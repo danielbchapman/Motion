@@ -1,2 +1,6 @@
 *.
 *.
+*.prefs
+*~.qtz
+.classpath
+.project
