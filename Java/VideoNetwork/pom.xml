@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.danielbchapman.video</groupId>
+  <artifactId>VideoNetwork</artifactId>
+  <version>0.0.1</version>
+  <name>Motion Video Network</name>
+  <description>A simple brute-force network video distribution system. This system scrapes or creates video input and distributes it to the clients for processing in near real time.</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>processing</groupId>
+  		<artifactId>core</artifactId>
+  		<version>2.0.1</version>
+  	</dependency>
+  </dependencies>
+  
+  	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>  
+</project>
