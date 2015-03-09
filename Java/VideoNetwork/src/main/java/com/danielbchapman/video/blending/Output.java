@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import com.danielbchapman.video.blending.Blender.Variables;
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PVector;
 
 public class Output extends JFrame
 {
@@ -29,20 +31,21 @@ public class Output extends JFrame
   
   public Variables getVariables()
   {
-    Variables var = new Variables();
-    setVisible(false);
-    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    GraphicsDevice[] screens = ge.getScreenDevices();
-    int n = screens.length;
-    
-    for (int i = 0; i < n; i++) {
-        if (screens[i].getIDstring().contentEquals(settings.getScreen())) {
-            JFrame dummy = new JFrame(screens[i].getDefaultConfiguration());
-            setLocationRelativeTo(dummy);
-            dummy.dispose();
-        }
-    }
-    setVisible(true);    
+    return null;
+//    Variables var = new Variables();
+//    setVisible(false);
+//    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//    GraphicsDevice[] screens = ge.getScreenDevices();
+//    int n = screens.length;
+//    
+//    for (int i = 0; i < n; i++) {
+//        if (screens[i].getIDstring().contentEquals(settings.getScreen())) {
+//            JFrame dummy = new JFrame(screens[i].getDefaultConfiguration());
+//            setLocationRelativeTo(dummy);
+//            dummy.dispose();
+//        }
+//    }
+//    setVisible(true);    
   }
   public Output(String title)
   {
@@ -89,7 +92,12 @@ public class Output extends JFrame
   {
     private static final long serialVersionUID = 1L;
     boolean fullScreen = false;
+    PVector topLeft;
+    PVector topRight;
+    PVector bottomRight;
+    PVector bottomLeft;
     
+    String message = "No Node Selected";
     public KeystoneApplet(boolean full)
     {
       this.fullScreen = full;
@@ -99,6 +107,28 @@ public class Output extends JFrame
 //    {
 //      return fullScreen;
 //    }
+    
+    public void drawKeystone(PGraphics g, int x, int y, int color)
+    {
+      g.pushMatrix();
+      g.noFill();
+      g.strokeWeight(1);
+      g.stroke(color);
+      g.ellipseMode(CENTER);
+      g.ellipse(x, y, 8, 8);
+      g.ellipse(x, y, 16, 16);
+      g.ellipse(x, y, 2, 2);
+      g.line(x-30, y, x+30, y);
+      g.line(x, y-30, x, y+30);
+      g.text("(" + x + ", " + y + ")", x+10, y+20);
+      g.text("(" + x + ", " + y + ")", x-60, y-15);
+      g.text("(" + x + ", " + y + ")", x+10, y-15);
+      g.text("(" + x + ", " + y + ")", x-60, y+20);
+      
+      g.text(message == null ? "" : message, g.width / 2 - 150, g.height /2);
+      
+      g.popMatrix();
+    }
     
     public void setup()
     {
@@ -118,8 +148,11 @@ public class Output extends JFrame
 //          //Draw
 //        }
 //      }
-      text("This is a window", 60, 60);
-
+      
+      drawKeystone(g, 50, 50, color(255,0,0));
+      drawKeystone(g, 200, 50, color(255,0,0));
+      drawKeystone(g, 200, 200, color(255,0,0));
+      drawKeystone(g, 50, 200, color(255,0,0));
     }
   }
 }
