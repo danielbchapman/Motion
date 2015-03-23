@@ -27,7 +27,7 @@ public class GridLayer extends Layer
     {
       for(int j = 0; j < gridX; j++)
       {
-        grid[i * gridX + j] = new Point(new Vec3(j * spacing, i * spacing, 0), 1f);
+        grid[i * gridX + j] = new Point(j * spacing, i * spacing, 0, 1f);
       }
     }
     

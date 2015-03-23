@@ -24,7 +24,7 @@ public class Cue
   }
   
   //FIXME this is a hack design that will work temporarily using the scheduler ~ 20ms in error in raw tests
-  public void go()
+  public void go(Layer layer, MotionEngine engine)
   {
     if(running)
       return;
@@ -34,16 +34,24 @@ public class Cue
     for(Action a : actions)
     {
       a.called = start;
+      a.layer = layer;
+      a.engine = engine;
       scheduler.schedule(a, a.timeStamp, TimeUnit.MILLISECONDS);
       
     }
-      
+    
+    long executeLast = 0L;
+    if(actions.length > 1)
+      executeLast = actions[actions.length - 1].timeStamp; 
+    
     scheduler.schedule(new Runnable(){
-
+      
       @Override
       public void run()
       {
+        System.out.println("Actions Length " + actions.length);
         Cue.this.running = false;
-      } }, actions[actions.length-1].timeStamp, TimeUnit.MILLISECONDS);
+        
+      } }, executeLast, TimeUnit.MILLISECONDS);
   }
 }

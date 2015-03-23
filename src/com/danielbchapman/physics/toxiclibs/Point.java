@@ -1,29 +1,30 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import lombok.Data;
+import toxi.geom.Vec3D;
+import toxi.physics3d.VerletParticle3D;
 
 @Data
-public class Point extends Vec3
+public class Point extends VerletParticle3D
 {
-  Vec3 home;
+  Vec3D home;
   float mass = 1.0f;
   
   public Point()
   {
-    this(new Vec3(0,0,0), 1f);
-  }
-  public Point(Vec3 location, float mass)
-  {
-    this(location, location, mass);
+    this(0, 0, 0, 1);
   }
   
-  public Point(Vec3 location, Vec3 home, float mass)
+  public Point(float x, float y, float z, float w)
   {
-    x = location.x;
-    y = location.y;
-    z = location.z;
-    this.mass = mass;
-    this.home = new Vec3(home);//clone to home
+    super(x, y, z, w);
+    this.home = new Vec3D(x, y, z);
+  }
+  
+  public Point(Point p)
+  {
+    this(p.x, p.y, p.z, p.weight);
+    this.home = new Vec3D(x, y, z);
   }
   
 }
