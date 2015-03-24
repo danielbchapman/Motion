@@ -18,12 +18,15 @@ public class Line extends Shape
     Point current = points[0];
     Point next;
     
-    g.beginShape(PConstants.LINE); 
+    g.beginShape(PConstants.LINE);
     for(int i = 1; i < points.length; i++)
     {
       next = points[i];
       if(next == null)
+      {
         break;
+      }
+        
       g.line(current.x, current.y,  current.z, next.x, next.y, next.z);
       current = next;
     }

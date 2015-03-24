@@ -44,7 +44,7 @@ public class Dance2015 extends PApplet {
 	@Override
 	public boolean sketchFullScreen()
 	{
-	  return true;
+	  return false;
 	}
 	
 	public void draw() {

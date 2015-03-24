@@ -10,21 +10,32 @@ import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.AttractionBehavior3D;
 import toxi.physics3d.behaviors.GravityBehavior3D;
+import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 public class MotionEngine extends PApplet
 {
+  public enum Mode
+  {
+    SUCK_FORCE,
+    SLAP_FORCE,
+    EXPLODE_FORCE
+  }
   private static final long serialVersionUID = 1L;
 
   private VerletPhysics3D physics = new VerletPhysics3D();
   private ArrayList<Layer> layers = new ArrayList<>();
 
+  private Mode mode = Mode.SUCK_FORCE;
   private static Cue testCue;
   private static Cue gravityOneSecond;
+
   
-  private static AttractionBehavior3D sucker = 
-      new AttractionBehavior3D(new Vec3D(1f, 1f, 1f), 45f, 1f, 1f); 
+  private static FalloffAttractionBehavior sucker = 
+      new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
 
   private static HomeBehavior3D home = new HomeBehavior3D(new Vec3D(0, 0, 0));
+  private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 100f);
+  private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
   
   static
   {
@@ -108,6 +119,8 @@ public class MotionEngine extends PApplet
     frameRate(60);
     physics.setDrag(0.5f);
     postSetup();
+    
+    //Add constraints
   }
 
   public void postSetup()
@@ -133,14 +146,48 @@ public class MotionEngine extends PApplet
     
     if (event.getKey() == '1')
     {
-      sucker.setStrength(-1f);
+      mode = Mode.SUCK_FORCE;
+      sucker.setStrength(-100f);
+      sucker.setJitter(1f);
     }
     
     if(event.getKey() == '2')
     {
-      sucker.setStrength(1f);
+      mode = Mode.SUCK_FORCE;
+      sucker.setStrength(100f);
+      sucker.setJitter(1f);
     }
     
+    if(event.getKey() == '7')
+    {
+      mode = Mode.SUCK_FORCE;
+      sucker.setStrength(100f);
+      sucker.setJitter(0f);
+    }
+    
+    if(event.getKey() == '8')
+    {
+      mode = Mode.SUCK_FORCE;
+      sucker.setStrength(-100f);
+      sucker.setJitter(0f);
+    }
+    
+    
+    if(event.getKey() == '3')
+    {
+      mode = Mode.SLAP_FORCE;
+    }
+    
+    if(event.getKey() == '4')
+    {
+      mode = Mode.EXPLODE_FORCE;
+      explode.direction = new Vec3D(0, 0, -1f);
+    }
+    if(event.getKey() == '5')
+    {
+      mode = Mode.EXPLODE_FORCE;
+      explode.direction = new Vec3D(0, 0, 1f);
+    }
     if(event.getKeyCode() == LEFT)
     {
       float drag = physics.getDrag();
@@ -150,22 +197,6 @@ public class MotionEngine extends PApplet
       
       System.out.println("Setting drag to -> " + drag);
       physics.setDrag(drag);
-    }
-    
-    if(event.getKey() == 'h')
-    {
-      System.out.println("Turning on home force!");
-      if(home.enabled)
-      {
-        home.enabled = false;
-        physics.removeBehavior(home);
-      }
-        
-      else
-      {
-        home.enabled = true;
-        physics.addBehavior(home);
-      }
     }
     
     if(event.getKeyCode() == RIGHT)
@@ -178,22 +209,79 @@ public class MotionEngine extends PApplet
       System.out.println("Setting drag to -> " + drag);
       physics.setDrag(drag);
     }
+    
+    if(event.getKeyCode() == UP)
+    {
+      float x = home.max;
+      x += 0.01;
+      if(x > 2f)
+        x = 2f;
+      
+      System.out.println("Setting max force to -> " + x);
+      home.max = x;
+    }
+    
+    if(event.getKeyCode() == DOWN)
+    {
+      float x = home.max;
+      x -= 0.01;
+      if(x < 0)
+        x = 0;
+      
+      System.out.println("Setting max force to -> " + x);
+      home.max = x;
+    }
+    
+    if(event.getKey() == 'h')
+    {
+      if(home.enabled)
+      {
+        System.out.println("Turning on home force!");
+        home.enabled = false;
+        physics.removeBehavior(home);
+      }
+        
+      else
+      {
+        System.out.println("Turning off home force!");
+        home.enabled = true;
+        physics.addBehavior(home);
+      }
+    }
   }
   
   @Override
   public void mouseDragged()
   {
-    sucker.setAttractor(new Vec3D(mouseX, mouseY, 0));
+    if(Mode.SUCK_FORCE == mode)
+      sucker.setAttractor(new Vec3D(mouseX, mouseY, -10f));
   }
   
   @Override
   public void mousePressed()
   {
     System.out.println("Mouse Down!");
-    physics.addBehavior(sucker);
+    if(Mode.SUCK_FORCE == mode)
+      physics.addBehavior(sucker);
+    else if(Mode.SLAP_FORCE == mode)
+    {
+      slap.location = new Vec3D(mouseX, mouseY, 0);//In the plane
+      physics.addBehavior(slap);
+    }
+    else if(Mode.EXPLODE_FORCE == mode)
+    {
+      explode.location = new Vec3D(mouseX, mouseY, 0);
+      physics.addBehavior(explode);
+    }
+      
   }
   public void mouseReleased() 
   {
-    physics.removeBehavior(sucker);
+    if(Mode.SUCK_FORCE == mode)
+      physics.removeBehavior(sucker);
+    else if(Mode.SLAP_FORCE == mode)
+      physics.removeBehavior(slap);
+    else if(Mode.EXPLODE_FORCE == mode)
+      physics.removeBehavior(explode);
   };
 }
