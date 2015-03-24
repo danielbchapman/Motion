@@ -6,7 +6,10 @@ import toxi.physics3d.behaviors.ConstantForceBehavior3D;
 
 public class HomeBehavior3D extends ConstantForceBehavior3D
 {
-
+  
+  protected float easing = 0.05f;
+  protected float max = 0.5f;
+  
   public HomeBehavior3D(Vec3D force)
   {
     super(force);
@@ -24,7 +27,8 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
     if(p3d instanceof Point)
     {
       Point p = (Point) p3d;
-      Vec3D f = p.home.sub(p).normalize().scale(0.05f);//easing 
+      Vec3D f = p.home.sub(p);//.scale(0.05f);//easing 
+      float mag = f.magnitude();
       float stop = 0.05f; //halt
       
       if(f.magnitude() < stop)//same pixel
@@ -35,6 +39,9 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
         return;
       }
       
+      if(mag > max)
+        f.normalizeTo(max);
+      f = f.scale(easing); //easing
       setForce(f);
       p.addForce(scaledForce);
       //Debug
