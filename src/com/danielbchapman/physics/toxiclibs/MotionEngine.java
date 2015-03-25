@@ -29,7 +29,8 @@ public class MotionEngine extends PApplet
   private static Cue testCue;
   private static Cue gravityOneSecond;
 
-  
+  private GridLayer grid;
+  private ParticleLayer particles;
   private static FalloffAttractionBehavior sucker = 
       new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
 
@@ -88,6 +89,7 @@ public class MotionEngine extends PApplet
   public void draw()
   {
     // Model updates
+    //physics.setTimeStep(frameRate / 60f);
     physics.update();
 
     
@@ -125,9 +127,10 @@ public class MotionEngine extends PApplet
 
   public void postSetup()
   {
-    GridLayer grid = new GridLayer();
-    add(grid);
-
+    grid = new GridLayer();
+    particles = new ParticleLayer();
+    add(particles);
+    //add(grid);
   }
 
   @Override
@@ -248,6 +251,12 @@ public class MotionEngine extends PApplet
         physics.addBehavior(home);
       }
     }
+    
+    //Animation tests
+    if(event.getKey() == '0')
+    {
+      grid.offscreen();
+    }
   }
   
   @Override
@@ -265,7 +274,7 @@ public class MotionEngine extends PApplet
       physics.addBehavior(sucker);
     else if(Mode.SLAP_FORCE == mode)
     {
-      slap.location = new Vec3D(mouseX, mouseY, 0);//In the plane
+      slap.location = new Vec3D(mouseX, mouseY, 20);//In the plane
       physics.addBehavior(slap);
     }
     else if(Mode.EXPLODE_FORCE == mode)

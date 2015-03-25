@@ -1,8 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import com.sun.prism.paint.Color;
+import java.util.Random;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 
 public class GridLayer extends Layer
@@ -80,7 +79,7 @@ public class GridLayer extends Layer
   public void render(PGraphics g)
   {
     g.background(0); //black
-    g.strokeWeight(3f);
+    g.strokeWeight(2f);
     g.stroke(255);
     g.pushMatrix();
     g.translate(10, 10, 0);//Offset to see correctly
@@ -91,6 +90,84 @@ public class GridLayer extends Layer
     }
     
     g.popMatrix();
+  }
+  
+  /**
+   * A random preset for animation that forces all the particles to one
+   * point offscreen so that they can "crawl" onto the screen.  
+   */
+  public void offscreen()
+  {
+    Random rand = new Random();
+    boolean direction = false;
+    int padding = 100;
+    int height = gridY * spacing + padding;
+    int width = gridX * spacing + padding;
+    for(int i = 0; i < lines.length; i++)
+    {
+      if(i < gridY)//horizontal
+      {
+        direction = rand.nextBoolean();
+        
+        if(direction)
+          for(Point p : lines[i].points)
+            p.x = width;
+        else
+          for(Point p : lines[i].points)
+            p.x = -width;
+      }
+      else
+      {
+        direction = rand.nextBoolean();
+        
+        if(direction)
+          for(Point p : lines[i].points)
+            p.x = height;
+        else
+          for(Point p : lines[i].points)
+            p.x = -height;
+      }
+    }
+  }
+  
+  /**
+   * A pretty awesome happy accident...
+   * 
+   * A random preset for animation that forces all the particles to one
+   * point offscreen so that they can "crawl" onto the screen.  
+   */
+  public void offscreenHappyAccident()
+  {
+    Random rand = new Random();
+    boolean direction = false;
+    int padding = 100;
+    int height = gridY * spacing + padding;
+    int width = gridX * spacing + padding;
+    for(int i = 0; i < lines.length; i++)
+    {
+      if(i < gridY)//horizontal
+      {
+        direction = rand.nextBoolean();
+        
+        if(direction)
+          for(Point p : lines[i].points)
+            p.x = width;
+        else
+          for(Point p : lines[i].points)
+            p.x = -width;
+      }
+      else
+      {
+        direction = rand.nextBoolean();
+        
+        if(direction)
+          for(Point p : lines[i].points)
+            p.x = height;
+        else
+          for(Point p : lines[i].points)
+            p.x = -height;
+      }
+    }
   }
 
 }

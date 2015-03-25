@@ -17,7 +17,6 @@ public class Line extends Shape
    
     Point current = points[0];
     Point next;
-    
     g.beginShape(PConstants.LINE);
     for(int i = 1; i < points.length; i++)
     {
