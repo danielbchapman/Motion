@@ -6,6 +6,7 @@ package com.danielbchapman.video.onestream;
  * Reading and displaying an image from an attached Capture device. 
  */
 
+import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -26,6 +27,17 @@ public class CaptureApp extends PApplet
 {
   public class Variables
   {
+    //Content
+    Vec2 contentStart = new Vec2();
+    Vec2 contentDimensions = new Vec2();
+    
+    //Blending Variables
+    Vec2 blendTopLeft = new Vec2();
+    Vec2 blendTopRight = new Vec2();
+    Vec2 blendBottomLeft = new Vec2();
+    Vec2 blendBottomRight = new Vec2();
+    
+    //Blending Variables    
     Vec2 topLeft = new Vec2();
     Vec2 topRight = new Vec2();
     Vec2 bottomRight = new Vec2();
@@ -33,6 +45,8 @@ public class CaptureApp extends PApplet
     
     Vec2 home = new Vec2();
     String name = "Default";
+    
+    PGraphics blend;
 
     public Variables(int x, int y)
     {
@@ -61,6 +75,15 @@ public class CaptureApp extends PApplet
     public int tY(int y)
     {
       return home.y + y;
+    }
+    
+    public void updateBlend()
+    {
+      if(blend == null)
+        throw new RuntimeException("Unable to blend uninitialized graphics object");
+      
+      //DO fancy blending here!
+      
     }
 
   }
@@ -121,7 +144,6 @@ public class CaptureApp extends PApplet
   public boolean editing;
   
   public int monitor = 0;
-  
   PImage image = loadImage("butterfly.jpg");
 
   public void draw()
@@ -372,9 +394,16 @@ public class CaptureApp extends PApplet
     System.out.println("SAVING SETTINGS--NOT IMPLEMENTED");
   }
   
+  Dimension contentInput = new Dimension(640, 480);
   public void setup()
   {
     size(1920 * 2, 1080, P3D);
+    for(Variables v : monitors)
+      if(v != null)
+      {
+        v.blend = createGraphics(contentInput.width, contentInput.height);
+        v.updateBlend();
+      }
   }
   
   @Override
