@@ -7,14 +7,14 @@
   <description>A simple brute-force network video distribution system. This system scrapes or creates video input and distributes it to the clients for processing in near real time.</description>
   <dependencies>
   	<dependency>
-  		<groupId>processing</groupId>
-  		<artifactId>core</artifactId>
-  		<version>2.0.1</version>
-  	</dependency>
-  	<dependency>
   		<groupId>org.projectlombok</groupId>
   		<artifactId>lombok</artifactId>
   		<version>1.14.8</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.danielbchapman.data</groupId>
+  		<artifactId>groups</artifactId>
+  		<version>1.0.0</version>
   	</dependency>
   </dependencies>
   
