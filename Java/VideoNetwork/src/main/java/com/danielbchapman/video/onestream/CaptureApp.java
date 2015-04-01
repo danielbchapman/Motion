@@ -23,6 +23,24 @@ import processing.core.PImage;
 
 import com.danielbchapman.video.blending.Vec2;
 
+import deadpixel.keystone.CornerPinSurface;
+import deadpixel.keystone.Keystone;
+import deadpixel.keystone.MeshPoint;
+
+
+/**
+ * <Class Definitions>
+ *
+ ***************************************************************************
+ * @author Daniel B. Chapman 
+ * <br /><i><b>Light Assistant</b></i> copyright Daniel B. Chapman
+ * @since Mar 31, 2015
+ * @version 2 Development
+ * @link http://www.lightassistant.com
+ ***************************************************************************
+ */
+//FIXME Java Doc Needed
+
 public class CaptureApp extends PApplet
 {
   public class Variables
@@ -140,11 +158,12 @@ public class CaptureApp extends PApplet
   int monitorIndex = 0;
   Variables selected = one;
   Variables[] monitors = new Variables[]{one, two, three, four};//Hard Coded 4 max
-
+  CornerPinSurface[] surfaces = new CornerPinSurface[monitors.length];
+  Keystone keystone;
   public boolean editing;
   
   public int monitor = 0;
-  PImage image = loadImage("butterfly.jpg");
+  PImage image;
 
   public void draw()
   {
@@ -157,13 +176,13 @@ public class CaptureApp extends PApplet
     // resizing, transformations, or tint.
     // set(0, 0, cam);
     
-    for(Variables v : monitors)
+    for(int i = 0; i < monitors.length; i++)
     {
-      if(v != null)
+      if(monitors[i] != null)
       {
-        drawMonitor(v);
+        drawMonitor(monitors[i], surfaces[i]);
         if(editing)
-          drawUi(g, v);  
+          drawUi(g, monitors[i]);  
       }
     }
     
@@ -195,24 +214,97 @@ public class CaptureApp extends PApplet
     
     g.popMatrix();
   }
-  public void drawMonitor(Variables v)
+  
+  public void drawMonitor(Variables v, CornerPinSurface s)
   {
+    boolean __useKeystone = true;
+    if(__useKeystone){
+      s.render(image, 0, 0, 800, 600);
+//          v.contentStart.x, 
+//          v.contentStart.y, 
+//          v.contentDimensions.x, 
+//          v.contentDimensions.y);
+      return;
+    }
+    int tX = 0;
+    int tY = 0;
+    int tW = 800;
+    int tH = 600;
+    
+//    Vec2 top = v.topRight.add(v.topLeft).div(2f);//v.topRight.sub(v.topLeft).div(2f, 1f);
+//    Vec2 right = v.topRight.add(v.bottomRight).div(2f);
+//    Vec2 bottom = v.bottomRight.add(v.bottomLeft).div(2f);
+//    Vec2 left = v.bottomLeft.add(v.topLeft).div(2f);
+    
+//    System.out.println("Top Left -> " + v.topLeft);
+//    System.out.println("Top -> " + top);
+//    System.out.println("Top Right -> " + v.topRight);
+//    System.out.println("Right -> " + right);
+//    System.out.println("Bottom Right -> " + v.bottomRight);
+//    System.out.println("Bottom -> " + bottom);
+//    System.out.println("Bottom Left -> " + v.bottomRight);
+//    System.out.println("Left -> " + left);
+//    System.out.println();
+    
+    //Create Mesh Surface-> Keystone5 base
+    
+    
     pushMatrix();
     noFill();
     noStroke();
     translate(v.home.x,v.home.y,0);
 
     textureMode(IMAGE);
-    beginShape(QUADS);
+    beginShape();
     texture(image);
-    vertex(v.topLeft.x, v.topLeft.y, 0, 0);
-    vertex(v.topRight.x, v.topRight.y, 800, 0);
-    vertex(v.bottomRight.x, v.bottomRight.y, 800, 600);
-    vertex(v.bottomLeft.x, v.bottomLeft.y, 0, 600);
+    vertex(v.topLeft.x, v.topLeft.y, tX, tY);
+    vertex(v.topRight.x, v.topRight.y, tW, tY);
+    vertex(v.bottomRight.x, v.bottomRight.y, tW, tH);
+    vertex(v.bottomLeft.x, v.bottomLeft.y, tX, tH);
     endShape(CLOSE);
     popMatrix();
   }
-
+  
+  /**
+   * Vector[](x,y,u,v); //texture map 
+   */
+  float[][] mesh;
+  public void drawSurface(PGraphics g, Variables v)
+  {
+    /*
+     Finish this at some point to understand it, what he does
+      is makes a map of quads and maps the texture to it using 
+      "WarpPerspective" to determine points and just applying the 
+      texture to the 3D surface. This isn't a bad method, I'm not
+      sure it is needed. 
+     */
+    
+//    int tX = 0;
+//    int tY = 0;
+//    int tW = 800;
+//    int tH = 600;
+//    
+//    int w = v.contentDimensions.x
+//    g.pushMatrix();
+//    g.translate(v.home.x, v.home.y);
+//    pushMatrix();
+//    noFill();
+//    noStroke();
+//    textureMode(IMAGE);
+//    beginShape(PApplet.QUADS);
+//    texture(image);
+//    
+//    
+//    
+//    vertex(v.topLeft.x, v.topLeft.y, tX, tY);
+//    vertex(v.topRight.x, v.topRight.y, tW, tY);
+//    vertex(v.bottomRight.x, v.bottomRight.y, tW, tH);
+//    vertex(v.bottomLeft.x, v.bottomLeft.y, tX, tH);
+//    endShape(PApplet.CLOSE);
+//    popMatrix();    
+//    g.popMatrix();
+  }
+  
   public void drawUi(PGraphics g, Variables monitor)
   {
     pushMatrix();
@@ -280,11 +372,18 @@ public class CaptureApp extends PApplet
     if(e.getKey() == 's')
     {
       System.out.println("SAVING?");
-      if(e.isAltDown())
+      if(e.isAltDown() || e.getKeyCode() == ALT)
       {
         System.out.println("SAVING.");
         save();
+        
       }
+    }
+    
+    if(e.getKey() == 'e')
+    {
+      System.out.println("Entering Keystone Calibration");
+      keystone.toggleCalibration();
     }
     
     if(e.getKey() == 'm')
@@ -398,12 +497,60 @@ public class CaptureApp extends PApplet
   public void setup()
   {
     size(1920 * 2, 1080, P3D);
+    keystone = new Keystone(this);
+    {//Draw Grid
+    image = loadImage("butterfly.jpg");
+    PGraphics grid = createGraphics(image.width, image.height);
+    //draw a grid
+    int spacing = 10;
+    int x = image.width / spacing;
+    int y = image.height / spacing;
+
+    grid.beginDraw();
+    grid.background(255,0,0);
+    grid.strokeWeight(2f);
+    grid.stroke(255);
+    grid.image(image, 0, 0);
+    for(int i = 0; i < x; i++)
+      grid.line(i * spacing, 0, i * spacing, image.height);
+    
+    for(int i = 0; i < y; i++)
+      grid.line(0, i * spacing, image.width, i * spacing);
+    grid.endDraw();
+    
+    image.loadPixels();
+    image.pixels = grid.pixels;
+    image.updatePixels();
+    
+    }
     for(Variables v : monitors)
       if(v != null)
       {
         v.blend = createGraphics(contentInput.width, contentInput.height);
         v.updateBlend();
       }
+    
+    int resolution = 4;
+    int w = 800;
+    int h = 600;
+    //Update Mesh (from Keystone 5)
+    mesh = new float[resolution * resolution][]; //vector(x,y,u,v)
+    for (int i = 0; i < mesh.length; i++) {
+      float x = (i % resolution) / (float) (resolution - 1);
+      float y = (i / resolution) / (float) (resolution - 1);
+      mesh[i] = new float[]{x * w, y * h, x * w, y * h};
+    }    
+    
+    //Create Keystone Surfaces
+    for(int i = 0; i < monitors.length; i++)
+    {
+      if(monitors[i] != null)
+      {
+        surfaces[i] = keystone.createCornerPinSurface(800, 600, 12);
+        surfaces[i].x = monitors[i].home.x;
+        surfaces[i].y = monitors[i].home.y;
+      }
+    }
   }
   
   @Override

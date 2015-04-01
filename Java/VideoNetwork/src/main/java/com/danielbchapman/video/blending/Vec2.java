@@ -1,5 +1,8 @@
 package com.danielbchapman.video.blending;
 
+import lombok.Data;
+
+@Data
 public class Vec2
 {
   public int x;
@@ -18,6 +21,36 @@ public class Vec2
   public Vec2 clone()
   {
     return new Vec2(x, y);
+  }
+  
+  public Vec2 sub(Vec2 other)
+  {
+    return new Vec2(x - other.x, y - other.y);
+  }
+  
+  public Vec2 add(Vec2 other)
+  {
+    return new Vec2(x + other.x, y + other.y);
+  }
+  
+  public Vec2 mult(float f)
+  {
+    return mult(f, f);
+  }
+  
+  public Vec2 mult(float fX, float fY)
+  {
+    return new Vec2((int)(x * fX), (int)(y * fY));//scales to int
+  }
+  
+  public Vec2 div(float f)
+  {
+    return div(f, f);
+  }
+  
+  public Vec2 div(float fX, float fY)
+  {
+    return new Vec2((int)(x / fX), (int)(y / fY));//scales to int
   }
   
   public boolean equals(Object other)
