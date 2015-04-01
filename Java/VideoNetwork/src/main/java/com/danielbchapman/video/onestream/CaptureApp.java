@@ -66,6 +66,7 @@ public class CaptureApp extends PApplet
     String name = "Default";
     
     PGraphics blend;
+    PGraphics cache;
 
     public Variables(int x, int y)
     {
@@ -101,10 +102,19 @@ public class CaptureApp extends PApplet
       if(blend == null)
         throw new RuntimeException("Unable to blend uninitialized graphics object");
       
-      //DO fancy blending here!
-      
+      int thickness = 100;
+      int colorA = 0x00000000;
+      int colorB = 0x000000FF;
+      blend.beginDraw();
+      blend.clear();
+      blend.noStroke();
+      blend.noFill();
+      drawGradient(blend, 0, 0, blend.width, thickness, Y_AXIS, false);
+      drawGradient(blend, 0, blend.height - thickness, blend.width, thickness, Y_AXIS, true);
+      drawGradient(blend, 0, 0, thickness, blend.height, X_AXIS, false);
+      drawGradient(blend, blend.width-thickness, 0, thickness, blend.height, X_AXIS, true);
+      blend.endDraw();
     }
-
   }
 
   /**
@@ -148,6 +158,9 @@ public class CaptureApp extends PApplet
     System.out.println("Total Width-> " + width + " Total Height-> " + height + " Current Location ->" + r.x + ", " + r.y);
   }
 
+  public static final int X_AXIS = 0;
+  public static final int Y_AXIS = 1;
+  
   Object lock = new Object();
 
   Vec2 vertex = null;
@@ -182,7 +195,7 @@ public class CaptureApp extends PApplet
     {
       if(monitors[i] != null)
       {
-        System.out.println("Drawing monitor [" + i + "]->" + monitors[i]);
+        //System.out.println("Drawing monitor [" + i + "]->" + monitors[i]);
         drawMonitor(monitors[i], surfaces[i]);
         if(editing)
           drawUi(g, monitors[i]);  
@@ -222,7 +235,11 @@ public class CaptureApp extends PApplet
   {
     boolean __useKeystone = true;
     if(__useKeystone){
-      s.render(image, 0, 0, image.width, image.height);
+      //
+      //v.cache.clear();
+      v.cache.image(image, 0, 0);
+      v.cache.image(v.blend, 0, 0);
+      s.render(v.cache, 0, 0, image.width, image.height);
 //          v.contentStart.x, 
 //          v.contentStart.y, 
 //          v.contentDimensions.x, 
@@ -503,6 +520,8 @@ public class CaptureApp extends PApplet
   {
     //size(1920 * 2, 1080, P3D);
     size(1400, 800, P3D);
+    smooth();
+    noLights();
     keystone = new Keystone(this);
     {//Draw Grid
     image = loadImage("butterfly.jpg");
@@ -524,15 +543,16 @@ public class CaptureApp extends PApplet
       grid.line(0, i * spacing, image.width, i * spacing);
     grid.endDraw();
     
-    image.loadPixels();
-    image.pixels = grid.pixels;
-    image.updatePixels();
+//    image.loadPixels();
+//    image.pixels = grid.pixels;
+//    image.updatePixels();
     
     }
     for(Variables v : monitors)
       if(v != null)
       {
         v.blend = createGraphics(contentInput.width, contentInput.height);
+        v.cache = createGraphics(contentInput.width, contentInput.height);
         v.updateBlend();
       }
     
@@ -558,7 +578,7 @@ public class CaptureApp extends PApplet
       }
     }
     //Disable for no input devices and use the butterfly
-    boolean __enableCamera = true;
+    boolean __enableCamera = false;
     
     if(__enableCamera)
     {
@@ -605,6 +625,13 @@ public class CaptureApp extends PApplet
     image.pixels = input.pixels;
     image.updatePixels();
     
+    for(Variables v : monitors)
+      if(v != null)
+      {
+        //Write the image crop to the cache.
+        v.cache.image(image, 0, 0);//FIXME crop this here...
+      }
+    
     
 //    int[] pixels = input.pixels;
 //    for(int i = 0; i < buffer.length; i++)
@@ -612,4 +639,43 @@ public class CaptureApp extends PApplet
    
     //System.out.println("Copied...");
   }
+  
+  public void drawGradient(PGraphics g, int x, int y, float w, float h, int axis, boolean reverse)
+  {
+    int black = 0;
+    int clear = 0;
+    if (reverse)
+    {
+      clear = this.color(0, 0, 0);
+      black = this.color(0, 0, 0, 0.0f);
+
+    }
+    else
+    {
+      black = this.color(0, 0, 0);
+      clear = this.color(0, 0, 0, 0.0f);
+    }
+
+    if (axis == Y_AXIS)
+    { // Top to bottom gradient
+      for (int i = y+1; i < y + h; i++)
+      {
+        float inter = map(i, y, y + h, 0, 1);
+        int c = lerpColor(black, clear, inter);
+        g.stroke(c);
+        g.line(x, i-1, x + w, i-1);
+      }
+    }
+    else
+      if (axis == X_AXIS)
+      { // Left to right gradient
+        for (int i = x+1; i < x + w; i++)
+        {
+          float inter = map(i, x, x + w, 0, 1);
+          int c = lerpColor(black, clear, inter);
+          g.stroke(c);
+          g.line(i-1, y, i-1, y + h);
+        }
+      }
+  }  
 }
