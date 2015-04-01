@@ -86,9 +86,9 @@ public class CaptureApp extends PApplet
 
     public void updateBlend()
     {
-      if(blend == null)
+      if (blend == null)
         throw new RuntimeException("Unable to blend uninitialized graphics object");
-      
+
       int thickness = 100;
       int colorA = 0x00000000;
       int colorB = 0x000000FF;
@@ -99,9 +99,10 @@ public class CaptureApp extends PApplet
       drawGradient(blend, 0, 0, blend.width, thickness, Y_AXIS, false);
       drawGradient(blend, 0, blend.height - thickness, blend.width, thickness, Y_AXIS, true);
       drawGradient(blend, 0, 0, thickness, blend.height, X_AXIS, false);
-      drawGradient(blend, blend.width-thickness, 0, thickness, blend.height, X_AXIS, true);
+      drawGradient(blend, blend.width - thickness, 0, thickness, blend.height, X_AXIS, true);
       blend.endDraw();
     }
+
     public void updateGradient(Variables v, int w, int h)
     {
       if (blend == null || blend.width != w || blend.height != h)
@@ -134,8 +135,6 @@ public class CaptureApp extends PApplet
    */
   private static final long serialVersionUID = 1L;
   private static JFrame application;
-  public static final int X_AXIS = 0;
-  public static final int Y_AXIS = 1;
 
   public static void main(String[] args)
   {
@@ -152,47 +151,6 @@ public class CaptureApp extends PApplet
 
     maxOut(application);
     // GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(fs);
-  }
-
-  public void drawGradient(PGraphics g, int x, int y, float w, float h, int axis, boolean reverse)
-  {
-    noFill();
-
-    int black = 0;
-    int clear = 0;
-    if (reverse)
-    {
-      clear = this.color(0, 0, 0);
-      black = this.color(0, 0, 0, 0.0f);
-
-    }
-    else
-    {
-      black = this.color(0, 0, 0);
-      clear = this.color(0, 0, 0, 0.0f);
-    }
-
-    if (axis == Y_AXIS)
-    { // Top to bottom gradient
-      for (int i = y; i <= y + h; i++)
-      {
-        float inter = map(i, y, y + h, 0, 1);
-        int c = lerpColor(black, clear, inter);
-        g.stroke(c);
-        g.line(x, i, x + w, i);
-      }
-    }
-    else
-      if (axis == X_AXIS)
-      { // Left to right gradient
-        for (int i = x; i <= x + w; i++)
-        {
-          float inter = map(i, x, x + w, 0, 1);
-          int c = lerpColor(black, clear, inter);
-          g.stroke(c);
-          g.line(i, y, i, y + h);
-        }
-      }
   }
 
   public static Vec2 maxOut(JFrame x)
@@ -218,7 +176,7 @@ public class CaptureApp extends PApplet
 
   public static final int X_AXIS = 0;
   public static final int Y_AXIS = 1;
-  
+
   Object lock = new Object();
 
   Vec2 vertex = null;
@@ -293,9 +251,9 @@ public class CaptureApp extends PApplet
     boolean __useKeystone = true;
     if (__useKeystone)
     {
-      
+
       //
-      //v.cache.clear();
+      // v.cache.clear();
       v.cache.image(image, 0, 0);
       v.cache.image(v.blend, 0, 0);
       s.render(v.cache, 0, 0, image.width, image.height);
@@ -591,22 +549,22 @@ public class CaptureApp extends PApplet
       int x = image.width / spacing;
       int y = image.height / spacing;
 
-    grid.beginDraw();
-    grid.background(255,0,0);
-    grid.strokeWeight(2f);
-    grid.stroke(255);
-    grid.image(image, 0, 0);
-    for(int i = 0; i < x; i++)
-      grid.line(i * spacing, 0, i * spacing, image.height);
-    
-    for(int i = 0; i < y; i++)
-      grid.line(0, i * spacing, image.width, i * spacing);
-    grid.endDraw();
-    
-//    image.loadPixels();
-//    image.pixels = grid.pixels;
-//    image.updatePixels();
-    
+      grid.beginDraw();
+      grid.background(255, 0, 0);
+      grid.strokeWeight(2f);
+      grid.stroke(255);
+      grid.image(image, 0, 0);
+      for (int i = 0; i < x; i++)
+        grid.line(i * spacing, 0, i * spacing, image.height);
+
+      for (int i = 0; i < y; i++)
+        grid.line(0, i * spacing, image.width, i * spacing);
+      grid.endDraw();
+
+      // image.loadPixels();
+      // image.pixels = grid.pixels;
+      // image.updatePixels();
+
     }
     for (Variables v : monitors)
       if (v != null)
@@ -685,22 +643,21 @@ public class CaptureApp extends PApplet
     image.loadPixels();
     image.pixels = input.pixels;
     image.updatePixels();
-    
-    for(Variables v : monitors)
-      if(v != null)
+
+    for (Variables v : monitors)
+      if (v != null)
       {
-        //Write the image crop to the cache.
-        v.cache.image(image, 0, 0);//FIXME crop this here...
+        // Write the image crop to the cache.
+        v.cache.image(image, 0, 0);// FIXME crop this here...
       }
-    
-    
-//    int[] pixels = input.pixels;
-//    for(int i = 0; i < buffer.length; i++)
-//      buffer[i] = pixels[i];
-   
-    //System.out.println("Copied...");
+
+    // int[] pixels = input.pixels;
+    // for(int i = 0; i < buffer.length; i++)
+    // buffer[i] = pixels[i];
+
+    // System.out.println("Copied...");
   }
-  
+
   public void drawGradient(PGraphics g, int x, int y, float w, float h, int axis, boolean reverse)
   {
     int black = 0;
@@ -719,24 +676,24 @@ public class CaptureApp extends PApplet
 
     if (axis == Y_AXIS)
     { // Top to bottom gradient
-      for (int i = y+1; i < y + h; i++)
+      for (int i = y + 1; i < y + h; i++)
       {
         float inter = map(i, y, y + h, 0, 1);
         int c = lerpColor(black, clear, inter);
         g.stroke(c);
-        g.line(x, i-1, x + w, i-1);
+        g.line(x, i - 1, x + w, i - 1);
       }
     }
     else
       if (axis == X_AXIS)
       { // Left to right gradient
-        for (int i = x+1; i < x + w; i++)
+        for (int i = x + 1; i < x + w; i++)
         {
           float inter = map(i, x, x + w, 0, 1);
           int c = lerpColor(black, clear, inter);
           g.stroke(c);
-          g.line(i-1, y, i-1, y + h);
+          g.line(i - 1, y, i - 1, y + h);
         }
       }
-  }  
+  }
 }
