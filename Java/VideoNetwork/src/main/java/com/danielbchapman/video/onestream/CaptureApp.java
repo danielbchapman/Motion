@@ -66,6 +66,32 @@ public class CaptureApp extends PApplet
       home.y = homeY;
       this.name = name;
     }
+
+    public void updateGradient(Variables v, int w, int h)
+    {
+      if(blend == null || blend.width != w || blend.height != h)
+      {
+        if(blend != null)
+          blend.dispose();
+        
+        blend = createGraphics(w, h);
+      }
+
+      blend.noFill();
+      blend.noStroke();
+      blend.beginDraw();
+      int thick = 100;//alter this later..
+      //Top
+      drawGradient(blend, 0, 0, w, thick, X_AXIS, false);
+      //Right
+      drawGradient(blend, w-thick, 0, thick, height, Y_AXIS, true);
+      //Bottom
+      drawGradient(blend, 0, h-thick, w, thick, X_AXIS, true);
+      //Left
+      drawGradient(blend, 0, 0, thick, height, Y_AXIS, false);
+      blend.endDraw();      
+      blend.loadPixels();
+    }
     
     public int tX(int x)
     {
@@ -79,11 +105,7 @@ public class CaptureApp extends PApplet
     
     public void updateBlend()
     {
-      if(blend == null)
-        throw new RuntimeException("Unable to blend uninitialized graphics object");
-      
-      //DO fancy blending here!
-      
+      updateGradient(this, 640, 480);
     }
 
   }
@@ -213,6 +235,50 @@ public class CaptureApp extends PApplet
     popMatrix();
   }
 
+  public final static int X_AXIS = 0;
+  public final static int Y_AXIS = 1;
+  
+  public void drawGradient(PGraphics g, int x, int y, float w, float h, int axis, boolean reverse)
+  {
+    noFill();
+
+    int black = 0;
+    int clear = 0;
+    if (reverse)
+    {
+      clear = this.color(0, 0, 0);
+      black = this.color(0, 0, 0, 0.0f);
+
+    }
+    else
+    {
+      black = this.color(0, 0, 0);
+      clear = this.color(0, 0, 0, 0.0f);
+    }
+
+    if (axis == Y_AXIS)
+    { // Top to bottom gradient
+      for (int i = y; i <= y + h; i++)
+      {
+        float inter = map(i, y, y + h, 0, 1);
+        int c = lerpColor(black, clear, inter);
+        g.stroke(c);
+        g.line(x, i, x + w, i);
+      }
+    }
+    else
+      if (axis == X_AXIS)
+      { // Left to right gradient
+        for (int i = x; i <= x + w; i++)
+        {
+          float inter = map(i, x, x + w, 0, 1);
+          int c = lerpColor(black, clear, inter);
+          g.stroke(c);
+          g.line(i, y, i, y + h);
+        }
+      }
+  }
+  
   public void drawUi(PGraphics g, Variables monitor)
   {
     pushMatrix();
