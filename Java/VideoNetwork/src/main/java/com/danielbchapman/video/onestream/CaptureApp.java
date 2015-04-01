@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.video.Capture;
 
 import com.danielbchapman.video.blending.Vec2;
 
@@ -115,9 +116,9 @@ public class CaptureApp extends PApplet
   {
     JFrame fs = new JFrame();
     fs.setUndecorated(true);
-    // fs.setSize(400, 400);
-    fs.setSize(1920 * 2, 720);//1080
-    fs.setLocation(-1920, 0);// FIXME need a smart way to deal with this.
+    fs.setSize(1024, 768);
+    //fs.setSize(1920 * 2, 720);//1080
+    //fs.setLocation(-1920, 0);// FIXME need a smart way to deal with this.
     CaptureApp x = new CaptureApp();
     fs.add(x);
     fs.setVisible(true);
@@ -151,8 +152,8 @@ public class CaptureApp extends PApplet
 
   Vec2 vertex = null;
   String message = "No Node Selected";
-  Variables one = new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Mointor 1", 1920, 0);
-  Variables two = new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Monitor 2", 0, 0);
+  Variables one = new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Mointor 1", 0, 0); //1920 for offset dual
+  Variables two = new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Monitor 2", 400, 0);
   Variables three = null;//new Variables(0, 0, 400, 0, 400, 400, 0, 400);
   Variables four = null; //new Variables(0, 0, 400, 0, 400, 400, 0, 400);
   int monitorIndex = 0;
@@ -165,6 +166,7 @@ public class CaptureApp extends PApplet
   public int monitor = 0;
   PImage image;
 
+  
   public void draw()
   {
     background(123, 0, 0);
@@ -180,6 +182,7 @@ public class CaptureApp extends PApplet
     {
       if(monitors[i] != null)
       {
+        System.out.println("Drawing monitor [" + i + "]->" + monitors[i]);
         drawMonitor(monitors[i], surfaces[i]);
         if(editing)
           drawUi(g, monitors[i]);  
@@ -219,7 +222,7 @@ public class CaptureApp extends PApplet
   {
     boolean __useKeystone = true;
     if(__useKeystone){
-      s.render(image, 0, 0, 800, 600);
+      s.render(image, 0, 0, image.width, image.height);
 //          v.contentStart.x, 
 //          v.contentStart.y, 
 //          v.contentDimensions.x, 
@@ -228,8 +231,8 @@ public class CaptureApp extends PApplet
     }
     int tX = 0;
     int tY = 0;
-    int tW = 800;
-    int tH = 600;
+    int tW = image.width;
+    int tH = image.height;
     
 //    Vec2 top = v.topRight.add(v.topLeft).div(2f);//v.topRight.sub(v.topLeft).div(2f, 1f);
 //    Vec2 right = v.topRight.add(v.bottomRight).div(2f);
@@ -494,9 +497,12 @@ public class CaptureApp extends PApplet
   }
   
   Dimension contentInput = new Dimension(640, 480);
+  Capture input;
+  
   public void setup()
   {
-    size(1920 * 2, 1080, P3D);
+    //size(1920 * 2, 1080, P3D);
+    size(1400, 800, P3D);
     keystone = new Keystone(this);
     {//Draw Grid
     image = loadImage("butterfly.jpg");
@@ -551,13 +557,59 @@ public class CaptureApp extends PApplet
         surfaces[i].y = monitors[i].home.y;
       }
     }
+    //Disable for no input devices and use the butterfly
+    boolean __enableCamera = true;
+    
+    if(__enableCamera)
+    {
+      String[] cameras = Capture.list();
+
+      if (cameras.length == 0)
+      {
+        System.err.println("There are no cameras available for capture.");
+        System.exit(-1);
+      }
+      else
+      {
+        System.out.println("Available cameras:");
+        for (int i = 0; i < cameras.length; i++)
+          System.out.println(cameras[i]);
+        
+        input = new Capture(this, 640, 480);
+        input.start();
+      }
+    }
+    
+    System.out.println("Camera intialized...");
   }
   
   @Override
   public boolean sketchFullScreen()
   {
-    // TODO Auto Generated Sub
-    throw new RuntimeException("Not Implemented...");
-
+    return false;
+  }
+  
+  public void captureEvent(Capture c)
+  {
+    input.read();
+    input.loadPixels();
+    System.out.println("Reading image...");
+    
+    //Resize on stream change...
+    if(image.width != input.height || image.height != input.height)
+    {
+      image = new PImage(input.width, input.height);
+    }
+    
+    image.loadPixels();
+    image.pixels = input.pixels;
+    image.updatePixels();
+    
+    
+//    int[] pixels = input.pixels;
+//    for(int i = 0; i < buffer.length; i++)
+//      buffer[i] = pixels[i];
+   
+    //System.out.println("Copied...");
   }
 }
