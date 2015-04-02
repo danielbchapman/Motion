@@ -13,7 +13,12 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import javax.swing.JFrame;
 
@@ -22,6 +27,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.video.Capture;
 
+import com.danielbchapman.utility.FileUtil;
 import com.danielbchapman.video.blending.Vec2;
 
 import deadpixel.keystone.CornerPinSurface;
@@ -34,8 +40,9 @@ import deadpixel.keystone.Keystone;
 public class CaptureApp extends PApplet
 {
   
-  public class Variables
+  public class Variables implements Serializable
   {
+    private static final long serialVersionUID = 1L;
     // Content
     Vec2 contentStart = new Vec2();
     Vec2 contentDimensions = new Vec2();
@@ -55,8 +62,8 @@ public class CaptureApp extends PApplet
     Vec2 home = new Vec2();
     String name = "Default";
 
-    PGraphics blend;
-    PGraphics cache;
+    private transient PGraphics blend;
+    private transient PGraphics cache;
 
     public Variables(int x, int y)
     {
@@ -129,6 +136,70 @@ public class CaptureApp extends PApplet
       drawGradient(blend, 0, 0, thick, height, Y_AXIS, false);
       blend.endDraw();
       blend.loadPixels();
+    }
+    
+    public void save(String file)
+    {
+      StringBuilder out = new StringBuilder();
+      
+      BiConsumer<Vec2, String> writeDoc = (v, l)->
+      {
+        out.append(l);
+        out.append("\r\n");
+        out.append(v.x);
+        out.append(",");
+        out.append(v.y);
+        out.append("\r\n");
+      };
+      
+      writeDoc.accept(bottomLeft, "Bottom Left");
+      writeDoc.accept(bottomRight, "Bottom Left");
+      writeDoc.accept(topLeft, "Bottom Left");
+      writeDoc.accept(topRight, "Bottom Left");
+      
+      writeDoc.accept(blendTopLeft, "Blend Top Left");
+      writeDoc.accept(blendTopRight, "Blend Top Right");
+      writeDoc.accept(blendBottomRight, "Blend Bottom Right");
+      writeDoc.accept(blendBottomLeft, "Blend Bottom Left");
+      
+      writeDoc.accept(contentStart, "Content Start");
+      writeDoc.accept(contentDimensions, "Content Dimensions");
+      writeDoc.accept(home, "Home");
+      
+      //Skiping name...
+      
+      FileUtil.writeFile(file, out.toString().getBytes());
+      
+    }
+    
+    int loadIndexInt = 0;
+    public void load(String file)
+    {
+      //Set variables here:
+      loadIndexInt = 0;
+      ArrayList<String> lines = FileUtil.readLines(file);
+      Function<ArrayList<String>, Vec2> read = (list) -> 
+      {
+        //Lines 1 == doc
+        String[] data = list.get(loadIndexInt).split(",");
+        loadIndexInt += 2;
+        return new Vec2(Integer.valueOf(data[0]), Integer.valueOf(data[1]));
+      };
+      
+      bottomLeft = read.apply(lines);
+      bottomRight = read.apply(lines);
+      topLeft = read.apply(lines);
+      topRight = read.apply(lines);
+      
+      blendTopLeft = read.apply(lines);
+      blendTopRight = read.apply(lines);
+      blendBottomRight = read.apply(lines);
+      blendBottomLeft = read.apply(lines);
+      
+      contentStart = read.apply(lines);
+      contentDimensions = read.apply(lines);
+      
+      home = read.apply(lines);
     }
   }
 
@@ -539,7 +610,31 @@ public class CaptureApp extends PApplet
 
   public void save()
   {
-    System.out.println("SAVING SETTINGS--NOT IMPLEMENTED");
+    System.out.println("SAVING SETTINGS via serialization");
+    
+    BiConsumer<Variables, String> s = (v, f) -> 
+    {
+      if(v != null)
+        v.save(f);
+    };
+    s.accept(one,  "config/1.cfg");
+    s.accept(two,  "config/2.cfg");
+    s.accept(three,  "config/3.cfg");
+    s.accept(four,  "config/4.cfg");
+  }
+  
+  public void load()
+  {
+    BiConsumer<Variables, String> l = (v, f) ->
+    {
+      if(v != null)
+        v.load(f);
+    };
+    
+    l.accept(one,  "config/1.cfg");
+    l.accept(two,  "config/2.cfg");
+    l.accept(three,  "config/3.cfg");
+    l.accept(four,  "config/4.cfg");
   }
 
   Dimension contentInput = new Dimension(640, 480);

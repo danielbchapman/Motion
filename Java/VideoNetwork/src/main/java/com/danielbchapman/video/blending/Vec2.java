@@ -1,10 +1,13 @@
 package com.danielbchapman.video.blending;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class Vec2
+public class Vec2 implements Serializable
 {
+  private static final long serialVersionUID = 1L;
   public int x;
   public int y;
   
