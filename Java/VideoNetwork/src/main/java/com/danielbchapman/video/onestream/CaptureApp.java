@@ -33,6 +33,7 @@ import deadpixel.keystone.Keystone;
  */
 public class CaptureApp extends PApplet
 {
+  
   public class Variables
   {
     // Content
@@ -95,6 +96,7 @@ public class CaptureApp extends PApplet
       blend.beginDraw();
       blend.clear();
       blend.noStroke();
+      blend.background(255);
       blend.noFill();
       drawGradient(blend, 0, 0, blend.width, thickness, Y_AXIS, false);
       drawGradient(blend, 0, blend.height - thickness, blend.width, thickness, Y_AXIS, true);
@@ -182,7 +184,7 @@ public class CaptureApp extends PApplet
   Vec2 vertex = null;
   String message = "No Node Selected";
   Variables one = new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Mointor 1", 0, 0); // 1920 for offset dual
-  Variables two = new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Monitor 2", 400, 0);
+  Variables two =  new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Monitor 2", 400, 0);
   Variables three = new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Monitor 3", 400, 0);
   Variables four = null; // new Variables(0, 0, 400, 0, 400, 400, 0, 400);
   int monitorIndex = 0;
@@ -254,9 +256,20 @@ public class CaptureApp extends PApplet
 
       //
       // v.cache.clear();
-      v.cache.image(image, 0, 0);
-      v.cache.image(v.blend, 0, 0);
-      s.render(v.cache, 0, 0, image.width, image.height);
+      if(v.cache == null || v.blend == null || image == null)
+      {
+        System.out.println("Cache or image null\n\t" + v + " | " + image);
+        return;
+      }
+       
+      v.cache.beginDraw();
+      v.cache.image(image, 0, 0); //crop here
+      v.cache.mask(v.blend);
+//      v.cache.mask(v.blend);
+      v.cache.endDraw();
+      //v.cache.image(image, 0, 0);
+      //v.cache.image(v.blend, 0, 0);
+      s.render(v.cache, 0, 0, v.cache.width, v.cache.height);
       // v.contentStart.x,
       // v.contentStart.y,
       // v.contentDimensions.x,
@@ -534,6 +547,7 @@ public class CaptureApp extends PApplet
 
   public void setup()
   {
+    
     Vec2 allMonitors = maxOut(application);
     size(allMonitors.x, allMonitors.y / 4 * 3, P3D); // Debug make this smaller
     // size(1920 * 2, 1080, P3D);
@@ -541,6 +555,7 @@ public class CaptureApp extends PApplet
     smooth();
     noLights();
     keystone = new Keystone(this);
+    
     {// Draw Grid
       image = loadImage("butterfly.jpg");
       PGraphics grid = createGraphics(image.width, image.height);
@@ -569,8 +584,8 @@ public class CaptureApp extends PApplet
     for (Variables v : monitors)
       if (v != null)
       {
-        v.blend = createGraphics(contentInput.width, contentInput.height);
-        v.cache = createGraphics(contentInput.width, contentInput.height);
+        v.blend = createGraphics(contentInput.width, contentInput.height, P3D);
+        v.cache = createGraphics(contentInput.width, contentInput.height, P3D);
         v.updateBlend();
       }
 
@@ -597,7 +612,7 @@ public class CaptureApp extends PApplet
       }
     }
     // Disable for no input devices and use the butterfly
-    boolean __enableCamera = false;
+    boolean __enableCamera = true;
 
     if (__enableCamera)
     {
@@ -644,12 +659,13 @@ public class CaptureApp extends PApplet
     image.pixels = input.pixels;
     image.updatePixels();
 
-    for (Variables v : monitors)
-      if (v != null)
-      {
-        // Write the image crop to the cache.
-        v.cache.image(image, 0, 0);// FIXME crop this here...
-      }
+//    for (Variables v : monitors)
+//      if (v != null)
+//      {
+//        // Write the image crop to the cache.
+//        v.cache.image(image, 0, 0);// FIXME crop this here...
+//        //System.out.println("writing to cache: " + v.cache);
+//      }
 
     // int[] pixels = input.pixels;
     // for(int i = 0; i < buffer.length; i++)
