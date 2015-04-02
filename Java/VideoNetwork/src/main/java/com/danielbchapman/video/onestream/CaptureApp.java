@@ -153,9 +153,9 @@ public class CaptureApp extends PApplet
       };
       
       writeDoc.accept(bottomLeft, "Bottom Left");
-      writeDoc.accept(bottomRight, "Bottom Left");
-      writeDoc.accept(topLeft, "Bottom Left");
-      writeDoc.accept(topRight, "Bottom Left");
+      writeDoc.accept(bottomRight, "Bottom Right");
+      writeDoc.accept(topLeft, "Top Left");
+      writeDoc.accept(topRight, "Top Right");
       
       writeDoc.accept(blendTopLeft, "Blend Top Left");
       writeDoc.accept(blendTopRight, "Blend Top Right");
@@ -181,7 +181,7 @@ public class CaptureApp extends PApplet
       Function<ArrayList<String>, Vec2> read = (list) -> 
       {
         //Lines 1 == doc
-        String[] data = list.get(loadIndexInt).split(",");
+        String[] data = list.get(loadIndexInt + 1).split(",");
         loadIndexInt += 2;
         return new Vec2(Integer.valueOf(data[0]), Integer.valueOf(data[1]));
       };
@@ -200,9 +200,37 @@ public class CaptureApp extends PApplet
       contentDimensions = read.apply(lines);
       
       home = read.apply(lines);
+      System.out.println("Home is -> " + home);
     }
   }
 
+  
+  public void updateMesh()
+  {
+    for(int i = 0; i < monitors.length; i++)
+    {
+      Variables v = monitors[i];
+      CornerPinSurface c = surfaces[i];
+      if(v != null && c != null)
+      {
+        c.load(v.home.x, v.home.y, 
+            v.topLeft.x, v.topLeft.y,
+            v.topRight.x, v.topRight.y,
+            v.bottomRight.x, v.bottomRight.y,
+            v.bottomLeft.x, v.bottomLeft.y);
+        c.x = v.home.x;
+        c.y = v.home.y;
+        System.out.println("Home move -> " + c);
+//        c.w = v.home.x;
+//        c.h = v.home.y;
+//        c.moveMeshPointTo(CornerPinSurface.TL, v.topLeft.x, v.topLeft.y);
+//        c.moveMeshPointTo(CornerPinSurface.TR, v.topRight.x, v.topRight.y);
+//        c.moveMeshPointTo(CornerPinSurface.BR, v.bottomRight.x, v.bottomRight.y);
+//        c.moveMeshPointTo(CornerPinSurface.BL, v.bottomLeft.x, v.bottomLeft.y);
+       
+      }
+    }
+  }
   /**
    * 
    */
@@ -266,6 +294,11 @@ public class CaptureApp extends PApplet
   public boolean editing;
 
   public int monitor = 0;
+  
+  /**
+   * This is the raw "Canvas" that is pulled from. On each capture event
+   * this is updated with the content that can be drawn as needed. 
+   */
   PImage image;
 
   public void draw()
@@ -332,19 +365,14 @@ public class CaptureApp extends PApplet
         System.out.println("Cache or image null\n\t" + v + " | " + image);
         return;
       }
-       
+        
       v.cache.beginDraw();
-      v.cache.image(image, 0, 0); //crop here
+      v.cache.image(image, v.contentStart.x, v.contentStart.y, v.contentDimensions.x, v.contentDimensions.y); //crop here
+      //v.cache.image(image, 0, 0, image.width, image.height);
+    
       v.cache.mask(v.blend);
-//      v.cache.mask(v.blend);
       v.cache.endDraw();
-      //v.cache.image(image, 0, 0);
-      //v.cache.image(v.blend, 0, 0);
-      s.render(v.cache, 0, 0, v.cache.width, v.cache.height);
-      // v.contentStart.x,
-      // v.contentStart.y,
-      // v.contentDimensions.x,
-      // v.contentDimensions.y);
+      s.render(g, v.cache, 0, 0, v.cache.width, v.cache.height);
       return;
     }
     int tX = 0;
@@ -498,6 +526,15 @@ public class CaptureApp extends PApplet
 
       }
     }
+    
+    if (e.getKey() == 'l')
+    {
+      if(e.isAltDown() || e.getKeyCode() == ALT)
+      {
+        System.out.println("LOADING POSITIONS");
+        load();
+      }
+    }
 
     if (e.getKey() == 'e')
     {
@@ -617,6 +654,39 @@ public class CaptureApp extends PApplet
       if(v != null)
         v.save(f);
     };
+    
+    BiConsumer<Variables, CornerPinSurface> update = (v, c)->
+    {
+     if(v == null || c == null)
+       return;
+     
+     float[] tl  = c.getMeshPoint(CornerPinSurface.TL);
+     float[] tr  =c.getMeshPoint(CornerPinSurface.TR);
+     float[] bl  =c.getMeshPoint(CornerPinSurface.BL);
+     float[] br  =c.getMeshPoint(CornerPinSurface.BR);
+     
+     v.topLeft.x = (int)tl[0];
+     v.topLeft.y = (int)tl[1];
+     
+     v.topRight.x = (int)tr[0];
+     v.topRight.y = (int)tr[1];
+     
+     v.bottomRight.x = (int)br[0];
+     v.bottomRight.y = (int)br[1];
+     
+     v.bottomLeft.x = (int)bl[0];
+     v.bottomLeft.y = (int)bl[1];
+     
+     v.home.x = (int) c.x;
+     v.home.y = (int) c.y;
+     
+     System.out.println("Saving surface to ->\n" + v);
+     
+    };
+    
+    for(int i = 0; i < monitors.length; i++)
+      update.accept(monitors[i], surfaces[i]);
+    
     s.accept(one,  "config/1.cfg");
     s.accept(two,  "config/2.cfg");
     s.accept(three,  "config/3.cfg");
@@ -635,6 +705,8 @@ public class CaptureApp extends PApplet
     l.accept(two,  "config/2.cfg");
     l.accept(three,  "config/3.cfg");
     l.accept(four,  "config/4.cfg");
+    
+    updateMesh();
   }
 
   Dimension contentInput = new Dimension(640, 480);
@@ -730,6 +802,20 @@ public class CaptureApp extends PApplet
     }
 
     System.out.println("Camera intialized...");
+    
+    //Set up the surfaces
+    //one = real
+    
+    int blend = 100/2;
+    one.contentDimensions = new Vec2(640, 480);
+    one.contentStart = new Vec2(0,0);
+    
+    two.contentDimensions = new Vec2(1280, 960); 
+    two.contentStart = new Vec2(-320-blend, -480); //middle of image
+    
+    three.contentDimensions = new Vec2(1280, 960);
+    three.contentStart = new Vec2(-640-320+blend, -480); //middle of image
+    
   }
 
   @Override
@@ -738,6 +824,10 @@ public class CaptureApp extends PApplet
     return false;
   }
 
+  /**
+   * Two monitors blended by 48 pixels!
+   */
+  Vec2 surfaceDimensions = new Vec2(2048-48, 1024);
   public void captureEvent(Capture c)
   {
     input.read();
@@ -749,7 +839,7 @@ public class CaptureApp extends PApplet
     {
       image = new PImage(input.width, input.height);
     }
-
+    //This is rudimentary, this needs to be properly scaled, this is distorted!
     image.loadPixels();
     image.pixels = input.pixels;
     image.updatePixels();

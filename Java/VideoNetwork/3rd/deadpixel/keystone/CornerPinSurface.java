@@ -45,8 +45,8 @@ public class CornerPinSurface implements Draggable {
 
 	public float x;
 	public float y;
-	float clickX;
-	float clickY;
+	public float clickX;
+	public float clickY;
 
 	int res;
 
@@ -56,8 +56,8 @@ public class CornerPinSurface implements Draggable {
 	public static int BL; // bottom left
 	public static int BR; // bottom right
 
-	int w;
-	int h;
+	public int w;
+	public int h;
 
 	int gridColor;
 	int controlPointColor;
@@ -111,7 +111,10 @@ public class CornerPinSurface implements Draggable {
 		this.controlPointColor = 0xFF00FF00;
 	}
 
-	
+	public float[] getMeshPoint(int i)
+	{
+	  return new float[]{mesh[i].x, mesh[i].y};
+	}
 	// ///////////////
 	// MANUAL MESHPOINT MOVE FUNCTIONS
 	// added by Daniel Wiedemann
@@ -128,6 +131,17 @@ public class CornerPinSurface implements Draggable {
 		mesh[corner].moveTo(mesh[corner].x + moveX, mesh[corner].y + moveY);
 	}
 
+	/**
+	 * A simple method to move the corners from another class
+	 * @param corner the corner to move
+	 * @param x the x location
+	 * @param y the y location  
+	 * 
+	 */
+	public void moveMeshPointTo(int corner, float x, float y)
+	{
+	  mesh[corner].moveTo(x, y);
+	}
 	/**
 	 * @return The surface's mesh resolution, in number of "tiles"
 	 */
@@ -435,11 +449,32 @@ public class CornerPinSurface implements Draggable {
 	 *            This moves the surface according to the offset from where the
 	 *            mouse was pressed when selecting the surface.
 	 */
-	public void moveTo(float x, float y) {
-		this.x = x - clickX;
+	public void moveTo(float x, float y)
+	{
+	  this.x = x - clickX;
 		this.y = y - clickY;
 	}
 
+	
+	public void load(float x, float y,
+	    float tlx, float tly, 
+	    float trx, float tr_y,
+	    float brx, float bry,
+	    float blx, float bly)
+  {
+	  this.x = x;
+	  this.y = y;
+	  mesh[TL].x = tlx;
+	  mesh[TL].y = tly;
+	  mesh[TR].x = trx;
+    mesh[TR].y = tr_y;
+    mesh[BR].x = brx;
+    mesh[BR].y = bry;
+    mesh[BL].x = blx;
+    mesh[BL].y = bly;
+    
+    calculateMesh();
+  }
 	/**
 	 * @invisible
 	 * 
@@ -484,6 +519,14 @@ public class CornerPinSurface implements Draggable {
 			}
 		}
 		return parent;
+	}
+	
+	public String toString()
+	{
+	  return super.toString() 
+	      + "\n"
+	      + "X/Y->" + x +", " + y + "\n"
+	      + "w/h->" + w +", " + h;
 	}
 
 }
