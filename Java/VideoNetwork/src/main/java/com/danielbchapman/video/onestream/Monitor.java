@@ -24,12 +24,13 @@ public class Monitor implements Serializable
   // Blending Variables
   int thickness = 100;
   int distance = 0;
+  int distance2 = 0;
   Vec2 blendTop = new Vec2(0,0);
   Vec2 blendRight = new Vec2(0,0);
   Vec2 blendBottom = new Vec2(0,0);
   Vec2 blendLeft = new Vec2(0,0);
 
-  // Blending Variables
+  //Keystone Variables
   Vec2 topLeft = new Vec2();
   Vec2 topRight = new Vec2();
   Vec2 bottomRight = new Vec2();
@@ -197,10 +198,10 @@ public class Monitor implements Serializable
     int t = thickness;
     int w = blend.width;
     int h = blend.height;
-    DrawingUtil.drawGradient(blend, white, black, 0, 0-distance, w, t+distance, DrawingUtil.Y_AXIS);//TOP
-    DrawingUtil.drawGradient(blend, black, white, 0, h - t+distance, w, t+distance, DrawingUtil.Y_AXIS);//BOTTOM
-    DrawingUtil.drawGradient(blend, white, black, 0-distance, 0, t+distance, h, DrawingUtil.X_AXIS);//LEFT
-    DrawingUtil.drawGradient(blend, black, white, w - t+distance, 0, t+distance, h, DrawingUtil.X_AXIS);//RIGHT
+    DrawingUtil.drawGradient(blend, white, black, 0, 0-distance, w, t+distance-distance2, DrawingUtil.Y_AXIS);//TOP
+    DrawingUtil.drawGradient(blend, black, white, 0, h - t+distance, w, t+distance+distance2, DrawingUtil.Y_AXIS);//BOTTOM
+    DrawingUtil.drawGradient(blend, white, black, 0-distance, 0, t+distance-distance2, h, DrawingUtil.X_AXIS);//LEFT
+    DrawingUtil.drawGradient(blend, black, white, w - t+distance, 0, t+distance+distance2, h, DrawingUtil.X_AXIS);//RIGHT
     blend.endDraw();
   }
 

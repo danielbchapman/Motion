@@ -107,7 +107,7 @@ public class CaptureApp extends PApplet
    */
   float[][] mesh;
 
-  Dimension contentInput = new Dimension(640, 480);
+  Dimension contentInput = new Dimension(1024, 768);
 
   Capture input;
 
@@ -149,8 +149,8 @@ public class CaptureApp extends PApplet
 
   public void draw()
   {
-    background(123, 0, 0);
-
+    //background(123, 0, 0);
+    background(0);
     fill(255);
     text("Frame Rate:" + frameRate, 50, 50);
     // The following does the same as the above image() line, but
@@ -218,8 +218,8 @@ public class CaptureApp extends PApplet
       v.cache.image(image, v.contentStart.x, v.contentStart.y, v.contentDimensions.x, v.contentDimensions.y); //crop here
       //v.cache.image(image, 0, 0, image.width, image.height);
     
-      v.cache.mask(v.blend);
-      //v.cache.image(v.blend,0,0);
+      //v.cache.mask(v.blend);
+      v.cache.image(v.blend,0,0);
       v.cache.endDraw();
       s.render(g, v.cache, 0, 0, v.cache.width, v.cache.height);
       return;
@@ -383,6 +383,10 @@ public class CaptureApp extends PApplet
     {
       System.out.println("Entering Keystone Calibration");
       keystone.toggleCalibration();
+      if(keystone.isCalibrating())
+        cursor();
+      else
+        noCursor();
     }
 
     if (e.getKey() == 'm')
@@ -493,10 +497,27 @@ public class CaptureApp extends PApplet
       blend(-5);
     if(e.getKey() == '+')
       blend(+5);
+
+    if(e.getKey() == '9')
+      blendB(-1);
+    if(e.getKey() == '0')
+      blendB(1);
+    if(e.getKey() == '(')
+      blendB(-5);
+    if(e.getKey() == ')')
+      blendB(+5);    
    
 
   }
 
+  public void updateMeshAndBlend()
+  {
+    for(Monitor m : monitors)
+      if(m != null)
+        m.updateBlend();
+    updateMesh();
+  }
+  
   public void load()
   {
     BiConsumer<Monitor, String> l = (v, f) ->
@@ -510,10 +531,7 @@ public class CaptureApp extends PApplet
     l.accept(three,  "config/3.cfg");
     l.accept(four,  "config/4.cfg");
     
-    for(Monitor m : monitors)
-      if(m != null)
-        m.updateBlend();
-    updateMesh();
+    updateMeshAndBlend();
   }
 
   public void save()
@@ -566,7 +584,6 @@ public class CaptureApp extends PApplet
 
   public void setup()
   {
-    
     Vec2 allMonitors = maxOut(application);
     size(allMonitors.x, allMonitors.y / 4 * 3, P3D); // Debug make this smaller
     // size(1920 * 2, 1080, P3D);
@@ -621,6 +638,10 @@ public class CaptureApp extends PApplet
     }
 
     // Create Keystone Surfaces
+    keystone.onShiftClick = (x) -> 
+    {
+      editSurface(x);
+    };
     for (int i = 0; i < monitors.length; i++)
     {
       if (monitors[i] != null)
@@ -668,7 +689,30 @@ public class CaptureApp extends PApplet
     three.contentDimensions = new Vec2(1280, 960);
     three.contentStart = new Vec2(-640-320+blend, -480); //middle of image
     
+    
+    noCursor();
   }
+  
+  public void editSurface(CornerPinSurface c)
+  {
+    Monitor m = null;
+    for(int i = 0; i < surfaces.length; i++)
+    {
+      if(c == surfaces[i])
+      {
+        m = monitors[i];
+        break;
+      }
+    }
+    
+    if(m != null)
+    {
+      System.out.println("Selecting monitors -> " + m);
+      MonitorConfiguration config = new MonitorConfiguration(m, this);
+      config.setVisible(true);
+    }
+  }
+  
   @Override
   public boolean sketchFullScreen()
   {
@@ -722,5 +766,27 @@ public class CaptureApp extends PApplet
         m.updateBlend();
         System.out.println("Blend is -> " + m.blendTop);
       }
+  }
+  
+  public void blendB(int amount)
+  {
+    for(Monitor m : monitors)
+      if(m != null)
+      {
+        m.blendTop.y = m.blendTop.y+ amount;
+        m.distance2 = m.distance2 + amount;
+        if(m.distance2 < -640)
+          m.distance2 = 0;
+        if(m.distance2 > 640)
+          m.distance2 = 640;
+        
+        if(m.blendBottom.y > 255)
+          m.blendBottom.y = 255;
+        if(m.blendBottom.y < 0)
+          m.blendBottom.y = 0;
+        
+        m.updateBlend();
+        System.out.println("Blend is -> " + m.blendBottom);
+      }  
   }
 }
