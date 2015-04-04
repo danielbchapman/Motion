@@ -40,197 +40,9 @@ import deadpixel.keystone.Keystone;
 public class CaptureApp extends PApplet
 {
   
-  public class Variables implements Serializable
-  {
-    private static final long serialVersionUID = 1L;
-    // Content
-    Vec2 contentStart = new Vec2();
-    Vec2 contentDimensions = new Vec2();
-
-    // Blending Variables
-    Vec2 blendTopLeft = new Vec2();
-    Vec2 blendTopRight = new Vec2();
-    Vec2 blendBottomLeft = new Vec2();
-    Vec2 blendBottomRight = new Vec2();
-
-    // Blending Variables
-    Vec2 topLeft = new Vec2();
-    Vec2 topRight = new Vec2();
-    Vec2 bottomRight = new Vec2();
-    Vec2 bottomLeft = new Vec2();
-
-    Vec2 home = new Vec2();
-    String name = "Default";
-
-    private transient PGraphics blend;
-    private transient PGraphics cache;
-
-    public Variables(int x, int y)
-    {
-      this(0, 0, x, 0, x, y, 0, y, "Default", 0, 0);
-    }
-
-    public Variables(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, String name, int homeX, int homeY)
-    {
-      topLeft = new Vec2(x1, y1);
-      topRight = new Vec2(x2, y2);
-      bottomRight = new Vec2(x3, y3);
-      bottomLeft = new Vec2(x4, y4);
-
-      home.x = homeX;
-      home.y = homeY;
-      this.name = name;
-    }
-
-    public int tX(int x)
-    {
-      return home.x + x;
-    }
-
-    public int tY(int y)
-    {
-      return home.y + y;
-    }
-
-    public void updateBlend()
-    {
-      if (blend == null)
-        throw new RuntimeException("Unable to blend uninitialized graphics object");
-
-      int thickness = 100;
-      int colorA = 0x00000000;
-      int colorB = 0x000000FF;
-      blend.beginDraw();
-      blend.clear();
-      blend.noStroke();
-      blend.background(255);
-      blend.noFill();
-      drawGradient(blend, 0, 0, blend.width, thickness, Y_AXIS, false);
-      drawGradient(blend, 0, blend.height - thickness, blend.width, thickness, Y_AXIS, true);
-      drawGradient(blend, 0, 0, thickness, blend.height, X_AXIS, false);
-      drawGradient(blend, blend.width - thickness, 0, thickness, blend.height, X_AXIS, true);
-      blend.endDraw();
-    }
-
-    public void updateGradient(Variables v, int w, int h)
-    {
-      if (blend == null || blend.width != w || blend.height != h)
-      {
-        if (blend != null)
-          blend.dispose();
-
-        blend = createGraphics(w, h);
-      }
-
-      blend.noFill();
-      blend.noStroke();
-      blend.beginDraw();
-      int thick = 100;// alter this later..
-      // Top
-      drawGradient(blend, 0, 0, w, thick, X_AXIS, false);
-      // Right
-      drawGradient(blend, w - thick, 0, thick, height, Y_AXIS, true);
-      // Bottom
-      drawGradient(blend, 0, h - thick, w, thick, X_AXIS, true);
-      // Left
-      drawGradient(blend, 0, 0, thick, height, Y_AXIS, false);
-      blend.endDraw();
-      blend.loadPixels();
-    }
-    
-    public void save(String file)
-    {
-      StringBuilder out = new StringBuilder();
-      
-      BiConsumer<Vec2, String> writeDoc = (v, l)->
-      {
-        out.append(l);
-        out.append("\r\n");
-        out.append(v.x);
-        out.append(",");
-        out.append(v.y);
-        out.append("\r\n");
-      };
-      
-      writeDoc.accept(bottomLeft, "Bottom Left");
-      writeDoc.accept(bottomRight, "Bottom Right");
-      writeDoc.accept(topLeft, "Top Left");
-      writeDoc.accept(topRight, "Top Right");
-      
-      writeDoc.accept(blendTopLeft, "Blend Top Left");
-      writeDoc.accept(blendTopRight, "Blend Top Right");
-      writeDoc.accept(blendBottomRight, "Blend Bottom Right");
-      writeDoc.accept(blendBottomLeft, "Blend Bottom Left");
-      
-      writeDoc.accept(contentStart, "Content Start");
-      writeDoc.accept(contentDimensions, "Content Dimensions");
-      writeDoc.accept(home, "Home");
-      
-      //Skiping name...
-      
-      FileUtil.writeFile(file, out.toString().getBytes());
-      
-    }
-    
-    int loadIndexInt = 0;
-    public void load(String file)
-    {
-      //Set variables here:
-      loadIndexInt = 0;
-      ArrayList<String> lines = FileUtil.readLines(file);
-      Function<ArrayList<String>, Vec2> read = (list) -> 
-      {
-        //Lines 1 == doc
-        String[] data = list.get(loadIndexInt + 1).split(",");
-        loadIndexInt += 2;
-        return new Vec2(Integer.valueOf(data[0]), Integer.valueOf(data[1]));
-      };
-      
-      bottomLeft = read.apply(lines);
-      bottomRight = read.apply(lines);
-      topLeft = read.apply(lines);
-      topRight = read.apply(lines);
-      
-      blendTopLeft = read.apply(lines);
-      blendTopRight = read.apply(lines);
-      blendBottomRight = read.apply(lines);
-      blendBottomLeft = read.apply(lines);
-      
-      contentStart = read.apply(lines);
-      contentDimensions = read.apply(lines);
-      
-      home = read.apply(lines);
-      System.out.println("Home is -> " + home);
-    }
-  }
+  
 
   
-  public void updateMesh()
-  {
-    for(int i = 0; i < monitors.length; i++)
-    {
-      Variables v = monitors[i];
-      CornerPinSurface c = surfaces[i];
-      if(v != null && c != null)
-      {
-        c.load(v.home.x, v.home.y, 
-            v.topLeft.x, v.topLeft.y,
-            v.topRight.x, v.topRight.y,
-            v.bottomRight.x, v.bottomRight.y,
-            v.bottomLeft.x, v.bottomLeft.y);
-        c.x = v.home.x;
-        c.y = v.home.y;
-        System.out.println("Home move -> " + c);
-//        c.w = v.home.x;
-//        c.h = v.home.y;
-//        c.moveMeshPointTo(CornerPinSurface.TL, v.topLeft.x, v.topLeft.y);
-//        c.moveMeshPointTo(CornerPinSurface.TR, v.topRight.x, v.topRight.y);
-//        c.moveMeshPointTo(CornerPinSurface.BR, v.bottomRight.x, v.bottomRight.y);
-//        c.moveMeshPointTo(CornerPinSurface.BL, v.bottomLeft.x, v.bottomLeft.y);
-       
-      }
-    }
-  }
   /**
    * 
    */
@@ -274,32 +86,76 @@ public class CaptureApp extends PApplet
     System.out.println("Total Width-> " + width + " Total Height-> " + height + " Current Location ->" + r.x + ", " + r.y);
     return new Vec2(width, height);
   }
-
-  public static final int X_AXIS = 0;
-  public static final int Y_AXIS = 1;
-
   Object lock = new Object();
 
   Vec2 vertex = null;
+
   String message = "No Node Selected";
-  Variables one = new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Mointor 1", 0, 0); // 1920 for offset dual
-  Variables two =  new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Monitor 2", 400, 0);
-  Variables three = new Variables(0, 0, 400, 0, 400, 400, 0, 400, "Monitor 3", 400, 0);
-  Variables four = null; // new Variables(0, 0, 400, 0, 400, 400, 0, 400);
+  Monitor one = new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Mointor 1", 0, 0); // 1920 for offset dual
+  Monitor two =  new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Monitor 2", 400, 0);
+  Monitor three = new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Monitor 3", 400, 0);
+  Monitor four = null; // new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Monitor 4", 400, 0);
   int monitorIndex = 0;
-  Variables selected = one;
-  Variables[] monitors = new Variables[] { one, two, three, four };// Hard Coded 4 max
+  Monitor selected = one;
+  
+  Monitor[] monitors = new Monitor[] { one, two, three, four };// Hard Coded 4 max
   CornerPinSurface[] surfaces = new CornerPinSurface[monitors.length];
+  
+  
   Keystone keystone;
   public boolean editing;
-
   public int monitor = 0;
-  
+
   /**
    * This is the raw "Canvas" that is pulled from. On each capture event
    * this is updated with the content that can be drawn as needed. 
    */
   PImage image;
+  
+  /**
+   * Vector[](x,y,u,v); //texture map 
+   */
+  float[][] mesh;
+
+  Dimension contentInput = new Dimension(640, 480);
+
+  Capture input;
+
+  /**
+   * Two monitors blended by 48 pixels!
+   */
+  Vec2 surfaceDimensions = new Vec2(2048-48, 1024);
+
+  public void captureEvent(Capture c)
+  {
+    input.read();
+    input.loadPixels();
+    // System.out.println("Reading image...");
+
+    // Resize on stream change...
+    if (image.width != input.height || image.height != input.height)
+    {
+      image = new PImage(input.width, input.height);
+    }
+    //This is rudimentary, this needs to be properly scaled, this is distorted!
+    image.loadPixels();
+    image.pixels = input.pixels;
+    image.updatePixels();
+
+//    for (Variables v : monitors)
+//      if (v != null)
+//      {
+//        // Write the image crop to the cache.
+//        v.cache.image(image, 0, 0);// FIXME crop this here...
+//        //System.out.println("writing to cache: " + v.cache);
+//      }
+
+    // int[] pixels = input.pixels;
+    // for(int i = 0; i < buffer.length; i++)
+    // buffer[i] = pixels[i];
+
+    // System.out.println("Copied...");
+  }
 
   public void draw()
   {
@@ -327,6 +183,8 @@ public class CaptureApp extends PApplet
     text("Frame Rate:" + frameRate, 50, 50);
   }
 
+  
+
   public void drawKeystone(PGraphics g, Vec2 vec, Vec2 home, int color)
   {
     int x = vec.x;
@@ -352,7 +210,7 @@ public class CaptureApp extends PApplet
     g.popMatrix();
   }
 
-  public void drawMonitor(Variables v, CornerPinSurface s)
+  public void drawMonitor(Monitor v, CornerPinSurface s)
   {
     boolean __useKeystone = true;
     if (__useKeystone)
@@ -413,12 +271,7 @@ public class CaptureApp extends PApplet
     popMatrix();
   }
 
-  /**
-   * Vector[](x,y,u,v); //texture map 
-   */
-  float[][] mesh;
-
-  public void drawSurface(PGraphics g, Variables v)
+  public void drawSurface(PGraphics g, Monitor v)
   {
     /*
      * Finish this at some point to understand it, what he does is makes a map of quads and maps the texture to it using
@@ -451,8 +304,8 @@ public class CaptureApp extends PApplet
     // popMatrix();
     // g.popMatrix();
   }
-
-  public void drawUi(PGraphics g, Variables monitor)
+  
+  public void drawUi(PGraphics g, Monitor monitor)
   {
     pushMatrix();
     int red = color(255, 0, 0);// Point
@@ -501,13 +354,12 @@ public class CaptureApp extends PApplet
   public int getCenterish()
   {
     int c = 0;
-    for (Variables v : monitors)
+    for (Monitor v : monitors)
       if (v != null)
         c++;
 
     return width / c;
   }
-
   @Override
   public void keyPressed(processing.event.KeyEvent e)
   {
@@ -645,17 +497,33 @@ public class CaptureApp extends PApplet
 
   }
 
+  public void load()
+  {
+    BiConsumer<Monitor, String> l = (v, f) ->
+    {
+      if(v != null)
+        v.load(f);
+    };
+    
+    l.accept(one,  "config/1.cfg");
+    l.accept(two,  "config/2.cfg");
+    l.accept(three,  "config/3.cfg");
+    l.accept(four,  "config/4.cfg");
+    
+    updateMesh();
+  }
+
   public void save()
   {
     System.out.println("SAVING SETTINGS via serialization");
     
-    BiConsumer<Variables, String> s = (v, f) -> 
+    BiConsumer<Monitor, String> s = (v, f) -> 
     {
       if(v != null)
         v.save(f);
     };
     
-    BiConsumer<Variables, CornerPinSurface> update = (v, c)->
+    BiConsumer<Monitor, CornerPinSurface> update = (v, c)->
     {
      if(v == null || c == null)
        return;
@@ -692,25 +560,6 @@ public class CaptureApp extends PApplet
     s.accept(three,  "config/3.cfg");
     s.accept(four,  "config/4.cfg");
   }
-  
-  public void load()
-  {
-    BiConsumer<Variables, String> l = (v, f) ->
-    {
-      if(v != null)
-        v.load(f);
-    };
-    
-    l.accept(one,  "config/1.cfg");
-    l.accept(two,  "config/2.cfg");
-    l.accept(three,  "config/3.cfg");
-    l.accept(four,  "config/4.cfg");
-    
-    updateMesh();
-  }
-
-  Dimension contentInput = new Dimension(640, 480);
-  Capture input;
 
   public void setup()
   {
@@ -748,7 +597,7 @@ public class CaptureApp extends PApplet
       // image.updatePixels();
 
     }
-    for (Variables v : monitors)
+    for (Monitor v : monitors)
       if (v != null)
       {
         v.blend = createGraphics(contentInput.width, contentInput.height, P3D);
@@ -779,7 +628,7 @@ public class CaptureApp extends PApplet
       }
     }
     // Disable for no input devices and use the butterfly
-    boolean __enableCamera = true;
+    boolean __enableCamera = false;
 
     if (__enableCamera)
     {
@@ -817,84 +666,36 @@ public class CaptureApp extends PApplet
     three.contentStart = new Vec2(-640-320+blend, -480); //middle of image
     
   }
-
   @Override
   public boolean sketchFullScreen()
   {
     return false;
   }
 
-  /**
-   * Two monitors blended by 48 pixels!
-   */
-  Vec2 surfaceDimensions = new Vec2(2048-48, 1024);
-  public void captureEvent(Capture c)
+  public void updateMesh()
   {
-    input.read();
-    input.loadPixels();
-    // System.out.println("Reading image...");
-
-    // Resize on stream change...
-    if (image.width != input.height || image.height != input.height)
+    for(int i = 0; i < monitors.length; i++)
     {
-      image = new PImage(input.width, input.height);
-    }
-    //This is rudimentary, this needs to be properly scaled, this is distorted!
-    image.loadPixels();
-    image.pixels = input.pixels;
-    image.updatePixels();
-
-//    for (Variables v : monitors)
-//      if (v != null)
-//      {
-//        // Write the image crop to the cache.
-//        v.cache.image(image, 0, 0);// FIXME crop this here...
-//        //System.out.println("writing to cache: " + v.cache);
-//      }
-
-    // int[] pixels = input.pixels;
-    // for(int i = 0; i < buffer.length; i++)
-    // buffer[i] = pixels[i];
-
-    // System.out.println("Copied...");
-  }
-
-  public void drawGradient(PGraphics g, int x, int y, float w, float h, int axis, boolean reverse)
-  {
-    int black = 0;
-    int clear = 0;
-    if (reverse)
-    {
-      clear = this.color(0, 0, 0);
-      black = this.color(0, 0, 0, 0.0f);
-
-    }
-    else
-    {
-      black = this.color(0, 0, 0);
-      clear = this.color(0, 0, 0, 0.0f);
-    }
-
-    if (axis == Y_AXIS)
-    { // Top to bottom gradient
-      for (int i = y + 1; i < y + h; i++)
+      Monitor v = monitors[i];
+      CornerPinSurface c = surfaces[i];
+      if(v != null && c != null)
       {
-        float inter = map(i, y, y + h, 0, 1);
-        int c = lerpColor(black, clear, inter);
-        g.stroke(c);
-        g.line(x, i - 1, x + w, i - 1);
+        c.load(v.home.x, v.home.y, 
+            v.topLeft.x, v.topLeft.y,
+            v.topRight.x, v.topRight.y,
+            v.bottomRight.x, v.bottomRight.y,
+            v.bottomLeft.x, v.bottomLeft.y);
+        c.x = v.home.x;
+        c.y = v.home.y;
+        System.out.println("Home move -> " + c);
+//        c.w = v.home.x;
+//        c.h = v.home.y;
+//        c.moveMeshPointTo(CornerPinSurface.TL, v.topLeft.x, v.topLeft.y);
+//        c.moveMeshPointTo(CornerPinSurface.TR, v.topRight.x, v.topRight.y);
+//        c.moveMeshPointTo(CornerPinSurface.BR, v.bottomRight.x, v.bottomRight.y);
+//        c.moveMeshPointTo(CornerPinSurface.BL, v.bottomLeft.x, v.bottomLeft.y);
+       
       }
     }
-    else
-      if (axis == X_AXIS)
-      { // Left to right gradient
-        for (int i = x + 1; i < x + w; i++)
-        {
-          float inter = map(i, x, x + w, 0, 1);
-          int c = lerpColor(black, clear, inter);
-          g.stroke(c);
-          g.line(i - 1, y, i - 1, y + h);
-        }
-      }
   }
 }
