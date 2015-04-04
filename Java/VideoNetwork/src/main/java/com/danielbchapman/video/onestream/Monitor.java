@@ -88,7 +88,9 @@ public class Monitor implements Serializable
     contentDimensions = read.apply(lines);
     
     home = read.apply(lines);
-    System.out.println("Home is -> " + home);
+    Vec2 blend = read.apply(lines);
+    thickness = blend.x;
+    distance = blend.y;
   }
 
   public void save(String file)
@@ -118,6 +120,7 @@ public class Monitor implements Serializable
     writeDoc.accept(contentStart, "Content Start");
     writeDoc.accept(contentDimensions, "Content Dimensions");
     writeDoc.accept(home, "Home");
+    writeDoc.accept(new Vec2(thickness, distance), "TotalBlend");
     
     //Skiping name...
     

@@ -32,11 +32,7 @@ import deadpixel.keystone.Keystone;
  *
  */
 public class CaptureApp extends PApplet
-{
-  
-  
-
-  
+{  
   /**
    * 
    */
@@ -514,6 +510,9 @@ public class CaptureApp extends PApplet
     l.accept(three,  "config/3.cfg");
     l.accept(four,  "config/4.cfg");
     
+    for(Monitor m : monitors)
+      if(m != null)
+        m.updateBlend();
     updateMesh();
   }
 
