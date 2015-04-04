@@ -21,10 +21,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
+
+import com.danielbchapman.video.blending.Vec2;
 
 import processing.core.*;
 import processing.data.XML;
@@ -48,7 +51,10 @@ public class Keystone {
 	PApplet parent;
 
 	ArrayList<CornerPinSurface> surfaces;
-
+	public Consumer<CornerPinSurface> onShiftClick;
+	public Consumer<CornerPinSurface> onSelected;
+	public Consumer<CornerPinSurface> onDeselect;
+	
 	Draggable dragged;
 
 	// calibration mode is application-wide, so I made this flag static
@@ -226,7 +232,7 @@ public class Keystone {
 		int y = e.getY();
 
 		switch (e.getAction()) {
-
+		
 		case MouseEvent.PRESS:
 			CornerPinSurface top = null;
 			// navigate the list backwards, as to select 
@@ -248,7 +254,22 @@ public class Keystone {
 				//int i = surfaces.indexOf(top);
 				//surfaces.remove(i);
 				//surfaces.add(0, top);
-			}
+
+			  top.selected = true;
+			  if(onSelected != null)
+			    onSelected.accept(top);
+			  
+			  if(onShiftClick != null && e.isShiftDown())
+			    onShiftClick.accept(top);
+			} 
+		  for(CornerPinSurface c : surfaces)
+		    if(c != top)
+		    {
+		      if(onDeselect != null)
+		        onDeselect.accept(c);
+		      
+          c.selected = false;
+		    }
 			break;
 
 		case MouseEvent.DRAG:
@@ -273,5 +294,4 @@ public class Keystone {
 	public void clearSurfaces() {
 		surfaces.clear();
 	}
-
 }

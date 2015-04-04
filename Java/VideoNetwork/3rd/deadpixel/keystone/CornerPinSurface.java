@@ -23,7 +23,10 @@ import java.awt.geom.Point2D;
 import javax.media.jai.PerspectiveTransform;
 import javax.media.jai.WarpPerspective;
 
+import com.danielbchapman.video.blending.Vec2;
+
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -60,7 +63,9 @@ public class CornerPinSurface implements Draggable {
 	public int h;
 
 	int gridColor;
-	int controlPointColor;
+	int gridColorSelected;
+	int controlPointColor;	
+	boolean selected;
 
 	// Jai class for keystone calculus
 	WarpPerspective warpPerspective = null;
@@ -108,6 +113,7 @@ public class CornerPinSurface implements Draggable {
 		calculateMesh();
 
 		this.gridColor = 128;
+		this.gridColorSelected = 0xFF88FF88;
 		this.controlPointColor = 0xFF00FF00;
 	}
 
@@ -185,7 +191,12 @@ public class CornerPinSurface implements Draggable {
 		g.pushMatrix();
 		g.translate(x, y);
 		if (Keystone.calibrate)
-			g.stroke(gridColor);
+		{
+		  if(selected)
+	      g.stroke(gridColorSelected);
+		  else
+		    g.stroke(gridColor);
+		}
 		else
 			g.noStroke();
 		g.fill(255);
@@ -314,8 +325,9 @@ public class CornerPinSurface implements Draggable {
 		g.noFill();
 		for (int i = 0; i < mesh.length; i++) {
 			if (mesh[i].isControlPoint()) {
-				g.ellipse(mesh[i].x, mesh[i].y, 30, 30);
-				g.ellipse(mesh[i].x, mesh[i].y, 10, 10);
+			  drawKeystone(g, mesh[i].x, mesh[i].y, controlPointColor);
+//				g.ellipse(mesh[i].x, mesh[i].y, 30, 30);
+//				g.ellipse(mesh[i].x, mesh[i].y, 10, 10);
 			}
 		}
 	}
@@ -529,4 +541,26 @@ public class CornerPinSurface implements Draggable {
 	      + "w/h->" + w +", " + h;
 	}
 
+  public void drawKeystone(PGraphics g, float x, float y, int color)
+  {
+    g.pushMatrix();
+    //g.translate(home.x, home.y);
+    g.noFill();
+    g.strokeWeight(1);
+    g.stroke(color);
+    g.ellipseMode(PConstants.CENTER);
+    g.ellipse(x, y, 8, 8);
+    g.ellipse(x, y, 16, 16);
+    g.ellipse(x, y, 2, 2);
+    g.line(x - 30, y, x + 30, y);
+    g.line(x, y - 30, x, y + 30);
+    g.text("(" + x + ", " + y + ")", x + 10, y + 20);
+    g.text("(" + x + ", " + y + ")", x - 60, y - 15);
+    g.text("(" + x + ", " + y + ")", x + 10, y - 15);
+    g.text("(" + x + ", " + y + ")", x - 60, y + 20);
+
+    //g.text(message == null ? "" : message, g.width / 2 - 150, g.height / 2);
+
+    g.popMatrix();
+  } 
 }
