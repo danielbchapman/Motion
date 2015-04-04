@@ -1,9 +1,6 @@
 package com.danielbchapman.video.onestream;
 
-import com.danielbchapman.utility.Utility;
-
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PGraphics;
 
 public class DrawingUtil

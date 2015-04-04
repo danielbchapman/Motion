@@ -12,13 +12,8 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.Window;
-import java.io.File;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 import javax.swing.JFrame;
 
@@ -27,7 +22,6 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.video.Capture;
 
-import com.danielbchapman.utility.FileUtil;
 import com.danielbchapman.video.blending.Vec2;
 
 import deadpixel.keystone.CornerPinSurface;
@@ -80,7 +74,7 @@ public class CaptureApp extends PApplet
     }
 
     GraphicsConfiguration xgc = x.getGraphicsConfiguration();
-    Window fs = xgc.getDevice().getFullScreenWindow();
+//    Window fs = xgc.getDevice().getFullScreenWindow();
     Rectangle r = xgc.getBounds();
 
     System.out.println("Total Width-> " + width + " Total Height-> " + height + " Current Location ->" + r.x + ", " + r.y);
@@ -311,7 +305,7 @@ public class CaptureApp extends PApplet
     pushMatrix();
     int red = color(255, 0, 0);// Point
     int orange = color(255, 255, 0);// Selected
-    int green = color(0, 255, 0);// MouseOver
+//    int green = color(0, 255, 0);// MouseOver
 
     int textRestore = getFont().getSize();
     fill(255);
