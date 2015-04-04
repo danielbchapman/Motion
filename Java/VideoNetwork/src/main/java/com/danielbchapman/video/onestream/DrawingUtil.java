@@ -1,5 +1,7 @@
 package com.danielbchapman.video.onestream;
 
+import com.danielbchapman.utility.Utility;
+
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -11,10 +13,17 @@ public class DrawingUtil
   
   public static void drawGradient(PGraphics g, int colorA, int colorB, int x, int y, float w, float h, int axis)
   {
+    g.fill(255,255,0, 128);
+    //g.rect(x, y, w, h);
     g.noFill();
     if (axis == Y_AXIS) {  // Top to bottom gradient
       for (int i = y; i <= y+h; i++) {
-        float inter = PApplet.map(i, y, y+h, 0, 1);
+        float inter = PApplet.map(i-1, y+1, y+h, 0, 1);
+        if(inter <= 0.008032128f)
+          inter = 0.008032128f;//acceptable minimum for a "1";
+        if(inter > 0.99196786f)
+          inter = 0.99196786f;
+        //System.out.println("Y->" + inter);
         int c = g.lerpColor(colorA, colorB, inter);
         g.stroke(c);
         g.line(x, i, x+w, i);
@@ -22,8 +31,15 @@ public class DrawingUtil
     }  
     else if (axis == X_AXIS) {  // Left to right gradient
       for (int i = x; i <= x+w; i++) {
-        float inter = PApplet.map(i, x, x+w, 0, 1);
+        float inter = PApplet.map(i-1, x+1, x+w, 0, 1);
+        if(inter <= 0.008032128f)
+          inter = 0.008032128f;//acceptable minimum for a "1";
+        if(inter > 0.99196786f)
+          inter = 0.99196786f;
+        //System.out.print("(" + i + ", " + y + ") to (" + i + ", " + (y + h) +") (" + inter + ")");
         int c = g.lerpColor(colorA, colorB, inter);
+        //byte[] b =Utility.encode(c); 
+        //System.out.println(" :: C ->" + b[0] + " | " + b[1] + " | " + b[2] + " | " + b[3] +" |");
         g.stroke(c);
         g.line(i, y, i, y+h);
       }

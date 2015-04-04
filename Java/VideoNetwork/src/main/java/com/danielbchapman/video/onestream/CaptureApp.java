@@ -715,6 +715,11 @@ public class CaptureApp extends PApplet
       if(m != null)
       {
         m.blendTop.y = m.blendTop.y+ amount;
+        m.distance = m.distance + amount;
+        if(m.distance < -640)
+          m.distance = 0;
+        if(m.distance > 640)
+          m.distance = 640;
         
         if(m.blendTop.y > 255)
           m.blendTop.y = 255;

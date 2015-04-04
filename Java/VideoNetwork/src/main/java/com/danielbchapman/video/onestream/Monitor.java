@@ -6,6 +6,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 
 import com.danielbchapman.utility.FileUtil;
@@ -21,10 +22,12 @@ public class Monitor implements Serializable
   Vec2 contentDimensions = new Vec2();
 
   // Blending Variables
-  Vec2 blendTop = new Vec2(0,255);
-  Vec2 blendRight = new Vec2(0,255);
-  Vec2 blendBottom = new Vec2(0,255);
-  Vec2 blendLeft = new Vec2(0,255);
+  int thickness = 100;
+  int distance = 0;
+  Vec2 blendTop = new Vec2(0,0);
+  Vec2 blendRight = new Vec2(0,0);
+  Vec2 blendBottom = new Vec2(0,0);
+  Vec2 blendLeft = new Vec2(0,0);
 
   // Blending Variables
   Vec2 topLeft = new Vec2();
@@ -137,22 +140,64 @@ public class Monitor implements Serializable
     if (blend == null)
       throw new RuntimeException("Unable to blend uninitialized graphics object");
 
-    int thickness = 100;
-    int white = parent.color(255,255,255, 255);
-    int black = parent.color(blendTop.y, blendTop.y, blendTop.y, 0);
+    //int thickness = 100;
+    int white = parent.color(0,0,0, 255f);
+    //int black = parent.color(blendTop.y, blendTop.y, blendTop.y, 255);
+    int black = parent.color(0,0,0,0f);
     blend.beginDraw();
     blend.clear();
     blend.noStroke();
     blend.background(255);
     blend.noFill();
+    
+    boolean __drawCurves = false;
+    boolean __left = true;
+    boolean __right = true;
+    boolean __top = true;
+    boolean __bottom = true;
+    //TOP
+    if(__drawCurves){//TOP if left... if right
+      int x = 0;
+      int y = 0;
+      int w = blend.width;
+      int h = blend.height;
+      if(__left){
+        w-= thickness+1;
+        x+=thickness-1;
+        blend.fill(0);
+        blend.rect(0,0,thickness,thickness);
+        blend.noFill();
+        DrawingUtil.drawGradientRadial(blend, white, black, thickness, thickness, thickness, PConstants.PI, PConstants.PI+PConstants.HALF_PI);
+        
+      }
+      if(__right){
+        w-= thickness-1;
+      }
+      DrawingUtil.drawGradient(blend, white, black, x, y, w, thickness, DrawingUtil.Y_AXIS);
+    }
+    //BOTTOM
+    if(__drawCurves){//if left... if right
+      if(__left){
+        
+      }
+      
+      if(__right){
+        
+      }
+      //DrawingUtil.drawGradient(blend, white, black, 0, blend.height - thickness, blend.width, thickness, DrawingUtil.Y_AXIS);  
+    }
+    
     /*
      * This needs better logic.
      * Basically we need to draw a radial gradient for the corners
      */
-    DrawingUtil.drawGradient(blend, black, white, 0, 0, blend.width, thickness, DrawingUtil.Y_AXIS);
-    DrawingUtil.drawGradient(blend, white, black, 0, blend.height - thickness, blend.width, thickness, DrawingUtil.Y_AXIS);
-    DrawingUtil.drawGradient(blend, black, white, 0, 0, thickness, blend.height, DrawingUtil.X_AXIS);
-    DrawingUtil.drawGradient(blend, white, black, blend.width - thickness, 0, thickness, blend.height, DrawingUtil.X_AXIS);
+    int t = thickness;
+    int w = blend.width;
+    int h = blend.height;
+    DrawingUtil.drawGradient(blend, white, black, 0, 0-distance, w, t+distance, DrawingUtil.Y_AXIS);//TOP
+    DrawingUtil.drawGradient(blend, black, white, 0, h - t+distance, w, t+distance, DrawingUtil.Y_AXIS);//BOTTOM
+    DrawingUtil.drawGradient(blend, white, black, 0-distance, 0, t+distance, h, DrawingUtil.X_AXIS);//LEFT
+    DrawingUtil.drawGradient(blend, black, white, w - t+distance, 0, t+distance, h, DrawingUtil.X_AXIS);//RIGHT
     blend.endDraw();
   }
 
