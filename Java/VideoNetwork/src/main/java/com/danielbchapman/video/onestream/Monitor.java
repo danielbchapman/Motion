@@ -21,10 +21,10 @@ public class Monitor implements Serializable
   Vec2 contentDimensions = new Vec2();
 
   // Blending Variables
-  Vec2 blendTopLeft = new Vec2();
-  Vec2 blendTopRight = new Vec2();
-  Vec2 blendBottomLeft = new Vec2();
-  Vec2 blendBottomRight = new Vec2();
+  Vec2 blendTop = new Vec2(0,255);
+  Vec2 blendRight = new Vec2(0,255);
+  Vec2 blendBottom = new Vec2(0,255);
+  Vec2 blendLeft = new Vec2(0,255);
 
   // Blending Variables
   Vec2 topLeft = new Vec2();
@@ -76,10 +76,10 @@ public class Monitor implements Serializable
     topLeft = read.apply(lines);
     topRight = read.apply(lines);
     
-    blendTopLeft = read.apply(lines);
-    blendTopRight = read.apply(lines);
-    blendBottomRight = read.apply(lines);
-    blendBottomLeft = read.apply(lines);
+    blendTop = read.apply(lines);
+    blendRight = read.apply(lines);
+    blendBottom = read.apply(lines);
+    blendLeft = read.apply(lines);
     
     contentStart = read.apply(lines);
     contentDimensions = read.apply(lines);
@@ -107,10 +107,10 @@ public class Monitor implements Serializable
     writeDoc.accept(topLeft, "Top Left");
     writeDoc.accept(topRight, "Top Right");
     
-    writeDoc.accept(blendTopLeft, "Blend Top Left");
-    writeDoc.accept(blendTopRight, "Blend Top Right");
-    writeDoc.accept(blendBottomRight, "Blend Bottom Right");
-    writeDoc.accept(blendBottomLeft, "Blend Bottom Left");
+    writeDoc.accept(blendTop, "Blend Top Left");
+    writeDoc.accept(blendRight, "Blend Top Right");
+    writeDoc.accept(blendRight, "Blend Bottom Right");
+    writeDoc.accept(blendBottom, "Blend Bottom Left");
     
     writeDoc.accept(contentStart, "Content Start");
     writeDoc.accept(contentDimensions, "Content Dimensions");
@@ -138,44 +138,23 @@ public class Monitor implements Serializable
       throw new RuntimeException("Unable to blend uninitialized graphics object");
 
     int thickness = 100;
-    int black = 0x00000000;
-    int alpha = 0x000000FF;
+    int white = parent.color(255,255,255, 255);
+    int black = parent.color(blendTop.y, blendTop.y, blendTop.y, 0);
     blend.beginDraw();
     blend.clear();
     blend.noStroke();
     blend.background(255);
     blend.noFill();
-    DrawingUtil.drawGradient(blend, black, alpha, 0, 0, blend.width, thickness, DrawingUtil.Y_AXIS);
-    DrawingUtil.drawGradient(blend, alpha, black, 0, blend.height - thickness, blend.width, thickness, DrawingUtil.Y_AXIS);
-    DrawingUtil.drawGradient(blend, black, alpha, 0, 0, thickness, blend.height, DrawingUtil.X_AXIS);
-    DrawingUtil.drawGradient(blend, alpha, black, blend.width - thickness, 0, thickness, blend.height, DrawingUtil.X_AXIS);
+    /*
+     * This needs better logic.
+     * Basically we need to draw a radial gradient for the corners
+     */
+    DrawingUtil.drawGradient(blend, black, white, 0, 0, blend.width, thickness, DrawingUtil.Y_AXIS);
+    DrawingUtil.drawGradient(blend, white, black, 0, blend.height - thickness, blend.width, thickness, DrawingUtil.Y_AXIS);
+    DrawingUtil.drawGradient(blend, black, white, 0, 0, thickness, blend.height, DrawingUtil.X_AXIS);
+    DrawingUtil.drawGradient(blend, white, black, blend.width - thickness, 0, thickness, blend.height, DrawingUtil.X_AXIS);
     blend.endDraw();
   }
+
   
-//  public void updateGradient(Monitor v, int w, int h)
-//  {
-//    if (blend == null || blend.width != w || blend.height != h)
-//    {
-//      if (blend != null)
-//        blend.dispose();
-//
-//      blend = parent.createGraphics(w, h);
-//    }
-//
-//    blend.noFill();
-//    blend.noStroke();
-//    blend.beginDraw();
-//    
-//    int thick = 100;// alter this later..
-//    int black = 0x00000000;
-//    int alpha = 0x000000FF;
-//    
-//    DrawingUtil.drawGradient(blend, black, alpha, 0, 0, w, thick, DrawingUtil.X_AXIS); //Top
-//    DrawingUtil.drawGradient(blend, alpha, black, w - thick, 0, thick, h, DrawingUtil.Y_AXIS);//Right
-//    DrawingUtil.drawGradient(blend, alpha, black, 0, h - thick, w, thick, DrawingUtil.X_AXIS);//Bottom
-//    DrawingUtil.drawGradient(blend, black, alpha, 0, 0, thick, h, DrawingUtil.Y_AXIS);//Left
-//    
-//    blend.endDraw();
-//    blend.loadPixels();
-//  }
 }

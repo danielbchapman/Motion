@@ -229,6 +229,7 @@ public class CaptureApp extends PApplet
       //v.cache.image(image, 0, 0, image.width, image.height);
     
       v.cache.mask(v.blend);
+      //v.cache.image(v.blend,0,0);
       v.cache.endDraw();
       s.render(g, v.cache, 0, 0, v.cache.width, v.cache.height);
       return;
@@ -492,8 +493,17 @@ public class CaptureApp extends PApplet
               else
                 vertex.x += 1;
             }
-
     }
+    
+    if(e.getKey() == '-')
+      blend(-1);
+    if(e.getKey() == '=')
+      blend(1);
+    if(e.getKey() == '_')
+      blend(-5);
+    if(e.getKey() == '+')
+      blend(+5);
+   
 
   }
 
@@ -697,5 +707,22 @@ public class CaptureApp extends PApplet
        
       }
     }
+  }
+  
+  public void blend(int amount)
+  {
+    for(Monitor m : monitors)
+      if(m != null)
+      {
+        m.blendTop.y = m.blendTop.y+ amount;
+        
+        if(m.blendTop.y > 255)
+          m.blendTop.y = 255;
+        if(m.blendTop.y < 0)
+          m.blendTop.y = 0;
+        
+        m.updateBlend();
+        System.out.println("Blend is -> " + m.blendTop);
+      }
   }
 }
