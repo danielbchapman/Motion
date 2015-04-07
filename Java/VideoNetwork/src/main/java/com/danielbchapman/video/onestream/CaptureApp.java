@@ -12,6 +12,9 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.Window;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 
@@ -38,11 +41,24 @@ public class CaptureApp extends PApplet
    */
   private static final long serialVersionUID = 1L;
   private static JFrame application;
-
+  private static String cameraName = "";
   public static void main(String[] args)
   {
+    if(args != null && args.length > 0)
+	  cameraName = args[0];
     application = new JFrame();
-    application.setUndecorated(true);
+    //Mac OS Specifics (this doesn't really work at all, we're relying on the capture event to sync the monitors)
+    try {
+		enableOSXFullscreen(application);
+		application.setUndecorated(false);
+	} catch (ClassNotFoundException | NoSuchMethodException | SecurityException
+			| InstantiationException | IllegalAccessException
+			| IllegalArgumentException | InvocationTargetException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		application.setUndecorated(true); //Windows mode...
+	}
+    
     Vec2 size = maxOut(application);
     application.setSize(size.x, (size.y / 4 * 3));
     // fs.setSize(1920 * 2, 720);//1080
@@ -56,6 +72,29 @@ public class CaptureApp extends PApplet
     // GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(fs);
   }
 
+  public static void enableOSXFullscreen(Window window) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+//      Preconditions.checkNotNull(window);
+//      try {
+//          Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
+//          Class params[] = new Class[]{Window.class, Boolean.TYPE};
+//          Method method = util.getMethod("setWindowCanFullScreen", params);
+//          method.invoke(util, window, true);
+//      } catch (ClassNotFoundException e1) {
+//      } catch (Exception e) {
+//          log.log(Level.WARNING, "OS X Fullscreen FAIL", e);
+//      }
+	  Object applicationObject;
+	  Method fullScreenMethod;
+	  Class<?> util = Class.forName("com.apple.eawt.FullScreenUtilities");
+      Method method = util.getMethod("setWindowCanFullScreen", Window.class, Boolean.TYPE);
+      method.invoke(util, window, true);
+
+      Class<?> application = Class.forName("com.apple.eawt.Application");
+      fullScreenMethod = application.getMethod("requestToggleFullScreen", Window.class);
+      applicationObject = application.newInstance();
+      fullScreenMethod.invoke(applicationObject, window);
+  }
+  
   public static Vec2 maxOut(JFrame x)
   {
     int width = 0;
@@ -82,8 +121,8 @@ public class CaptureApp extends PApplet
 
   String message = "No Node Selected";
   Monitor one = new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Mointor 1", 0, 0); // 1920 for offset dual
-  Monitor two =  new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Monitor 2", 400, 0);
-  Monitor three = new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Monitor 3", 400, 0);
+  Monitor two =  null;//new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Monitor 2", 400, 0);
+  Monitor three = null;//new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Monitor 3", 400, 0);
   Monitor four = null; // new Monitor(this, 0, 0, 400, 0, 400, 400, 0, 400, "Monitor 4", 400, 0);
   int monitorIndex = 0;
   Monitor selected = one;
@@ -218,8 +257,8 @@ public class CaptureApp extends PApplet
       v.cache.image(image, v.contentStart.x, v.contentStart.y, v.contentDimensions.x, v.contentDimensions.y); //crop here
       //v.cache.image(image, 0, 0, image.width, image.height);
     
-      //v.cache.mask(v.blend);
-      v.cache.image(v.blend,0,0);
+      v.cache.mask(v.blend);
+      //v.cache.image(v.blend,0,0);
       v.cache.endDraw();
       s.render(g, v.cache, 0, 0, v.cache.width, v.cache.height);
       return;
@@ -354,6 +393,7 @@ public class CaptureApp extends PApplet
   @Override
   public void keyPressed(processing.event.KeyEvent e)
   {
+	  System.out.println("Key hit");
     if (e.getKeyCode() == ESC)
     {
       System.exit(1);
@@ -361,18 +401,16 @@ public class CaptureApp extends PApplet
 
     if (e.getKey() == 's')
     {
-      System.out.println("SAVING?");
-      if (e.isAltDown() || e.getKeyCode() == ALT)
+      if (e.isAltDown() || e.getKeyCode() == ALT || e.isControlDown() || e.isMetaDown())
       {
         System.out.println("SAVING.");
         save();
-
       }
     }
     
     if (e.getKey() == 'l')
     {
-      if(e.isAltDown() || e.getKeyCode() == ALT)
+      if(e.isAltDown() || e.getKeyCode() == ALT || e.isControlDown() || e.isMetaDown())
       {
         System.out.println("LOADING POSITIONS");
         load();
@@ -652,7 +690,7 @@ public class CaptureApp extends PApplet
       }
     }
     // Disable for no input devices and use the butterfly
-    boolean __enableCamera = false;
+    boolean __enableCamera = true;
 
     if (__enableCamera)
     {
@@ -682,13 +720,15 @@ public class CaptureApp extends PApplet
     int blend = 100/2;
     one.contentDimensions = new Vec2(640, 480);
     one.contentStart = new Vec2(0,0);
-    
+    if(two != null){
     two.contentDimensions = new Vec2(1280, 960); 
     two.contentStart = new Vec2(-320-blend, -480); //middle of image
+    }
     
+    if(three != null){
     three.contentDimensions = new Vec2(1280, 960);
     three.contentStart = new Vec2(-640-320+blend, -480); //middle of image
-    
+    }
     
     noCursor();
   }
