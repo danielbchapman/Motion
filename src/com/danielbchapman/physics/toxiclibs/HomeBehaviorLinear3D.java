@@ -33,18 +33,29 @@ public class HomeBehaviorLinear3D implements ParticleBehavior3D
       Point p = (Point) particle;
       Vec3D dir = p.sub(p.home);
       float mag = dir.magnitude();
+      float maxAngle = vars.maxForce * 0.1f;//do we need this?
       float delta = vars.userA * mag;
-      
+      float magA = p.angular.magnitude();
+      float deltaA = magA * vars.userA;
       if(delta > vars.maxForce)
         delta = mag - vars.maxForce;
       
+      //Position
       dir = dir.normalizeTo(mag - delta);//move X units of distance
       
       p.x = p.home.x + dir.x;
       p.y = p.home.y + dir.y;
       p.z = p.home.z + dir.z;
+      
+      //Angular
+      if(magA > 0.001f)
+      {
+        if(magA > maxAngle)
+          p.angular = p.angular.normalizeTo(magA - deltaA);
+        else
+          p.angular = p.angular.normalizeTo(magA - deltaA);
+      }
     }
-
      
   }
   @Override

@@ -11,7 +11,7 @@ public class Letter
   PImage texture;
   
   private char character;
-  int size = 16;
+  int size = 12;
   PVector rotation = new PVector();
   
   public Letter(char c, int size)

@@ -21,8 +21,8 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
   @Override
   public void apply(VerletParticle3D p3d)
   {
-    if(!enabled)
-      return;    
+    if(p3d.isLocked() || !enabled)
+      return;
       
     if(p3d instanceof Point)
     {

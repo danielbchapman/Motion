@@ -34,6 +34,7 @@ public class MotionEngine extends PApplet
   private GridLayer grid;
   private GridLayerFlying gridFly;
   private ParticleLayer particles;
+  WordLayer words;
   private static FalloffAttractionBehavior sucker = 
       new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
 
@@ -123,7 +124,7 @@ public class MotionEngine extends PApplet
 
   public void setup()
   {
-    size(1920, 1080, OPENGL);
+    size(1280, 720, OPENGL);
     frameRate(60);
     //physics.addBehavior(world);
     physics.setDrag(0.5f);
@@ -137,10 +138,11 @@ public class MotionEngine extends PApplet
     grid = new GridLayer();
     particles = new ParticleLayer();
     gridFly = new GridLayerFlying();
-    
+    words = new WordLayer();
     //add(gridFly);
-    add(particles);
+    //add(particles);
     //add(grid);
+    add(words);
   }
 
   @Override
@@ -157,6 +159,10 @@ public class MotionEngine extends PApplet
       gravityOneSecond.go(layers.get(0), this);
     }
     
+    if (event.getKey() == 's')
+    {
+      words.randomSplits(physics);
+    }
     if (event.getKey() == '1')
     {
       mode = Mode.SUCK_FORCE;

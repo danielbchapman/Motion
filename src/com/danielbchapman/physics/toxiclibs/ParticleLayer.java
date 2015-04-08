@@ -60,7 +60,8 @@ public class ParticleLayer extends Layer
       Point p  = points[i];
       
       g.translate(p.x, p.y, p.z);
-      g.rotate((p.angular.magnitude())/360f, p.angular.x, p.angular.y, p.angular.z);
+      Point.rotation(g, p);
+      //g.rotate((p.angular.magnitude())/360f, p.angular.x, p.angular.y, p.angular.z);
       g.text("Word", 0,0,0);
       //Rotation based on angular
 //      g.translate(-p.x, -p.y, -p.z);
@@ -71,5 +72,4 @@ public class ParticleLayer extends Layer
     
     g.popMatrix();
   }
- 
 }
