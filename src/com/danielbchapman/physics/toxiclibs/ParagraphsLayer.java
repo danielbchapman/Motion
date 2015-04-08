@@ -19,7 +19,7 @@ public class ParagraphsLayer extends Layer
   @Override
   public Point[] init()
   {
-    Point origin = new Point(200,200,0, 1);
+    Point origin = new Point(10,10,0, 1);
     String text = 
           "Buy it, use it, break it, fix it, "+ "\n"+
           "Trash it, change it, mail - upgrade it,"+ "\n"+
