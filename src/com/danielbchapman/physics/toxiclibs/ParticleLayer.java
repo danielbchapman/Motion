@@ -16,9 +16,9 @@ public class ParticleLayer extends Layer
   
   public Point[] init()
   {
-    gridX = 120/2;
-    gridY = 76/2;
-    spacing = 40;
+    gridX = (int) (120 *1.0f);
+    gridY = (int) (76* 1.0f);
+    spacing = 10 *2;
     Point[] grid = new Point[gridX * gridY];
   
     for(int i = 0; i < gridY; i++)
@@ -57,8 +57,8 @@ public class ParticleLayer extends Layer
     for(int i = 0; i < points.length; i++)
     {
       Point p  = points[i];
-      g.text("Word", p.x, p.y, p.z);
-      //g.point(p.x, p.y, p.z); 
+      //g.text("Word", p.x, p.y, p.z);
+      g.point(p.x, p.y, p.z); 
     }
     
     g.popMatrix();

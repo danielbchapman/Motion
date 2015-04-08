@@ -45,7 +45,7 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
       setForce(f);
       p.addForce(scaledForce);
       //Debug
-      if(p.home.x == 0 && p.home.y == 0)
+      if(false && p.home.x == 0 && p.home.y == 0)
       {
         System.out.println("Point");
         System.out.println("\tlocation: " + p.toString());

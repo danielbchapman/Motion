@@ -1,5 +1,6 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import lombok.Data;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
@@ -30,5 +31,18 @@ public class Line extends Shape
       current = next;
     }
     g.endShape(PConstants.LINE);
+  }
+  
+  @Override
+  public String toString()
+  {
+    StringBuilder buf = new StringBuilder();
+    buf.append("Line -> " + super.toString());
+    
+    for(Point p : points)
+      buf.append("\n\t").append(p);
+    
+    buf.append("\n");
+    return buf.toString();
   }
 }

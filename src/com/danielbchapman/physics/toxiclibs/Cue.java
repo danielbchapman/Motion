@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.danielbchapman.groups.Item;
+
 public class Cue
 {
   private Layer layer;
@@ -53,5 +55,15 @@ public class Cue
         Cue.this.running = false;
         
       } }, executeLast, TimeUnit.MILLISECONDS);
+  }
+  
+  public static void save(Item item, Cue cue)
+  {
+    
+  }
+  
+  public static Cue load(Item item)
+  {
+    return null;
   }
 }

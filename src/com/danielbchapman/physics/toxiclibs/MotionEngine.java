@@ -30,13 +30,16 @@ public class MotionEngine extends PApplet
   private static Cue gravityOneSecond;
 
   private GridLayer grid;
+  private GridLayerFlying gridFly;
   private ParticleLayer particles;
   private static FalloffAttractionBehavior sucker = 
       new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
 
   private static HomeBehavior3D home = new HomeBehavior3D(new Vec3D(0, 0, 0));
+  private static HomeBehaviorLinear3D homeLinear = new HomeBehaviorLinear3D(0.005f, .1f, 10f);
   private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 100f);
   private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
+  private static FrequencyOscillationBehavior osc = new FrequencyOscillationBehavior();
   
   static
   {
@@ -91,6 +94,7 @@ public class MotionEngine extends PApplet
     // Model updates
     //physics.setTimeStep(frameRate / 60f);
     physics.update();
+    osc.update();
 
     
     if (layers != null)
@@ -129,6 +133,9 @@ public class MotionEngine extends PApplet
   {
     grid = new GridLayer();
     particles = new ParticleLayer();
+    gridFly = new GridLayerFlying();
+    
+    //add(gridFly);
     add(particles);
     //add(grid);
   }
@@ -191,6 +198,29 @@ public class MotionEngine extends PApplet
       mode = Mode.EXPLODE_FORCE;
       explode.direction = new Vec3D(0, 0, 1f);
     }
+    
+    if(event.getKey() == 'd')
+    {
+      gridFly.debugXAxis();
+    }
+    
+    //Animation tests
+    if(event.getKey() == '0')
+    {
+      physics.clear();
+      add(gridFly);
+      
+
+      gridFly.offscreen();
+      gridFly.lockAll();
+    }
+    
+    if(event.getKey() == 'z')
+    {
+      gridFly.runFades();
+    }
+    
+    //Force Basics
     if(event.getKeyCode() == LEFT)
     {
       float drag = physics.getDrag();
@@ -239,23 +269,50 @@ public class MotionEngine extends PApplet
     {
       if(home.enabled)
       {
-        System.out.println("Turning on home force!");
+        System.out.println("Turning off home force!");
         home.enabled = false;
         physics.removeBehavior(home);
       }
         
       else
       {
-        System.out.println("Turning off home force!");
+        System.out.println("Turning on home force!");
         home.enabled = true;
         physics.addBehavior(home);
       }
     }
     
-    //Animation tests
-    if(event.getKey() == '0')
+    if(event.getKey() == 'j')
     {
-      grid.offscreen();
+      if(homeLinear.enabled)
+      {
+        System.out.println("Turning off home linear force!");
+        homeLinear.enabled = false;
+        physics.removeBehavior(homeLinear);
+      }
+        
+      else
+      {
+        System.out.println("Turning on linear home force!");
+        homeLinear.enabled = true;
+        physics.addBehavior(homeLinear);
+      }
+    }
+    
+    if(event.getKey() == 'o')
+    {
+      if(!osc.enabled)
+      {
+        System.out.println("Turning on 20hz Wave");
+        physics.addBehavior(osc);
+        osc.setEnabled(true);
+      }
+      else
+      {
+        System.out.println("Turning off 20hz Wave");
+        physics.removeBehavior(osc);
+        osc.setEnabled(false);
+      } 
     }
   }
   

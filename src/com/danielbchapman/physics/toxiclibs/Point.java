@@ -1,10 +1,12 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import lombok.Data;
+import lombok.ToString;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
 
 @Data
+@ToString(callSuper=true)
 public class Point extends VerletParticle3D
 {
   Vec3D home;
