@@ -64,7 +64,7 @@ public class Word
       return;
     split = true;
     //Add new points
-    //remove old points
+    //FIXME Remove old points
     for(int i = 0; i < letters.length; i++){
       Vec3D rand = Vec3D.randomVector().scale(mag);
       points[i] = parent.copyTranslate(i*size, 0, 0);

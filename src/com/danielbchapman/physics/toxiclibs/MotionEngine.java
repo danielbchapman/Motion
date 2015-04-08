@@ -1,7 +1,10 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.function.Consumer;
+
+import com.danielbchapman.artwork.Word;
 
 import javafx.scene.input.KeyCode;
 import processing.core.PApplet;
@@ -34,6 +37,7 @@ public class MotionEngine extends PApplet
   private GridLayer grid;
   private GridLayerFlying gridFly;
   private ParticleLayer particles;
+  private ParagraphsLayer paragraph;
   WordLayer words;
   private static FalloffAttractionBehavior sucker = 
       new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
@@ -135,14 +139,16 @@ public class MotionEngine extends PApplet
 
   public void postSetup()
   {
-    grid = new GridLayer();
-    particles = new ParticleLayer();
-    gridFly = new GridLayerFlying();
+//    grid = new GridLayer();
+//    particles = new ParticleLayer();
+//    gridFly = new GridLayerFlying();
     words = new WordLayer();
+    paragraph = new ParagraphsLayer();
     //add(gridFly);
     //add(particles);
     //add(grid);
-    add(words);
+//    add(words);
+    add(paragraph);
   }
 
   @Override
@@ -161,7 +167,23 @@ public class MotionEngine extends PApplet
     
     if (event.getKey() == 's')
     {
+      System.out.println("Splitting words...");
       words.randomSplits(physics);
+    }
+    
+    if (event.getKey() == 'S')
+    {
+      System.out.println("Splitting paragraph...");
+      paragraph.split(physics, 0);
+      if(paragraph.isSplit())
+      {
+        System.out.println("Splitting words");
+        Random rand = new Random();
+        for(Word w : paragraph.paragraph.words)
+        {
+          w.split(physics, rand.nextFloat() % 3f);
+        }
+      }
     }
     if (event.getKey() == '1')
     {

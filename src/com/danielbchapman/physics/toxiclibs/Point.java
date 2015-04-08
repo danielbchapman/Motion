@@ -70,7 +70,7 @@ public class Point extends VerletParticle3D
   {
     return copyTranslate(0, 0, 0);
   }
-  
+
   /**
    * Create a copy of this point but translate the particles so that they physics engine
    * maintains veloctiy etc... 
