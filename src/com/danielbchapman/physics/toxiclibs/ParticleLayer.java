@@ -56,8 +56,16 @@ public class ParticleLayer extends Layer
     g.translate(10, 10, 0);//Offset to see correctly
     for(int i = 0; i < points.length; i++)
     {
+      g.pushMatrix();
       Point p  = points[i];
-      g.text("Word", p.x, p.y, p.z);
+      
+      g.translate(p.x, p.y, p.z);
+      g.rotate((p.angular.magnitude())/360f, p.angular.x, p.angular.y, p.angular.z);
+      g.text("Word", 0,0,0);
+      //Rotation based on angular
+//      g.translate(-p.x, -p.y, -p.z);
+//      g.rotate(-p.angular.x);
+      g.popMatrix();
       //g.point(p.x, p.y, p.z); 
     }
     

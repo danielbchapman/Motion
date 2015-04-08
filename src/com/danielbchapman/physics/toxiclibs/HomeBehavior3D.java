@@ -30,8 +30,22 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
       Vec3D f = p.home.sub(p);//.scale(0.05f);//easing 
       float mag = f.magnitude();
       float stop = 0.05f; //halt
+      float maxAngle = max * 0.1f;
       
-      if(f.magnitude() < stop)//same pixel
+      Vec3D angular = p.angular.copy().invert();//0,0,0 == home position
+      float magA = angular.magnitude();
+      
+      if(magA > 0.001f)
+      {
+        if(magA > maxAngle)
+          p.addAngularForce(angular.normalizeTo(maxAngle));
+        else 
+          p.addAngularForce(angular);
+      }
+      //else don't rotate
+      
+      //FIXME this is fishy--shouldn't we ease first then check?
+      if(mag < stop)//same pixel
       {
         p.x = p.home.x;
         p.y = p.home.y;
@@ -52,6 +66,7 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
         System.out.println("\thome    : " + p.home);
         System.out.println("\tforce   : " + f);
         System.out.println("\tdistance   : " + f.magnitude());
+        System.out.println("\tangular   : " + p.angular.toString());
       }
       
     }
