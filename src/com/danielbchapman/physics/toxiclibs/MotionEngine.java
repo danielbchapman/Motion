@@ -6,7 +6,9 @@ import java.util.function.Consumer;
 import javafx.scene.input.KeyCode;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
+import toxi.geom.AABB;
 import toxi.geom.Vec3D;
+import toxi.physics3d.constraints.BoxConstraint;
 import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.AttractionBehavior3D;
 import toxi.physics3d.behaviors.GravityBehavior3D;
@@ -51,11 +53,11 @@ public class MotionEngine extends PApplet
       test.add(a);
     }
 
-    ArrayList<Action> gravityOne = new ArrayList<>();
+    ArrayList<Action> gravityThirty = new ArrayList<>();
     Action start = new Action("Start Gravity", 0);
-    final GravityBehavior3D gravity = new GravityBehavior3D(new Vec3D(0f, 0.01f, 0f));
+    final AngularGravityBehavior3D gravity = new AngularGravityBehavior3D(new Vec3D(0f, 0.01f, 0f));
 
-    Action stop = new Action("Stop Gravity", 1000);
+    Action stop = new Action("Stop Gravity", 30000);
 
     start.motionFunction = (MotionEngine e) -> {
       e.physics.addBehavior(gravity);
@@ -65,10 +67,10 @@ public class MotionEngine extends PApplet
       e.physics.removeBehavior(gravity);
     };
     
-    gravityOne.add(start);
-    gravityOne.add(stop);
+    gravityThirty.add(start);
+    gravityThirty.add(stop);
 
-    gravityOneSecond = new Cue(null, null, gravityOne);
+    gravityOneSecond = new Cue(null, null, gravityThirty);
     testCue = new Cue(null, null, test);
   }
 
@@ -121,8 +123,9 @@ public class MotionEngine extends PApplet
 
   public void setup()
   {
-    size(1024, 768, OPENGL);
+    size(1920, 1080, OPENGL);
     frameRate(60);
+    //physics.addBehavior(world);
     physics.setDrag(0.5f);
     postSetup();
     

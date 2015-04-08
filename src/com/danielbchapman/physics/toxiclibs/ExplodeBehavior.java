@@ -43,7 +43,10 @@ public class ExplodeBehavior implements ParticleBehavior3D
     Vec3D vForce = direction.normalizeTo(modifier);
     distanceV = distanceV.normalizeTo(modifier);  
     vForce = vForce.add(distanceV);
-    
+    if(p instanceof Point)
+    {
+      ((Point)p).addAngularForce(vForce.scale(5f));
+    }
     p.addForce(vForce);
   }
 
