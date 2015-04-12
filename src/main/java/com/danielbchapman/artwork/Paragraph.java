@@ -32,8 +32,16 @@ public class Paragraph
     int col = 0;
     int row = 0;
     int index = 0;
+    
+
+    int count = 3000;
+    int currentDelay = 0;
+    int increment = 10000 / parts.length;
+    
+    int debugCount = 0;
     for(String s : parts)
     {
+      
       int colNext = col + s.length() * wordSpace;
       
       if(colNext > maxWidth)
@@ -43,12 +51,17 @@ public class Paragraph
         row++;
         System.out.println("Increasing column");
       }
-
+      
       Point p = parent.copyTranslate(col, row*rowSpace, 0);
-      Word w = new Word(s, p);
+      
+      Word w = new Word(s, p, 0, 255, count, currentDelay);
+      if(debugCount == 50)
+        w.debug = true;
       wordList.add(w);
       colNext += wordSpace; //add a space
       col = colNext;
+      currentDelay += increment;
+      debugCount++;
     }
     
     points = new Point[wordList.size()];

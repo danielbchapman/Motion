@@ -18,6 +18,7 @@ public class Fadeable
   public boolean running;
   public boolean finished;
   public static final int MAX = 255;
+  public boolean debug = false;
 
   public Fadeable(int opacityStart, int opacityEnd, long count, long delay)
   {
@@ -39,7 +40,7 @@ public class Fadeable
     }
     
     long delta = time - start;
-    if(delta <= 0){
+    if(delta <= 0 || (delta - delay) <= 0){
       opacity = opacityStart;
       running = false;
     } else if(delta > (count+delay)){
@@ -48,6 +49,17 @@ public class Fadeable
     } else {
       float amount = ((float)(delta-delay)) / ((float)count);
       opacity = (int) (opacityStart + (amount * opacityDelta));
+    }
+    if(debug)
+    {
+      System.out.println("[Fadeable]::Debug Information");
+      System.out.println("Opacity -> " + opacity);
+      System.out.println("Opacity Start -> " + opacityStart);
+      System.out.println("Opacity End -> " + opacityEnd);
+      System.out.println("Count -> " + count);
+      System.out.println("Delay -> " + delay);
+      System.out.println("Arguments: time:" + time + " color:" + Integer.toHexString(color));
+      System.out.println("Opacity -> " + opacity);
     }
     return ( opacity << 24) | (0x00FFFFFF &  color);
   }

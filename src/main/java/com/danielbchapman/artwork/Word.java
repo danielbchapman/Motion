@@ -9,15 +9,16 @@ import toxi.physics3d.VerletPhysics3D;
 
 import com.danielbchapman.physics.toxiclibs.Point;
 
-public class Word
+public class Word extends Fadeable
 {
   char[] letters;
   boolean split;
   Point[] points;
   Point parent;
   
-  public Word(String word, Point parent)
+  public Word(String word, Point parent, int low, int high, int count, int delay)
   {
+    super(low, high, count, delay);
     letters = word.toCharArray();
     points = new Point[letters.length];
     character = letters[0];
@@ -25,11 +26,18 @@ public class Word
     //calculate points
   }
   
+  public Word(String word, Point parent)
+  {
+    this(word, parent, 255, 255, 0, 0);
+  }
+  
   private char character;
   int size = 12;
   
   public void draw(PGraphics g, Point p)
   {
+    int reset = g.fillColor;
+    int color = color(System.currentTimeMillis(), g.fillColor);
     if(split)
     {
       for(int i = 0; i < points.length; i++)
@@ -37,6 +45,7 @@ public class Word
         g.pushMatrix();
         g.translate(points[i].x, points[i].y, points[i].z);
         Point.rotation(g, points[i]);
+        g.fill(color);
         g.text(letters[i], 0, 0, 0);
         g.popMatrix();
       }
@@ -46,16 +55,14 @@ public class Word
       g.pushMatrix();
       g.translate(p.x,  p.y, p.z);
       Point.rotation(g, p);
-      g.fill(255);
-      g.stroke(255);
+      g.fill(color);
       for(int i = 0; i < letters.length; i++)
       {
         g.text(letters[i], i*size, 0, 0);  
       }
-      
       g.popMatrix();  
     }
-    
+    g.fill(reset);
   }
   
   public void split(VerletPhysics3D physics, float mag)
