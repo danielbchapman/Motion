@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.danielbchapman</groupId>
+	<artifactId>motion</artifactId>
+	<version>0.0.1</version>
+	<name>Motion</name>
+	<description>A responsive environment based loosely on the standard model of physics.</description>
+
+	<!-- Windows 32 bit for the natives please adjust as needed -->
+	<dependencies>
+		<!-- Dependencies via Daniel B. Chapman (GPL) http://www.github.com/danielbchapman-->
+		
+		
+		<!-- Processing Dependencies -->
+		<dependency>
+			<groupId>processing</groupId>
+			<artifactId>core</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/core.jar</systemPath>
+	    </dependency>
+	    <dependency>
+			<groupId>gluegen-rt</groupId>
+			<artifactId>natives</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
+	    </dependency>
+	    <dependency>
+			<groupId>gluegen-rt</groupId>
+			<artifactId>core</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/gluegen-rt.jar</systemPath>
+	    </dependency>
+	    <dependency>
+			<groupId>gstreamer-java</groupId>
+			<artifactId>core</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/gstreamer-java.jar</systemPath>
+	    </dependency>
+	    <dependency>
+			<groupId>jna</groupId>
+			<artifactId>core</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/jna.jar</systemPath>
+	    </dependency>
+	    <dependency>
+			<groupId>jogl-all</groupId>
+			<artifactId>natives</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
+	    </dependency>
+	    <dependency>
+			<groupId>jogl-all</groupId>
+			<artifactId>core</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/jogl-all.jar</systemPath>
+	    </dependency>
+		<dependency>
+			<groupId>processing</groupId>
+			<artifactId>video</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/video.jar</systemPath>
+	    </dependency>
+		<dependency>
+			<groupId>com.danielbchapman.data</groupId>
+			<artifactId>groups</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.danielbchapman</groupId>
+			<artifactId>utilities</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.2</version>
+		</dependency>
+	</dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
