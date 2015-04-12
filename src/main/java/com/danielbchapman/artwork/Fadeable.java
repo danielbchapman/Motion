@@ -8,7 +8,7 @@ import processing.core.PGraphics;
 
 public class Fadeable
 {
-  public long start = 0L;
+  public long start = -1L;
   public long count;
   public int opacity;
   public int opacityStart;
@@ -34,19 +34,19 @@ public class Fadeable
     if(finished)
       return color;
     running = true;
-    if(start == 0L){
+    if(start < 0L){
       start = time;
     }
     
     long delta = time - start;
-    if(delta < 0){
+    if(delta <= 0){
       opacity = opacityStart;
       running = false;
-    } else if(delta > count){
+    } else if(delta > (count+delay)){
       finished = true;
       return color;
     } else {
-      float amount = delta / count;
+      float amount = ((float)(delta-delay)) / ((float)count);
       opacity = (int) (opacityStart + (amount * opacityDelta));
     }
     return ( opacity << 24) | (0x00FFFFFF &  color);
