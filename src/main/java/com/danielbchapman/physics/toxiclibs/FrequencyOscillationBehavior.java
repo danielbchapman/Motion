@@ -20,7 +20,7 @@ public class FrequencyOscillationBehavior extends SineWave implements ParticleBe
   float val2 = 0f;
   public FrequencyOscillationBehavior()
   {
-    super(1f, hertzToRadians(20f, 60f));
+    super(1f, hertzToRadians(20f, 1f));
     vars.direction = new Vec3D(0, 0, 0.1f);
   }
   

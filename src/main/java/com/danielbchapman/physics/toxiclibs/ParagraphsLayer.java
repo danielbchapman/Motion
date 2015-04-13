@@ -40,7 +40,7 @@ public class ParagraphsLayer extends Layer
           "Turn it, leave it, start - format it."+ "\n";
     
     //paragraph = new Paragraph(text, origin, 400, 12, 12);
-    paragraph = new Paragraph(text, origin, 500, 12, 12, 0, 3000, 10000, 0, 255, FadeType.LINE_BY_LINE);
+    paragraph = new Paragraph(text, origin, 500, 12, 12, 0, 0, 10000, 0, 255, FadeType.LINE_BY_LINE);
     origin.setWeight(1f);
     //points = new Point[1];
     //points[0] = paragraph.parent;//origin
