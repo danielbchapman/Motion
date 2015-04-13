@@ -27,6 +27,7 @@ public class MotionEngine extends PApplet
   }
   private static final long serialVersionUID = 1L;
 
+  public static Actions ACTIONS;
   private VerletPhysics3D physics = new VerletPhysics3D();
   private ArrayList<Layer> layers = new ArrayList<>();
 
@@ -87,6 +88,7 @@ public class MotionEngine extends PApplet
   public void add(Layer layer)
   {
     layer.applet = this;
+    layer.engine = this;
     layers.add(layer);
     for (Point p : layer.points)
       physics.addParticle(p);
@@ -136,6 +138,7 @@ public class MotionEngine extends PApplet
     postSetup();
     
     //Add constraints
+    ACTIONS.engine = this;
   }
 
   public void postSetup()
@@ -339,8 +342,9 @@ public class MotionEngine extends PApplet
     {
       if(one != null)
       {
-        System.out.println("Firing Go!");
-        one.tweet(physics);
+        if(one != null){
+          one.go();  
+        }
       }
     }
     
@@ -395,4 +399,9 @@ public class MotionEngine extends PApplet
     else if(Mode.EXPLODE_FORCE == mode)
       physics.removeBehavior(explode);
   };
+  
+  public VerletPhysics3D getPhysics()
+  {
+    return physics;
+  }
 }

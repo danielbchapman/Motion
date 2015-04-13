@@ -25,6 +25,7 @@ public abstract class Layer
 {
   protected Point[] points;
   protected PApplet applet;
+  protected MotionEngine engine;
   /**
    * @param points the objects to draw
    */

@@ -1,11 +1,5 @@
 package com.danielbchapman.artwork;
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
-import processing.core.PGraphics;
-
 public class Fadeable
 {
   public long start = -1L;

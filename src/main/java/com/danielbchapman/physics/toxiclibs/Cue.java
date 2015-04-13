@@ -14,7 +14,7 @@ public class Cue
   private long start;
   private long total;
   private boolean running;
-  private ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(8);
+  public static final ScheduledThreadPoolExecutor SCHEDULER = new ScheduledThreadPoolExecutor(8);
   
   public Cue(Layer layer, MotionEngine engine, ArrayList<Action> actions)
   {
@@ -38,7 +38,7 @@ public class Cue
       a.called = start;
       a.layer = layer;
       a.engine = engine;
-      scheduler.schedule(a, a.timeStamp, TimeUnit.MILLISECONDS);
+      SCHEDULER.schedule(a, a.timeStamp, TimeUnit.MILLISECONDS);
       
     }
     
@@ -46,7 +46,7 @@ public class Cue
     if(actions.length > 1)
       executeLast = actions[actions.length - 1].timeStamp; 
     
-    scheduler.schedule(new Runnable(){
+    SCHEDULER.schedule(new Runnable(){
       
       @Override
       public void run()

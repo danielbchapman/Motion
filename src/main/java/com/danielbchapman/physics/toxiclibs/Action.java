@@ -14,6 +14,13 @@ public class Action implements Callable<Void>
   protected Layer layer;
   protected MotionEngine engine;
   
+  public Action(String label, int timeStamp, Consumer<Layer> layerFunction, Consumer<MotionEngine> motionFunction)
+  {
+    this(label, timeStamp);
+    this.layerFunction = layerFunction;
+    this.motionFunction = motionFunction;
+  }
+  
   public Action(String label, int timeStamp)
   {
     this.timeStamp = timeStamp;
@@ -32,4 +39,5 @@ public class Action implements Callable<Void>
 
     return null;
   }
+  
 }

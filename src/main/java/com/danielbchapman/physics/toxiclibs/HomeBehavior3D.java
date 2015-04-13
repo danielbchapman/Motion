@@ -15,7 +15,7 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
     super(force);
   }
 
-  boolean enabled;
+  boolean enabled = true;
   float strength; 
 
   @Override
@@ -59,7 +59,8 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
       setForce(f);
       p.addForce(scaledForce);
       //Debug
-      if(false && p.home.x == 0 && p.home.y == 0)
+      boolean __debug = false;
+      if(__debug && p.home.x == 0 && p.home.y == 0)
       {
         System.out.println("Point");
         System.out.println("\tlocation: " + p.toString());
