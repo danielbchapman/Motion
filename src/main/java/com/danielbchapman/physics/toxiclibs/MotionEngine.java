@@ -175,14 +175,16 @@ public class MotionEngine extends PApplet
     {
       Random rand = new Random();
       System.out.println("Splitting paragraph...");
-      paragraph.split(physics, rand.nextFloat() % 3f);
+      //paragraph.split(physics, rand.nextFloat() % 3f);
+      paragraph.split(physics, 0f);
       if(paragraph.isSplit())
       {
         System.out.println("Splitting words");
         
         for(Word w : paragraph.paragraph.words)
         {
-          w.split(physics, rand.nextFloat() % 3f);
+          //w.split(physics, rand.nextFloat() % 3f);
+          w.split(physics, 0f);
         }
       }
     }

@@ -50,6 +50,7 @@ public class Fadeable
       float amount = ((float)(delta-delay)) / ((float)count);
       opacity = (int) (opacityStart + (amount * opacityDelta));
     }
+    
     if(debug)
     {
       System.out.println("[Fadeable]::Debug Information");
@@ -61,6 +62,13 @@ public class Fadeable
       System.out.println("Arguments: time:" + time + " color:" + Integer.toHexString(color));
       System.out.println("Opacity -> " + opacity);
     }
+    
     return ( opacity << 24) | (0x00FFFFFF &  color);
+  }
+  
+  public void setOpacity(int opacity)
+  {
+    this.opacity = opacity % 255;
+    this.opacityEnd = this.opacity;
   }
 }

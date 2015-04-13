@@ -7,6 +7,7 @@ import toxi.physics3d.VerletPhysics3D;
 
 import com.danielbchapman.artwork.Paragraph;
 import com.danielbchapman.artwork.Word;
+import com.danielbchapman.artwork.Paragraph.FadeType;
 
 public class ParagraphsLayer extends Layer
 {
@@ -38,7 +39,8 @@ public class ParagraphsLayer extends Layer
           "Touch it, bring it, pay it, watch it,"+ "\n"+
           "Turn it, leave it, start - format it."+ "\n";
     
-    paragraph = new Paragraph(text, origin, 400, 12, 12);
+    //paragraph = new Paragraph(text, origin, 400, 12, 12);
+    paragraph = new Paragraph(text, origin, 500, 12, 12, 0, 3000, 10000, 0, 255, FadeType.LINE_BY_LINE);
     origin.setWeight(1f);
     //points = new Point[1];
     //points[0] = paragraph.parent;//origin
