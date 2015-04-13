@@ -37,6 +37,7 @@ public class MotionEngine extends PApplet
   private GridLayer grid;
   private GridLayerFlying gridFly;
   private ParticleLayer particles;
+  private SceneOneLayer one;
   private ParagraphsLayer paragraph;
   WordLayer words;
   private static FalloffAttractionBehavior sucker = 
@@ -144,11 +145,13 @@ public class MotionEngine extends PApplet
 //    gridFly = new GridLayerFlying();
     words = new WordLayer();
     paragraph = new ParagraphsLayer();
+    one = new SceneOneLayer();
     //add(gridFly);
     //add(particles);
     //add(grid);
 //    add(words);
-    add(paragraph);
+    //add(paragraph);
+    add(one);
   }
 
   @Override
@@ -330,6 +333,14 @@ public class MotionEngine extends PApplet
         System.out.println("Turning on linear home force!");
         homeLinear.enabled = true;
         physics.addBehavior(homeLinear);
+      }
+    }
+    if(event.getKey() == ']')
+    {
+      if(one != null)
+      {
+        System.out.println("Firing Go!");
+        one.tweet(physics);
       }
     }
     

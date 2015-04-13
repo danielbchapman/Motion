@@ -79,4 +79,30 @@ public class Word extends Fadeable
       physics.addParticle(points[i]);
     }
   }
+  
+  /**
+   * Moves all the points in this word by a certain amount. This will
+   * also translate the forces so that this doesn't cause ridiculous acceleration.
+   * 
+   * @param vec 
+   *          the translation amount  
+   * 
+   */
+  public void translate(Vec3D vec)
+  {
+    parent.addSelf(vec);
+    parent.clearForce();
+    parent.clearVelocity();
+    
+    parent.y += vec.y;
+    parent.z += vec.z;
+    for(int i = 0; i < points.length; i++)
+      if(points[i] != null)
+      {
+        points[i].addSelf(vec);
+        points[i].clearForce();
+        points[i].clearVelocity();
+      }
+        
+  }
 }

@@ -3,6 +3,7 @@ package com.danielbchapman.artwork;
 import java.util.ArrayList;
 
 import processing.core.PGraphics;
+import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
 import com.danielbchapman.physics.toxiclibs.Point;
@@ -314,6 +315,20 @@ public class Paragraph
     g.popMatrix();
   }
 
+  /**
+   * Moves all the points in this paragraph by a certain amount. This will
+   * also translate the forces so that this doesn't cause ridiculous acceleration.
+   * 
+   * @param vec 
+   *          the translation amount  
+   * 
+   */
+  public void translate(Vec3D vec)
+  {
+    for(Word w : words)
+      w.translate(vec);
+  }
+  
   public void split(VerletPhysics3D physics, float mag)
   {
     System.out.println("Does nothing...");

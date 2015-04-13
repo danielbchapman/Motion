@@ -77,7 +77,7 @@ public class Point extends VerletParticle3D
    * @param x the x translation
    * @param y the y translation
    * @param z the z translation
-   * @return <Return Description>  
+   * @return a copy of this point that is translated by the vector 
    * 
    */
   public Point copyTranslate(float x, float y, float z)
@@ -86,6 +86,25 @@ public class Point extends VerletParticle3D
     Point copy = new Point(this);
     copy.addSelf(trans);
     copy.home.addSelf(trans);
+    copy.temp.addSelf(trans);
+    copy.prev.addSelf(trans);
+    return copy;
+  }
+  /**
+   * Create a copy of this point but translate the particles so that they physics engine
+   * maintains velocity etc... but does not alter the home position of the particle. 
+   * @param x the x translation
+   * @param y the y translation
+   * @param z the z translation
+   * @return a copy of this point that is translated by the vector 
+   * 
+   */  
+  public Point copyTranslateNoHome(float x, float y, float z)
+  {
+    Vec3D trans = new Vec3D(x, y, z);
+    Point copy = new Point(this);
+    copy.addSelf(trans);
+    copy.home = this.home.copy();
     copy.temp.addSelf(trans);
     copy.prev.addSelf(trans);
     return copy;
