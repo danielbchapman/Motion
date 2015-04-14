@@ -16,7 +16,7 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 public class HomeBehaviorLinear3D implements ParticleBehavior3D
 {
   ForceVariables vars = new ForceVariables();
-  public boolean enabled = false;
+  public boolean enabled = true;
   public HomeBehaviorLinear3D(float easing, float min, float max)
   {
     vars.maxForce = max;

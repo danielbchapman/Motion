@@ -133,29 +133,39 @@ public class SceneOneLayer extends Layer
       
       add(
           //Tweet!
-          cue(Actions.homeTo(0.4f), 
+          cue("Environment Setup and Tweet", 
+              Actions.homeTo(0.4f), 
               Actions.dragTo(0.12f),
               Actions.homeOn,
               action("Tweet 1", null, (x)->{tweet(x.getPhysics());} )),
-          cue(action("Tweet 2", null, (x)->{tweet(x.getPhysics());} )),
-          cue(action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
-          cue(action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
-          cue(action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 2", action("Tweet 2", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 3",action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 4", action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 5", action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
           
           //Turn on Gravity!
-          cue(Actions.homeOff, Actions.dragToVeryLow, Actions.gravityOn),
-          cue(Actions.homeTo(0.2f), Actions.homeOn, Actions.gravityOff),
+          cue("Gravity On, Home off", 
+              Actions.homeOff, 
+              Actions.dragToVeryLow, 
+              Actions.gravityOn),
+          cue("Home On, Gravity Off", 
+              Actions.homeTo(0.2f), 
+              Actions.homeOn, 
+              Actions.gravityOff),
           //Go Home
-          cue(Actions.dragToBasic, Actions.homeOff, Actions.homeLinearOn)
+          cue("Return Home Easing Mode", 
+              Actions.dragToBasic, 
+              Actions.homeOff, 
+              Actions.homeLinearOn)
       );
     }
     
-    public Cue cue(Action ... actions)
+    public Cue cue(String label, Action ... actions)
     {
       ArrayList<Action> list = new ArrayList<Action>();
       for(Action a : actions)
         list.add(a);
-      Cue cue = new Cue(SceneOneLayer.this, SceneOneLayer.this.engine, list);
+      Cue cue = new Cue(label, SceneOneLayer.this, SceneOneLayer.this.engine, list);
       return cue;
     }
     

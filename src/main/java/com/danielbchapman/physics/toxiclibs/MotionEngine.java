@@ -2,20 +2,14 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.function.Consumer;
 
-import com.danielbchapman.artwork.Word;
-
-import javafx.scene.input.KeyCode;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
-import toxi.geom.AABB;
 import toxi.geom.Vec3D;
-import toxi.physics3d.constraints.BoxConstraint;
 import toxi.physics3d.VerletPhysics3D;
-import toxi.physics3d.behaviors.AttractionBehavior3D;
-import toxi.physics3d.behaviors.GravityBehavior3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
+
+import com.danielbchapman.artwork.Word;
 
 public class MotionEngine extends PApplet
 {
@@ -27,6 +21,10 @@ public class MotionEngine extends PApplet
   }
   private static final long serialVersionUID = 1L;
 
+  //Behavior Checks--map these behaviors
+  ArrayList<ParticleBehavior3D> activeBehaviors = new ArrayList<>();
+  EnvironmentTools tools;
+  
   public static Actions ACTIONS;
   private VerletPhysics3D physics = new VerletPhysics3D();
   private ArrayList<Layer> layers = new ArrayList<>();
@@ -41,11 +39,9 @@ public class MotionEngine extends PApplet
   private SceneOneLayer one;
   private ParagraphsLayer paragraph;
   WordLayer words;
-  private static FalloffAttractionBehavior sucker = 
-      new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
-
-  private static HomeBehavior3D home = new HomeBehavior3D(new Vec3D(0, 0, 0));
-  private static HomeBehaviorLinear3D homeLinear = new HomeBehaviorLinear3D(0.005f, .1f, 10f);
+  
+  //Brushes
+  private static FalloffAttractionBehavior sucker = new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
   private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 100f);
   private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
   private static FrequencyOscillationBehavior osc = new FrequencyOscillationBehavior();
@@ -77,8 +73,8 @@ public class MotionEngine extends PApplet
     gravityThirty.add(start);
     gravityThirty.add(stop);
 
-    gravityOneSecond = new Cue(null, null, gravityThirty);
-    testCue = new Cue(null, null, test);
+    gravityOneSecond = new Cue("Gravity Thirty", null, null, gravityThirty);
+    testCue = new Cue("Test Cue", null, null, test);
   }
 
   // public Force gravity;
@@ -160,6 +156,16 @@ public class MotionEngine extends PApplet
   @Override
   public void keyPressed(KeyEvent event)
   {
+    if (event.getKey() == 'q' || event.getKey() == 'Q')
+    {
+      if(tools == null)
+      {
+        tools = new EnvironmentTools(this);
+      }
+      tools.pullData();
+      tools.setVisible(true);
+      
+    }
     if (event.getKey() == ' ')
     {
       testCue.go(layers.get(0), this);
@@ -285,57 +291,51 @@ public class MotionEngine extends PApplet
     
     if(event.getKeyCode() == UP)
     {
-      float x = home.max;
+      float x = Actions.home.max;
       x += 0.01;
       if(x > 2f)
         x = 2f;
       
       System.out.println("Setting max force to -> " + x);
-      home.max = x;
+      Actions.home.max = x;
     }
     
     if(event.getKeyCode() == DOWN)
     {
-      float x = home.max;
+      float x = Actions.home.max;
       x -= 0.01;
       if(x < 0)
         x = 0;
       
       System.out.println("Setting max force to -> " + x);
-      home.max = x;
+      Actions.home.max = x;
     }
     
     if(event.getKey() == 'h')
     {
-      if(home.enabled)
+      if(isActive(Actions.home))
       {
         System.out.println("Turning off home force!");
-        home.enabled = false;
-        physics.removeBehavior(home);
+        removeBehavior(Actions.home);
       }
-        
       else
       {
         System.out.println("Turning on home force!");
-        home.enabled = true;
-        physics.addBehavior(home);
+        addBehavior(Actions.home);
       }
     }
     
     if(event.getKey() == 'j')
     {
-      if(homeLinear.enabled)
+      if(isActive(Actions.homeLinear))
       {
         System.out.println("Turning off home linear force!");
-        homeLinear.enabled = false;
-        physics.removeBehavior(homeLinear);
+        removeBehavior(Actions.homeLinear);
       }
-        
       else
       {
         System.out.println("Turning on linear home force!");
-        homeLinear.enabled = true;
-        physics.addBehavior(homeLinear);
+        addBehavior(Actions.homeLinear);
       }
     }
     if(event.getKey() == ']')
@@ -400,8 +400,30 @@ public class MotionEngine extends PApplet
       physics.removeBehavior(explode);
   };
   
+  //FIXME this needs to be HashMaps This probably isn't an issue for less than 10-20 forces
+  public boolean isActive(ParticleBehavior3D behavior)
+  {
+    return activeBehaviors.contains(behavior);
+  }
+  
+  public boolean addBehavior(ParticleBehavior3D behavior)
+  {
+    if(activeBehaviors.contains(behavior))
+      return false;
+    
+    physics.addBehavior(behavior);
+    activeBehaviors.add(behavior);
+    return true;
+  }
+  
+  public void removeBehavior(ParticleBehavior3D behavior)
+  {
+    physics.removeBehavior(behavior);
+    activeBehaviors.remove(behavior);
+  }
   public VerletPhysics3D getPhysics()
   {
     return physics;
   }
+  
 }

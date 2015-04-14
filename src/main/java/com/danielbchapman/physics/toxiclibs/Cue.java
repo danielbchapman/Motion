@@ -14,10 +14,14 @@ public class Cue
   private long start;
   private long total;
   private boolean running;
+  private String label = "Unknown";
   public static final ScheduledThreadPoolExecutor SCHEDULER = new ScheduledThreadPoolExecutor(8);
   
-  public Cue(Layer layer, MotionEngine engine, ArrayList<Action> actions)
+  public Cue(String label, Layer layer, MotionEngine engine, ArrayList<Action> actions)
   {
+    if(label == null)
+      label = "Unknown";
+    this.label = label;
     this.layer = layer;
     this.engine = engine;
     this.actions = new Action[actions.size()];
@@ -33,6 +37,7 @@ public class Cue
     
     running = true;
     long start = System.currentTimeMillis();
+    System.out.println("Firing Cue " + label);
     for(Action a : actions)
     {
       a.called = start;
@@ -51,7 +56,7 @@ public class Cue
       @Override
       public void run()
       {
-        System.out.println("Actions Length " + actions.length);
+        System.out.println("Cue " + label + " Complete | Actions Length " + actions.length);
         Cue.this.running = false;
         
       } }, executeLast, TimeUnit.MILLISECONDS);

@@ -35,34 +35,34 @@ public class Actions
   
   public static Action gravityOff = new Action("Gravity Off", 0, null, 
       (x)->{
-        x.getPhysics().removeBehavior(gravity);
+        x.removeBehavior(gravity);
       });
   
   public static Action gravityOn = new Action("Gravity On", 0, null, 
       (x)->{
-        x.getPhysics().addBehavior(gravity);
+        x.addBehavior(gravity);
       });
   public static HomeBehavior3D home = new HomeBehavior3D(new Vec3D(0, 0, 0));
   public static HomeBehaviorLinear3D homeLinear = new HomeBehaviorLinear3D(0.005f, .1f, 10f);
   
   public static Action homeOff = new Action("Home Off", 0, null, 
       (x)->{
-        x.getPhysics().removeBehavior(home);
+        x.removeBehavior(home);
       });
   
   public static Action homeOn = new Action("Home On", 0, null, 
       (x)->{
-        x.getPhysics().addBehavior(home);
+        x.addBehavior(home);
       });
  
   public static Action homeLinearOff = new Action("Home Linear Off", 0, null, 
       (x)->{
-        x.getPhysics().removeBehavior(homeLinear);
+        x.removeBehavior(homeLinear);
       });
   
   public static Action homeLinearOn = new Action("Home Linear On", 0, null, 
       (x)->{
-        x.getPhysics().addBehavior(homeLinear);
+        x.addBehavior(homeLinear);
       });
   
   public static Action homeTo(float f)
