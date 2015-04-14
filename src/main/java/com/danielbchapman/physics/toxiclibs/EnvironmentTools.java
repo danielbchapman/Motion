@@ -7,6 +7,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.DecimalFormat;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -35,6 +36,7 @@ public class EnvironmentTools extends JFrame
   BehaviorSlider<HomeBehaviorLinear3D> homeLinear;
   BehaviorSlider<HomeBehaviorLinear3D> homeLinearMax;
   BehaviorSlider<AngularGravityBehavior3D> gravity;
+  PropertySlider<MotionEngine> dragSlider;
   VectorPanel<AngularGravityBehavior3D> gravityVector;
   
   JButton read;
@@ -103,15 +105,15 @@ public class EnvironmentTools extends JFrame
         (b, s)->{s.set(b.vars.maxForce);}
         );
     
-    gravity = new BehaviorSlider<>(
+    gravity = new BehaviorSlider<AngularGravityBehavior3D>(
         "Angular Gravity", 
         0, 
         10000,
         10000f,
         Actions.gravity, 
         (b, f)->{
-          Vec3D force = b.getForce();
-          force.scaleSelf(f);
+          b.updateMagnitude(f);
+          System.out.println("Scaling Gravity to -> " + f + " Gravity: " + Actions.gravity);
         },
         (b, s)->
         {
@@ -125,36 +127,52 @@ public class EnvironmentTools extends JFrame
         Actions.gravity,
         (b, g)->{
           System.out.println("Called Set");
-          b.set(g.getForce());
+          //b.set(g.getForce());
         },
         (g, b)->{
           System.out.println("Called change");
-          g.setForce(b.get());
+          //g.setForce(b.get());
           }
         );
     
+    dragSlider = new PropertySlider<MotionEngine>(
+        "Drag", 
+        0, 
+        10000,
+        10000f,
+        Actions.engine, 
+        (e, f)->{
+          e.getPhysics().setDrag(f);
+        },
+        (s, e)->
+        {
+          s.set(e.getPhysics().getDrag());
+        }
+        );  
+    
     setPreferredSize(new Dimension(400, 650));
     setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    
+    int i = 0;
     setLayout(new GridBagLayout());
-    place(new TitleField("FORCES"), 0);
+    place(new TitleField("FORCES"), i++);
     
-    place(homeForce, 1);
-    place(homeMax, 2);
-    place(homeLinear, 3);
-    place(homeLinearMax, 4);
-    place(gravity, 5);
-    place(gravityVector, 6);
+    place(dragSlider, i++);
+    place(homeForce, i++);
+    place(homeMax, i++);
+    place(homeLinear, i++);
+    place(homeLinearMax, i++);
+    place(gravity, i++);
+    place(gravityVector, i++);
     
-    place(new TitleField("VECTORS"), 11);
+    place(new TitleField("VECTORS"), i++);
 //    place(new VectorPanel("Some Vector"), 12);
 //    place(new VectorPanel("Some Vector"), 13);
 //    place(new VectorPanel("Some Vector"), 14);
     //Buttons
-    place(new Spacer(100, 15), 95);
-    add(read, UiUtility.getNoFill(1, 96));
-    add(hide, UiUtility.getNoFill(2, 96));
-    add(new JPanel(), UiUtility.getFillBoth(0, 99));//Push up
+    place(new Spacer(100, 15), i++);
+    add(read, UiUtility.getNoFill(1, i));
+    add(hide, UiUtility.getNoFill(2, i));
+    add(new JPanel(), UiUtility.getFillBoth(0, ++i));//Push up
     
     read();
     pack();
@@ -193,6 +211,7 @@ public class EnvironmentTools extends JFrame
     homeLinearMax.pullData();
     gravity.pullData();
     gravityVector.pullData();
+    dragSlider.pullData();
   }
   
   public class VectorPanel<T> extends JPanel
@@ -254,11 +273,11 @@ public class EnvironmentTools extends JFrame
     }
     public void set(Vec3D vec)
     {
-      this.vector = vec;
-      DecimalFormat df = new DecimalFormat("000.0000");
-      xText.setText(df.format(vec.x));
-      yText.setText(df.format(vec.y));
-      zText.setText(df.format(vec.z));
+//      this.vector = vec;
+//      DecimalFormat df = new DecimalFormat("000.0000");
+//      xText.setText(df.format(vec.x));
+//      yText.setText(df.format(vec.y));
+//      zText.setText(df.format(vec.z));
     }
     
     public Vec3D get()
@@ -268,6 +287,39 @@ public class EnvironmentTools extends JFrame
       float z = Float.valueOf(zText.getText());
       vector = new Vec3D(x,  y,  z);
       return vector.copy();
+    }
+  }
+  
+  public class PropertySlider<Source> extends FloatSlider
+  {
+    private static final long serialVersionUID = 1L;
+    private BiConsumer<Source, Float> onChange;
+    private BiConsumer<FloatSlider, Source> get;
+    private Source source;
+    public PropertySlider(String label, int min, int max, float divisor, Source source, BiConsumer<Source, Float> onChange, BiConsumer<FloatSlider, Source> get)
+    {
+      this(label, min, max, divisor, source, onChange, get, false);
+    }
+    
+    public PropertySlider(String label, int min, int max, float divisor, Source source, BiConsumer<Source, Float> onChange, BiConsumer<FloatSlider, Source> get, boolean useEnabled)
+    {
+      super(label, min, max, divisor);
+      this.onChange = onChange;
+      this.get = get;
+      this.source = source;
+      enabled.setVisible(false);
+    }
+    
+    @Override
+    public void set(float f)
+    {
+      super.set(f);
+      onChange.accept(source, f);
+    }    
+    
+    public void pullData()
+    {
+      get.accept(this, source);
     }
   }
   

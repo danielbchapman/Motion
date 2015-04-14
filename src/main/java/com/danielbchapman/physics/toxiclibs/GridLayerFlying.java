@@ -199,6 +199,7 @@ public class GridLayerFlying extends Layer
   
   public void runFades()
   {
+    System.out.println("Running Fades");
     final ArrayList<Line> schedule = new ArrayList<>();
     
     for(Line l : xAxis)

@@ -58,16 +58,16 @@ public class MotionEngine extends PApplet
 
     ArrayList<Action> gravityThirty = new ArrayList<>();
     Action start = new Action("Start Gravity", 0);
-    final AngularGravityBehavior3D gravity = new AngularGravityBehavior3D(new Vec3D(0f, 0.01f, 0f));
+    //final AngularGravityBehavior3D gravity = new AngularGravityBehavior3D(new Vec3D(0f, 0.01f, 0f));
 
     Action stop = new Action("Stop Gravity", 30000);
 
     start.motionFunction = (MotionEngine e) -> {
-      e.physics.addBehavior(gravity);
+      e.addBehavior(Actions.gravity);
     };
 
     stop.motionFunction = (MotionEngine e) -> {
-      e.physics.removeBehavior(gravity);
+      e.addBehavior(Actions.gravity);
     };
     
     gravityThirty.add(start);
@@ -142,16 +142,16 @@ public class MotionEngine extends PApplet
   {
 //    grid = new GridLayer();
 //    particles = new ParticleLayer();
-//    gridFly = new GridLayerFlying();
-    words = new WordLayer();
-    paragraph = new ParagraphsLayer();
-    one = new SceneOneLayer();
-    //add(gridFly);
+    gridFly = new GridLayerFlying();
+//    words = new WordLayer();
+//    paragraph = new ParagraphsLayer();
+//    one = new SceneOneLayer();
+    add(gridFly);
     //add(particles);
     //add(grid);
 //    add(words);
     //add(paragraph);
-    add(one);
+    //add(one);
   }
 
   @Override
@@ -411,7 +411,7 @@ public class MotionEngine extends PApplet
   {
     if(activeBehaviors.contains(behavior))
       return false;
-    
+    System.out.println("Adding Behavior: " + behavior);
     physics.addBehavior(behavior);
     activeBehaviors.add(behavior);
     return true;
@@ -420,7 +420,8 @@ public class MotionEngine extends PApplet
   public void removeBehavior(ParticleBehavior3D behavior)
   {
     physics.removeBehavior(behavior);
-    activeBehaviors.remove(behavior);
+    if(activeBehaviors.remove(behavior))
+      System.out.println("Removing Behavior: " + behavior);
   }
   public VerletPhysics3D getPhysics()
   {
