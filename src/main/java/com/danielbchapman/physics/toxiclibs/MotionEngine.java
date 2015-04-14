@@ -127,14 +127,15 @@ public class MotionEngine extends PApplet
 
   public void setup()
   {
-    size(1280, 720, OPENGL);
+    ACTIONS.engine = this;
+    size(1280, 960, OPENGL);
     frameRate(60);
     //physics.addBehavior(world);
     physics.setDrag(0.5f);
     postSetup();
     
     //Add constraints
-    ACTIONS.engine = this;
+    
   }
 
   public void postSetup()

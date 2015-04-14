@@ -79,7 +79,7 @@ public class Paragraph
           col = 0;
           colNext = s.length() * wordSpace;
           row++;
-          System.out.println("Increasing column");
+          //System.out.println("Increasing column");
         }
 
         char[] chars = s.toCharArray();
@@ -108,7 +108,7 @@ public class Paragraph
         Word w = wordList.get(i);
         points[i] = w.parent;
         words[i] = w;
-        System.out.println(words[i].letters + " @ " + points[i].x + ", " + points[i].y + ", " + points[i].z);
+        //System.out.println(words[i].letters + " @ " + points[i].x + ", " + points[i].y + ", " + points[i].z);
       }
     }
     else if (FadeType.LINE_BY_LINE == type)
@@ -140,7 +140,7 @@ public class Paragraph
           currentDelay += increment;
           col = 0;
           row++;
-          System.out.println("Increasing column");
+          //System.out.println("Increasing column");
           continue;
         }
         
@@ -151,7 +151,7 @@ public class Paragraph
           col = 0;
           colNext = s.length() * wordSpace;
           row++;
-          System.out.println("Increasing column");
+          //System.out.println("Increasing column");
         }
 
         Point p = parent.copyTranslate(col, row * rowSpace, 0);
@@ -175,7 +175,7 @@ public class Paragraph
         Word w = wordList.get(i);
         points[i] = w.parent;
         words[i] = w;
-        System.out.println(words[i].letters + " @ " + points[i].x + ", " + points[i].y + ", " + points[i].z);
+        //System.out.println(words[i].letters + " @ " + points[i].x + ", " + points[i].y + ", " + points[i].z);
       }
     }
     else if (FadeType.WORD_BY_WORD == type || FadeType.TOGETHER == type)
