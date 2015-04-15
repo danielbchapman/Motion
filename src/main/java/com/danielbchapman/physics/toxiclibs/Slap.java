@@ -9,7 +9,7 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 public class Slap implements ParticleBehavior3D
 {
   protected float force = 20f;
-  protected float maxForce = 5f;
+  protected float maxForce = 10f;
   protected float minForce = 0.1f;
   protected float radius = 65;
   protected float timeStep;

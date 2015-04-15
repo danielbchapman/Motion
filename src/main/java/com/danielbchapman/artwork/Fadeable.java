@@ -14,6 +14,12 @@ public class Fadeable
   public static final int MAX = 255;
   public boolean debug = false;
 
+  /**
+   * @param opacityStart
+   * @param opacityEnd
+   * @param count
+   * @param delay
+   */
   public Fadeable(int opacityStart, int opacityEnd, long count, long delay)
   {
     this.opacity = opacityStart;

@@ -5,15 +5,18 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -23,12 +26,27 @@ import lombok.Setter;
 import toxi.geom.Vec3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
+import com.danielbchapman.utility.FileUtil;
 import com.danielbchapman.utility.UiUtility;
 
 public class EnvironmentTools extends JFrame
 {
   private static final long serialVersionUID = 1L;
   
+  
+  /**
+   * A set of identifiers used for file consistency (if desired)
+   * this should probably be converted to JSON.
+   */
+  public class FileArgs
+  {
+    public final static String DRAG = "Drag";
+    public final static String GRAVITY = "Gravity";
+    public final static String WIND = "Wind";
+    public final static String HOME = "Home";
+  }
+  
+  public final static String ENVIRONMENT_FOLDER = "environment";
   MotionEngine engine;
   
   BehaviorSlider<HomeBehavior3D> homeForce;
@@ -41,6 +59,9 @@ public class EnvironmentTools extends JFrame
   
   JButton read;
   JButton hide;
+  JButton save;
+  JButton open;
+
   private boolean apply = false;
 
   //TEST METHODS
@@ -56,8 +77,11 @@ public class EnvironmentTools extends JFrame
     this.engine = engine;
     read = new JButton("Read Scene");
     hide = new JButton("Hide");
+    save = new JButton("Save");
+    open = new JButton("Open");
     read.addActionListener((x)->{ read();});
     hide.addActionListener((x)->{ setVisible(false);});
+    save.addActionListener((x)->{ attemptSave();});
     
     //Home
     homeForce = new BehaviorSlider<>(
@@ -170,8 +194,16 @@ public class EnvironmentTools extends JFrame
 //    place(new VectorPanel("Some Vector"), 14);
     //Buttons
     place(new Spacer(100, 15), i++);
-    add(read, UiUtility.getNoFill(1, i));
-    add(hide, UiUtility.getNoFill(2, i));
+    JPanel group = new JPanel();
+    group.setLayout(new GridBagLayout());
+    group.add(read, UiUtility.getFillHorizontal(0, 0));
+    group.add(hide, UiUtility.getFillHorizontal(1, 0));
+    group.add(save, UiUtility.getFillHorizontal(2, 0));
+    group.add(open, UiUtility.getFillHorizontal(3, 0));
+    
+    GridBagConstraints ggbc = UiUtility.getFillHorizontal(1, i++);
+    ggbc.gridwidth = 2;
+    add(group, ggbc);
     add(new JPanel(), UiUtility.getFillBoth(0, ++i));//Push up
     
     read();
@@ -466,5 +498,71 @@ public class EnvironmentTools extends JFrame
     GridBagConstraints gbc = UiUtility.getFillHorizontal(0, y);
     gbc.gridwidth = 4;
     this.add(c, gbc);
+  }
+  
+  public void attemptSave()
+  {
+    String disclaimer = "<html><h1>Do you really want to save?</h1></html>";
+    String disclaimer2 = "<html><p>Saving this will create a file in the environment folder for future use.</p></html>";
+    JFrame save = new JFrame();
+    save.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    save.setTitle("Save Environment?");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
+    JTextField name = new JTextField("environment-" + sdf.format(new Date()));
+    JButton cancel = new JButton("Cancel");
+    JButton doIt = new JButton("Save");
+    
+    save.setLayout(new GridBagLayout());
+    GridBagConstraints x = UiUtility.getFillHorizontal(0, 0);
+    x.gridwidth = 3;
+    save.add(new JLabel(disclaimer), x);
+    x.gridy = 1;
+    save.add(new JLabel(disclaimer2), x);
+    save.add(new JLabel("File Name: "), UiUtility.getNoFill(0, 5));
+    save.add(name, UiUtility.getNoFill(1, 5));
+    save.add(new JPanel(), UiUtility.getFillHorizontal(0, 99));
+    save.add(doIt, UiUtility.getFillHorizontal(1, 99));
+    save.add(cancel, UiUtility.getFillHorizontal(2, 99));
+    
+    save.setSize(400, 300);
+    UiUtility.centerFrame(this, save);
+    save.setVisible(true);
+    
+    cancel.addActionListener((l)->{ save.setVisible(false); save.dispose();});
+    doIt.addActionListener((l)->
+    {
+      if(saveVariables(name.getText()))
+      {
+        save.setVisible(false);
+        save.dispose();
+      }
+      else
+        JOptionPane.showMessageDialog(save, "Unable to save the file, please check the logs");
+    });
+  }
+  
+  public boolean saveVariables(String fileName)
+  {
+    //Save the data here!
+    StringBuilder buffer = new StringBuilder();
+    BiConsumer<String, String> write = (label, data)->
+    {
+      buffer.append(label);
+      buffer.append("\n");
+      buffer.append(data);
+      buffer.append("\n");
+    };
+    
+    write.accept(FileArgs.DRAG, Actions.engine.getPhysics().getDrag()+"");
+    write.accept(FileArgs.GRAVITY, Actions.gravity.toString());
+    try{
+      FileUtil.makeDirs(new File(ENVIRONMENT_FOLDER));
+      FileUtil.writeFile(ENVIRONMENT_FOLDER + "/" + fileName +".env", buffer.toString().getBytes());
+      return true;
+    } catch (Throwable t) {
+      JOptionPane.showMessageDialog(this, t.getMessage());
+      t.printStackTrace();
+      return false;
+    }
   }
 }

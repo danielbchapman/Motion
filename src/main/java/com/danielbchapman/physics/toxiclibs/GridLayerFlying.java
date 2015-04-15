@@ -5,8 +5,12 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+
+import com.danielbchapman.artwork.Fadeable;
 
 import processing.core.PGraphics;
+import toxi.geom.Vec3D;
 
 public class GridLayerFlying extends Layer
 {
@@ -15,6 +19,13 @@ public class GridLayerFlying extends Layer
   int spacing;
   Line[] xAxis;
   Line[] yAxis;
+  
+  boolean startFade = false;
+  Fadeable fader = new Fadeable(0, 255, 3000, 0);
+  CueStack stack;
+  
+  int color = 0x00FFFFFF;
+  
   
   public GridLayerFlying()
   {
@@ -83,6 +94,7 @@ public class GridLayerFlying extends Layer
       grid[i+pointsY.length] = pointsY[i];
     }
     
+    prepareCues();
     return grid;
   }
 
@@ -103,8 +115,11 @@ public class GridLayerFlying extends Layer
   public void render(PGraphics g)
   {
     g.background(0); //black
+    if(startFade)
+      g.stroke(fader.color(System.currentTimeMillis(), 0xFFFFFFFF));
+    else
+      g.stroke(color);
     g.strokeWeight(2f);
-    g.stroke(255);
     g.pushMatrix();
     g.translate(10, 10, 0);//Offset to test with
     for(int i = 0; i < xAxis.length; i++)
@@ -128,6 +143,8 @@ public class GridLayerFlying extends Layer
    */
   public void offscreen()
   {
+    startFade = false;
+    fader = new Fadeable(fader.opacityStart, fader.opacityEnd, fader.count, fader.delay);
     Random rand = new Random();
     boolean direction = false;
     int padding = 0;
@@ -191,6 +208,82 @@ public class GridLayerFlying extends Layer
     }
   }
   
+  public void go()
+  {
+    stack.go(engine, this);
+  }
+  
+  public void prepareCues()
+  {
+    stack = new CueStack();
+    stack.add(
+        cue("Prepare Scene", 
+            Actions.homeOff,
+            Actions.gravityOff,
+            Actions.homeLinearOff,
+            Actions.dragTo(.5f),
+            //Need to set the forces I like here...
+            action("Send Lines Out", (x)->{offscreen(); lockAll();}, null)
+            ),
+        cue("Start Fades", 
+            Actions.homeLinearOn,
+            action("Start Lines", (x)->{runFades();}, null)),
+        cue("Slap! One",
+            Actions.gravityOff,
+            Actions.homeLinearOff,
+            Actions.homeOff,
+            Actions.dragToNone,
+            action("SLAP", (x)->{slap();}, null),
+            action("Restore", (x)->{
+              Actions.dragTo(.5f).motionFunction.accept(Actions.engine);
+              Actions.homeLinearOn.motionFunction.accept(Actions.engine);
+              }, null, 1000)
+            )      
+    );
+  }
+  
+  public void slap()
+  {
+    if(engine == null)
+    {
+      System.out.println("Slap Failed!");
+      return;
+    }
+      
+    int[] where = Transform.translate(0f, 0f, 0f, Actions.engine.width, Actions.engine.height);
+    Slap force = new Slap(new Vec3D(where[0], where[1], where[2]), new Vec3D(0, 0, -1f), 100f);
+    force.maxForce = 10f;
+    Cue slap = cue("Slap",
+          new Action("Slap Start", 0,null, 
+              (x)->{
+                x.addBehavior(force);
+              }),
+          new Action("Slap End", 1500,null, 
+              (x)->{
+                x.removeBehavior(force);
+              })    
+        );
+    //Copy current forces (global)
+    slap.go(this, engine);
+    
+  }
+  public Cue cue(String label, Action ... actions)
+  {
+    ArrayList<Action> list = new ArrayList<Action>();
+    for(Action a : actions)
+      list.add(a);
+    Cue cue = new Cue(label, this, Actions.engine, list);
+    return cue;
+  }
+  
+  public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
+  {
+    return new Action(label, 0, fL, fE);
+  }
+  public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE, int delay)
+  {
+    return new Action(label, delay, fL, fE);
+  }
   public void lockAll()
   {
     for(Point p : points)
@@ -199,6 +292,7 @@ public class GridLayerFlying extends Layer
   
   public void runFades()
   {
+    startFade = true;  
     System.out.println("Running Fades");
     final ArrayList<Line> schedule = new ArrayList<>();
     

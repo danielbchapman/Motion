@@ -42,7 +42,7 @@ public class MotionEngine extends PApplet
   
   //Brushes
   private static FalloffAttractionBehavior sucker = new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
-  private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 100f);
+  private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 1000f);
   private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
   private static FrequencyOscillationBehavior osc = new FrequencyOscillationBehavior();
   
@@ -140,15 +140,15 @@ public class MotionEngine extends PApplet
 
   public void postSetup()
   {
-//    grid = new GridLayer();
-//    particles = new ParticleLayer();
-    gridFly = new GridLayerFlying();
+    grid = new GridLayer();
+//  particles = new ParticleLayer();
+    //gridFly = new GridLayerFlying();
 //    words = new WordLayer();
 //    paragraph = new ParagraphsLayer();
 //    one = new SceneOneLayer();
-    add(gridFly);
+    //add(gridFly);
     //add(particles);
-    //add(grid);
+   add(grid);
 //    add(words);
     //add(paragraph);
     //add(one);
@@ -342,11 +342,9 @@ public class MotionEngine extends PApplet
     if(event.getKey() == ']')
     {
       if(one != null)
-      {
-        if(one != null){
           one.go();  
-        }
-      }
+      if(gridFly != null)
+        gridFly.go();
     }
     
     if(event.getKey() == 'o')
