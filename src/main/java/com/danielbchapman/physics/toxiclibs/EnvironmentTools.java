@@ -535,7 +535,7 @@ public class EnvironmentTools extends JFrame
     save.setSize(400, 300);
     UiUtility.centerFrame(this, save);
     save.setVisible(true);
-    
+    name.selectAll();
     cancel.addActionListener((l)->{ save.setVisible(false); save.dispose();});
     doIt.addActionListener((l)->
     {

@@ -5,12 +5,6 @@ public interface StringSerialize<T>
   public String save();
   public T load(String data);
   
-  public static ForceVariables read(String line)
-  {
-    String[] parts = line.split(",");
-    return null;
-  }
-  
   public static String write(ForceVariables vars)
   {
     

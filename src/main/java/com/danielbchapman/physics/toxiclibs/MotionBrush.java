@@ -28,28 +28,28 @@ public class MotionBrush implements Serializable
   ForceVariables variables = new ForceVariables();
   public Class<? extends ParticleBehavior3D> behaviorClass; 
   
-  public Item save(Item item)
-  {
-    if(item == null)
-      item = new Item();
-    
-    ForceVariables.save(variables, item);
-    item.setValue(Fields.BEHAVIOR_CLASS, behaviorClass.getName());
-    item.setValue(Fields.BRUSH_ID, brushName);
-    
-    return item;
-  }
+//  public Item save(Item item)
+//  {
+//    if(item == null)
+//      item = new Item();
+//    
+//    ForceVariables.save(variables, item);
+//    item.setValue(Fields.BEHAVIOR_CLASS, behaviorClass.getName());
+//    item.setValue(Fields.BRUSH_ID, brushName);
+//    
+//    return item;
+//  }
   
-  @SuppressWarnings("unchecked")
-  public static MotionBrush load(Item i) throws ClassNotFoundException
-  {
-    MotionBrush brush = new MotionBrush();
-    String name = i.string(Fields.BEHAVIOR_CLASS);
-    String id = i.string(Fields.BRUSH_ID);
-    brush.variables = ForceVariables.load(i);
-    Class x = ExplodeBehavior.class.getClassLoader().loadClass(name);
-    brush.setBehaviorClass((Class<? extends ParticleBehavior3D>) x); 
-    
-    return brush;
-  }
+//  @SuppressWarnings("unchecked")
+//  public static MotionBrush load(Item i) throws ClassNotFoundException
+//  {
+//    MotionBrush brush = new MotionBrush();
+//    String name = i.string(Fields.BEHAVIOR_CLASS);
+//    String id = i.string(Fields.BRUSH_ID);
+//    brush.variables = ForceVariables.load(i);
+//    Class x = ExplodeBehavior.class.getClassLoader().loadClass(name);
+//    brush.setBehaviorClass((Class<? extends ParticleBehavior3D>) x); 
+//    
+//    return brush;
+//  }
 }

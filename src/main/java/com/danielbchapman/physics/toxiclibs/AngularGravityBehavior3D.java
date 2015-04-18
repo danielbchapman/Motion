@@ -30,9 +30,6 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
       this.vars.scaledForce = force.scale(vars.timeStep * vars.timeStep);
   }
 
-  // END FIX TWO
-  ForceVariables vars = new ForceVariables();
-
   // Vec3D original = new Vec3D();
   public AngularGravityBehavior3D(Vec3D gravity)
   {
@@ -67,7 +64,7 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
   @Override
   public String save()
   {
-    System.out.println(this + " running? " + vars.running);
+    System.out.println(this + " AngularGravity? " + vars.running);
     return ForceVariables.toLine(vars);
   }
 

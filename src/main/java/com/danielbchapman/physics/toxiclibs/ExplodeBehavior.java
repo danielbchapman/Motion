@@ -1,5 +1,9 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
@@ -10,8 +14,23 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
  * for that causes the points to be pushed away in a spherical shape.
  *
  */
-public class ExplodeBehavior implements ParticleBehavior3D
+public class ExplodeBehavior extends MotionInteractiveBehavior
 {
+  static final Map<String, String> FIELD_NAMES;
+  static {
+    HashMap<String, String> m = new HashMap<>();
+    m.put(ForceVariables.Fields.MAGNITUDE, "Magniture");
+    m.put(ForceVariables.Fields.MAX_FORCE, "Max Force");
+    m.put(ForceVariables.Fields.MIN_FORCE, "Min Force");
+    m.put(ForceVariables.Fields.POS_X, "Position");
+    m.put(ForceVariables.Fields.POS_Y, "Position");
+    m.put(ForceVariables.Fields.POS_Z, "Position");
+    m.put(ForceVariables.Fields.FOR_X, "Force");
+    m.put(ForceVariables.Fields.FOR_Y, "Force");
+    m.put(ForceVariables.Fields.FOR_Z, "Force");
+    
+    FIELD_NAMES = Collections.unmodifiableMap(m);
+  }
   protected float force;
   protected float timeStep;
   protected float maxForce = 10f;
@@ -19,6 +38,11 @@ public class ExplodeBehavior implements ParticleBehavior3D
   protected Vec3D location;
   protected Vec3D direction;
 
+  public ExplodeBehavior()
+  {
+    this(new Vec3D(), 0f);
+  }
+  
   public ExplodeBehavior(Vec3D direction, float force)
   {
     this.direction = direction;
@@ -54,6 +78,18 @@ public class ExplodeBehavior implements ParticleBehavior3D
   public void configure(float timeStep)
   {
     this.timeStep = timeStep;
+  }
+
+  @Override
+  public Map<String, String> getFieldNames()
+  {
+     return FIELD_NAMES;
+  }
+
+  @Override
+  public String getName()
+  {
+    return "Explode Behavior";
   }
 
 }
