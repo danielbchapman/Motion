@@ -8,12 +8,15 @@ import java.awt.event.FocusListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -44,6 +47,7 @@ public class EnvironmentTools extends JFrame
     public final static String GRAVITY = "Gravity";
     public final static String WIND = "Wind";
     public final static String HOME = "Home";
+    public final static String HOME_LINEAR = "Home Linear";
   }
   
   public final static String ENVIRONMENT_FOLDER = "environment";
@@ -82,16 +86,17 @@ public class EnvironmentTools extends JFrame
     read.addActionListener((x)->{ read();});
     hide.addActionListener((x)->{ setVisible(false);});
     save.addActionListener((x)->{ attemptSave();});
+    open.addActionListener((x)->{ loadGlobal();});;
     
     //Home
-    homeForce = new BehaviorSlider<>(
+    homeForce = new BehaviorSlider<HomeBehavior3D>(
         "Home Euclidian Force", 
         0, 
         10000,
         1000f,
         Actions.home, 
-        (b, f)->{ b.strength = f; },
-        (b, s)->{ s.set(b.strength);},
+        (b, f)->{ b.vars.magnitude = f; },
+        (b, s)->{ s.set(b.vars.magnitude);},
         true
         );
     
@@ -103,9 +108,9 @@ public class EnvironmentTools extends JFrame
         1000f,
         Actions.home, 
         (b, f)->{
-          b.max = f;
+          b.vars.maxForce = f;
         },
-        (b, s)->{s.set(b.max);}
+        (b, s)->{s.set(b.vars.maxForce);}
         );
     
     homeLinear = new BehaviorSlider<>(
@@ -225,6 +230,9 @@ public class EnvironmentTools extends JFrame
     );
   }
   
+  /**
+   * Pulls the data into the user interface.
+   */
   public void read()
   {
     if(engine == null)
@@ -552,9 +560,13 @@ public class EnvironmentTools extends JFrame
       buffer.append(data);
       buffer.append("\n");
     };
-    
+    //Prepare
     write.accept(FileArgs.DRAG, Actions.engine.getPhysics().getDrag()+"");
-    write.accept(FileArgs.GRAVITY, Actions.gravity.toString());
+    write.accept(FileArgs.GRAVITY, Actions.gravity.save());
+    write.accept(FileArgs.HOME, Actions.home.save());
+    write.accept(FileArgs.HOME_LINEAR, Actions.homeLinear.save());
+    write.accept(FileArgs.WIND, "not implemented...");
+    
     try{
       FileUtil.makeDirs(new File(ENVIRONMENT_FOLDER));
       FileUtil.writeFile(ENVIRONMENT_FOLDER + "/" + fileName +".env", buffer.toString().getBytes());
@@ -564,5 +576,67 @@ public class EnvironmentTools extends JFrame
       t.printStackTrace();
       return false;
     }
+  }
+  
+  public void loadGlobal()
+  {
+    JFileChooser open = new JFileChooser(new File("environment"));
+    int act = open.showOpenDialog(this);
+    if(act == JFileChooser.APPROVE_OPTION)
+    {
+      File f = open.getSelectedFile();
+      if(!loadVariables(f.getAbsolutePath()))
+        JOptionPane.showConfirmDialog(this, "Unable to open " + f.getName(), "Error Opening File", JOptionPane.ERROR_MESSAGE);
+    }
+    
+  }
+  public boolean loadVariables(String fileName)
+  {
+    ArrayList<String> lines = FileUtil.readLines(fileName);
+    
+    if(lines == null)
+      return false;
+    
+    BiConsumer<SaveableParticleBehavior3D<?>, String> loadIt = (x, line)->
+    {
+      x.load(line);
+      if(x.vars.running)
+      {
+        System.out.println("Loading -> " + x + " and setting to running");
+        Actions.engine.addBehavior(x);
+      }
+      else
+      {
+        System.out.println("Loading -> " + x + " and setting to not running");
+        Actions.engine.removeBehavior(x);
+      }
+        
+    };
+    
+    for(int i = 0; i < lines.size(); i++)
+    {
+      switch(i)
+      {
+        case 1:
+          Actions.engine.getPhysics().setDrag(Float.valueOf(lines.get(i)));
+          break;
+        case 3:
+          loadIt.accept(Actions.gravity, lines.get(i));
+          break;
+        case 5:
+          loadIt.accept(Actions.home, lines.get(i));
+          break;
+        case 7:
+          loadIt.accept(Actions.homeLinear, lines.get(i));
+          break;
+        case 9:
+          //wind
+          //Actions.home.load(lines.get(i));
+          break;
+      }
+    }
+    read();
+    
+    return true;
   }
 }

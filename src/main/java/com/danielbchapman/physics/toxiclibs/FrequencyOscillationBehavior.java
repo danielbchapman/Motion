@@ -21,14 +21,14 @@ public class FrequencyOscillationBehavior extends SineWave implements ParticleBe
   public FrequencyOscillationBehavior()
   {
     super(1f, hertzToRadians(20f, 1f));
-    vars.direction = new Vec3D(0, 0, 0.1f);
+    vars.force = new Vec3D(0, 0, 0.1f);
   }
   
   @Override
   public void apply(VerletParticle3D p)
   {
     //Apply magnitude 
-    Vec3D force = vars.direction.copy();
+    Vec3D force = vars.force.copy();
     //float off = offset+(p.x/100f);
     float off = (offset + p.x) / 100f;
     float forceBasedOnX = (float) Math.sin((double)off);//use X

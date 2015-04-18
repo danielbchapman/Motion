@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import toxi.geom.Vec3D;
 import toxi.physics3d.behaviors.GravityBehavior3D;
+import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 
 /**
@@ -69,7 +70,7 @@ public class Actions
   {
     return new Action("Home to " + f, 0, null, 
         (x)->{
-          home.max = f;
+          home.vars.maxForce = f;
         });
   }
   
@@ -83,21 +84,20 @@ public class Actions
   
   public static Action homeTo0dot2f = new Action("Home to 0.2f", 0, null, 
       (x)->{
-        home.max = 0.2f;
+        home.vars.maxForce = 0.2f;
       });
   public static Action homeTo01f = new Action("Home to 1f", 0, null, 
       (x)->{
-        home.max = 1f;
+        home.vars.maxForce = 1f;
       });
   
   public static Action homeTo2f = new Action("Home to 2f", 0, null, 
       (x)->{
-        home.max = 2f;
+        home.vars.maxForce = 2f;
       });
   
   public static Action homeTo10f = new Action("Home to 10f", 0, null, 
       (x)->{
-        home.max = 10f;
+        home.vars.maxForce = 10f;
       });
-
 }

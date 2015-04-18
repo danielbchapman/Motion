@@ -4,24 +4,19 @@ import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
 import toxi.physics3d.behaviors.ConstantForceBehavior3D;
 
-public class HomeBehavior3D extends ConstantForceBehavior3D
+public class HomeBehavior3D extends SaveableConstantForce3D
 {
-  
-  protected float easing = 0.05f;
-  protected float max = 0.5f;
-  
   public HomeBehavior3D(Vec3D force)
   {
     super(force);
+    vars.maxForce = 0.5f;
+    vars.userA = 0.05f; //easing
   }
-
-  boolean enabled = true;
-  float strength; 
 
   @Override
   public void apply(VerletParticle3D p3d)
   {
-    if(p3d.isLocked() || !enabled)
+    if(p3d.isLocked() || !vars.enabled)
       return;
       
     if(p3d instanceof Point)
@@ -30,7 +25,7 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
       Vec3D f = p.home.sub(p);//.scale(0.05f);//easing 
       float mag = f.magnitude();
       float stop = 0.05f; //halt
-      float maxAngle = max * 0.1f;
+      float maxAngle = vars.maxForce * 0.1f;
       
       Vec3D angular = p.angular.copy().invert();//0,0,0 == home position
       float magA = angular.magnitude();
@@ -53,11 +48,11 @@ public class HomeBehavior3D extends ConstantForceBehavior3D
         return;
       }
       
-      if(mag > max)
-        f.normalizeTo(max);
-      f = f.scale(easing); //easing
+      if(mag > vars.maxForce)
+        f.normalizeTo(vars.maxForce);
+      f = f.scale(vars.userA); //easing
       setForce(f);
-      p.addForce(scaledForce);
+      p.addForce(vars.scaledForce);
       //Debug
       boolean __debug = false;
       if(__debug && p.home.x == 0 && p.home.y == 0)

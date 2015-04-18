@@ -1,5 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.sql.Savepoint;
+
 import org.junit.Test;
 
 import toxi.geom.Vec3D;
@@ -13,12 +15,11 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
  *
  */
 
-public class HomeBehaviorLinear3D implements ParticleBehavior3D
+public class HomeBehaviorLinear3D extends SaveableConstantForce3D
 {
-  ForceVariables vars = new ForceVariables();
-  public boolean enabled = true;
   public HomeBehaviorLinear3D(float easing, float min, float max)
   {
+    super(new Vec3D());//Zero Vector
     vars.maxForce = max;
     vars.minForce = min;
     vars.userA = easing;

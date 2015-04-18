@@ -1,18 +1,20 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.sql.Savepoint;
+
 import lombok.Data;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 @Data
-public class AngularGravityBehavior3D implements StringSerialize<AngularGravityBehavior3D>, ParticleBehavior3D
+public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<AngularGravityBehavior3D>
 {
 
   public void configure(float timeStep)
   {
     vars.timeStep = timeStep;
-    setForce(vars.direction);
+    setForce(vars.force);
   }
 
   /**
@@ -20,11 +22,11 @@ public class AngularGravityBehavior3D implements StringSerialize<AngularGravityB
    */
   public Vec3D getForce()
   {
-    return vars.direction;
+    return vars.force;
   }
 
   public void setForce(Vec3D force) {
-      this.vars.direction = force;
+      this.vars.force = force;
       this.vars.scaledForce = force.scale(vars.timeStep * vars.timeStep);
   }
 
@@ -34,7 +36,7 @@ public class AngularGravityBehavior3D implements StringSerialize<AngularGravityB
   // Vec3D original = new Vec3D();
   public AngularGravityBehavior3D(Vec3D gravity)
   {
-    vars.direction = gravity;
+    vars.force = gravity;
     vars.backup = gravity.copy();
   }
 
@@ -65,6 +67,7 @@ public class AngularGravityBehavior3D implements StringSerialize<AngularGravityB
   @Override
   public String save()
   {
+    System.out.println(this + " running? " + vars.running);
     return ForceVariables.toLine(vars);
   }
 

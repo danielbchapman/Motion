@@ -15,16 +15,16 @@ public class ForceVariables
     public final static String POS_X = "pos_x";
     public final static String POS_Y = "pos_y";
     public final static String POS_Z = "pos_z";
-    public final static String DIR_X = "mag_x";
-    public final static String DIR_Y = "mag_y";
-    public final static String DIR_Z = "mag_z";
+    public final static String FOR_X = "for_x";
+    public final static String FOR_Y = "for_y";
+    public final static String FOR_Z = "for_z";
     public final static String BAK_X = "bak_x";
     public final static String BAK_Y = "bak_y";
     public final static String BAK_Z = "bak_z";
     public final static String SCL_X = "scl_x";
     public final static String SCL_Y = "scl_y";
     public final static String SCL_Z = "scl_z";
-    public final static String FORCE = "force";
+    public final static String MAGNITUDE = "magnitude";
     public final static String RADIUS = "radius";
     public final static String USER_A = "userA";
     public final static String USER_B = "userB";
@@ -32,13 +32,15 @@ public class ForceVariables
     public final static String MAX_FORCE = "maxForce";
     public final static String MIN_FORCE = "minForce";
     public final static String TIME_STEP = "timeStep";
+    public final static String ENABLED = "enabled";
+    public final static String RUNNING = "running";
   }
 
   public Vec3D position = new Vec3D(0f, 0f, 0f);
-  public Vec3D direction = new Vec3D(1f, 1f, 1f);
+  public Vec3D force = new Vec3D(1f, 1f, 1f);
   public Vec3D backup = new Vec3D(0f, 0f, 0f);
   public Vec3D scaledForce = new Vec3D(0f, 0f, 0f);
-  public float force = 0f;
+  public float magnitude = 0f;
   public float radius = 0f;
   public float userA = 0f;
   public float userB = 0f;
@@ -46,6 +48,8 @@ public class ForceVariables
   public float maxForce = 0f;
   public float minForce = 0f;
   public float timeStep = 1f;
+  public boolean enabled = true;
+  public boolean running = false; //for loading/saving/do not use
 
   public static Item save(ForceVariables v, Item item)
   {
@@ -55,9 +59,9 @@ public class ForceVariables
     item.setValue(Fields.POS_Y, v.position.y);
     item.setValue(Fields.POS_Z, v.position.z);
     
-    item.setValue(Fields.DIR_X, v.direction.x);
-    item.setValue(Fields.DIR_Y, v.direction.y);
-    item.setValue(Fields.DIR_Z, v.direction.z);
+    item.setValue(Fields.FOR_X, v.force.x);
+    item.setValue(Fields.FOR_Y, v.force.y);
+    item.setValue(Fields.FOR_Z, v.force.z);
     
     item.setValue(Fields.BAK_X, v.backup.x);
     item.setValue(Fields.BAK_Y, v.backup.y);
@@ -67,7 +71,7 @@ public class ForceVariables
     item.setValue(Fields.SCL_Y, v.scaledForce.y);
     item.setValue(Fields.SCL_Z, v.scaledForce.z);
     
-    item.setValue(Fields.FORCE, v.force);
+    item.setValue(Fields.MAGNITUDE, v.magnitude);
     item.setValue(Fields.MAX_FORCE, v.maxForce);
     item.setValue(Fields.MIN_FORCE, v.minForce);
     item.setValue(Fields.RADIUS, v.radius);
@@ -75,6 +79,7 @@ public class ForceVariables
     item.setValue(Fields.USER_B, v.userB);
     item.setValue(Fields.USER_C, v.userC);
     item.setValue(Fields.TIME_STEP, v.timeStep);
+    item.setValue(Fields.ENABLED, v.enabled);
     return item;
   }
 
@@ -84,9 +89,9 @@ public class ForceVariables
       return new ForceVariables();
     
     ForceVariables vars = new ForceVariables();
-    vars.direction.x = i.decimal(Fields.DIR_X).floatValue();
-    vars.direction.y = i.decimal(Fields.DIR_Y).floatValue();
-    vars.direction.z = i.decimal(Fields.DIR_Z).floatValue();
+    vars.force.x = i.decimal(Fields.FOR_X).floatValue();
+    vars.force.y = i.decimal(Fields.FOR_Y).floatValue();
+    vars.force.z = i.decimal(Fields.FOR_Z).floatValue();
     
     vars.position.x = i.decimal(Fields.POS_X).floatValue();
     vars.position.y = i.decimal(Fields.POS_Y).floatValue();
@@ -101,13 +106,15 @@ public class ForceVariables
     vars.scaledForce.z = i.decimal(Fields.SCL_Z).floatValue();
     
     vars.radius = i.decimal(Fields.RADIUS).floatValue();
-    vars.force = i.decimal(Fields.FORCE).floatValue();
+    vars.magnitude = i.decimal(Fields.MAGNITUDE).floatValue();
     vars.maxForce = i.decimal(Fields.MAX_FORCE).floatValue();
     vars.minForce = i.decimal(Fields.MIN_FORCE).floatValue();
     vars.userA = i.decimal(Fields.USER_A).floatValue();
     vars.userB = i.decimal(Fields.USER_B).floatValue();
     vars.userC = i.decimal(Fields.USER_C).floatValue();
     vars.timeStep = i.decimal(Fields.TIME_STEP).floatValue();
+    vars.enabled = i.bool(Fields.ENABLED);
+    vars.running = i.bool(Fields.RUNNING);
     
     return vars;
   }
@@ -124,9 +131,9 @@ public class ForceVariables
     v.position.y = Float.parseFloat(values[i++]);
     v.position.z = Float.parseFloat(values[i++]);
     
-    v.direction.x = Float.parseFloat(values[i++]);
-    v.direction.y = Float.parseFloat(values[i++]);
-    v.direction.z = Float.parseFloat(values[i++]);
+    v.force.x = Float.parseFloat(values[i++]);
+    v.force.y = Float.parseFloat(values[i++]);
+    v.force.z = Float.parseFloat(values[i++]);
     
     v.backup.x = Float.parseFloat(values[i++]);
     v.backup.y = Float.parseFloat(values[i++]);
@@ -136,7 +143,7 @@ public class ForceVariables
     v.scaledForce.y = Float.parseFloat(values[i++]);
     v.scaledForce.z = Float.parseFloat(values[i++]);
     
-    v.force = Float.parseFloat(values[i++]);
+    v.magnitude = Float.parseFloat(values[i++]);
     v.maxForce = Float.parseFloat(values[i++]);
     v.minForce = Float.parseFloat(values[i++]);
     v.radius = Float.parseFloat(values[i++]);
@@ -144,7 +151,8 @@ public class ForceVariables
     v.userB = Float.parseFloat(values[i++]);
     v.userC = Float.parseFloat(values[i++]);
     v.timeStep = Float.parseFloat(values[i++]);
-
+    v.enabled = Boolean.parseBoolean(values[i++]);
+    v.running = Boolean.parseBoolean(values[i++]);
     return v;
   }
   public static String toLine(ForceVariables v)
@@ -159,9 +167,9 @@ public class ForceVariables
     add.accept(v.position.y);
     add.accept(v.position.z);
     
-    add.accept(v.direction.x);
-    add.accept(v.direction.y);
-    add.accept(v.direction.z);
+    add.accept(v.force.x);
+    add.accept(v.force.y);
+    add.accept(v.force.z);
     
     add.accept(v.backup.x);
     add.accept(v.backup.y);
@@ -171,7 +179,7 @@ public class ForceVariables
     add.accept(v.scaledForce.y);
     add.accept(v.scaledForce.z);
     
-    add.accept(v.force);
+    add.accept(v.magnitude);
     add.accept(v.maxForce);
     add.accept(v.minForce);
     add.accept(v.radius);
@@ -179,6 +187,8 @@ public class ForceVariables
     add.accept(v.userB);
     add.accept(v.userC);
     add.accept(v.timeStep);
+    add.accept(v.enabled);
+    add.accept(v.running);
     b.append("END_VALUES");
        
     return b.toString();

@@ -292,24 +292,24 @@ public class MotionEngine extends PApplet
     
     if(event.getKeyCode() == UP)
     {
-      float x = Actions.home.max;
+      float x = Actions.home.vars.maxForce;
       x += 0.01;
       if(x > 2f)
         x = 2f;
       
       System.out.println("Setting max force to -> " + x);
-      Actions.home.max = x;
+      Actions.home.vars.maxForce = x;
     }
     
     if(event.getKeyCode() == DOWN)
     {
-      float x = Actions.home.max;
+      float x = Actions.home.vars.maxForce;
       x -= 0.01;
       if(x < 0)
         x = 0;
       
       System.out.println("Setting max force to -> " + x);
-      Actions.home.max = x;
+      Actions.home.vars.maxForce = x;
     }
     
     if(event.getKey() == 'h')
@@ -411,6 +411,13 @@ public class MotionEngine extends PApplet
       return false;
     System.out.println("Adding Behavior: " + behavior);
     physics.addBehavior(behavior);
+    if(behavior instanceof SaveableParticleBehavior3D)
+    {
+      System.out.println("Marking behavior as running: " + behavior);
+      ((SaveableParticleBehavior3D) behavior).setRunning(true);
+      System.out.println(((SaveableParticleBehavior3D) behavior).vars.running);
+    }
+      
     activeBehaviors.add(behavior);
     return true;
   }
@@ -420,6 +427,13 @@ public class MotionEngine extends PApplet
     physics.removeBehavior(behavior);
     if(activeBehaviors.remove(behavior))
       System.out.println("Removing Behavior: " + behavior);
+    
+    if(behavior instanceof SaveableParticleBehavior3D)
+    {
+      System.out.println("Marking behavior as not running: " + behavior);
+      ((SaveableParticleBehavior3D) behavior).setRunning(false);
+      System.out.println(((SaveableParticleBehavior3D) behavior).vars.running);
+    }
   }
   public VerletPhysics3D getPhysics()
   {

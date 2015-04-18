@@ -15,18 +15,20 @@ public class TestForceVariables
   {
     Random rand = new Random();
     ForceVariables x = new ForceVariables();
-    x.direction = Vec3D.randomVector();
+    x.force = Vec3D.randomVector();
     x.position = Vec3D.randomVector();
     x.backup = Vec3D.randomVector();
     x.scaledForce = Vec3D.randomVector();
     x.radius = rand.nextFloat();
-    x.force = rand.nextFloat();
+    x.magnitude = rand.nextFloat();
     x.maxForce = rand.nextFloat();
     x.minForce = rand.nextFloat();
     x.timeStep = rand.nextFloat();
     x.userA = rand.nextFloat();
     x.userB = rand.nextFloat();
     x.userC = rand.nextFloat();
+    x.enabled = false; //not default
+    x.running = true; //not default
     
     String line = ForceVariables.toLine(x);
     ForceVariables y = ForceVariables.fromLine(line);
