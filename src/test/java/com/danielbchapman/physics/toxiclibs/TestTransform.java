@@ -113,8 +113,8 @@ public class TestTransform
       float f = 0f;
       int r = Transform.size(f, dim);
       float fR = Transform.size(x, dim);
-      assertTrue("? == " + f + "?-> ", r == x);
-      assertTrue("? == " + f + "?-> ", fR == f);
+      assertTrue("Zero Test << " + r + " == " + x, r == x);
+      assertTrue("Zero Test << " + fR + " == " + f, fR == f);
     }
     
     { //75%
@@ -122,8 +122,8 @@ public class TestTransform
       float f = .5f;
       int r = Transform.size(f, dim);
       float fR = Transform.size(x, dim);
-      assertTrue("? == " + f + "?-> ", r == x);
-      assertTrue("? == " + f + "?-> ", fR == f);
+      assertTrue("75% Test << " + r + " == " + x, r == x);
+      assertTrue("75% Test << " + fR + " == " + f, fR == f);
     }
     
     { //25%

@@ -65,13 +65,17 @@ public class Transform
   
   public static float size(int x, int dim)
   {
-    float fX = x;
-    return fX / (float) dim / 2f;
+    float fX = (float) (x - dim / 2);
+    float dCenter = (float)dim /2f; 
+    return fX / dCenter;
   }
   
   public static int size(float x, int dim)
   {
     float dF = (float) dim;
-    return (int)( dF /2f * x ); 
+    if(x == 0f)
+      return (int) (dF / 2f); //scale by zero
+    else
+      return (int)( dF /2f * x ) + (dim / 2); //scale 
   }
 }
