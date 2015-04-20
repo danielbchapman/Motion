@@ -31,40 +31,42 @@ public class ExplodeBehavior extends MotionInteractiveBehavior
     
     FIELD_NAMES = Collections.unmodifiableMap(m);
   }
-  protected float force;
-  protected float timeStep;
-  protected float maxForce = 10f;
-  protected float minForce = 0.1f;
-  protected Vec3D location;
-  protected Vec3D direction;
+//  protected float force;
+//  protected float timeStep;
+//  protected float maxForce = 10f;
+//  protected float minForce = 0.1f;
+//  protected Vec3D location;
+//  protected Vec3D direction;
 
   public ExplodeBehavior()
   {
     this(new Vec3D(), 0f);
   }
   
-  public ExplodeBehavior(Vec3D direction, float force)
+  public ExplodeBehavior(Vec3D direction, float magnitude)
   {
-    this.direction = direction;
-    this.force = force;
+    vars.force = direction;
+    vars.magnitude = magnitude;
+    vars.maxForce = 10f;
+    vars.minForce = 0.1f;
   }
   
   @Override
   public void apply(VerletParticle3D p)
   {
-    Vec3D distanceV = p.sub(location);
+    Vec3D distanceV = p.sub(vars.position);
     float distance = distanceV.magnitude();
-    float modifier = force / distance;// / mag; // 1 / n^2
+    float modifier = vars.magnitude / distance;// / mag; // 1 / n^2
     
-    if(modifier > maxForce)
-      modifier = maxForce;
+    if(modifier > vars.maxForce)
+      modifier =  vars.maxForce;
     
-    if(modifier < minForce)
+    if(modifier <  vars.minForce)
       return;//skip
     //noise
 
     //Away and in the direction 
-    Vec3D vForce = direction.normalizeTo(modifier);
+    Vec3D vForce =  vars.force.normalizeTo(modifier);
     distanceV = distanceV.normalizeTo(modifier);  
     vForce = vForce.add(distanceV);
     if(p instanceof Point)
@@ -77,7 +79,7 @@ public class ExplodeBehavior extends MotionInteractiveBehavior
   @Override
   public void configure(float timeStep)
   {
-    this.timeStep = timeStep;
+    vars.timeStep = timeStep;
   }
 
   @Override

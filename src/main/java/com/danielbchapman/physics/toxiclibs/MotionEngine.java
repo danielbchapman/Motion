@@ -238,12 +238,12 @@ public class MotionEngine extends PApplet
     if(event.getKey() == '4')
     {
       mode = Mode.EXPLODE_FORCE;
-      explode.direction = new Vec3D(0, 0, -1f);
+      explode.vars.force = new Vec3D(0, 0, -1f);
     }
     if(event.getKey() == '5')
     {
       mode = Mode.EXPLODE_FORCE;
-      explode.direction = new Vec3D(0, 0, 1f);
+      explode.vars.force = new Vec3D(0, 0, 1f);
     }
     
     if(event.getKey() == 'd')
@@ -384,7 +384,7 @@ public class MotionEngine extends PApplet
     }
     else if(Mode.EXPLODE_FORCE == mode)
     {
-      explode.location = new Vec3D(mouseX, mouseY, 0);
+      explode.vars.position = new Vec3D(mouseX, mouseY, 0);
       physics.addBehavior(explode);
     }
       
