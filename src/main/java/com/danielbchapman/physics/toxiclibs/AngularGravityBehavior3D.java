@@ -30,6 +30,11 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
       this.vars.scaledForce = force.scale(vars.timeStep * vars.timeStep);
   }
 
+  public void setGravity(Vec3D v)
+  {
+    vars.force = v.copy();
+    vars.backup = v.copy();
+  }
   // Vec3D original = new Vec3D();
   public AngularGravityBehavior3D(Vec3D gravity)
   {
