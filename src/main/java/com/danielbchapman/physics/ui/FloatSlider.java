@@ -35,8 +35,8 @@ public class FloatSlider extends JPanel
     enabled = new JCheckBox();
     enabled.setText("Enabled");
     slider = new JSlider(JSlider.HORIZONTAL);
-    slider.setMinimum(0);
-    slider.setMaximum(10000);
+    slider.setMinimum(min);
+    slider.setMaximum(max);
     slider.setMajorTickSpacing(1000);
     slider.setMinorTickSpacing(100);
     slider.setPaintTicks(true);

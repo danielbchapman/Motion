@@ -49,6 +49,16 @@ public class ExplodeBehavior extends MotionInteractiveBehavior
     vars.magnitude = magnitude;
     vars.maxForce = 10f;
     vars.minForce = 0.1f;
+    
+    //Default Brush Data
+    vars.maxForceMin = 0f;
+    vars.maxForceMax = 100f;
+    
+    vars.minForceMin = 0f;
+    vars.minForceMin = 1f;
+    
+    vars.magnitudeMin = 0f;
+    vars.magnitudeMax = 100f;
   }
   
   @Override
@@ -92,6 +102,14 @@ public class ExplodeBehavior extends MotionInteractiveBehavior
   public String getName()
   {
     return "Explode Behavior";
+  }
+
+  @Override
+  public void setPosition(Vec3D location)
+  {
+    vars.position.x = location.x;
+    vars.position.y = location.y;
+    vars.position.z = location.z;
   }
 
 }

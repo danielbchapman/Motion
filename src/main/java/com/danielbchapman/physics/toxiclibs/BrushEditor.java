@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.swing.JButton;
@@ -117,6 +118,7 @@ public class BrushEditor extends JFrame
       warn("Unable to Load", "The variables for this brush are null");
       return;
     }
+    this.current = behavior;
     this.variables = behavior.vars;
     
     Map<String, String> names = behavior.getFieldNames();
@@ -194,11 +196,12 @@ public class BrushEditor extends JFrame
         }
         );
     
+    float steps = 1000f;
     magnitude = new PropertySlider<>(
         checkName.apply(Fields.MAGNITUDE), 
-        0, 
-        10000, 
-        10000f, 
+        (int)(variables.magnitudeMin * steps), 
+        (int)(variables.magnitudeMax * steps), 
+        steps, 
         this, 
         (o, f)->
         {
@@ -212,9 +215,9 @@ public class BrushEditor extends JFrame
     //FixME implement a min/max for each variable
     radius = new PropertySlider<>(
         checkName.apply(Fields.RADIUS), 
-        0, 
-        10000, 
-        10000f, 
+        (int)(variables.radiusMin * steps), 
+        (int)(variables.radiusMax * steps), 
+        steps, 
         this, 
         (o, f)->
         {

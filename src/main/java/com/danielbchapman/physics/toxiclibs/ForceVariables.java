@@ -26,12 +26,33 @@ public class ForceVariables
     public final static String SCL_Y = "scl_y";
     public final static String SCL_Z = "scl_z";
     public final static String MAGNITUDE = "magnitude";
+    public final static String MAGNITUDE_MIN = "magnitude_min";
+    public final static String MAGNITUDE_MAX = "magnitude_max";
+    
     public final static String RADIUS = "radius";
+    public final static String RADIUS_MIN = "radius_min";
+    public final static String RADIUS_MAX = "radius_max";
+    
     public final static String USER_A = "userA";
+    public final static String USER_A_MIN = "userA_min";
+    public final static String USER_A_MAX = "userA_max";
+    
     public final static String USER_B = "userB";
+    public final static String USER_B_MIN = "userB_min";
+    public final static String USER_B_MAX = "userB_max";
+    
     public final static String USER_C = "userC";
+    public final static String USER_C_MIN = "userC_min";
+    public final static String USER_C_MAX = "userC_max";
+    
     public final static String MAX_FORCE = "maxForce";
+    public final static String MAX_FORCE_MIN = "maxForce_min";
+    public final static String MAX_FORCE_MAX = "maxForce_max";
+    
     public final static String MIN_FORCE = "minForce";
+    public final static String MIN_FORCE_MIN = "minForce_min";
+    public final static String MIN_FORCE_MAX = "minForce_max";
+    
     public final static String TIME_STEP = "timeStep";
     public final static String ENABLED = "enabled";
     public final static String RUNNING = "running";
@@ -40,7 +61,7 @@ public class ForceVariables
     
     public final static String[] ALL_FIELDS;
     static 
-    {
+    { //FIXME do we link this up? The other data min/max is meta-data for the UI
       ALL_FIELDS = new String[]
           {
           "pos_x",
@@ -75,13 +96,35 @@ public class ForceVariables
   public Vec3D force = new Vec3D(1f, 1f, 1f);
   public Vec3D backup = new Vec3D(0f, 0f, 0f);
   public Vec3D scaledForce = new Vec3D(0f, 0f, 0f);
+  
   public float magnitude = 0f;
+  public float magnitudeMin = 0f;
+  public float magnitudeMax = 10f;
+  
   public float radius = 0f;
+  public float radiusMin = 0f;
+  public float radiusMax = 0f;
+  
   public float userA = 0f;
+  public float userAMin = 0f;
+  public float userAMax = 0f;
+  
   public float userB = 0f;
+  public float userBMin = 0f;
+  public float userBMax = 0f;
+  
   public float userC = 0f;
+  public float userCMin = 0f;
+  public float userCMax = 0f;
+  
   public float maxForce = 0f;
+  public float maxForceMin = 0f;
+  public float maxForceMax = 0f;
+  
   public float minForce = 0f;
+  public float minForceMin = 0f;
+  public float minForceMax = 0f;
+  
   public float timeStep = 1f;
   public boolean enabled = true;
   public boolean running = false; //for loading/saving/do not use
@@ -181,16 +224,38 @@ public class ForceVariables
     v.scaledForce.z = Float.parseFloat(values[i++]);
     
     v.magnitude = Float.parseFloat(values[i++]);
+    v.magnitudeMin = Float.parseFloat(values[i++]);
+    v.magnitudeMax = Float.parseFloat(values[i++]);
+    
     v.maxForce = Float.parseFloat(values[i++]);
+    v.maxForceMin = Float.parseFloat(values[i++]);
+    v.maxForceMax = Float.parseFloat(values[i++]);
+    
     v.minForce = Float.parseFloat(values[i++]);
+    v.minForceMin = Float.parseFloat(values[i++]);
+    v.minForceMax = Float.parseFloat(values[i++]);
+    
     v.radius = Float.parseFloat(values[i++]);
+    v.radiusMin = Float.parseFloat(values[i++]);
+    v.radiusMax = Float.parseFloat(values[i++]);
+    
     v.userA = Float.parseFloat(values[i++]);
+    v.userAMin = Float.parseFloat(values[i++]);
+    v.userAMax = Float.parseFloat(values[i++]);
+    
     v.userB = Float.parseFloat(values[i++]);
+    v.userBMin = Float.parseFloat(values[i++]);
+    v.userBMax = Float.parseFloat(values[i++]);
+    
     v.userC = Float.parseFloat(values[i++]);
+    v.userCMin = Float.parseFloat(values[i++]);
+    v.userCMax = Float.parseFloat(values[i++]);
+    
     v.timeStep = Float.parseFloat(values[i++]);
     v.enabled = Boolean.parseBoolean(values[i++]);
     v.running = Boolean.parseBoolean(values[i++]);
     v.petName = values[i++];
+    
     return v;
   }
   public static String toLine(ForceVariables v)
@@ -218,16 +283,38 @@ public class ForceVariables
     add.accept(v.scaledForce.z);
     
     add.accept(v.magnitude);
+    add.accept(v.magnitudeMin);
+    add.accept(v.magnitudeMax);
+    
     add.accept(v.maxForce);
+    add.accept(v.maxForceMin);
+    add.accept(v.maxForceMax);
+    
     add.accept(v.minForce);
+    add.accept(v.minForceMin);
+    add.accept(v.minForceMax);
+    
     add.accept(v.radius);
+    add.accept(v.radiusMin);
+    add.accept(v.radiusMax);
+    
     add.accept(v.userA);
+    add.accept(v.userAMin);
+    add.accept(v.userAMax);
+    
     add.accept(v.userB);
+    add.accept(v.userBMin);
+    add.accept(v.userBMax);
+    
     add.accept(v.userC);
+    add.accept(v.userCMin);
+    add.accept(v.userCMax);
+    
     add.accept(v.timeStep);
     add.accept(v.enabled);
     add.accept(v.running);
-    add.accept(Utility.isEmptyOrNull(v.petName) ? "" : v.petName);
+    add.accept(Utility.isEmptyOrNull(v.petName) ? null : v.petName);
+    
     b.append("END_VALUES");
        
     return b.toString();

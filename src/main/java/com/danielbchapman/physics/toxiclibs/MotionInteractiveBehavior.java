@@ -3,6 +3,7 @@ package com.danielbchapman.physics.toxiclibs;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import toxi.geom.Vec3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
@@ -28,6 +29,12 @@ public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
    */
   public abstract String getName();
   
+  /**
+   * Sets the position for this behavior
+   * @param location the location of this behavior  
+   * 
+   */
+  public abstract void setPosition(Vec3D location);
   /**
    * Saves the MotionBehavior from the data which is formatted:
    * <tt>

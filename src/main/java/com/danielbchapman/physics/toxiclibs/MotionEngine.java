@@ -17,14 +17,15 @@ public class MotionEngine extends PApplet
   {
     SUCK_FORCE,
     SLAP_FORCE,
-    EXPLODE_FORCE
+    EXPLODE_FORCE,
+    BRUSH_PALLET
   }
   private static final long serialVersionUID = 1L;
 
   //Behavior Checks--map these behaviors
   ArrayList<ParticleBehavior3D> activeBehaviors = new ArrayList<>();
   EnvironmentTools tools;
-  BrushEditor brush;
+  BrushEditor brushTools;
   PalletEditor pallets;
   
   public static Actions ACTIONS;
@@ -43,6 +44,7 @@ public class MotionEngine extends PApplet
   WordLayer words;
   
   //Brushes
+  private static MotionInteractiveBehavior brush = new ExplodeBehavior(new Vec3D(0,0, 1f), 100f);
   private static FalloffAttractionBehavior sucker = new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
   private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 1000f);
   private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
@@ -171,12 +173,13 @@ public class MotionEngine extends PApplet
     
     if (event.getKey() == 'a' || event.getKey() == 'A')
     {
-      if(brush == null)
+      if(brushTools == null)
       {
-        brush = new BrushEditor(this);
+        brushTools = new BrushEditor(this);
+        brushTools.populate(brush);
       }
-      tools.pullData();
-      tools.setVisible(true);
+      brushTools.sync();
+      brushTools.setVisible(true);
     }
     
     if (event.getKey() == ' ')
@@ -215,9 +218,7 @@ public class MotionEngine extends PApplet
     }
     if (event.getKey() == '1')
     {
-      mode = Mode.SUCK_FORCE;
-      sucker.setStrength(-100f);
-      sucker.setJitter(1f);
+      mode = Mode.BRUSH_PALLET;
     }
     
     if(event.getKey() == '2')
@@ -226,6 +227,22 @@ public class MotionEngine extends PApplet
       sucker.setStrength(100f);
       sucker.setJitter(1f);
     }
+    
+    if(event.getKey() == '3')
+    {
+      mode = Mode.SLAP_FORCE;
+    }
+    
+    if(event.getKey() == '4')
+    {
+      mode = Mode.EXPLODE_FORCE;
+      explode.vars.force = new Vec3D(0, 0, -1f);
+    }
+    if(event.getKey() == '5')
+    {
+      mode = Mode.EXPLODE_FORCE;
+      explode.vars.force = new Vec3D(0, 0, 1f);
+    }    
     
     if(event.getKey() == '7')
     {
@@ -242,27 +259,6 @@ public class MotionEngine extends PApplet
     }
     
     
-    if(event.getKey() == '3')
-    {
-      mode = Mode.SLAP_FORCE;
-    }
-    
-    if(event.getKey() == '4')
-    {
-      mode = Mode.EXPLODE_FORCE;
-      explode.vars.force = new Vec3D(0, 0, -1f);
-    }
-    if(event.getKey() == '5')
-    {
-      mode = Mode.EXPLODE_FORCE;
-      explode.vars.force = new Vec3D(0, 0, 1f);
-    }
-    
-    if(event.getKey() == 'd')
-    {
-      gridFly.debugXAxis();
-    }
-    
     //Animation tests
     if(event.getKey() == '0')
     {
@@ -273,6 +269,12 @@ public class MotionEngine extends PApplet
       gridFly.offscreen();
       gridFly.lockAll();
     }
+    
+    if(event.getKey() == 'd')
+    {
+      gridFly.debugXAxis();
+    }
+
     
     if(event.getKey() == 'z')
     {
@@ -381,6 +383,13 @@ public class MotionEngine extends PApplet
   {
     if(Mode.SUCK_FORCE == mode)
       sucker.setAttractor(new Vec3D(mouseX, mouseY, -10f));
+    else if (Mode.BRUSH_PALLET == mode)
+    {
+      //Maintain the Z index of the brush
+
+      brush.setPosition(new Vec3D(mouseX, mouseY, brush.vars.position.z));
+    }
+      
   }
   
   @Override
@@ -388,7 +397,9 @@ public class MotionEngine extends PApplet
   {
     System.out.println("Mouse Down!");
     if(Mode.SUCK_FORCE == mode)
+    {
       physics.addBehavior(sucker);
+    }
     else if(Mode.SLAP_FORCE == mode)
     {
       slap.location = new Vec3D(mouseX, mouseY, 20);//In the plane
@@ -398,6 +409,11 @@ public class MotionEngine extends PApplet
     {
       explode.vars.position = new Vec3D(mouseX, mouseY, 0);
       physics.addBehavior(explode);
+    } 
+    else if (Mode.BRUSH_PALLET == mode)
+    {
+      brush.vars.position = new Vec3D(mouseX, mouseY, 0);
+      physics.addBehavior(brush);
     }
       
   }
@@ -409,6 +425,8 @@ public class MotionEngine extends PApplet
       physics.removeBehavior(slap);
     else if(Mode.EXPLODE_FORCE == mode)
       physics.removeBehavior(explode);
+    else if(Mode.BRUSH_PALLET == mode)
+      physics.removeBehavior(brush);
   };
   
   //FIXME this needs to be HashMaps This probably isn't an issue for less than 10-20 forces
