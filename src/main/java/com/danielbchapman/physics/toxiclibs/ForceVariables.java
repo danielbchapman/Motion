@@ -6,6 +6,7 @@ import lombok.Data;
 import toxi.geom.Vec3D;
 
 import com.danielbchapman.groups.Item;
+import com.danielbchapman.text.Utility;
 
 @Data
 public class ForceVariables
@@ -35,6 +36,7 @@ public class ForceVariables
     public final static String ENABLED = "enabled";
     public final static String RUNNING = "running";
     public final static String CLASS_NAME = "className";
+    public final static String PET_NAME = "petName";
     
     public final static String[] ALL_FIELDS;
     static 
@@ -63,7 +65,8 @@ public class ForceVariables
           "timeStep",
           "enabled",
           "running",
-          "className"
+          "className",
+          "petName"
             };
     }
   }
@@ -83,6 +86,7 @@ public class ForceVariables
   public boolean enabled = true;
   public boolean running = false; //for loading/saving/do not use
   public String className = null;
+  public String petName = null;
 
 //  public static Item save(ForceVariables v, Item item)
 //  {
@@ -186,6 +190,7 @@ public class ForceVariables
     v.timeStep = Float.parseFloat(values[i++]);
     v.enabled = Boolean.parseBoolean(values[i++]);
     v.running = Boolean.parseBoolean(values[i++]);
+    v.petName = values[i++];
     return v;
   }
   public static String toLine(ForceVariables v)
@@ -222,6 +227,7 @@ public class ForceVariables
     add.accept(v.timeStep);
     add.accept(v.enabled);
     add.accept(v.running);
+    add.accept(Utility.isEmptyOrNull(v.petName) ? "" : v.petName);
     b.append("END_VALUES");
        
     return b.toString();

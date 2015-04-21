@@ -24,6 +24,8 @@ public class MotionEngine extends PApplet
   //Behavior Checks--map these behaviors
   ArrayList<ParticleBehavior3D> activeBehaviors = new ArrayList<>();
   EnvironmentTools tools;
+  BrushEditor brush;
+  PalletEditor pallets;
   
   public static Actions ACTIONS;
   private VerletPhysics3D physics = new VerletPhysics3D();
@@ -165,8 +167,18 @@ public class MotionEngine extends PApplet
       }
       tools.pullData();
       tools.setVisible(true);
-      
     }
+    
+    if (event.getKey() == 'a' || event.getKey() == 'A')
+    {
+      if(brush == null)
+      {
+        brush = new BrushEditor(this);
+      }
+      tools.pullData();
+      tools.setVisible(true);
+    }
+    
     if (event.getKey() == ' ')
     {
       testCue.go(layers.get(0), this);

@@ -44,6 +44,7 @@ public class FloatSlider extends JPanel
     text = new JTextField();
     text.setPreferredSize(new Dimension(50, 20));
     text.setSize(50, 20);
+    text.setEditable(false);
     setPreferredSize(new Dimension(240, 75));
     setLayout(new GridBagLayout());
     

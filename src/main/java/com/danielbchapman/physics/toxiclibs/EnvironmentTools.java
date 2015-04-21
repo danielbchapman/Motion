@@ -166,9 +166,9 @@ public class EnvironmentTools extends JFrame
         (e, f)->{
           e.getPhysics().setDrag(f);
         },
-        (s, e)->
+        (s)->
         {
-          s.set(e.getPhysics().getDrag());
+          return s.getPhysics().getDrag();
         }
         );  
     
