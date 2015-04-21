@@ -404,6 +404,7 @@ public class MotionEngine extends PApplet
     {
       if(!capture.isEmpty())
       {
+        
         Playback p = Recorder.playback(capture, null, this);
         playbacks.clear();
         playbacks.add(p);

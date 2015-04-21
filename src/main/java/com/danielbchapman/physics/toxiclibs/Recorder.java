@@ -1,8 +1,13 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
+import com.danielbchapman.utility.FileUtil;
 
 import lombok.Data;
 import lombok.Getter;
@@ -12,6 +17,22 @@ import processing.event.MouseEvent;
 @Data
 public class Recorder
 {
+  public final static String CAPTURE_FOLDER = "captures";
+  
+  public static void save(ArrayList<RecordAction> actions, int w, int h)
+  {
+    StringBuilder b = new StringBuilder();
+    
+    for(int i = 0; i < actions.size(); i++)
+    {
+     b.append(RecordAction.toFloatFormat(actions.get(i), w, h));
+     b.append("\n");
+    }
+    
+    FileUtil.makeDirs(new File(CAPTURE_FOLDER));
+    FileUtil.writeFile(CAPTURE_FOLDER + "/capture-" + new SimpleDateFormat("yyyyMMdd-HH-mm-ss").format(new Date()), b.toString().getBytes());
+  }
+  
   ArrayList<RecordAction> actions = new ArrayList<RecordAction>();
   @Getter
   boolean recording = false;

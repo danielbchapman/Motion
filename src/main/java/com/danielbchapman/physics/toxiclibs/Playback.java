@@ -59,7 +59,11 @@ public class Playback
     copy.keyEvent = false;
     
     e.robot(copy);
-    System.out.println("Polling complete");
+    System.out.println("Polling complete saving to: ");
+    ArrayList<RecordAction> cp = new ArrayList<>();
+    for(int i = 0; i < actions.length; i++)
+      cp.add(actions[i]);
+    Recorder.save(cp, e.getWidth(), e.getHeight());
     running = false;
     last = -1;
     size = -1;
