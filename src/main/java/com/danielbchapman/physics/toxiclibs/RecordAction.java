@@ -53,7 +53,27 @@ public class RecordAction
     return b.toString();
   }
   
-  public static RecordAction fromString(String s)
+  public static String toFloatFormat(RecordAction a, int w, int h)
+  {
+    StringBuilder b = new StringBuilder();
+    Consumer<Object> append = (x)->
+    {
+      b.append(",");
+      b.append(x);
+    };
+    
+    b.append(a.label.replaceAll(",", ""));
+    append.accept(a.stamp);
+    append.accept(Transform.size(a.x, w));
+    append.accept(Transform.size(a.y, h));
+    append.accept(a.leftClick);
+    append.accept(a.rightClick);
+    append.accept(a.keyEvent);
+    
+    return b.toString();
+  }
+
+  public static RecordAction fromFloatFormat(String s, int w, int h)
   {
     if(Utility.isEmptyOrNull(s))
       return null;
@@ -66,8 +86,8 @@ public class RecordAction
     {
       result.label = parts[i++];
       result.stamp = Integer.parseInt(parts[i++]);
-      result.x = Integer.parseInt(parts[i++]);
-      result.y = Integer.parseInt(parts[i++]);
+      result.x = Transform.size(Float.parseFloat(parts[i++]), w);
+      result.y = Transform.size(Float.parseFloat(parts[i++]), h);
       result.leftClick = Boolean.parseBoolean(parts[i++]);
       result.rightClick = Boolean.parseBoolean(parts[i++]);
       result.keyEvent = Boolean.parseBoolean(parts[i++]);
