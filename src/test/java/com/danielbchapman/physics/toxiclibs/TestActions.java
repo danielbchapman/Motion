@@ -12,10 +12,16 @@ public class TestActions
   public void testRecordSerialization()
   {
     Random rand = new Random();
-    RecordAction a = new RecordAction("Test", rand.nextInt(), rand.nextInt(), rand.nextInt(), true, true, true);
-    
+
+    int w = 800;
+    int h = 600;
+
+    //FIXME this doesn't really have high accuracy, we need a +/- 1 or 2 this will fail on a random test
+    RecordAction a = new RecordAction("Test", 2560, 2400, 2000, true, true, true);
     String x = a.toString();
-    RecordAction b = RecordAction.fromString(x);
-    assertTrue("A == B", a.equals(b));
+    String y = RecordAction.toFloatFormat(a, w, h);
+    RecordAction b = RecordAction.fromFloatFormat(y, w, h);
+
+    assertTrue("A == B FLOAT\n" + a + "\n" + b, a.equals(b));
   }
 }
