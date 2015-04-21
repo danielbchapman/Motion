@@ -27,10 +27,13 @@ public class MotionEngine extends PApplet
   EnvironmentTools tools;
   BrushEditor brushTools;
   PalletEditor pallets;
+  private final static Recorder RECORDER = new Recorder();
+  private ArrayList<RecordAction> capture = new ArrayList<>();
   
   public static Actions ACTIONS;
   private VerletPhysics3D physics = new VerletPhysics3D();
   private ArrayList<Layer> layers = new ArrayList<>();
+  private ArrayList<Playback> playbacks = new ArrayList<>();
 
   private Mode mode = Mode.SUCK_FORCE;
   private static Cue testCue;
@@ -99,13 +102,18 @@ public class MotionEngine extends PApplet
     layers.remove(layer);
   }
 
+  @SuppressWarnings("deprecation")
   public void draw()
   {
     // Model updates
     //physics.setTimeStep(frameRate / 60f);
+    for(Playback p : playbacks)
+      p.poll(this);
     physics.update();
     osc.update();
-
+    
+    if(RECORDER.isRecording())
+      RECORDER.capture(mouseEvent);
     
     if (layers != null)
       for (Layer l : layers)
@@ -376,6 +384,32 @@ public class MotionEngine extends PApplet
         osc.setEnabled(false);
       } 
     }
+    
+    if(event.getKey() == 'r' || event.getKey() == 'R')
+    {
+      if(RECORDER.isRecording())
+      {
+        System.out.println("Stopping recording");
+        capture = RECORDER.stop();
+        System.out.println("List Recorded");
+      }
+      else
+      {
+        System.out.println("Recording Starting...");
+        RECORDER.start();
+      }
+    }
+    
+    if(event.getKey() == 't')
+    {
+      if(!capture.isEmpty())
+      {
+        Playback p = Recorder.playback(capture, null, this);
+        playbacks.clear();
+        playbacks.add(p);
+        p.start();
+      }
+    }
   }
   
   @Override
@@ -390,6 +424,24 @@ public class MotionEngine extends PApplet
       brush.setPosition(new Vec3D(mouseX, mouseY, brush.vars.position.z));
     }
       
+  }
+  
+  /**
+   * A hook that allows an action to be "Played" on the screen
+   * @param action the action to apply
+   * 
+   */
+  public void robot(RecordAction action)
+  {
+    System.out.println("Recorder Running");
+    if(action.leftClick){
+      brush.vars.position = new Vec3D(action.x, action.y, 0);
+      addBehavior(brush);
+    } 
+    else 
+    {
+      removeBehavior(brush);
+    }
   }
   
   @Override
