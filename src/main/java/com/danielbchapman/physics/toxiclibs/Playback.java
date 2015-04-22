@@ -50,7 +50,7 @@ public class Playback
       if(actions[last].stamp > max)
         return; // try again next loop
       
-      e.robot(actions[last]);
+      e.robot(actions[last], MotionEngine.brush);
     }
     
     RecordAction copy = actions[last -1];
@@ -58,12 +58,12 @@ public class Playback
     copy.rightClick = false;
     copy.keyEvent = false;
     
-    e.robot(copy);
+    e.robot(copy, MotionEngine.brush);
     System.out.println("Polling complete");
-    ArrayList<RecordAction> cp = new ArrayList<>();
-    for(int i = 0; i < actions.length; i++)
-      cp.add(actions[i]);
-    //Recorder.save(cp, e.getWidth(), e.getHeight());
+//    ArrayList<RecordAction> cp = new ArrayList<>();
+//    for(int i = 0; i < actions.length; i++)
+//      cp.add(actions[i]);
+//    //Recorder.save(cp, e.getWidth(), e.getHeight());
     running = false;
     last = -1;
     size = -1;

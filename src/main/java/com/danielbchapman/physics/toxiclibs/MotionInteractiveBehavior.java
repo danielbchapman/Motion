@@ -25,6 +25,11 @@ public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
   public abstract Map<String, String> getFieldNames();
   
   /**
+   * return a copy of this instance for use in multiple steps.
+   * 
+   */
+  public abstract MotionInteractiveBehavior copy();
+  /**
    * @return the name for this class, null for the class name 
    */
   public abstract String getName();

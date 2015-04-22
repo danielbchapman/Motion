@@ -53,7 +53,7 @@ public class MotionEngine extends PApplet
   WordLayer words;
   
   //Brushes
-  private static MotionInteractiveBehavior brush = new ExplodeBehavior(new Vec3D(0,0, 1f), 100f);
+  public static MotionInteractiveBehavior brush = new ExplodeBehavior(new Vec3D(0,0, 1f), 100f);
   private static FalloffAttractionBehavior sucker = new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
   private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 1000f);
   private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
@@ -457,16 +457,16 @@ public class MotionEngine extends PApplet
    * @param action the action to apply
    * 
    */
-  public void robot(RecordAction action)
+  public void robot(RecordAction action, MotionInteractiveBehavior behavior)
   {
     System.out.println("Recorder Running");
     if(action.leftClick){
-      brush.vars.position = new Vec3D(action.x, action.y, 0);
-      addBehavior(brush);
+      behavior.vars.position = new Vec3D(action.x, action.y, 0);
+      addBehavior(behavior);
     } 
     else 
     {
-      removeBehavior(brush);
+      removeBehavior(behavior);
     }
   }
   

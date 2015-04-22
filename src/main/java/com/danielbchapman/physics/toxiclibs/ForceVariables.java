@@ -1,15 +1,15 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
 import lombok.Data;
 import toxi.geom.Vec3D;
 
-import com.danielbchapman.groups.Item;
 import com.danielbchapman.text.Utility;
 
 @Data
-public class ForceVariables
+public class ForceVariables implements Cloneable
 {
   public static class Fields
   {
@@ -318,5 +318,22 @@ public class ForceVariables
     b.append("END_VALUES");
        
     return b.toString();
+  }
+  
+  @Override
+  public ForceVariables clone()
+  {
+    System.err.println("[WARN]: This implemention is slow and needs to be implemented property");
+    return ForceVariables.fromLine(ForceVariables.toLine(this));
+  }
+  
+  /**
+   *
+   * @return a copy of this  
+   * 
+   */
+  public ForceVariables copy()
+  {
+    return clone();
   }
 }

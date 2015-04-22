@@ -112,4 +112,13 @@ public class ExplodeBehavior extends MotionInteractiveBehavior
     vars.position.z = location.z;
   }
 
+  @Override
+  public MotionInteractiveBehavior copy()
+  {
+    ExplodeBehavior copy = new ExplodeBehavior();
+    copy.vars = vars.copy();
+    
+    return copy;
+  }
+
 }
