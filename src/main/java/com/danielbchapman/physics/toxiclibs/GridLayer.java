@@ -170,4 +170,9 @@ public class GridLayer extends Layer
     }
   }
 
+  @Override
+  public void go(MotionEngine engine)
+  {
+  }
+
 }

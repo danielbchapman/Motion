@@ -18,14 +18,12 @@ public class MotionEngine extends PApplet
 {
   public enum Mode
   {
-    SUCK_FORCE,
-    SLAP_FORCE,
-    EXPLODE_FORCE,
-    BRUSH_PALLET
+    SUCK_FORCE, SLAP_FORCE, EXPLODE_FORCE, BRUSH_PALLET
   }
+
   private static final long serialVersionUID = 1L;
 
-  //Behavior Checks--map these behaviors
+  // Behavior Checks--map these behaviors
   ArrayList<ParticleBehavior3D> activeBehaviors = new ArrayList<>();
   EnvironmentTools tools;
   BrushEditor brushTools;
@@ -35,7 +33,7 @@ public class MotionEngine extends PApplet
   @Getter
   @Setter
   private ArrayList<RecordAction> capture = new ArrayList<>();
-  
+
   public static Actions ACTIONS;
   private VerletPhysics3D physics = new VerletPhysics3D();
   private ArrayList<Layer> layers = new ArrayList<>();
@@ -51,14 +49,18 @@ public class MotionEngine extends PApplet
   private SceneOneLayer one;
   private ParagraphsLayer paragraph;
   WordLayer words;
-  
-  //Brushes
-  public static MotionInteractiveBehavior brush = new ExplodeBehavior(new Vec3D(0,0, 1f), 100f);
-  private static FalloffAttractionBehavior sucker = new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f); 
+
+  // Brushes
+  public static MotionInteractiveBehavior brush = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
+  private static FalloffAttractionBehavior sucker = new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f);
   private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 1000f);
   private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
   private static FrequencyOscillationBehavior osc = new FrequencyOscillationBehavior();
+
+  public Layer activeLayer;
   
+  // Mobilology
+  public MobilologyOne mobolologyOne;
   static
   {
     ArrayList<Action> test = new ArrayList<>();
@@ -71,7 +73,7 @@ public class MotionEngine extends PApplet
 
     ArrayList<Action> gravityThirty = new ArrayList<>();
     Action start = new Action("Start Gravity", 0);
-    //final AngularGravityBehavior3D gravity = new AngularGravityBehavior3D(new Vec3D(0f, 0.01f, 0f));
+    // final AngularGravityBehavior3D gravity = new AngularGravityBehavior3D(new Vec3D(0f, 0.01f, 0f));
 
     Action stop = new Action("Stop Gravity", 30000);
 
@@ -82,12 +84,12 @@ public class MotionEngine extends PApplet
     stop.motionFunction = (MotionEngine e) -> {
       e.addBehavior(Actions.gravity);
     };
-    
+
     gravityThirty.add(start);
     gravityThirty.add(stop);
 
-    gravityOneSecond = new Cue("Gravity Thirty", null, null, gravityThirty);
-    testCue = new Cue("Test Cue", null, null, test);
+    gravityOneSecond = new Cue("Gravity Thirty", gravityThirty);
+    testCue = new Cue("Test Cue", test);
   }
 
   // public Force gravity;
@@ -112,22 +114,22 @@ public class MotionEngine extends PApplet
   public void draw()
   {
     // Model updates
-    //physics.setTimeStep(frameRate / 60f);
-    for(Playback p : playbacks)
+    // physics.setTimeStep(frameRate / 60f);
+    for (Playback p : playbacks)
       p.poll(this);
     physics.update();
     osc.update();
-    
-    if(RECORDER.isRecording())
+
+    if (RECORDER.isRecording())
       RECORDER.capture(mouseEvent);
-    
+
     if (layers != null)
       for (Layer l : layers)
       {
         // Apply forces...
         g.pushMatrix();
-        //Rotate world
-        //rotateX(45f);
+        // Rotate world
+        // rotateX(45f);
         l.render(g);
         g.popMatrix();
       }
@@ -148,28 +150,41 @@ public class MotionEngine extends PApplet
     ACTIONS.engine = this;
     size(1280, 960, OPENGL);
     frameRate(60);
-    //physics.addBehavior(world);
+    // physics.addBehavior(world);
     physics.setDrag(0.5f);
     postSetup();
-    
-    //Add constraints
-    
+
+    // Add constraints
+
   }
 
   public void postSetup()
   {
-    grid = new GridLayer();
-//  particles = new ParticleLayer();
-    //gridFly = new GridLayerFlying();
+//    grid = new GridLayer();
+//    add(grid);
+//
+//    particles = new ParticleLayer();
+//    add(particles);
+//
+//    gridFly = new GridLayerFlying();
+//    add(gridFly);
+//
 //    words = new WordLayer();
-//    paragraph = new ParagraphsLayer();
-//    one = new SceneOneLayer();
-    //add(gridFly);
-    //add(particles);
-   add(grid);
 //    add(words);
-    //add(paragraph);
-    //add(one);
+//
+//    paragraph = new ParagraphsLayer();
+//    add(paragraph);
+//
+//    one = new SceneOneLayer();
+//    add(one);
+
+    /*
+     * Mobilology Dance Piece
+     */
+    mobolologyOne = new MobilologyOne();
+    add(mobolologyOne);
+    
+    activeLayer = mobolologyOne;
   }
 
   @Override
@@ -177,17 +192,17 @@ public class MotionEngine extends PApplet
   {
     if (event.getKey() == 'q' || event.getKey() == 'Q')
     {
-      if(tools == null)
+      if (tools == null)
       {
         tools = new EnvironmentTools(this);
       }
       tools.pullData();
       tools.setVisible(true);
     }
-    
+
     if (event.getKey() == 'a' || event.getKey() == 'A')
     {
-      if(brushTools == null)
+      if (brushTools == null)
       {
         brushTools = new BrushEditor(this);
         brushTools.populate(brush);
@@ -195,7 +210,7 @@ public class MotionEngine extends PApplet
       brushTools.sync();
       brushTools.setVisible(true);
     }
-    
+
     if (event.getKey() == ' ')
     {
       testCue.go(layers.get(0), this);
@@ -206,26 +221,26 @@ public class MotionEngine extends PApplet
       // Gravity for one second.
       gravityOneSecond.go(layers.get(0), this);
     }
-    
+
     if (event.getKey() == 's')
     {
       System.out.println("Splitting words...");
       words.randomSplits(physics);
     }
-    
+
     if (event.getKey() == 'S')
     {
       Random rand = new Random();
       System.out.println("Splitting paragraph...");
-      //paragraph.split(physics, rand.nextFloat() % 3f);
+      // paragraph.split(physics, rand.nextFloat() % 3f);
       paragraph.split(physics, 0f);
-      if(paragraph.isSplit())
+      if (paragraph.isSplit())
       {
         System.out.println("Splitting words");
-        
-        for(Word w : paragraph.paragraph.words)
+
+        for (Word w : paragraph.paragraph.words)
         {
-          //w.split(physics, rand.nextFloat() % 3f);
+          // w.split(physics, rand.nextFloat() % 3f);
           w.split(physics, 0f);
         }
       }
@@ -234,115 +249,112 @@ public class MotionEngine extends PApplet
     {
       mode = Mode.BRUSH_PALLET;
     }
-    
-    if(event.getKey() == '2')
+
+    if (event.getKey() == '2')
     {
       mode = Mode.SUCK_FORCE;
       sucker.setStrength(100f);
       sucker.setJitter(1f);
     }
-    
-    if(event.getKey() == '3')
+
+    if (event.getKey() == '3')
     {
       mode = Mode.SLAP_FORCE;
     }
-    
-    if(event.getKey() == '4')
+
+    if (event.getKey() == '4')
     {
       mode = Mode.EXPLODE_FORCE;
       explode.vars.force = new Vec3D(0, 0, -1f);
     }
-    if(event.getKey() == '5')
+    if (event.getKey() == '5')
     {
       mode = Mode.EXPLODE_FORCE;
       explode.vars.force = new Vec3D(0, 0, 1f);
-    }    
-    
-    if(event.getKey() == '7')
+    }
+
+    if (event.getKey() == '7')
     {
       mode = Mode.SUCK_FORCE;
       sucker.setStrength(100f);
       sucker.setJitter(0f);
     }
-    
-    if(event.getKey() == '8')
+
+    if (event.getKey() == '8')
     {
       mode = Mode.SUCK_FORCE;
       sucker.setStrength(-100f);
       sucker.setJitter(0f);
     }
-    
-    
-    //Animation tests
-    if(event.getKey() == '0')
+
+    // Animation tests
+    if (event.getKey() == '0')
     {
       physics.clear();
       add(gridFly);
-      
 
       gridFly.offscreen();
       gridFly.lockAll();
     }
-    
-    if(event.getKey() == 'd')
+
+    if (event.getKey() == 'd')
     {
       gridFly.debugXAxis();
     }
 
-    
-    if(event.getKey() == 'z')
+    if (event.getKey() == 'z')
     {
       gridFly.runFades();
     }
-    
-    //Force Basics
-    if(event.getKeyCode() == LEFT)
+
+    // Force Basics
+    if (event.getKeyCode() == LEFT)
     {
       float drag = physics.getDrag();
       drag -= 0.01;
-      if(drag < 0)
+      if (drag < 0)
         drag = 0;
-      
+
       System.out.println("Setting drag to -> " + drag);
       physics.setDrag(drag);
     }
-    
-    if(event.getKeyCode() == RIGHT)
+
+    if (event.getKeyCode() == RIGHT)
     {
       float drag = physics.getDrag();
       drag += 0.01;
-      if(drag > 2)
+      if (drag > 2)
         drag = 2;
-      
+
       System.out.println("Setting drag to -> " + drag);
       physics.setDrag(drag);
     }
-    
-    if(event.getKeyCode() == UP)
+
+    if (event.getKeyCode() == UP)
     {
       float x = Actions.home.vars.maxForce;
       x += 0.01;
-      if(x > 2f)
+      if (x > 2f)
         x = 2f;
-      
+
       System.out.println("Setting max force to -> " + x);
       Actions.home.vars.maxForce = x;
     }
-    
-    if(event.getKeyCode() == DOWN)
+
+    if (event.getKeyCode() == DOWN)
     {
       float x = Actions.home.vars.maxForce;
       x -= 0.01;
-      if(x < 0)
+      if (x < 0)
         x = 0;
-      
+
       System.out.println("Setting max force to -> " + x);
       Actions.home.vars.maxForce = x;
     }
-    
-    if(event.getKey() == 'h')
+
+    if (event.getKey() == 'h')
     {
-      if(isActive(Actions.home))
+      if (isActive(Actions.home))
       {
         System.out.println("Turning off home force!");
         removeBehavior(Actions.home);
@@ -353,10 +365,10 @@ public class MotionEngine extends PApplet
         addBehavior(Actions.home);
       }
     }
-    
-    if(event.getKey() == 'j')
+
+    if (event.getKey() == 'j')
     {
-      if(isActive(Actions.homeLinear))
+      if (isActive(Actions.homeLinear))
       {
         System.out.println("Turning off home linear force!");
         removeBehavior(Actions.homeLinear);
@@ -367,17 +379,15 @@ public class MotionEngine extends PApplet
         addBehavior(Actions.homeLinear);
       }
     }
-    if(event.getKey() == ']')
+    if (event.getKey() == ']')
     {
-      if(one != null)
-          one.go();  
-      if(gridFly != null)
-        gridFly.go();
-    }
-    
-    if(event.getKey() == 'o')
+      if(activeLayer != null)
+        activeLayer.go(this);
+     }
+
+    if (event.getKey() == 'o')
     {
-      if(!osc.enabled)
+      if (!osc.enabled)
       {
         System.out.println("Turning on 20hz Wave");
         physics.addBehavior(osc);
@@ -388,16 +398,16 @@ public class MotionEngine extends PApplet
         System.out.println("Turning off 20hz Wave");
         physics.removeBehavior(osc);
         osc.setEnabled(false);
-      } 
+      }
     }
-    
-    if(event.getKey() == 'r' || event.getKey() == 'R')
+
+    if (event.getKey() == 'r' || event.getKey() == 'R')
     {
-      if(RECORDER.isRecording())
+      if (RECORDER.isRecording())
       {
         System.out.println("Stopping recording");
         capture = RECORDER.stop();
-        if(recordUi == null)
+        if (recordUi == null)
         {
           recordUi = new RecordUI(width, height);
           recordUi.populate("Unknown", getCapture());
@@ -408,28 +418,28 @@ public class MotionEngine extends PApplet
           recordUi.populate(recordUi.name, getCapture());
           recordUi.setVisible(true);
         }
-          
+
         System.out.println("List Recorded");
       }
       else
       {
-        if(recordUi != null)
+        if (recordUi != null)
         {
           recordUi.setVisible(false);
-          recordUi.close();  
+          recordUi.close();
         }
         recordUi = null;
         System.out.println("Recording Starting...");
         RECORDER.start();
       }
-      
+
     }
-    
-    if(event.getKey() == 't')
+
+    if (event.getKey() == 't')
     {
-      if(!capture.isEmpty())
+      if (!capture.isEmpty())
       {
-        
+
         Playback p = Recorder.playback(capture, null, this);
         playbacks.clear();
         playbacks.add(p);
@@ -437,21 +447,22 @@ public class MotionEngine extends PApplet
       }
     }
   }
-  
+
   @Override
   public void mouseDragged()
   {
-    if(Mode.SUCK_FORCE == mode)
+    if (Mode.SUCK_FORCE == mode)
       sucker.setAttractor(new Vec3D(mouseX, mouseY, -10f));
-    else if (Mode.BRUSH_PALLET == mode)
-    {
-      //Maintain the Z index of the brush
+    else
+      if (Mode.BRUSH_PALLET == mode)
+      {
+        // Maintain the Z index of the brush
 
-      brush.setPosition(new Vec3D(mouseX, mouseY, brush.vars.position.z));
-    }
-      
+        brush.setPosition(new Vec3D(mouseX, mouseY, brush.vars.position.z));
+      }
+
   }
-  
+
   /**
    * A hook that allows an action to be "Played" on the screen
    * @param action the action to apply
@@ -460,92 +471,101 @@ public class MotionEngine extends PApplet
   public void robot(RecordAction action, MotionInteractiveBehavior behavior)
   {
     System.out.println("Recorder Running");
-    if(action.leftClick){
+    if (action.leftClick)
+    {
       behavior.vars.position = new Vec3D(action.x, action.y, 0);
       addBehavior(behavior);
-    } 
-    else 
+    }
+    else
     {
       removeBehavior(behavior);
     }
   }
-  
+
   @Override
   public void mousePressed()
   {
     System.out.println("Mouse Down!");
-    if(Mode.SUCK_FORCE == mode)
+    if (Mode.SUCK_FORCE == mode)
     {
       physics.addBehavior(sucker);
     }
-    else if(Mode.SLAP_FORCE == mode)
-    {
-      slap.location = new Vec3D(mouseX, mouseY, 20);//In the plane
-      physics.addBehavior(slap);
-    }
-    else if(Mode.EXPLODE_FORCE == mode)
-    {
-      explode.vars.position = new Vec3D(mouseX, mouseY, 0);
-      physics.addBehavior(explode);
-    } 
-    else if (Mode.BRUSH_PALLET == mode)
-    {
-      brush.vars.position = new Vec3D(mouseX, mouseY, 0);
-      physics.addBehavior(brush);
-    }
-      
+    else
+      if (Mode.SLAP_FORCE == mode)
+      {
+        slap.location = new Vec3D(mouseX, mouseY, 20);// In the plane
+        physics.addBehavior(slap);
+      }
+      else
+        if (Mode.EXPLODE_FORCE == mode)
+        {
+          explode.vars.position = new Vec3D(mouseX, mouseY, 0);
+          physics.addBehavior(explode);
+        }
+        else
+          if (Mode.BRUSH_PALLET == mode)
+          {
+            brush.vars.position = new Vec3D(mouseX, mouseY, 0);
+            physics.addBehavior(brush);
+          }
+
   }
-  public void mouseReleased() 
+
+  public void mouseReleased()
   {
-    if(Mode.SUCK_FORCE == mode)
+    if (Mode.SUCK_FORCE == mode)
       physics.removeBehavior(sucker);
-    else if(Mode.SLAP_FORCE == mode)
-      physics.removeBehavior(slap);
-    else if(Mode.EXPLODE_FORCE == mode)
-      physics.removeBehavior(explode);
-    else if(Mode.BRUSH_PALLET == mode)
-      physics.removeBehavior(brush);
+    else
+      if (Mode.SLAP_FORCE == mode)
+        physics.removeBehavior(slap);
+      else
+        if (Mode.EXPLODE_FORCE == mode)
+          physics.removeBehavior(explode);
+        else
+          if (Mode.BRUSH_PALLET == mode)
+            physics.removeBehavior(brush);
   };
-  
-  //FIXME this needs to be HashMaps This probably isn't an issue for less than 10-20 forces
+
+  // FIXME this needs to be HashMaps This probably isn't an issue for less than 10-20 forces
   public boolean isActive(ParticleBehavior3D behavior)
   {
     return activeBehaviors.contains(behavior);
   }
-  
+
   public boolean addBehavior(ParticleBehavior3D behavior)
   {
-    if(activeBehaviors.contains(behavior))
+    if (activeBehaviors.contains(behavior))
       return false;
     System.out.println("Adding Behavior: " + behavior);
     physics.addBehavior(behavior);
-    if(behavior instanceof SaveableParticleBehavior3D)
+    if (behavior instanceof SaveableParticleBehavior3D)
     {
       System.out.println("Marking behavior as running: " + behavior);
       ((SaveableParticleBehavior3D) behavior).setRunning(true);
       System.out.println(((SaveableParticleBehavior3D) behavior).vars.running);
     }
-      
+
     activeBehaviors.add(behavior);
     return true;
   }
-  
+
   public void removeBehavior(ParticleBehavior3D behavior)
   {
     physics.removeBehavior(behavior);
-    if(activeBehaviors.remove(behavior))
+    if (activeBehaviors.remove(behavior))
       System.out.println("Removing Behavior: " + behavior);
-    
-    if(behavior instanceof SaveableParticleBehavior3D)
+
+    if (behavior instanceof SaveableParticleBehavior3D)
     {
       System.out.println("Marking behavior as not running: " + behavior);
       ((SaveableParticleBehavior3D) behavior).setRunning(false);
       System.out.println(((SaveableParticleBehavior3D) behavior).vars.running);
     }
   }
+
   public VerletPhysics3D getPhysics()
   {
     return physics;
   }
-  
+
 }

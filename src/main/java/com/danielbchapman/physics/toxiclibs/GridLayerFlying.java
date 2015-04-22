@@ -7,10 +7,10 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import com.danielbchapman.artwork.Fadeable;
-
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
+
+import com.danielbchapman.artwork.Fadeable;
 
 public class GridLayerFlying extends Layer
 {
@@ -208,7 +208,7 @@ public class GridLayerFlying extends Layer
     }
   }
   
-  public void go()
+  public void go(MotionEngine engine)
   {
     stack.go(engine, this);
   }
@@ -272,7 +272,7 @@ public class GridLayerFlying extends Layer
     ArrayList<Action> list = new ArrayList<Action>();
     for(Action a : actions)
       list.add(a);
-    Cue cue = new Cue(label, this, Actions.engine, list);
+    Cue cue = new Cue(label, list);
     return cue;
   }
   

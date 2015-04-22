@@ -11,14 +11,6 @@ import processing.event.KeyEvent;
  * The scene class renders a series of objects to the graphics context and is responsible
  * for all their updates from the user interface. This allows the user to define events as 
  * needed and can work as a series of cues/applied forces etc...
- *
- ***************************************************************************
- * @author Daniel B. Chapman 
- * <br /><i><b>Light Assistant</b></i> copyright Daniel B. Chapman
- * @since Mar 22, 2015
- * @version Development
- * @link http://www.lightassistant.com
- ***************************************************************************
  */
 
 public abstract class Layer
@@ -37,4 +29,10 @@ public abstract class Layer
   public abstract Point[] init();
   
   public abstract void render(PGraphics graphics);
+  
+  /**
+   * Fire a cue if needed.
+   * @param engine the engine to use.
+   */
+  public abstract void go(MotionEngine engine);
 }

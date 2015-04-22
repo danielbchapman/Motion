@@ -50,15 +50,20 @@ public class Recorder
     FileUtil.writeFile(CAPTURE_FOLDER + "/" + name, b.toString().getBytes());
   }
 
-  public static ArrayList<RecordAction> load(String file, int w, int h)
+  public static ArrayList<RecordAction> load(String file, int w, int h, int offsetX, int offsetY)
   {
     ArrayList<RecordAction> results = new ArrayList<>();
 
     ArrayList<String> lines = FileUtil.readLines(file);
 
     for (String s : lines)
-      results.add(RecordAction.fromFloatFormat(s, w, h));
-
+    {
+      RecordAction tmp = RecordAction.fromFloatFormat(s, w, h); 
+      tmp.x = tmp.x + offsetX;
+      tmp.y = tmp.y + offsetY;
+      results.add(tmp);
+    }
+      
     return results;
   }
 
@@ -124,7 +129,7 @@ public class Recorder
   {
     System.out.println("Creating stack: " + actions.size());
 
-    return new Playback("playback", actions);
+    return new Playback("playback", actions, MotionEngine.brush);
   }
 
   public static class RecordUI extends JFrame
@@ -149,7 +154,7 @@ public class Recorder
       
       open.addActionListener((x)->
       {
-        open(Actions.engine.width, Actions.engine.height);
+        open(Actions.engine.width, Actions.engine.height, 0, 0);
       });
       
       close.addActionListener((e)->
@@ -194,14 +199,14 @@ public class Recorder
       content.repaint();
     }
 
-    public void open(int w, int h)
+    public void open(int w, int h, int offsetX, int offsetY)
     {
       JFileChooser open = new JFileChooser(CAPTURE_FOLDER);
       int act = open.showOpenDialog(this);
       if(act == JFileChooser.APPROVE_OPTION)
       {
         File f = open.getSelectedFile();
-        ArrayList<RecordAction> actions = Recorder.load(f.getAbsolutePath(), w, h);
+        ArrayList<RecordAction> actions = Recorder.load(f.getAbsolutePath(), w, h, offsetX, offsetY);
         if(actions == null || actions.isEmpty())
         {
           warn("Failed to Load", "Unable to open " + f.getName());

@@ -8,25 +8,32 @@ import com.danielbchapman.groups.Item;
 
 public class Cue
 {
-  private Layer layer;
-  private MotionEngine engine;
-  private final Action[] actions;
+  private ArrayList<Action> actions = new ArrayList<>();
   private long start;
   private long total;
   private boolean running;
   private String label = "Unknown";
   public static final ScheduledThreadPoolExecutor SCHEDULER = new ScheduledThreadPoolExecutor(8);
   
-  public Cue(String label, Layer layer, MotionEngine engine, ArrayList<Action> actions)
+  public Cue(String label, ArrayList<Action> actions)
   {
     if(label == null)
       label = "Unknown";
     this.label = label;
-    this.layer = layer;
-    this.engine = engine;
-    this.actions = new Action[actions.size()];
-    for(int i = 0; i < actions.size(); i++)
-      this.actions[i] = actions.get(i);
+    
+    if(actions != null)
+      for(Action a : actions)
+        this.actions.add(a);
+  }
+  
+  public void addAction(Action a)
+  {
+    actions.add(a);
+  }
+  
+  public void removeAction(Action a)
+  {
+    actions.remove(a);
   }
   
   //FIXME this is a hack design that will work temporarily using the scheduler ~ 20ms in error in raw tests
@@ -48,15 +55,15 @@ public class Cue
     }
     
     long executeLast = 0L;
-    if(actions.length > 1)
-      executeLast = actions[actions.length - 1].timeStamp; 
+    if(actions.size() > 1)
+      executeLast = actions.get(actions.size() - 1).timeStamp; 
     
     SCHEDULER.schedule(new Runnable(){
       
       @Override
       public void run()
       {
-        System.out.println("Cue " + label + " Complete | Actions Length " + actions.length);
+        System.out.println("Cue " + label + " Complete | Actions Length " + actions.size());
         Cue.this.running = false;
         
       } }, executeLast, TimeUnit.MILLISECONDS);

@@ -1,22 +1,18 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
-import java.util.Stack;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import javafx.scene.transform.Translate;
+import processing.core.PGraphics;
+import toxi.geom.Vec3D;
+import toxi.physics3d.VerletPhysics3D;
 
 import com.danielbchapman.artwork.Paragraph;
 import com.danielbchapman.utility.FileUtil;
 
-import processing.core.PGraphics;
-import toxi.geom.Vec3D;
-import toxi.physics3d.VerletPhysics3D;
-import toxi.physics3d.behaviors.GravityBehavior3D;
-
-public class SceneOneLayer extends Layer
+public class MobilologyOne extends Layer
 {
   //Static reads
   
@@ -31,7 +27,7 @@ public class SceneOneLayer extends Layer
     stack.go(engine, this);
   }
   
-  public SceneOneLayer()
+  public MobilologyOne()
   {
   }
   
@@ -132,6 +128,16 @@ public class SceneOneLayer extends Layer
         list.add(a);
       Cue cue = new Cue(label, list);
       return cue;
+    }
+    
+    public PlaybackCue playback(String label, String brushFile, String motionFile)
+    {
+      int w = Actions.engine.width;
+      int h = Actions.engine.height;
+      
+      PlaybackCue pb = new PlaybackCue(label, brushFile, motionFile);
+      pb.loadCue(w, h, 0, 0); //FIXME add an offset here! Or scaling if needed..
+      return pb;
     }
     
     public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)

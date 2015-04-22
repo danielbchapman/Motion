@@ -72,4 +72,9 @@ public class ParticleLayer extends Layer
     
     g.popMatrix();
   }
+
+  @Override
+  public void go(MotionEngine engine)
+  {
+  }
 }

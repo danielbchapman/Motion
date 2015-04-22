@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 @Data
 public class Playback
@@ -14,11 +15,19 @@ public class Playback
   private boolean running;
   private RecordAction[] actions;
   
+  @Getter
+  @Setter
+  private MotionInteractiveBehavior brush;
+  
   private int last = -1;
   private int size = -1;
   
-  public Playback(String label, ArrayList<RecordAction> actions)
+  public Playback(String label, ArrayList<RecordAction> actions, MotionInteractiveBehavior brush)
   {
+    if(brush == null)
+      brush = Actions.engine.brush.copy();
+    this.brush = brush;
+    
     this.actions = new RecordAction[actions.size()];
     for(int i = 0; i < actions.size(); i++)
       this.actions[i] = actions.get(i);
@@ -58,6 +67,7 @@ public class Playback
     copy.rightClick = false;
     copy.keyEvent = false;
     
+    //FIXME use a specific brush here.
     e.robot(copy, MotionEngine.brush);
     System.out.println("Polling complete");
 //    ArrayList<RecordAction> cp = new ArrayList<>();
