@@ -3,6 +3,8 @@ package com.danielbchapman.physics.toxiclibs;
 import java.util.ArrayList;
 import java.util.Random;
 
+import lombok.Getter;
+import lombok.Setter;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import toxi.geom.Vec3D;
@@ -10,6 +12,7 @@ import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 import com.danielbchapman.artwork.Word;
+import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
 
 public class MotionEngine extends PApplet
 {
@@ -28,6 +31,9 @@ public class MotionEngine extends PApplet
   BrushEditor brushTools;
   PalletEditor pallets;
   private final static Recorder RECORDER = new Recorder();
+  private RecordUI recordUi;
+  @Getter
+  @Setter
   private ArrayList<RecordAction> capture = new ArrayList<>();
   
   public static Actions ACTIONS;
@@ -391,13 +397,32 @@ public class MotionEngine extends PApplet
       {
         System.out.println("Stopping recording");
         capture = RECORDER.stop();
+        if(recordUi == null)
+        {
+          recordUi = new RecordUI(width, height);
+          recordUi.populate("Unknown", getCapture());
+          recordUi.setVisible(true);
+        }
+        else
+        {
+          recordUi.populate(recordUi.name, getCapture());
+          recordUi.setVisible(true);
+        }
+          
         System.out.println("List Recorded");
       }
       else
       {
+        if(recordUi != null)
+        {
+          recordUi.setVisible(false);
+          recordUi.close();  
+        }
+        recordUi = null;
         System.out.println("Recording Starting...");
         RECORDER.start();
       }
+      
     }
     
     if(event.getKey() == 't')
