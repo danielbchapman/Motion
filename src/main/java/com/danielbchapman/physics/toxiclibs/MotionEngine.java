@@ -61,6 +61,11 @@ public class MotionEngine extends PApplet
   
   // Mobilology
   public MobilologyOne mobolologyOne;
+  public MobilologyOne mobolologyTwo;
+  public MobilologyThree mobolologyThree;
+  
+  
+  
   static
   {
     ArrayList<Action> test = new ArrayList<>();
@@ -129,7 +134,11 @@ public class MotionEngine extends PApplet
         // Apply forces...
         g.pushMatrix();
         // Rotate world
-        // rotateX(45f);
+//        rotateX(90);
+//        rotateY(90);
+//        translate(width/2, height/2);
+//        rotateZ(-90);
+//        translate(-width/2, -height/2);
         l.render(g);
         g.popMatrix();
       }
@@ -151,8 +160,8 @@ public class MotionEngine extends PApplet
 
   public void setup()
   {
-    ACTIONS.engine = this;
-    size(1280, 960, OPENGL);
+    Actions.engine = this;
+    size(Actions.WIDTH, Actions.HEIGHT, OPENGL);//FIXME Needs a resize listener (though not critical)
     frameRate(60);
     // physics.addBehavior(world);
     physics.setDrag(0.5f);
@@ -182,14 +191,21 @@ public class MotionEngine extends PApplet
 //    one = new SceneOneLayer();
 //    add(one);
 
-    add(new EmitterLayer());
+//    add(new EmitterLayer());
     /*
      * Mobilology Dance Piece
      */
 //    mobolologyOne = new MobilologyOne();
 //    add(mobolologyOne);
+//    activeLayer = mobolologyOne;
     
-    activeLayer = mobolologyOne;
+//    mobolologyTwo = new MobilologyTwo();
+//    add(mobolologyTwo);
+//    activeLayer = mobolologyTwo;
+    
+    mobolologyThree = new MobilologyThree();
+    add(mobolologyThree);
+    activeLayer = mobolologyThree;
   }
 
   @Override

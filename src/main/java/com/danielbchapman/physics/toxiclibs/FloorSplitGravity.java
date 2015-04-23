@@ -8,11 +8,11 @@ import toxi.physics3d.VerletParticle3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 @Data
-public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<AngularGravityBehavior3D>
+public class FloorSplitGravity extends SaveableParticleBehavior3D<FloorSplitGravity>
 {
 
   // Vec3D original = new Vec3D();
-  public AngularGravityBehavior3D(Vec3D gravity)
+  public FloorSplitGravity(Vec3D gravity)
   {
     vars.force = gravity;
     vars.backup = gravity.copy();
@@ -21,19 +21,33 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
 
   public void apply(VerletParticle3D p)
   {
+    Point px = null;
+    if(p instanceof Point)
+      px = (Point) p;
     if(p.y > vars.userC)
     {
-      return;//Don't apply force, it is on the floor
+      if(!px.isEnableRotation())
+      {
+        apply(px, p, Vec3D.randomVector(), Vec3D.randomVector());
+      }
+      px.setEnableRotation(true);
+      return;
     }
       
-    if (p instanceof Point)
+    if (px != null)
     {
-      Point px = (Point) p;
       if(px.enableRotation)
         px.addAngularForce(vars.scaledForce.scale(5f));
     }
     
-    p.addForce(vars.scaledForce);
+    apply(px, p, vars.scaledForce, vars.scaledForce.scale(5f));
+  }
+  
+  private void apply(Point px, VerletParticle3D p, Vec3D force, Vec3D angular)
+  {
+    p.addForce(force);
+    if(px != null && px.isEnableRotation())
+      px.addAngularForce(angular);
   }
   
   public void configure(float timeStep)
@@ -55,7 +69,7 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
   }
 
   @Override
-  public AngularGravityBehavior3D load(String data)
+  public FloorSplitGravity load(String data)
   {
     this.vars = ForceVariables.fromLine(data);
     return this;
@@ -78,6 +92,16 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
     vars.backup = v.copy();
   }
 
+  public void setDriftPoint(float f)
+  {
+    vars.userB = f;
+  }
+  
+  public float getDriftPoint(float f)
+  {
+    return vars.userB;
+  }
+  
   public void setStopPoint(float stop)
   {
     vars.userC = stop;

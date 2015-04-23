@@ -17,6 +17,8 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 public class Actions
 {
   public static MotionEngine engine;
+  public static int WIDTH = 1280;
+  public static int HEIGHT = 960;
   //Forces
   
   public static Action dragToVeryLow = new Action("Drag to 0.01f", 0, null, 

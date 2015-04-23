@@ -1,9 +1,8 @@
 package com.danielbchapman.artwork;
 
-import java.util.Random;
-
+import lombok.Getter;
+import lombok.Setter;
 import processing.core.PGraphics;
-import processing.core.PImage;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
@@ -14,8 +13,20 @@ public class Word extends Fadeable
   char[] letters;
   boolean split;
   Point[] points;
+  @Getter
+  boolean enableRotation = true;
+  @Getter
+  @Setter
   Point parent;
   
+  public void setEnableRotation(boolean to)
+  {
+    this.enableRotation = to;
+    
+    if(points != null)
+    for(Point p : points)
+      p.enableRotation = to;
+  }
   public Word(String word, Point parent, int low, int high, int count, int delay)
   {
     super(low, high, count, delay);
@@ -44,7 +55,9 @@ public class Word extends Fadeable
       {
         g.pushMatrix();
         g.translate(points[i].x, points[i].y, points[i].z);
+        
         Point.rotation(g, points[i]);
+        
         g.fill(color);
         g.text(letters[i], 0, 0, 0);
         g.popMatrix();
@@ -54,6 +67,7 @@ public class Word extends Fadeable
     {
       g.pushMatrix();
       g.translate(p.x,  p.y, p.z);
+      
       Point.rotation(g, p);
       g.fill(color);
       for(int i = 0; i < letters.length; i++)

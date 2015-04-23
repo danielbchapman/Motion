@@ -1,8 +1,10 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import processing.core.PGraphics;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
+import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
@@ -19,6 +21,9 @@ public class Point extends VerletParticle3D
   Vec3D angTemp = new Vec3D(0,0,0);
   Vec3D angForce = new Vec3D(0,0,0);
   float mass = 1.0f;
+  @Getter
+  @Setter
+  public boolean enableRotation = true;
   
   //Decay Variables
   public int life = 0;
@@ -43,6 +48,7 @@ public class Point extends VerletParticle3D
     this.angPrevious = p.angPrevious.copy();
     this.angTemp = p.angTemp.copy();
     this.angForce = p.angForce.copy();
+    this.enableRotation = p.enableRotation;
     
     if(p.behaviors != null)
       for(ParticleBehavior3D b : p.behaviors)
