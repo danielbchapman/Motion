@@ -15,7 +15,7 @@ import toxi.physics3d.behaviors.AttractionBehavior3D;
  *
  */
 
-public class FalloffAttractionBehavior extends MotionInteractiveBehavior
+public class FalloffAttractionBehaviorInverse extends MotionInteractiveBehavior
 {
   static final Map<String, String> FIELD_NAMES;
   static {
@@ -33,17 +33,8 @@ public class FalloffAttractionBehavior extends MotionInteractiveBehavior
     FIELD_NAMES = Collections.unmodifiableMap(m);
   }
 
-  public FalloffAttractionBehavior()
+  public FalloffAttractionBehaviorInverse(Vec3D attractor, float radius, float strength, float jitter)
   {
-    this(new Vec3D(), 10f, 10f, 0f);
-  }
-  public FalloffAttractionBehavior(Vec3D attractor, float radius, float strength, float jitter)
-  {
-    vars.magnitudeMax = 200f;
-    vars.magnitudeMin = 0f;
-    vars.maxForceMax = 25f;
-    vars.maxForceMin = 0f;
-    
     vars.position = attractor;
     vars.setRadius(radius);
     vars.magnitude = strength;
@@ -82,7 +73,7 @@ public class FalloffAttractionBehavior extends MotionInteractiveBehavior
     if(modifier < vars.minForce)
       return;
 
-    Vec3D force = delta.normalizeTo(modifier);
+    Vec3D force = delta.normalizeTo(modifier).invert();
     p.addForce(force);
   }
 

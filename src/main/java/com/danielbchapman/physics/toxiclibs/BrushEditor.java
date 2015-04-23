@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.swing.JButton;
@@ -24,7 +25,9 @@ import javax.swing.JTextField;
 
 import com.danielbchapman.physics.toxiclibs.ForceVariables.Fields;
 import com.danielbchapman.physics.ui.CheckBoxProperty;
+import com.danielbchapman.physics.ui.PojoComboBox;
 import com.danielbchapman.physics.ui.PropertySlider;
+import com.danielbchapman.physics.ui.SelectItem;
 import com.danielbchapman.physics.ui.Spacer;
 import com.danielbchapman.physics.ui.Vec3DEditor;
 import com.danielbchapman.text.Utility;
@@ -47,7 +50,8 @@ public class BrushEditor extends JFrame
   }
   
   ArrayList<JButton> brushDefaults = new ArrayList<JButton>();
-  
+  PojoComboBox<Class<? extends MotionInteractiveBehavior>> brushClass;
+  JButton reload;
   JButton save;
   JButton load;
   JButton close;
@@ -88,6 +92,52 @@ public class BrushEditor extends JFrame
     close.addActionListener(x -> { this.setVisible(false); this.dispose();});
     update.addActionListener(x -> { sync();});
     
+    
+    brushClass = new PojoComboBox<>();
+    reload = new JButton("Reload");
+    @SuppressWarnings("unchecked")
+    
+    BiConsumer<String, Class<? extends MotionInteractiveBehavior>> addItem = (name, clazz)->
+    {
+      brushClass.addItem(
+          new SelectItem<Class<? extends MotionInteractiveBehavior>>(name, clazz));
+    };
+    
+    addItem.accept("Explode Brush", ExplodeBehavior.class);
+    addItem.accept("Inverse Explode Brush", ExplodeBehaviorInverse.class);
+    addItem.accept("Falloff Attractor", FalloffAttractionBehavior.class);
+    addItem.accept("Inverse Falloff Attractor", FalloffAttractionBehaviorInverse.class);
+    addItem.accept("Lambda Brush", LambdaBrush.class);
+    
+    Consumer<Void> loadFromCombo = (Void)->
+    {
+      System.out.println("Combo Box: " + brushClass.getSelectedValue());
+      if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this, "Load brush? " + brushClass.getSelectedName()))
+          {
+            Class<? extends MotionInteractiveBehavior> clazz = brushClass.getSelectedValue();
+            MotionInteractiveBehavior beh;
+            try
+            {
+              beh = clazz.newInstance();
+              populate(beh);
+              MotionEngine.brush = beh;
+            }
+            catch (Exception e)
+            {
+              e.printStackTrace();
+              warn("Unable to load brush", "The brush " + clazz + " could not be loaded.");
+            }
+          }
+    };
+    brushClass.addActionListener((x)->
+    {
+      loadFromCombo.accept(null);
+    });
+    
+    reload.addActionListener(x->{loadFromCombo.accept(null);});
+    
+    add(brushClass, UiUtility.getFillHorizontal(0, 0).size(2, 1));
+    add(reload, UiUtility.getFillHorizontal(3, 0));
     int row = 0;
     content.setLayout(new GridBagLayout());
     GridBagConstraints gbc = UiUtility.getFillHorizontal(0, 50);
