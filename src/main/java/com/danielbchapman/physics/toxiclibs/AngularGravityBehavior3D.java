@@ -11,18 +11,25 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<AngularGravityBehavior3D>
 {
 
+  public AngularGravityBehavior3D()
+  {
+    setStopPoint(((float)Actions.HEIGHT) / 2f);
+    vars.userC = Actions.HEIGHT;
+  }
   // Vec3D original = new Vec3D();
   public AngularGravityBehavior3D(Vec3D gravity)
   {
     vars.force = gravity;
     vars.backup = gravity.copy();
-    setStopPoint((float)Actions.HEIGHT / 2f);
+    float h = (float) Actions.HEIGHT;
+    vars.userC = Actions.HEIGHT;
   }
 
   public void apply(VerletParticle3D p)
   {
     if(p.y > vars.userC)
     {
+      System.out.println("User C " + vars.userC + " " + p);
       return;//Don't apply force, it is on the floor
     }
       
