@@ -335,4 +335,9 @@ public class GridLayerFlying extends Layer
     }
     
   }
+
+  @Override
+  public void update()
+  {
+  }
 }

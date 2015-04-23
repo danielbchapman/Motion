@@ -1,17 +1,27 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import processing.core.PGraphics;
+import toxi.geom.Vec3D;
 
 public class ParticleLayer extends Layer
 {
   int gridX;
   int gridY;
   int spacing;
-  
+  String data = "This is the end of days";
+  ArrayList<Emitter> emitters = new ArrayList<>();
   public ParticleLayer()
   {
+    for(int i = 0; i < 10; i++)
+    {
+      float x = (float) Actions.engine.width / (float)10;
+      x -= 75f;
+      x *= i+1;
+      emitters.add(new LetterEmitter(data, new Vec3D(x, -100, 0), Vec3D.randomVector(), 5000, 250, 2f, 25));
+    }
   }
   
   public Point[] init()
@@ -71,10 +81,20 @@ public class ParticleLayer extends Layer
     }
     
     g.popMatrix();
+    
+    for(Emitter e : emitters)
+      e.draw(g);
   }
 
   @Override
   public void go(MotionEngine engine)
   {
+  }
+
+  @Override
+  public void update()
+  {
+    for(Emitter e : emitters)
+      e.update(System.currentTimeMillis());
   }
 }

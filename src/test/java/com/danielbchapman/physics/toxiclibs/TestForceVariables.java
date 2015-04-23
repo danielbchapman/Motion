@@ -21,7 +21,7 @@ public class TestForceVariables
     x.backup = Vec3D.randomVector();
     x.scaledForce = Vec3D.randomVector();
     
-    x.radius = rand.nextFloat();
+    x.setRadius(rand.nextFloat());
     x.radiusMin = rand.nextFloat();
     x.radiusMax = rand.nextFloat();
     

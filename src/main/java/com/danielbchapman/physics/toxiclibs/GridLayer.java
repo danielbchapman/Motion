@@ -175,4 +175,9 @@ public class GridLayer extends Layer
   {
   }
 
+  @Override
+  public void update()
+  {
+  }
+
 }

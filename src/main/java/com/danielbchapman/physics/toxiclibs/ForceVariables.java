@@ -101,7 +101,8 @@ public class ForceVariables implements Cloneable
   public float magnitudeMin = 0f;
   public float magnitudeMax = 10f;
   
-  public float radius = 0f;
+  private float radius = 0f;
+  private float radiusSquared = 0f;
   public float radiusMin = 0f;
   public float radiusMax = 0f;
   
@@ -235,7 +236,7 @@ public class ForceVariables implements Cloneable
     v.minForceMin = Float.parseFloat(values[i++]);
     v.minForceMax = Float.parseFloat(values[i++]);
     
-    v.radius = Float.parseFloat(values[i++]);
+    v.setRadius(Float.parseFloat(values[i++]));
     v.radiusMin = Float.parseFloat(values[i++]);
     v.radiusMax = Float.parseFloat(values[i++]);
     
@@ -335,5 +336,11 @@ public class ForceVariables implements Cloneable
   public ForceVariables copy()
   {
     return clone();
+  }
+  
+  public void setRadius(float r)
+  {
+    radius = r;
+    radiusSquared = r * r;
   }
 }

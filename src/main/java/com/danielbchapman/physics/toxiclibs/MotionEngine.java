@@ -143,6 +143,10 @@ public class MotionEngine extends PApplet
     fill(255, 0, 0);
     text("Frame Rate: " + frameRate, 50, height - 50 + 15, 1);
     popMatrix();
+    
+    if (layers != null)
+      for (Layer l : layers)
+        l.update();
   }
 
   public void setup()
@@ -178,11 +182,12 @@ public class MotionEngine extends PApplet
 //    one = new SceneOneLayer();
 //    add(one);
 
+    add(new EmitterLayer());
     /*
      * Mobilology Dance Piece
      */
-    mobolologyOne = new MobilologyOne();
-    add(mobolologyOne);
+//    mobolologyOne = new MobilologyOne();
+//    add(mobolologyOne);
     
     activeLayer = mobolologyOne;
   }
@@ -253,7 +258,7 @@ public class MotionEngine extends PApplet
     if (event.getKey() == '2')
     {
       mode = Mode.SUCK_FORCE;
-      sucker.setStrength(100f);
+      sucker.vars.magnitude = 100f;
       sucker.setJitter(1f);
     }
 
@@ -276,14 +281,14 @@ public class MotionEngine extends PApplet
     if (event.getKey() == '7')
     {
       mode = Mode.SUCK_FORCE;
-      sucker.setStrength(100f);
+      sucker.vars.magnitude = 100f;
       sucker.setJitter(0f);
     }
 
     if (event.getKey() == '8')
     {
       mode = Mode.SUCK_FORCE;
-      sucker.setStrength(-100f);
+      sucker.vars.magnitude = -100f;
       sucker.setJitter(0f);
     }
 
@@ -452,7 +457,7 @@ public class MotionEngine extends PApplet
   public void mouseDragged()
   {
     if (Mode.SUCK_FORCE == mode)
-      sucker.setAttractor(new Vec3D(mouseX, mouseY, -10f));
+      sucker.setPosition(new Vec3D(mouseX, mouseY, -10f));
     else
       if (Mode.BRUSH_PALLET == mode)
       {

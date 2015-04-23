@@ -20,6 +20,10 @@ public class Point extends VerletParticle3D
   Vec3D angForce = new Vec3D(0,0,0);
   float mass = 1.0f;
   
+  //Decay Variables
+  public int life = 0;
+  public long created = 0;
+  
   public Point()
   {
     this(0, 0, 0, 1);

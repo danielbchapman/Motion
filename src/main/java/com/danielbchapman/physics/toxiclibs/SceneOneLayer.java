@@ -227,4 +227,9 @@ public class SceneOneLayer extends Layer
         toDisplay = "No Text";
       return new Paragraph(toDisplay, p, pW, 12, 12, 0, 3000, 10000, 0, 255, Paragraph.FadeType.LETTER_BY_LETTER);    }
   }
+
+  @Override
+  public void update()
+  {
+  }
 }

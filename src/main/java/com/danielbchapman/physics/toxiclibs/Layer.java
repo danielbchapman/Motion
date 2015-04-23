@@ -31,6 +31,11 @@ public abstract class Layer
   public abstract void render(PGraphics graphics);
   
   /**
+   * Called before each draw method  
+   */
+  public abstract void update();
+  
+  /**
    * Fire a cue if needed.
    * @param engine the engine to use.
    */

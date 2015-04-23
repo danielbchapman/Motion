@@ -221,11 +221,11 @@ public class BrushEditor extends JFrame
         this, 
         (o, f)->
         {
-          o.variables.radius = f;
+          o.variables.setRadius(f);
         }, 
         (o)->
         {
-          return o.variables.radius;
+          return o.variables.getRadius();
         });
     userA = new PropertySlider<>(
         checkName.apply(Fields.USER_A), 

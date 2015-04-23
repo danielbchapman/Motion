@@ -70,5 +70,9 @@ public class ParagraphsLayer extends Layer
   @Override
   public void go(MotionEngine engine)
   {
+  }
+  @Override
+  public void update()
+  {
   }  
 }
