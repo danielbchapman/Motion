@@ -29,7 +29,6 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
   {
     if(p.y > vars.userC)
     {
-      System.out.println("User C " + vars.userC + " " + p);
       return;//Don't apply force, it is on the floor
     }
       

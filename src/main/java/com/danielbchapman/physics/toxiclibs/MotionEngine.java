@@ -6,6 +6,7 @@ import java.util.Random;
 import lombok.Getter;
 import lombok.Setter;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.event.KeyEvent;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
@@ -63,8 +64,6 @@ public class MotionEngine extends PApplet
   public MobilologyOne mobolologyOne;
   public MobilologyOne mobolologyTwo;
   public MobilologyThree mobolologyThree;
-  
-  
   
   static
   {
@@ -133,12 +132,10 @@ public class MotionEngine extends PApplet
       {
         // Apply forces...
         g.pushMatrix();
-        // Rotate world
-//        rotateX(90);
-//        rotateY(90);
-//        translate(width/2, height/2);
-//        rotateZ(-90);
-//        translate(-width/2, -height/2);
+        
+          /*rotate 90*/
+//          translate(0, height);
+//          rotateZ(-PConstants.HALF_PI);
         l.render(g);
         g.popMatrix();
       }

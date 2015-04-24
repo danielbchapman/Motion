@@ -26,7 +26,7 @@ public class Playback
   {
     if(brush == null)
       brush = Actions.engine.brush.copy();
-    this.brush = brush;
+    this.brush = brush.copy();
     
     this.actions = new RecordAction[actions.size()];
     for(int i = 0; i < actions.size(); i++)
@@ -59,7 +59,7 @@ public class Playback
       if(actions[last].stamp > max)
         return; // try again next loop
       
-      e.robot(actions[last], MotionEngine.brush);
+      e.robot(actions[last], brush);
     }
     
     RecordAction copy = actions[last -1];
@@ -68,7 +68,7 @@ public class Playback
     copy.keyEvent = false;
     
     //FIXME use a specific brush here.
-    e.robot(copy, MotionEngine.brush);
+    e.robot(copy, brush);
     System.out.println("Polling complete");
 //    ArrayList<RecordAction> cp = new ArrayList<>();
 //    for(int i = 0; i < actions.length; i++)

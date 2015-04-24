@@ -79,6 +79,13 @@ public class Word extends Fadeable
     g.fill(reset);
   }
   
+  public void spread(float mag)
+  {
+    if(points != null)
+      for(Point p : points)
+        p.addForce(new Vec3D().randomVector().scaleSelf(mag));
+  }
+  
   public void split(VerletPhysics3D physics, float mag)
   {
     if(split)

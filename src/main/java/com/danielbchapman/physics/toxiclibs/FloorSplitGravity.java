@@ -10,13 +10,13 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 @Data
 public class FloorSplitGravity extends SaveableParticleBehavior3D<FloorSplitGravity>
 {
-
+  float breakLine = ((float)Actions.HEIGHT) / 2f;
   // Vec3D original = new Vec3D();
   public FloorSplitGravity(Vec3D gravity)
   {
     vars.force = gravity;
     vars.backup = gravity.copy();
-    setStopPoint((float)Actions.HEIGHT / 2f);
+    setStopPoint(breakLine);
   }
 
   public void apply(VerletParticle3D p)
@@ -28,9 +28,16 @@ public class FloorSplitGravity extends SaveableParticleBehavior3D<FloorSplitGrav
     {
       if(!px.isEnableRotation())
       {
-        apply(px, p, Vec3D.randomVector(), Vec3D.randomVector());
+        //apply(px, p, Vec3D.randomVector().scaleSelf(10f), Vec3D.randomVector().scaleSelf(10f));
+        px.setEnableRotation(true);
+        
+        //reset home to random vector
+        int randX = Util.rand(0, Actions.WIDTH);
+        int randY = Util.rand(0,  breakLine + Actions.HEIGHT - breakLine) + (int)breakLine;
+        px.setHome(new Vec3D(randX, randY, 0));
+        return;
       }
-      px.setEnableRotation(true);
+      
       return;
     }
       
