@@ -7,6 +7,7 @@ import com.danielbchapman.artwork.Word;
 import com.danielbchapman.utility.FileUtil;
 
 import processing.core.PGraphics;
+import processing.core.PImage;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
@@ -33,40 +34,40 @@ public class MobilologyThree extends Layer
   
   public MobilologyThree()
   {
-     setText(FileUtil.readFile("content/scene_three/text.txt"));
+    setText(FileUtil.readFile("content/scene_three/text.txt"));
     
-     location = new Vec3D(
-         Transform.size(0f, Actions.engine.width),
-         Transform.size(-1.02f, Actions.engine.height),
-         0
-         );
+    location = new Vec3D(
+        Transform.size(0f, Actions.engine.width),
+        Transform.size(-1.02f, Actions.engine.height),
+        0
+      );
      
-     low = new Vec3D(
-         Transform.size(-.8f, Actions.engine.width),
-         -50,
-         -100
-         );
-     high = new Vec3D(
-         Transform.size(.8f, Actions.engine.width),
-         50,
-         100
-         );
+   low = new Vec3D(
+       Transform.size(-.8f, Actions.engine.width),
+       -50,
+       -100
+     );
+   high = new Vec3D(
+       Transform.size(.8f, Actions.engine.width),
+       50,
+       100
+     );
     
-     int count = 10;
-//     String data2 = "These are some letters that we should emit";
-//     for(int i = 0; i < count; i++)
-//     {
-//       float x = ((float) Actions.engine.width -75f) / (float)count;
-//       x *= i+1;
-//       emitters.add(new LetterEmitter(data2, new Vec3D(x, -100, 0), Vec3D.randomVector(), 15000, 1000, 2f, 25));
-//     }
-//     
-//     for(int i = 0; i < count; i++)
-//     {
-//       float x = ((float) Actions.engine.width -45f) / (float)count;
-//       x *= i+1;
-//       emitters.add(new LetterEmitter(data2, new Vec3D(x, -100, 150), Vec3D.randomVector(), 15000, 1000, 2f, 25));
-//     }
+   int count = 10;
+   String data2 = "These are some letters that we should emit";
+   for(int i = 0; i < count; i++)
+   {
+     float x = ((float) Actions.engine.width -75f) / (float)count;
+     x *= i+1;
+     emitters.add(new LetterEmitter(data2, new Vec3D(x, -100, 0), Vec3D.randomVector(), 15000, 1000, 2f, 25));
+   }
+   
+   for(int i = 0; i < count; i++)
+   {
+     float x = ((float) Actions.engine.width -45f) / (float)count;
+     x *= i+1;
+     emitters.add(new LetterEmitter(data2, new Vec3D(x, -100, 150), Vec3D.randomVector(), 15000, 1000, 2f, 25));
+   }
      
      //Start gravity
     Actions.engine.addBehavior(gravity);
@@ -139,9 +140,8 @@ public class MobilologyThree extends Layer
   @Override
   public void render(PGraphics g)
   {
-
     float size = g.textSize;
-    g.background(0); //black
+      g.background(0);
     g.strokeWeight(2f);
     g.stroke(255);
     g.fill(255, 255, 255);
