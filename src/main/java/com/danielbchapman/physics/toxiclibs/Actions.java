@@ -126,7 +126,7 @@ public class Actions
   
   public static Cue loadRecording(File recording, File brush){
     ArrayList<Action> actions = new ArrayList<>();
-    MotionInteractiveBehavior instance = MotionInteractiveBehavior.load(brush.getAbsolutePath());
+    MotionInteractiveBehavior instance = MotionInteractiveBehavior.load(brush);
     ArrayList<RecordAction> brushInstance = Recorder.load(recording.getAbsolutePath(), WIDTH, HEIGHT, 0, 0);
     
     Playback p = new Playback("Playback from: " + recording.getName(), brushInstance, instance);

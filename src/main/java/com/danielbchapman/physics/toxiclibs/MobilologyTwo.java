@@ -1,5 +1,6 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -229,6 +230,9 @@ public class MobilologyTwo extends Layer
         cue("Start Fades", 
             Actions.homeLinearOn,
             action("Start Lines", (x)->{runFades();}, null)),
+        load("captures/test-motion", "brushes/implode-brush"),
+        load("captures/test-motion", "brushes/implode-brush"),
+        load("captures/test-motion", "brushes/implode-brush"),
         cue("Slap! One",
             Actions.gravityOff,
             Actions.homeLinearOff,
@@ -277,6 +281,10 @@ public class MobilologyTwo extends Layer
     return cue;
   }
   
+  public Cue load(String file, String brushFile)
+  {
+    return Actions.loadRecording(new File(file), new File(brushFile));
+  }
   public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
   {
     return new Action(label, 0, fL, fE);
