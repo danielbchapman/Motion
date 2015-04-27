@@ -2,6 +2,7 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +38,8 @@ public class MotionEngine extends PApplet
 
   public static Actions ACTIONS;
   private VerletPhysics3D physics = new VerletPhysics3D();
+  private int sceneIndex = -1;
+  private ArrayList<Layer> scenes = new ArrayList<>();
   private ArrayList<Layer> layers = new ArrayList<>();
   private ArrayList<Playback> playbacks = new ArrayList<>();
 
@@ -62,7 +65,7 @@ public class MotionEngine extends PApplet
   
   // Mobilology
   public MobilologyOne mobolologyOne;
-  public MobilologyOne mobolologyTwo;
+  public MobilologyTwo mobolologyTwo;
   public MobilologyThree mobolologyThree;
   
   static
@@ -107,6 +110,8 @@ public class MotionEngine extends PApplet
     layers.add(layer);
     for (Point p : layer.points)
       physics.addParticle(p);
+    
+    activeLayer = layer;
   }
 
   public void remove(Layer layer)
@@ -167,6 +172,26 @@ public class MotionEngine extends PApplet
     // Add constraints
 
   }
+  
+  
+  public void advanceScene()
+  {
+    physics.clear();
+    
+    if(sceneIndex == -1 || sceneIndex+1 >= scenes.size())
+      sceneIndex = 0;
+    else
+      sceneIndex++;
+    
+    System.out.println("Advancing to scene: " + sceneIndex);
+    Layer tmp = scenes.get(sceneIndex);
+    if(tmp == null)
+    {
+      throw new RuntimeException("Layer was not found, simulation may crash");
+    }
+    layers.clear();//Remove all
+    add(tmp);
+  }
 
   public void postSetup()
   {
@@ -192,18 +217,32 @@ public class MotionEngine extends PApplet
     /*
      * Mobilology Dance Piece
      */
-//    mobolologyOne = new MobilologyOne();
+    mobolologyOne = new MobilologyOne();
 //    add(mobolologyOne);
 //    activeLayer = mobolologyOne;
     
-//    mobolologyTwo = new MobilologyTwo();
+    mobolologyTwo = new MobilologyTwo();
 //    add(mobolologyTwo);
 //    activeLayer = mobolologyTwo;
     
     mobolologyThree = new MobilologyThree();
-    add(mobolologyThree);
-    activeLayer = mobolologyThree;
+//    add(mobolologyThree);
+//    activeLayer = mobolologyThree;
+    
+    Consumer<Layer> prepare = (layer)->
+    {
+      layer.applet = this;
+      layer.engine = this;
+      scenes.add(layer);
+//      for (Point p : layer.points)
+//        physics.addParticle(p);
+    };
+    
+    prepare.accept(mobolologyOne);
+    prepare.accept(mobolologyTwo);
+    prepare.accept(mobolologyThree);
   }
+  
 
   @Override
   public void keyPressed(KeyEvent event)
@@ -229,9 +268,13 @@ public class MotionEngine extends PApplet
       brushTools.setVisible(true);
     }
 
+    if(event.getKey() == 'L' || event.getKey() == 'l')
+      advanceScene();
+    
     if (event.getKey() == ' ')
     {
-      testCue.go(layers.get(0), this);
+      if(activeLayer != null)
+        activeLayer.go(this);
     }
 
     if (event.getKey() == 'g')
@@ -584,6 +627,12 @@ public class MotionEngine extends PApplet
   public VerletPhysics3D getPhysics()
   {
     return physics;
+  }
+  
+  public void startPlayback(Playback p)
+  {
+    p.start();
+    playbacks.add(p);
   }
 
 }

@@ -106,6 +106,7 @@ public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
       clazz = (Class<T>) MotionInteractiveBehavior.class.getClassLoader().loadClass(className);
       T instance = clazz.newInstance();
       instance.vars = vars;
+      System.out.println("Returing instance! " + instance);
       return instance;
     }
     catch (InstantiationException | IllegalAccessException | ClassNotFoundException e)

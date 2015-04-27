@@ -96,7 +96,6 @@ public class BrushEditor extends JFrame
     brushClass = new PojoComboBox<>();
     reload = new JButton("Reload");
     @SuppressWarnings("unchecked")
-    
     BiConsumer<String, Class<? extends MotionInteractiveBehavior>> addItem = (name, clazz)->
     {
       brushClass.addItem(
@@ -462,6 +461,7 @@ public class BrushEditor extends JFrame
         loaded.vars = vars;
         
         populate(loaded);
+        Actions.engine.brush = loaded;
         return true;
       }
       catch (Throwable t)

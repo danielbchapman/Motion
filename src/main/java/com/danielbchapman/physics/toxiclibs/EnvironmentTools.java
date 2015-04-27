@@ -339,6 +339,16 @@ public class EnvironmentTools extends JFrame
   }
   public boolean loadVariables(String fileName)
   {
+    if(loadVariablesNoUi(fileName)){
+      read();
+      return true;
+    }
+    else
+      return false;
+  }
+  
+  public static boolean loadVariablesNoUi(String fileName)
+  {
     ArrayList<String> lines = FileUtil.readLines(fileName);
     
     if(lines == null)
@@ -382,7 +392,6 @@ public class EnvironmentTools extends JFrame
           break;
       }
     }
-    read();
     
     return true;
   }

@@ -68,11 +68,6 @@ public class MobilologyThree extends Layer
      x *= i+1;
      emitters.add(new LetterEmitter(data2, new Vec3D(x, -100, 150), Vec3D.randomVector(), 15000, 1000, 2f, 25));
    }
-     
-     //Start gravity
-    Actions.engine.addBehavior(gravity);
-    Actions.engine.getPhysics().setDrag(0.0201f);
-    Actions.engine.addBehavior(Actions.home);
   }
   public void emit(String letters, Vec3D position, Vec3D force)
   {
@@ -82,9 +77,19 @@ public class MobilologyThree extends Layer
     toAdd.add(word);
   }
   
+  boolean started = false;
   @Override
   public void go(MotionEngine engine)
   {
+    if(!started)
+    {
+      started = true;
+      //Start gravity
+      Actions.engine.addBehavior(gravity);
+      Actions.engine.getPhysics().setDrag(0.0201f);
+      Actions.engine.addBehavior(Actions.home);
+      System.out.println("Adding forces!");
+    }
     //Create random vector
     Vec3D location = randomVec();
     Vec3D force = randomVec().normalizeTo(1f);

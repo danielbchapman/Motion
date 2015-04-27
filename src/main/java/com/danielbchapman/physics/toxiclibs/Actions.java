@@ -1,6 +1,12 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.function.Function;
+
+
+
+import com.danielbchapman.utility.FileUtil;
 
 import toxi.geom.Vec3D;
 import toxi.physics3d.behaviors.GravityBehavior3D;
@@ -102,4 +108,36 @@ public class Actions
       (x)->{
         home.vars.maxForce = 10f;
       });
+  
+  public static Action loadBrush(File file){
+    return new Action("Brush: " + file.getName(), 0, null,
+      (x)->{
+        engine.brush = MotionInteractiveBehavior.load(
+            FileUtil.readFile(file.getAbsolutePath()));
+      });
+  };
+  
+  public static Action loadEnvironment(File file){
+    return new Action("Environment: " + file.getName(), 0, null,
+      (x)->{
+        EnvironmentTools.loadVariablesNoUi(file.getAbsolutePath());
+      });
+  };
+  
+  public static Cue loadRecording(File recording, File brush){
+    ArrayList<Action> actions = new ArrayList<>();
+    MotionInteractiveBehavior instance = MotionInteractiveBehavior.load(brush.getAbsolutePath());
+    ArrayList<RecordAction> brushInstance = Recorder.load(recording.getAbsolutePath(), WIDTH, HEIGHT, 0, 0);
+    
+    Playback p = new Playback("Playback from: " + recording.getName(), brushInstance, instance);
+    actions.add(new Action("Playback", 0, 
+        null,
+        (e)->
+        {
+          e.startPlayback(p);
+        } 
+        ));
+    Cue ret = new Cue("Cue for " + recording.getName(), actions);
+    return ret;
+  };
 }
