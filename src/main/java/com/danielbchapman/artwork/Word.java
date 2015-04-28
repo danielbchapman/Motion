@@ -43,10 +43,12 @@ public class Word extends Fadeable
   }
   
   private char character;
-  int size = 12;
+  int size = 36;
   
   public void draw(PGraphics g, Point p)
   {
+    float tSize = g.textSize;
+    g.textSize(size);
     int reset = g.fillColor;
     int color = color(System.currentTimeMillis(), g.fillColor);
     if(split)
@@ -77,6 +79,8 @@ public class Word extends Fadeable
       g.popMatrix();  
     }
     g.fill(reset);
+    
+    g.textSize(tSize);
   }
   
   public void spread(float mag)

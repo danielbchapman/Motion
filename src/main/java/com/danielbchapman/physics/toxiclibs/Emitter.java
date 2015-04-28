@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import lombok.Getter;
+import lombok.Setter;
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
+import toxi.physics3d.VerletPhysics3D;
 
 public abstract class Emitter<T extends Point>
 {
@@ -14,6 +17,10 @@ public abstract class Emitter<T extends Point>
   Random rand = new Random();
   long lastTime = -1L;
   long nextDelta = -1L;
+  @Getter
+  @Setter 
+  VerletPhysics3D physics = Actions.engine.getPhysics();
+  
   public Emitter(Vec3D position, Vec3D heading, int lifeSpan, int rate, float randomVector, int randomTime)
   {
     vars.position = position;
@@ -72,7 +79,7 @@ public abstract class Emitter<T extends Point>
         }
     }
     
-    Actions.engine.getPhysics().addParticle(p);
+    physics.addParticle(p);
   }
   
   public abstract void draw(PGraphics g);

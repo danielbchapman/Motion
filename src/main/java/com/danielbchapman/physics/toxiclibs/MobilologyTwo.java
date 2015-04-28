@@ -35,9 +35,11 @@ public class MobilologyTwo extends Layer
   
   public Point[] init()
   {
-    gridX = 124/2;//;120;
-    gridY = 76/2;//76;
-    spacing = 10*2;
+    int w = 1080;
+    int h = 1920;
+    gridX = 1080/20;//w/20;//124/2;//;120;
+    gridY = 1920/20;//h/20;//76/2;//76;
+    spacing = 20;
     Point[] pointsX = new Point[gridX * gridY];
     Point[] pointsY = new Point[gridX * gridY];
     xAxis = new Line[gridY]; //lines

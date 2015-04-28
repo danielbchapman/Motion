@@ -507,6 +507,12 @@ public class MotionEngine extends PApplet
         p.start();
       }
     }
+    
+    if(event.getKey() == 'b')
+    {
+      System.out.println("lose decoration");
+      Main.setUndecorated();
+    }
   }
 
   @Override

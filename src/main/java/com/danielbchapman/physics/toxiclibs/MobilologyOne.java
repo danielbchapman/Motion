@@ -8,14 +8,16 @@ import java.util.stream.Collectors;
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
+import toxi.physics3d.behaviors.GravityBehavior3D;
 
 import com.danielbchapman.artwork.Paragraph;
 import com.danielbchapman.utility.FileUtil;
+import com.sun.scenario.effect.InvertMask;
 
 public class MobilologyOne extends Layer
 {
   //Static reads
-  
+  VerletPhysics3D local = new VerletPhysics3D();
   Paragraph wall;
   int lastIndex = 0;
   SectionOneCueStack stack;
@@ -28,6 +30,7 @@ public class MobilologyOne extends Layer
   
   public MobilologyOne()
   {
+    local.setDrag(0f);
   }
   
   @Override
@@ -45,6 +48,9 @@ public class MobilologyOne extends Layer
     g.fill(255);
     for(Paragraph p : stack.active)
       p.draw(g, p.parent);
+    
+    for(LetterEmitter e : emitters)
+      e.draw(g);
   }
   
   public class SectionOneCueStack extends CueStack
@@ -83,26 +89,27 @@ public class MobilologyOne extends Layer
 //          cue("Tweet 3",action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
 //          cue("Tweet 4", action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
 //          cue("Tweet 5", action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 2", action("Tweet 2", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 3", action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 4", action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 5", action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 6", action("Tweet 6", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 7", action("Tweet 7", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 8", action("Tweet 8", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 9", action("Tweet 9", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 10", action("Tweet 10", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 11", action("Tweet 11", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 12", action("Tweet 12", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 13", action("Tweet 13", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 14", action("Tweet 14", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 15", action("Tweet 15", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 16", action("Tweet 16", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 17", action("Tweet 17", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 18", action("Tweet 18", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 19", action("Tweet 19", null, (x)->{tweet(x.getPhysics());} )),
-              cue("Tweet 20", action("Tweet 20", null, (x)->{tweet(x.getPhysics());} )),
-              
+          cue("Tweet 2", action("Tweet 2", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 3", action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 4", action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 5", action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 6", action("Tweet 6", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 7", action("Tweet 7", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 8", action("Tweet 8", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 9", action("Tweet 9", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 10", action("Tweet 10", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 11", action("Tweet 11", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 12", action("Tweet 12", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 13", action("Tweet 13", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 14", action("Tweet 14", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 15", action("Tweet 15", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 16", action("Tweet 16", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 17", action("Tweet 17", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 18", action("Tweet 18", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 19", action("Tweet 19", null, (x)->{tweet(x.getPhysics());} )),
+          cue("Tweet 20", action("Tweet 20", null, (x)->{tweet(x.getPhysics());} )),
+          
+          cue("Start Fountain!", action("fountain", null, (x)->{startFountain();})),    
           //Turn on Gravity!
           cue("Gravity On, Home off", 
               Actions.homeOff, 
@@ -220,7 +227,7 @@ public class MobilologyOne extends Layer
     {
       int width = Actions.engine.width;
       int height = Actions.engine.height;
-      int pW = Transform.size(w, Actions.engine.width);
+      int pW = Transform.size(w, Actions.engine.width) / 3;
       
       int[] c = Transform.translate(x, y, width, height);
       System.out.println("Creating paragraph width: " + pW);
@@ -230,11 +237,55 @@ public class MobilologyOne extends Layer
       String toDisplay = FileUtil.readFile(file);
       if(toDisplay == null)
         toDisplay = "No Text";
-      return new Paragraph(toDisplay, p, pW, 12, 12, 0, 3000, 10000, 0, 255, Paragraph.FadeType.LETTER_BY_LETTER);    }
+      
+      int size = 36;
+      return new Paragraph(toDisplay, p, pW, size, size, 0, 3000, 10000, 0, 255, Paragraph.FadeType.LETTER_BY_LETTER);    }
+  }
+  
+  ArrayList<LetterEmitter> emitters = new ArrayList<>();
+  
+  public void stopFountain()
+  {
+    emitters.clear();
+  }
+  public void startFountain()
+  {
+    emitters.clear();
+    local.clear();
+    local.setDrag(.1f);
+    ExplodeBehaviorInverse point = new ExplodeBehaviorInverse();
+    int[] coord = Transform.translate(0f, -1.5f, -.3f, engine.width, engine.height);
+    point.setPosition(new Vec3D(coord[0], coord[1], coord[2]));
+    point.vars.magnitude = 150f;
+    
+    HomeBehavior3D home = new HomeBehavior3D(new Vec3D(1,1,1));
+    local.addBehavior(point);
+    local.addBehavior(home);
+
+    int x = Transform.size(0f, engine.width);
+    int y = Transform.size(1f, engine.height);
+    int z = Transform.size(-.5f, engine.width);
+    
+    LetterEmitter emitter = new LetterEmitter(
+        "This is a test set of letters",
+        new Vec3D(x,y,z),
+        new Vec3D(0, 1f, 0),
+        15000,
+        50,
+        25f,
+        13
+        );
+
+    emitter.setPhysics(local);
+    emitters.add(emitter);
   }
 
   @Override
   public void update()
   {
+    local.update();
+    long time = System.currentTimeMillis();
+    for(LetterEmitter e : emitters)
+      e.update(time);
   }
 }

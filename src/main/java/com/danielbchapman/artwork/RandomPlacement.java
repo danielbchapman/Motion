@@ -1,10 +1,44 @@
 package com.danielbchapman.artwork;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class RandomPlacement
 {
   public static void main(String ... args)
+  {
+    randomCounts(45000, 20);
+  }
+  
+  public static void randomCounts(int millis, int count)
+  {
+    Random rand = new Random();
+    
+    int range = millis / count;
+    
+    ArrayList<Integer> values = new ArrayList<>();
+    
+    values.add(0);
+    for(int i = 1; i < count; i++)
+    {
+      int random = (range * i) + (int)bind(0, -200f, 200f);
+      values.add(random);
+    }
+    
+    for(Integer i : values)
+      System.out.println(i);
+    
+  }
+  public static float bind(float f, float low, float high)
+  {
+    float original = f;
+    float spread = high - low;
+    f = f * spread + low;
+    //System.out.println("Returning -> " + f + " spread " + spread + " | b(" + low + ", " + high +") " + original);
+    return f;
+  }
+  
+  public static void randomTweets()
   {
     //Create Tweets
     Random rand = new Random();
@@ -31,14 +65,5 @@ public class RandomPlacement
     {
       System.out.println("cue(\"Tweet " + i + "\", action(\"Tweet " + i + "\", null, (x)->{tweet(x.getPhysics());} )),");
     }
-  }
-  
-  public static float bind(float f, float low, float high)
-  {
-    float original = f;
-    float spread = high - low;
-    f = f * spread + low;
-    //System.out.println("Returning -> " + f + " spread " + spread + " | b(" + low + ", " + high +") " + original);
-    return f;
   }
 }

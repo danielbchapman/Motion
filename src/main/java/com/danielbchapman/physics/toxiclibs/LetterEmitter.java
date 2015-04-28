@@ -22,7 +22,6 @@ public class LetterEmitter extends Emitter<PointWrapper<Word>>
    * @param randomVector
    * @param randomTime
    */
-  //FIXME Java Doc Needed
   public LetterEmitter(String text, Vec3D position, Vec3D heading, int lifeSpan, int rate, float randomVector, int randomTime)
   {
     super(position, heading, lifeSpan, rate, randomVector, randomTime);
