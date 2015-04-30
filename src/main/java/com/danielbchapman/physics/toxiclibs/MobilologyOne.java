@@ -1,6 +1,8 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -21,10 +23,10 @@ public class MobilologyOne extends Layer
   Paragraph wall;
   int lastIndex = 0;
   SectionOneCueStack stack;
-  
+  FloorSplitGravity gravity = new FloorSplitGravity(new Vec3D(0, 0.1f, 0));
+  ArrayList<Emitter<?>> emitters = new ArrayList<>();
   public void go(MotionEngine engine)
   {
-    System.out.println("Firing Cue Scene One Stack...");
     stack.go(engine, this);
   }
   
@@ -46,10 +48,15 @@ public class MobilologyOne extends Layer
   { 
     g.background(0);
     g.fill(255);
-    for(Paragraph p : stack.active)
-      p.draw(g, p.parent);
+    ArrayList<Paragraph> active = new ArrayList<>();
     
-    for(LetterEmitter e : emitters)
+    for(int i = 0; i < stack.active.size(); i++)
+    {
+      Paragraph p =stack.active.get(i);
+      p.draw(g, p.parent);
+    }
+      
+    for(Emitter<?> e : emitters)
       e.draw(g);
   }
   
@@ -59,7 +66,7 @@ public class MobilologyOne extends Layer
     ArrayList<Paragraph> active = new ArrayList<>();
 
     public void tweet(VerletPhysics3D physics)
-    {
+    { 
       if(lastIndex < tweets.size())
       {
         Paragraph paragraph = tweets.get(lastIndex);
@@ -69,7 +76,7 @@ public class MobilologyOne extends Layer
         
         for(Point p : paragraph.points)
           physics.addParticle(p);
-      }
+      } 
       else
         System.out.println("Can't Tweet Nothing!");
     }
@@ -80,36 +87,130 @@ public class MobilologyOne extends Layer
       
       add(
           //Tweet!
-          cue("Environment Setup and Tweet", 
+          cue("[ZERO] Environment Setup and Tweet", 
               Actions.homeTo(0.4f), 
               Actions.dragTo(0.12f),
-              Actions.homeOn,
-              action("Tweet 1", null, (x)->{tweet(x.getPhysics());} )),
+              Actions.homeOn
+          ),
+              
+          cue("[1] Flying Text",
+              action(0, "Tweet 1", null, (x)->{tweet(x.getPhysics());} ),
+              action(3300, "Tweet 2", null, (x)->{tweet(x.getPhysics());} ),
+              action(6800, "Tweet 3", null, (x)->{tweet(x.getPhysics());} ),
+              action(10300, "Tweet 4", null, (x)->{tweet(x.getPhysics());} ),
+              action(13800, "Tweet 5", null, (x)->{tweet(x.getPhysics());} ),
+              action(17300, "Tweet 6", null, (x)->{tweet(x.getPhysics());} ),
+              action(20800, "Tweet 7", null, (x)->{tweet(x.getPhysics());} ),
+              action(24300, "Tweet 8", null, (x)->{tweet(x.getPhysics());} ),
+              action(27800, "Tweet 9", null, (x)->{tweet(x.getPhysics());} ),
+              action(31300, "Tweet 10", null, (x)->{tweet(x.getPhysics());} ),
+              action(34800, "Tweet 11", null, (x)->{tweet(x.getPhysics());} ),
+              action(38300, "Tweet 12", null, (x)->{tweet(x.getPhysics());} ),
+              action(41800, "Tweet 13", null, (x)->{tweet(x.getPhysics());} ),
+              action(45300, "Tweet 14", null, (x)->{tweet(x.getPhysics());} ),
+              action(48800, "Tweet 15", null, (x)->{tweet(x.getPhysics());} ),
+              action(52300, "Tweet 16", null, (x)->{tweet(x.getPhysics());} ),
+              action(55800, "Tweet 17", null, (x)->{tweet(x.getPhysics());} ),
+              action(59300, "Tweet 18", null, (x)->{tweet(x.getPhysics());} ),
+              action(62800, "Tweet 19", null, (x)->{tweet(x.getPhysics());} ),
+              action(66300, "Tweet 20", null, (x)->{tweet(x.getPhysics());} )
+              ),
+//            cue("[2] Scanner--Not implemented"
+//                ),
+            cue("[3] CHAIN -> Start Emitters @ ~1:25, Gravity On1",
+                Actions.loadEnvironment(new File("/content/scene_one/scene-one-pre-gravity.env")),
+                action("Start Gravity", null, (e)->{e.addBehavior(gravity);})
+                ),
+//            load("[4] Cross after spin on Ground",
+//                "content/scene_one/rec/1-cue-4",
+//                "content/scene_one/brush/crosses",
+//                action("Set Drag Low", null, e-> e.getPhysics().setDrag(.0402f))
+//                ),
+//            load("[5] Girls Entrance from Left (might move up",
+//                "content/scene_one/rec/1-cue-5",
+//                "content/scene_one/brush/dl-entrance"
+//                ),
+//            load("[6] Girls cross upstage center",
+//                "content/scene_one/rec/1-cue-6",
+//                "content/scene_one/brush/1-cue-6"
+//                ),
+//            load("[7] Girls Carry to Left, then to up right",
+//                "content/scene_one/rec/1-cue-7",
+//                "content/scene_one/brush/1-cue-6"
+//                ),
+//            load("[8] Other group crossing towards up-right"
+//                ),
+            cue("[9] Rainfall is started",
+                action("Emitter", (l)-> {startFountain(7, 12, 72);}, null)),
+            load("[10] Group at UP LEFT ",
+                "content/scene_one/rec/grop-cross-ul",
+                "content/scene_one/brush/scene-1-soft"
+                ),
+            cue("[11] Two break",
+                action("Stop Playbacks", null, e->{e.clearPlaybacks();})
+                ),
+//            load("[12] Two more break",
+//                "content/scene_one/rec/break-2",
+//                "content/scene_one/brush/break"),
+//            load("[13] Two more break",
+//                "content/scene_one/rec/break-3",
+//                "content/scene_one/brush/break"),
+            load("[14] Everything  to Nikki @ cube",//Possibly add an point source here?
+                "content/scene_one/rec/OneNikkiAtCube",
+                "content/scene_one/brush/scene-1-soft"
+                ),
+            load("[15] Flying things behind Nikki",
+                "content/scene_one/rec/nikki-levitate",
+                "content/scene_one/brush/nikki-levitate"),
+            cue("[16] Nikki ends pose--stuff falls",
+                action("Clear Playbacks", null, (x)->{x.clearPlaybacks();})),
+            load("[17] Nikki standing",
+                "content/scene_one/rec/nikki-stands",
+                "content/scene_one/brush/nikki-levitate"
+                ),
+            cue("[18] Music for two start",
+                Actions.loadRecordingAsAction(
+                    new File("content/scene_one/rec/push-away"), 
+                    new File("content/scene_one/brush/max-explode")),
+                action("Remove Gravity", null, e->{e.removeBehavior(gravity);}),
+                Actions.homeOff,
+                Actions.homeLinearOff,
+                Actions.dragTo(0f)
+                ),
+            cue("[19] CHANGE SCENE", //MAKE A FOLLOW
+                action("Scene Two Start", null, (e)->{e.advanceScene();}),
+                action(300, "Scene Two GO", null, e->e.activeLayerGo()),
+                action("STOP", null, e->{stopFountain();})
+                ), 
+            
+            
+          
 //          cue("Tweet 2", action("Tweet 2", null, (x)->{tweet(x.getPhysics());} )),
 //          cue("Tweet 3",action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
 //          cue("Tweet 4", action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
 //          cue("Tweet 5", action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 2", action("Tweet 2", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 3", action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 4", action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 5", action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 6", action("Tweet 6", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 7", action("Tweet 7", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 8", action("Tweet 8", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 9", action("Tweet 9", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 10", action("Tweet 10", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 11", action("Tweet 11", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 12", action("Tweet 12", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 13", action("Tweet 13", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 14", action("Tweet 14", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 15", action("Tweet 15", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 16", action("Tweet 16", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 17", action("Tweet 17", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 18", action("Tweet 18", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 19", action("Tweet 19", null, (x)->{tweet(x.getPhysics());} )),
-          cue("Tweet 20", action("Tweet 20", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 2", action("Tweet 2", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 3", action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 4", action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 5", action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 6", action("Tweet 6", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 7", action("Tweet 7", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 8", action("Tweet 8", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 9", action("Tweet 9", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 10", action("Tweet 10", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 11", action("Tweet 11", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 12", action("Tweet 12", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 13", action("Tweet 13", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 14", action("Tweet 14", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 15", action("Tweet 15", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 16", action("Tweet 16", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 17", action("Tweet 17", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 18", action("Tweet 18", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 19", action("Tweet 19", null, (x)->{tweet(x.getPhysics());} )),
+//          cue("Tweet 20", action("Tweet 20", null, (x)->{tweet(x.getPhysics());} )),
           
-          cue("Start Fountain!", action("fountain", null, (x)->{startFountain();})),    
+          cue("Start Fountain!", 
+              action("fountain", null, (x)->{startFountain(5,10,72);})),    
           //Turn on Gravity!
           cue("Gravity On, Home off", 
               Actions.homeOff, 
@@ -125,15 +226,80 @@ public class MobilologyOne extends Layer
               Actions.homeOff, 
               Actions.homeLinearOn)
       );
+      
+    cue("CHAIN -> Start Emitters @ ~1:25, Gravity On1",
+    Actions.loadEnvironment(new File("/content/scene_one/scene-one-pre-gravity.env")),
+    action("Start Gravity", null, (e)->{e.addBehavior(gravity);})
+    );
     }
     
     public Cue cue(String label, Action ... actions)
     {
+      return cue(label, null, actions);
+    }
+    public Cue cue(String label, List<Action> post, Action ... pre)
+    {
       ArrayList<Action> list = new ArrayList<Action>();
-      for(Action a : actions)
-        list.add(a);
+      if(pre != null)
+        for(Action a : pre)
+          list.add(a);
+      
+      if(post != null)
+        for(Action a : post)
+          list.add(a);
+      
       Cue cue = new Cue(label, list);
       return cue;
+    }
+    
+    public Cue load(String label, String file, String brushFile, Action ... post)
+    {
+      ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+      if(post != null)
+        for(Action a : post)
+          acts.add(a);
+      return cue(label, acts);
+    }
+    
+    public Cue load(String label, String env, String file, String brushFile, Action ... post)
+    {
+      ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+      Action loadEnv = Actions.loadEnvironment(new File(env));
+      if(post != null)
+        for(Action a : post)
+          acts.add(a);
+      return cue(label, acts, loadEnv);
+    }
+    
+    public Cue load(String label, String file, String brush)
+    {
+      try
+      {
+        ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brush));
+        return cue(label, acts);  
+      }
+      catch (Throwable t)
+      {
+        System.err.println("ARGS: " + label + ", " + file + ", " + brush);
+        t.printStackTrace();
+        throw t;
+      }
+      
+    }
+    
+    public Cue load(String file, String brushFile)
+    {
+      return Actions.loadRecording(new File(file), new File(brushFile));
+    }
+    
+    public Cue load(String label)
+    {
+      return cue(label);
+    }
+
+    public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE, int delay)
+    {
+      return new Action(label, delay, fL, fE);
     }
     
     public PlaybackCue playback(String label, String brushFile, String motionFile)
@@ -149,6 +315,10 @@ public class MobilologyOne extends Layer
     public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
     {
       return new Action(label, 0, fL, fE);
+    }
+    public Action action(int delay, String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
+    {
+      return new Action(label, delay, fL, fE);
     }
     public void makeTweets()
     {
@@ -201,26 +371,27 @@ public class MobilologyOne extends Layer
 //      tweets.add(create(4, -.9f,-.9f, .4f));
 //      tweets.add(create(5, .5f,    0, .25f));
       
-      tweets.add(create(1, -0.8484037f, -0.7767497f, 0.30237955f));
-      tweets.add(create(2, -0.32622182f, -0.08932668f, 0.410291f));
-      tweets.add(create(3, -0.6360295f, -0.24247438f, 0.26332414f));
-      tweets.add(create(4, -0.86493295f, -0.24452251f, 0.33556807f));
-      tweets.add(create(5, -0.27467936f, -0.7601769f, 0.278355f));
-      tweets.add(create(6, -0.034897566f, 0.15360034f, 0.3512485f));
-      tweets.add(create(7, 0.015447915f, -0.6243588f, 0.40551943f));
-      tweets.add(create(8, 0.7235648f, -0.116715014f, 0.3204156f));
-      tweets.add(create(9, -0.74228424f, 0.22538579f, 0.37197044f));
-      tweets.add(create(10, 0.09099883f, 0.24332011f, 0.26577008f));
-      tweets.add(create(11, -0.59968406f, -0.15510714f, 0.41845268f));
-      tweets.add(create(12, -0.016927779f, -0.3144101f, 0.26566678f));
-      tweets.add(create(13, -0.31929725f, -0.014933825f, 0.27539426f));
-      tweets.add(create(14, 0.7354534f, -0.71851176f, 0.3970907f));
-      tweets.add(create(15, -0.4252262f, -0.57359636f, 0.326428f));
-      tweets.add(create(16, -0.50721383f, 0.07806498f, 0.3798647f));
-      tweets.add(create(17, -0.8192794f, -0.09218466f, 0.33783633f));
-      tweets.add(create(18, -0.765166f, 0.19136155f, 0.387854f));
-      tweets.add(create(19, -0.81006783f, -0.6293552f, 0.3905328f));
-      tweets.add(create(20, -0.8023385f, -0.38700843f, 0.41174376f));
+      tweets.add(create(1, 0.60774976f, -0.8660331f, 0.3113848f));
+      tweets.add(create(2, 0.58814126f, -0.79523945f, 0.30825332f));
+      tweets.add(create(3, 0.29003507f, -0.89551735f, 0.38781804f));
+      tweets.add(create(4, -0.22912174f, -0.83671033f, 0.40248105f));
+      tweets.add(create(5, 0.2404893f, -0.7592367f, 0.2594211f));
+      tweets.add(create(6, 0.47673875f, -0.8176122f, 0.27160722f));
+      tweets.add(create(7, 0.23561329f, -0.8220054f, 0.38576248f));
+      tweets.add(create(8, -0.5969826f, -0.92680335f, 0.3300926f));
+      tweets.add(create(9, -0.5420708f, -0.8197777f, 0.31014243f));
+      tweets.add(create(10, -0.7764856f, -0.8661885f, 0.2753278f));
+      tweets.add(create(11, -0.7423372f, -0.76972085f, 0.40629107f));
+      tweets.add(create(12, 0.13760239f, -0.8734967f, 0.38589758f));
+      tweets.add(create(13, 0.18477231f, -0.8238119f, 0.33576635f));
+      tweets.add(create(14, 0.5980403f, -0.81536245f, 0.26064658f));
+      tweets.add(create(15, 0.32537585f, -0.78095186f, 0.35657996f));
+      tweets.add(create(16, -0.5967808f, -0.82131493f, 0.38780418f));
+      tweets.add(create(17, 0.08435255f, -0.76120436f, 0.264645f));
+      tweets.add(create(18, 0.75374967f, -0.7866781f, 0.41352078f));
+      tweets.add(create(19, 0.122197926f, -0.7948279f, 0.30538788f));
+      tweets.add(create(20, -0.32357234f, -0.750912f, 0.31922892f));
+
     }
     
     public Paragraph create(int fileNo, float x, float y, float w)
@@ -242,50 +413,39 @@ public class MobilologyOne extends Layer
       return new Paragraph(toDisplay, p, pW, size, size, 0, 3000, 10000, 0, 255, Paragraph.FadeType.LETTER_BY_LETTER);    }
   }
   
-  ArrayList<LetterEmitter> emitters = new ArrayList<>();
-  
   public void stopFountain()
   {
     emitters.clear();
   }
-  public void startFountain()
+  
+  public void startFountain(int low, int high, int spacing)
   {
     emitters.clear();
-    local.clear();
-    local.setDrag(.1f);
-    ExplodeBehaviorInverse point = new ExplodeBehaviorInverse();
-    int[] coord = Transform.translate(0f, -1.5f, -.3f, engine.width, engine.height);
-    point.setPosition(new Vec3D(coord[0], coord[1], coord[2]));
-    point.vars.magnitude = 150f;
     
-    HomeBehavior3D home = new HomeBehavior3D(new Vec3D(1,1,1));
-    local.addBehavior(point);
-    local.addBehavior(home);
-
-    int x = Transform.size(0f, engine.width);
-    int y = Transform.size(1f, engine.height);
-    int z = Transform.size(-.5f, engine.width);
-    
-    LetterEmitter emitter = new LetterEmitter(
-        "This is a test set of letters",
-        new Vec3D(x,y,z),
-        new Vec3D(0, 1f, 0),
-        15000,
-        50,
-        25f,
-        13
+    int base = spacing/2;
+    for(int i = 0; i < high; i++)
+    {
+      LetterEmitter emitter = new LetterEmitter(
+          "Buy it, use it, break it, fix it, Trash it, change it, mail - upgrade it, Charge it, point it, zoom it, press it,".replaceAll(",", " "),
+          new Vec3D(Util.rand(10, base) + (spacing *i), Util.rand(-700, -400), -200),
+          new Vec3D(0, 1f, 0),
+          25000,
+          50, 
+          20f,
+          200
         );
-
-    emitter.setPhysics(local);
-    emitters.add(emitter);
+        emitter.physics = Actions.engine.getPhysics();
+        
+        emitters.add(emitter);
+    }
+    
   }
 
   @Override
   public void update()
   {
-    local.update();
     long time = System.currentTimeMillis();
-    for(LetterEmitter e : emitters)
+    for(Emitter<?> e : emitters)
       e.update(time);
   }
 }

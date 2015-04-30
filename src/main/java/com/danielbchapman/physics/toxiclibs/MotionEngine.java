@@ -26,10 +26,12 @@ public class MotionEngine extends PApplet
   private static final long serialVersionUID = 1L;
 
   // Behavior Checks--map these behaviors
+  public static boolean showCoordinates = false;
   ArrayList<ParticleBehavior3D> activeBehaviors = new ArrayList<>();
   EnvironmentTools tools;
   BrushEditor brushTools;
   PalletEditor pallets;
+  boolean highlightMouse = true;
   private final static Recorder RECORDER = new Recorder();
   private RecordUI recordUi;
   @Getter
@@ -68,6 +70,7 @@ public class MotionEngine extends PApplet
   public MobilologyTwo mobolologyTwo;
   public MobilologyThree mobolologyThree;
   
+  private boolean stopPlayback = false;
   static
   {
     ArrayList<Action> test = new ArrayList<>();
@@ -124,10 +127,24 @@ public class MotionEngine extends PApplet
   {
     // Model updates
     // physics.setTimeStep(frameRate / 60f);
-    for (Playback p : playbacks)
-      p.poll(this);
-    physics.update();
-    osc.update();
+    if(stopPlayback)
+    {
+        clearPlaybacksPrivate();
+    }
+    else
+      for (Playback p : playbacks){
+          p.poll(this);      
+    
+    }
+    if(stopPlayback)
+      stopPlayback = false;
+    try{
+      physics.update();
+      osc.update();  
+    } catch (Throwable t){
+      t.printStackTrace();
+    }
+    
 
     if (RECORDER.isRecording())
       RECORDER.capture(mouseEvent);
@@ -158,6 +175,27 @@ public class MotionEngine extends PApplet
     if (layers != null)
       for (Layer l : layers)
         l.update();
+    
+    if(highlightMouse)
+    {
+      pushMatrix();
+      ellipseMode(CENTER);
+      stroke(4f);
+      fill(255,200,200);
+      stroke(255,0,0);
+      ellipse(mouseX, mouseY, 50, 50);
+      fill(0);
+      
+      if(showCoordinates)
+      {
+        translate(mouseX, mouseY + 100);
+        fill(255);
+        text("[" + mouseX + ", " + mouseY + "]", 0, 0, 0);
+      }
+      popMatrix();
+       
+    }
+     
   }
 
   public void setup()
@@ -173,10 +211,32 @@ public class MotionEngine extends PApplet
 
   }
   
+  public synchronized void clearPlaybacks()
+  {
+    stopPlayback = true;
+  }
   
-  public void advanceScene()
+  private synchronized void clearPlaybacksPrivate()
+  {
+    for(int i = 0; i < playbacks.size(); i++)
+    {
+      Playback p = playbacks.get(i);
+      removeBehavior(p.getBrush());
+    }
+    playbacks.clear();
+  }
+  
+  public synchronized void clearPhysics()
   {
     physics.clear();
+    activeBehaviors.clear();
+  }
+  public synchronized void advanceScene()
+  {
+    layers.clear();
+    playbacks.clear(); //STOP PLAYBACKS
+    
+    clearPhysics();
     
     if(sceneIndex == -1 || sceneIndex+1 >= scenes.size())
       sceneIndex = 0;
@@ -191,6 +251,12 @@ public class MotionEngine extends PApplet
     }
     layers.clear();//Remove all
     add(tmp);
+  }
+  
+  public void activeLayerGo()
+  {
+    if(activeLayer != null)
+      activeLayer.go(this);
   }
 
   public void postSetup()
@@ -241,6 +307,7 @@ public class MotionEngine extends PApplet
     prepare.accept(mobolologyOne);
     prepare.accept(mobolologyTwo);
     prepare.accept(mobolologyThree);
+    prepare.accept(new BlackoutLayer());
   }
   
 
@@ -365,7 +432,7 @@ public class MotionEngine extends PApplet
 
     if (event.getKey() == 'z')
     {
-      gridFly.runFades();
+      clearPlaybacks();
     }
 
     // Force Basics
@@ -513,6 +580,11 @@ public class MotionEngine extends PApplet
       System.out.println("lose decoration");
       Main.setUndecorated();
     }
+    
+    if(event.getKey() == 'x')
+    {
+      showCoordinates = !showCoordinates;
+    }
   }
 
   @Override
@@ -537,7 +609,7 @@ public class MotionEngine extends PApplet
    */
   public void robot(RecordAction action, MotionInteractiveBehavior behavior)
   {
-    System.out.println("Recorder Running");
+//    System.out.println("Recorder Running");
     if (action.leftClick)
     {
       behavior.vars.position = new Vec3D(action.x, action.y, 0);
@@ -639,6 +711,20 @@ public class MotionEngine extends PApplet
   {
     p.start();
     playbacks.add(p);
+  }
+
+  public void osc(boolean enable)
+  {
+    if(enable)
+    {
+      System.out.println("Turning on 20hz Wave");
+      physics.addBehavior(osc);  
+    }
+    else
+    {
+      physics.removeBehavior(osc);
+      osc.setEnabled(enable);
+    }
   }
 
 }

@@ -49,11 +49,17 @@ public abstract class Emitter<T extends Point>
 //    else
 //      System.out.println("[SKIPPED] Calling update" + time + ", " + lastTime + " " + nextDelta);
   }
-  
+  boolean stop = false;
+  public void stop(boolean stop)
+  {
+    this.stop = stop;
+  }
   public abstract T createPoint(float x, float y, float z, float w);
   
   public void addPoint(long time)
   {
+    if(stop)
+      return;
     T p = createPoint(vars.position.x, vars.position.y, vars.position.z, 1f);
     p.addForce(vars.force);
     if(vars.userB > 0)

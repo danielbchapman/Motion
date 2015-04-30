@@ -3,6 +3,7 @@ package com.danielbchapman.physics.toxiclibs;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -32,16 +33,18 @@ public class MobilologyTwo extends Layer
   public MobilologyTwo()
   {
   }
-  
+   
   public Point[] init()
   {
-    int w = 1080;
-    int h = 1920;
-    gridX = 1080/20;//w/20;//124/2;//;120;
-    gridY = 1920/20;//h/20;//76/2;//76;
+    int w = 720;
+    int h = 1280;
+    gridX = w/20;//w/20;//124/2;//;120;
+    gridY = h/20;//h/20;//76/2;//76;
     spacing = 20;
     Point[] pointsX = new Point[gridX * gridY];
     Point[] pointsY = new Point[gridX * gridY];
+    
+    int total = gridX + gridY;
     xAxis = new Line[gridY]; //lines
     yAxis = new Line[gridX];
     
@@ -56,7 +59,7 @@ public class MobilologyTwo extends Layer
       }
     }
     
-    //X-Axis
+    //X-Axis 
     for(int i = 0; i < gridY; i++)
     {
       Point[] row = new Point[gridX];
@@ -123,7 +126,7 @@ public class MobilologyTwo extends Layer
       g.stroke(fader.color(System.currentTimeMillis(), 0xFFFFFFFF));
     else
       g.stroke(color);
-    g.strokeWeight(2f);
+    g.strokeWeight(4f);
     g.pushMatrix();
     g.translate(10, 10, 0);//Offset to test with
     for(int i = 0; i < xAxis.length; i++)
@@ -221,32 +224,108 @@ public class MobilologyTwo extends Layer
   {
     stack = new CueStack();
     stack.add(
-        cue("Prepare Scene", 
+        cue("[PRESET] Prepare Scene", 
             Actions.homeOff,
             Actions.gravityOff,
             Actions.homeLinearOff,
             Actions.dragTo(.5f),
             //Need to set the forces I like here...
-            action("Send Lines Out", (x)->{offscreen(); lockAll();}, null)
+            action("Send Lines Out", (x)->{offscreen(); lockAll();}, null),
+            action("addLinear", null, (e)->{e.addBehavior(Actions.homeLinear);}, 50),
+            action("Start Lines", (x)->{runFades();}, null, 100)
             ),
-        cue("Start Fades", 
-            Actions.homeLinearOn,
-            action("Start Lines", (x)->{runFades();}, null)),
-        load("captures/test-motion", "brushes/implode-brush"),
-        load("captures/test-motion", "brushes/implode-brush"),
-        load("captures/test-motion", "brushes/implode-brush"),
-        cue("Slap! One",
-            Actions.gravityOff,
-            Actions.homeLinearOff,
-            Actions.homeOff,
-            Actions.dragToNone,
-            action("SLAP", (x)->{slap();}, null),
-            action("Restore", (x)->{
-              Actions.dragTo(.5f).motionFunction.accept(Actions.engine);
-              Actions.homeLinearOn.motionFunction.accept(Actions.engine);
-              }, null, 1000)
-            )      
+        load("[31] SLAP!",
+            "content/scene_two/env/slap-2-final.env",
+            "content/scene_two/rec/slap-2-final", 
+            "content/scene_two/brush/slap-2-final"
+//            Actions.homeLinearOff,
+//            Actions.homeOff,
+//            Actions.dragTo(0.01f)
+//            action("Restore", (x)->{
+//              Actions.dragTo(.25f).motionFunction.accept(Actions.engine);
+//              Actions.homeLinearOn.motionFunction.accept(Actions.engine);
+//              }, null, 1500)
+            ), 
+         cue("[32] on Throw Restore Gravity",
+             Actions.homeLinearOn,
+             Actions.homeOn,
+             Actions.dragTo(0.05173f)
+             ),
+    
+         load("[33] Nikki Hands on Cube", //Restore Gravity on the throw
+             "content/scene_two/rec/nikki-hands-on-cube",
+             "content/scene_two/brush/scene-two-squeeze",
+             //hActions.homeOff,
+             Actions.homeLinearOff),
+         cue("[34] Return Home", Actions.dragTo(.25f), Actions.homeLinearOn),
+                      
+         load("[37] Nikki Hits the Wall",
+             "content/scene_two/rec/punching-wall",
+             "content/scene_two/brush/scene-two-squeeze",
+             Actions.dragTo(0.01f)
+          ),
+         cue("[38] No home with the suck down", Actions.homeLinearOff), //need some environment here
+         load("[39] Jitter Run", 
+             "content/scene_two/rec/scene-2-jitter",
+             "content/scene_two/brush/scene-two-squeeze",
+             Actions.homeLinearOn
+             ),
+         load("[40] Jitter Run", 
+             "content/scene_two/rec/scene-2-jitter",
+             "content/scene_two/brush/scene-two-squeeze",
+             Actions.homeLinearOff
+             ),
+         load("[41] Line Enters",
+             "content/scene_two/rec/2-line-enters",
+             "content/scene_two/brush/scene-two-squeeze"),   
+             
+             //jitter -> 
+         cue("[45] Restore Grid", 
+             Actions.stopPlayback(), 
+             Actions.homeLinearOn, 
+             Actions.homeLinearOn),
+              
+         cue("[49] Suck Offstage",
+             Actions.dragToNone,
+             Actions.stopPlayback(),
+             Actions.homeOff,
+             Actions.homeLinearOff,
+             action("clear", null, 
+                 (e)->{
+                   try{
+                   e.getPhysics().behaviors.clear();
+                   } catch (Throwable t){
+                     t.printStackTrace();
+                   }
+                 }),
+             Actions.follow(100)),
+             
+         load("[49.1] Suck Offstage",
+             "content/scene_two/env/suck",  
+             "content/scene_two/rec/suck",
+             "content/scene_two/brush/suck",
+             Actions.homeLinearOff,
+             Actions.homeOff
+             ),
+         cue("[50] 5 Transition to 3",
+             action("Scene 3", null, (x)->{x.advanceScene(); x.activeLayer.go(x);})
+//             Actions.go(100)
+             )
     );
+//        load("captures/test-motion", "brushes/implode-brush"),
+//        load("captures/test-motion", "brushes/implode-brush"),
+//        cue("Slap! One",
+//            Actions.gravityOff,
+//            Actions.homeLinearOff,
+//            Actions.homeOff,
+//            Actions.dragToNone,
+//            action("SLAP", (x)->{slap();}, null),
+//            action("Restore", (x)->{
+//              Actions.dragTo(.5f).motionFunction.accept(Actions.engine);
+//              Actions.homeLinearOn.motionFunction.accept(Actions.engine);
+//              }, null, 1000)
+//            )      
+    
   }
   
   public void slap()
@@ -276,16 +355,56 @@ public class MobilologyTwo extends Layer
   }
   public Cue cue(String label, Action ... actions)
   {
+    return cue(label, null, actions);
+  }
+  public Cue cue(String label, List<Action> post, Action ... pre)
+  {
     ArrayList<Action> list = new ArrayList<Action>();
-    for(Action a : actions)
-      list.add(a);
+    if(pre != null)
+      for(Action a : pre)
+        list.add(a);
+    
+    if(post != null)
+      for(Action a : post)
+        list.add(a);
+    
     Cue cue = new Cue(label, list);
     return cue;
+  }
+  
+  public Cue load(String label, String env, String file, String brushFile, Action ... post)
+  {
+    ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+    Action loadEnv = Actions.loadEnvironment(new File(env));
+    if(post != null)
+      for(Action a : post)
+        acts.add(a);
+    return cue(label, acts, loadEnv);
+  }
+  
+  public Cue load(String label, String file, String brush)
+  {
+    ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brush));
+    return cue(label, acts);
+  }
+  
+  public Cue load(String label, String file, String brushFile, Action ... post)
+  {
+    ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+    if(post != null)
+      for(Action a : post)
+        acts.add(a);
+    return cue(label, acts);
   }
   
   public Cue load(String file, String brushFile)
   {
     return Actions.loadRecording(new File(file), new File(brushFile));
+  }
+  
+  public Cue load(String label)
+  {
+    return cue(label);
   }
   public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
   {
@@ -318,12 +437,15 @@ public class MobilologyTwo extends Layer
 
     Random rand = new Random();
     long total = 0L;
+    int count = 28000 / ((720/20) + (1280/20) + 10); // 35 seconds
+  
+    System.out.println("Firing -> " + count);
     for(int i = 0; i < schedule.size(); i++)
     {
       final FadeThread t = new FadeThread();
       final Line line = schedule.get(i);
       t.line = line;
-      long delay = rand.nextLong() % 640;
+      long delay = rand.nextLong() % count; //35 second?
       if(delay < 0)
         delay = -delay;
       total += delay + 200;

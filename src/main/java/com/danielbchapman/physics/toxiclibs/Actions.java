@@ -27,6 +27,23 @@ public class Actions
   public static int HEIGHT = 1280;
   //Forces
   
+  public static Action advanceScene(int delay)
+  {
+    return new Action("ADVANCE SCENE", delay, null, e->e.advanceScene());
+  }
+  public static Action go()
+  {
+    return go(0);
+  }
+  public static Action go(int delay)
+  {
+    return new Action("GO", 0, null, e->e.activeLayerGo());
+  }
+  
+  public static Action follow(int delay)
+  {
+    return new Action("Follow " + delay, delay, null, e->e.activeLayerGo());
+  }
   public static Action dragToVeryLow = new Action("Drag to 0.01f", 0, null, 
       (x)->{
         x.getPhysics().setDrag(0.01f);
@@ -117,12 +134,35 @@ public class Actions
       });
   };
   
+  public static Action stopPlayback()
+  {
+    return new Action("Stopping Playbacks", 0, null, (e)->{Actions.engine.clearPlaybacks();});
+  }
+  
   public static Action loadEnvironment(File file){
     return new Action("Environment: " + file.getName(), 0, null,
       (x)->{
         EnvironmentTools.loadVariablesNoUi(file.getAbsolutePath());
       });
   };
+  
+  public static ArrayList<Action> loadRecordingAsAction(File recording, File brush)
+  {
+    ArrayList<Action> actions = new ArrayList<>();
+    MotionInteractiveBehavior instance = MotionInteractiveBehavior.load(brush);
+    ArrayList<RecordAction> brushInstance = Recorder.load(recording.getAbsolutePath(), WIDTH, HEIGHT, 0, 0);
+    
+    Playback p = new Playback("Playback from: " + recording.getName(), brushInstance, instance);
+    actions.add(new Action("Playback", 0, 
+        null,
+        (e)->
+        {
+          e.startPlayback(p);
+        } 
+        ));
+   
+    return actions;
+  }
   
   public static Cue loadRecording(File recording, File brush){
     ArrayList<Action> actions = new ArrayList<>();

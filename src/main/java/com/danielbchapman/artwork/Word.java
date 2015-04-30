@@ -10,41 +10,38 @@ import com.danielbchapman.physics.toxiclibs.Point;
 
 public class Word extends Fadeable
 {
-  char[] letters;
-  boolean split;
-  Point[] points;
+  private char character;
   @Getter
   boolean enableRotation = true;
+  char[] letters;
   @Getter
   @Setter
   Point parent;
+  Point[] points;
   
-  public void setEnableRotation(boolean to)
-  {
-    this.enableRotation = to;
-    
-    if(points != null)
-    for(Point p : points)
-      p.enableRotation = to;
-  }
-  public Word(String word, Point parent, int low, int high, int count, int delay)
-  {
-    super(low, high, count, delay);
-    letters = word.toCharArray();
-    points = new Point[letters.length];
-    character = letters[0];
-    this.parent = parent;
-    //calculate points
-  }
+  int size = 36;
+  boolean split;
   
   public Word(String word, Point parent)
   {
     this(word, parent, 255, 255, 0, 0);
   }
   
-  private char character;
-  int size = 36;
+  public Word(String word, Point parent, int low, int high, int count, int delay)
+  {
+    this(word, parent, low, high, count, delay, 36);
+  }
   
+  public Word(String word, Point parent, int low, int high, int count, int delay, int size)
+  {
+    super(low, high, count, delay);
+    letters = word.toCharArray();
+    points = new Point[letters.length];
+    character = letters[0];
+    this.parent = parent;
+    this.size = size;
+    //calculate points
+  }
   public void draw(PGraphics g, Point p)
   {
     float tSize = g.textSize;
@@ -83,11 +80,13 @@ public class Word extends Fadeable
     g.textSize(tSize);
   }
   
-  public void spread(float mag)
+  public void setEnableRotation(boolean to)
   {
+    this.enableRotation = to;
+    
     if(points != null)
-      for(Point p : points)
-        p.addForce(new Vec3D().randomVector().scaleSelf(mag));
+    for(Point p : points)
+      p.enableRotation = to;
   }
   
   public void split(VerletPhysics3D physics, float mag)
@@ -103,6 +102,13 @@ public class Word extends Fadeable
       points[i].addForce(rand);
       physics.addParticle(points[i]);
     }
+  }
+  
+  public void spread(float mag)
+  {
+    if(points != null)
+      for(Point p : points)
+        p.addForce(new Vec3D().randomVector().scaleSelf(mag));
   }
   
   /**

@@ -10,7 +10,7 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 @Data
 public class FloorSplitGravity extends SaveableParticleBehavior3D<FloorSplitGravity>
 {
-  float breakLine = ((float)Actions.HEIGHT) / 3.2f;
+  float breakLine = ((float)Actions.HEIGHT) / 3.05f;
   // Vec3D original = new Vec3D();
   public FloorSplitGravity(Vec3D gravity)
   {

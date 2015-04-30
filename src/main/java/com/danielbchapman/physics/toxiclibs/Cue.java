@@ -44,7 +44,7 @@ public class Cue
     
     running = true;
     long start = System.currentTimeMillis();
-    System.out.println("Firing Cue " + label);
+    System.out.println(label + " [FIRED]");
     for(Action a : actions)
     {
       a.called = start;

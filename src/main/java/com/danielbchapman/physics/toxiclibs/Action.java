@@ -30,7 +30,7 @@ public class Action implements Callable<Void>
   @Override
   public Void call() throws Exception
   {
-    System.out.println("Executing action: " + label + " at " + timeStamp + " elapsed = " + (System.currentTimeMillis() - called));
+    //System.out.println("Executing action: " + label + " at " + timeStamp + " elapsed = " + (System.currentTimeMillis() - called));
     if (layerFunction != null)
       layerFunction.accept(layer);
 

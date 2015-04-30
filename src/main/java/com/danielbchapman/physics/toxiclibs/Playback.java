@@ -69,7 +69,7 @@ public class Playback
     
     //FIXME use a specific brush here.
     e.robot(copy, brush);
-    System.out.println("Polling complete");
+//    System.out.println("Polling complete");
 //    ArrayList<RecordAction> cp = new ArrayList<>();
 //    for(int i = 0; i < actions.length; i++)
 //      cp.add(actions[i]);
