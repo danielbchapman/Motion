@@ -23,8 +23,8 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 public class Actions
 {
   public static MotionEngine engine;
-  public static int WIDTH = 720;
-  public static int HEIGHT = 1280;
+  public static int WIDTH = 800;
+  public static int HEIGHT = 600;
   //Forces
   
   public static Action advanceScene(int delay)

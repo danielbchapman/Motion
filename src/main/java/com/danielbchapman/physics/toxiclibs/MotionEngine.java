@@ -283,18 +283,19 @@ public class MotionEngine extends PApplet
     /*
      * Mobilology Dance Piece
      */
-    mobolologyOne = new MobilologyOne();
-//    add(mobolologyOne);
-//    activeLayer = mobolologyOne;
     
-    mobolologyTwo = new MobilologyTwo();
-//    add(mobolologyTwo);
-//    activeLayer = mobolologyTwo;
-    
-    mobolologyThree = new MobilologyThree();
-//    add(mobolologyThree);
-//    activeLayer = mobolologyThree;
-    
+//    mobolologyOne = new MobilologyOne();
+////    add(mobolologyOne);
+////    activeLayer = mobolologyOne;
+//    
+//    mobolologyTwo = new MobilologyTwo();
+////    add(mobolologyTwo);
+////    activeLayer = mobolologyTwo;
+//    
+//    mobolologyThree = new MobilologyThree();
+////    add(mobolologyThree);
+////    activeLayer = mobolologyThree;
+//    
     Consumer<Layer> prepare = (layer)->
     {
       layer.applet = this;
@@ -304,10 +305,12 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
-    prepare.accept(mobolologyOne);
-    prepare.accept(mobolologyTwo);
-    prepare.accept(mobolologyThree);
+//    prepare.accept(mobolologyOne);
+//    prepare.accept(mobolologyTwo);
+//    prepare.accept(mobolologyThree);
     prepare.accept(new BlackoutLayer());
+    prepare.accept(new SpriteLayer(this));
+    
   }
   
 
@@ -584,6 +587,11 @@ public class MotionEngine extends PApplet
     if(event.getKey() == 'x')
     {
       showCoordinates = !showCoordinates;
+    }
+    
+    if(event.getKey() == 'v')
+    {
+      highlightMouse = !highlightMouse;
     }
   }
 
