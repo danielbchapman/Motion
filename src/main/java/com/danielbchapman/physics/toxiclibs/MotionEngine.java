@@ -15,6 +15,7 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 import com.danielbchapman.artwork.Word;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
+import com.danielbchapman.physics.ui.SceneController;
 
 public class MotionEngine extends PApplet
 {
@@ -31,7 +32,7 @@ public class MotionEngine extends PApplet
   EnvironmentTools tools;
   BrushEditor brushTools;
   PalletEditor pallets;
-  boolean highlightMouse = true;
+  boolean highlightMouse = false;
   private final static Recorder RECORDER = new Recorder();
   private RecordUI recordUi;
   @Getter
@@ -585,6 +586,11 @@ public class MotionEngine extends PApplet
     {
       showCoordinates = !showCoordinates;
     }
+    
+    if(event.getKey() == 'c')
+    {
+      showControls();
+    }
   }
 
   @Override
@@ -725,6 +731,12 @@ public class MotionEngine extends PApplet
       physics.removeBehavior(osc);
       osc.setEnabled(enable);
     }
+  }
+  
+  public void showControls()
+  {
+    SceneController controller = new SceneController(this);
+    controller.setVisible(true);
   }
 
 }
