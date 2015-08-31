@@ -84,7 +84,7 @@ public class Matrix
   {
     //should use mod but close enough...
     int v = vector.length;
-    int m = matrix.length;
+    //int m = matrix.length;
     
     float[] result = new float[vector.length];
     for(int i = 0; i < vector.length; i++)

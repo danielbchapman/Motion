@@ -1,20 +1,15 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
-import java.util.Stack;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import javafx.scene.transform.Translate;
-
-import com.danielbchapman.artwork.Paragraph;
-import com.danielbchapman.utility.FileUtil;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
-import toxi.physics3d.behaviors.GravityBehavior3D;
+
+import com.danielbchapman.artwork.Paragraph;
+import com.danielbchapman.utility.FileUtil;
 
 public class SceneOneLayer extends Layer
 {
@@ -54,6 +49,7 @@ public class SceneOneLayer extends Layer
   
   public class SectionOneCueStack extends CueStack
   {
+    private static final long serialVersionUID = 1L;
     ArrayList<Paragraph> tweets = new ArrayList<>();
     ArrayList<Paragraph> active = new ArrayList<>();
 
@@ -139,16 +135,9 @@ public class SceneOneLayer extends Layer
       return new Action(label, 0, fL, fE);
     }
     public void makeTweets()
-    {
-
-      final ArrayList<String> data = new ArrayList<>();
-      
-      Consumer<String> read = (x)->
-      {
-        data.add(FileUtil.readLines(x).stream().collect(Collectors.joining("\n")));
-      };
-      
+    { 
       //creates a paragraph based on the arguments
+      @SuppressWarnings("unused")
       BiFunction<Integer, Integer[], Paragraph> create = (s, a) ->
       {
         int x = a[0];

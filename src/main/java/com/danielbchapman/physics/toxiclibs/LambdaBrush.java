@@ -6,7 +6,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -14,12 +13,12 @@ import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
+import toxi.geom.Vec3D;
+import toxi.physics3d.VerletParticle3D;
+
 import com.danielbchapman.code.jdk.JavaSourceString;
 import com.danielbchapman.code.jdk.ReloadingClassLoader;
 import com.danielbchapman.utility.FileUtil;
-
-import toxi.geom.Vec3D;
-import toxi.physics3d.VerletParticle3D;
 
 public class LambdaBrush extends MotionInteractiveBehavior
 {
@@ -75,7 +74,6 @@ public class LambdaBrush extends MotionInteractiveBehavior
 
   public String compile() throws Exception
   {
-    String packageName = "com.danielbchapman.physics.toxiclibs";
     className = "LambdaBrushDynamic" + name;
     JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
     if (javac == null)

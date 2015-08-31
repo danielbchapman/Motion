@@ -10,7 +10,6 @@ import com.danielbchapman.physics.toxiclibs.Point;
 
 public class Word extends Fadeable
 {
-  private char character;
   @Getter
   boolean enableRotation = true;
   char[] letters;
@@ -37,7 +36,6 @@ public class Word extends Fadeable
     super(low, high, count, delay);
     letters = word.toCharArray();
     points = new Point[letters.length];
-    character = letters[0];
     this.parent = parent;
     this.size = size;
     //calculate points
@@ -108,7 +106,7 @@ public class Word extends Fadeable
   {
     if(points != null)
       for(Point p : points)
-        p.addForce(new Vec3D().randomVector().scaleSelf(mag));
+        p.addForce(Vec3D.randomVector().scaleSelf(mag));
   }
   
   /**

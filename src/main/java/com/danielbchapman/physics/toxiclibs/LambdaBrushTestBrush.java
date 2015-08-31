@@ -1,8 +1,6 @@
 package com.danielbchapman.physics.toxiclibs; 
  
-import java.util.function.*; 
-import com.danielbchapman.physics.toxiclibs.*; 
-import java.util.*; 
+import java.util.function.Consumer;
  
 public class LambdaBrushTestBrush extends LambdaBrushClass 
 { 

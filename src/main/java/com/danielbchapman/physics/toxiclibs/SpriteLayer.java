@@ -33,7 +33,7 @@ public class SpriteLayer extends Layer
   public Point[] init()
   {
     //Load Variables
-    engine.brush = MotionInteractiveBehavior.load(new File("test/sprite/test-sprite.brush"));
+    MotionEngine.brush = MotionInteractiveBehavior.load(new File("test/sprite/test-sprite.brush"));
     Action x = Actions.loadEnvironment(new File("test/sprite/test-sprite.env"));
     x.engine = engine;
     x.layer = this;

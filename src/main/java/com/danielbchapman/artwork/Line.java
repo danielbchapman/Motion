@@ -1,7 +1,6 @@
 package com.danielbchapman.artwork;
 
 import processing.core.PGraphics;
-import processing.core.PImage;
 import processing.core.PVector;
 
 import com.danielbchapman.physics.vertlet.Point3D;

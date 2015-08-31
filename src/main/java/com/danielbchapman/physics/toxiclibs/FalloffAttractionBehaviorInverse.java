@@ -6,7 +6,6 @@ import java.util.Map;
 
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
-import toxi.physics3d.behaviors.AttractionBehavior3D;
 
 /**
  * An attraction behavior that falls off over a larger radius. This is significantly

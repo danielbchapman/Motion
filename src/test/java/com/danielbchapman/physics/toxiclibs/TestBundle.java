@@ -6,8 +6,6 @@ import org.junit.Test;
 
 import toxi.geom.Vec3D;
 
-import com.danielbchapman.groups.Item;
-
 public class TestBundle
 {
   @Test //We can't use this, the classloading fails

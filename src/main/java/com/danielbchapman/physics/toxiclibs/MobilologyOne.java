@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
-import toxi.physics3d.behaviors.GravityBehavior3D;
 
 import com.danielbchapman.artwork.Paragraph;
 import com.danielbchapman.utility.FileUtil;
-import com.sun.scenario.effect.InvertMask;
 
 public class MobilologyOne extends Layer
 {
@@ -48,7 +45,6 @@ public class MobilologyOne extends Layer
   { 
     g.background(0);
     g.fill(255);
-    ArrayList<Paragraph> active = new ArrayList<>();
     
     for(int i = 0; i < stack.active.size(); i++)
     {
@@ -62,6 +58,7 @@ public class MobilologyOne extends Layer
   
   public class SectionOneCueStack extends CueStack
   {
+    private static final long serialVersionUID = 1L;
     ArrayList<Paragraph> tweets = new ArrayList<>();
     ArrayList<Paragraph> active = new ArrayList<>();
 
@@ -183,32 +180,6 @@ public class MobilologyOne extends Layer
                 action("STOP", null, e->{stopFountain();})
                 ), 
             
-            
-          
-//          cue("Tweet 2", action("Tweet 2", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 3",action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 4", action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 5", action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 2", action("Tweet 2", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 3", action("Tweet 3", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 4", action("Tweet 4", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 5", action("Tweet 5", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 6", action("Tweet 6", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 7", action("Tweet 7", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 8", action("Tweet 8", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 9", action("Tweet 9", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 10", action("Tweet 10", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 11", action("Tweet 11", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 12", action("Tweet 12", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 13", action("Tweet 13", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 14", action("Tweet 14", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 15", action("Tweet 15", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 16", action("Tweet 16", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 17", action("Tweet 17", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 18", action("Tweet 18", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 19", action("Tweet 19", null, (x)->{tweet(x.getPhysics());} )),
-//          cue("Tweet 20", action("Tweet 20", null, (x)->{tweet(x.getPhysics());} )),
-          
           cue("Start Fountain!", 
               action("fountain", null, (x)->{startFountain(5,10,72);})),    
           //Turn on Gravity!
@@ -321,16 +292,9 @@ public class MobilologyOne extends Layer
       return new Action(label, delay, fL, fE);
     }
     public void makeTweets()
-    {
-
-      final ArrayList<String> data = new ArrayList<>();
-      
-      Consumer<String> read = (x)->
-      {
-        data.add(FileUtil.readLines(x).stream().collect(Collectors.joining("\n")));
-      };
-      
+    {      
       //creates a paragraph based on the arguments
+      @SuppressWarnings("unused")
       BiFunction<Integer, Integer[], Paragraph> create = (s, a) ->
       {
         int x = a[0];
@@ -340,7 +304,7 @@ public class MobilologyOne extends Layer
         int fade = a[4];
         int total = a[5];
         int from = a[6];
-        int to = a[7];
+        int to = a[7]; 
 
         String file = "content/scene_one/" + s;
         Point p = new Point(x, y, 0, 1f);
@@ -372,13 +336,13 @@ public class MobilologyOne extends Layer
 //      tweets.add(create(5, .5f,    0, .25f));
       
       tweets.add(create(1, 0.60774976f, -0.8660331f, 0.3113848f));
-      tweets.add(create(2, 0.58814126f, -0.79523945f, 0.30825332f));
-      tweets.add(create(3, 0.29003507f, -0.89551735f, 0.38781804f));
-      tweets.add(create(4, -0.22912174f, -0.83671033f, 0.40248105f));
+      tweets.add(create(2, -0.88814126f, -0.79523945f, 0.30825332f));
+      tweets.add(create(3, -0.29003507f, -0.89551735f, 0.38781804f));
+      tweets.add(create(4, 0f, -0.83671033f, 0.40248105f));
       tweets.add(create(5, 0.2404893f, -0.7592367f, 0.2594211f));
       tweets.add(create(6, 0.47673875f, -0.8176122f, 0.27160722f));
       tweets.add(create(7, 0.23561329f, -0.8220054f, 0.38576248f));
-      tweets.add(create(8, -0.5969826f, -0.92680335f, 0.3300926f));
+      tweets.add(create(8, -0.969826f, -0.92680335f, 0.3300926f));
       tweets.add(create(9, -0.5420708f, -0.8197777f, 0.31014243f));
       tweets.add(create(10, -0.7764856f, -0.8661885f, 0.2753278f));
       tweets.add(create(11, -0.7423372f, -0.76972085f, 0.40629107f));

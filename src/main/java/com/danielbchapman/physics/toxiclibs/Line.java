@@ -1,6 +1,5 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import lombok.Data;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 

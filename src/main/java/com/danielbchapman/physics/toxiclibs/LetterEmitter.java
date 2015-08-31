@@ -1,10 +1,9 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import com.danielbchapman.artwork.Letter;
-import com.danielbchapman.artwork.Word;
-
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
+
+import com.danielbchapman.artwork.Word;
 
 public class LetterEmitter extends Emitter<PointWrapper<Word>>
 {

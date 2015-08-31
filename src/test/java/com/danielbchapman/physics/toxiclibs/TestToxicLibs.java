@@ -3,13 +3,11 @@ package com.danielbchapman.physics.toxiclibs;
 import static org.junit.Assert.assertTrue;
 
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.junit.Test;
 
 import com.danielbchapman.artwork.Fadeable;
-import com.danielbchapman.utility.FileUtil;
 import com.danielbchapman.utility.Utility;
 
 public class TestToxicLibs
@@ -17,7 +15,6 @@ public class TestToxicLibs
   @Test
   public void testFadable()
   {
-    long start = 1;
     long time = 5000;
     long delay = 2000;
     int color = 0xFFAA9977;

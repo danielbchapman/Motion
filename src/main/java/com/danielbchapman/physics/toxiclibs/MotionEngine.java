@@ -1,21 +1,22 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.function.Consumer;
 
 import lombok.Getter;
 import lombok.Setter;
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.event.KeyEvent;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 import com.danielbchapman.artwork.Word;
+import com.danielbchapman.physics.kinect.KinectTracker;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
+import com.danielbchapman.physics.ui.SceneController;
 
+@SuppressWarnings("unused")
 public class MotionEngine extends PApplet
 {
   public enum Mode
@@ -31,7 +32,7 @@ public class MotionEngine extends PApplet
   EnvironmentTools tools;
   BrushEditor brushTools;
   PalletEditor pallets;
-  boolean highlightMouse = true;
+  boolean highlightMouse = false;
   private final static Recorder RECORDER = new Recorder();
   private RecordUI recordUi;
   @Getter
@@ -51,6 +52,7 @@ public class MotionEngine extends PApplet
 
   private GridLayer grid;
   private GridLayerFlying gridFly;
+
   private ParticleLayer particles;
   private SceneOneLayer one;
   private ParagraphsLayer paragraph;
@@ -283,19 +285,18 @@ public class MotionEngine extends PApplet
     /*
      * Mobilology Dance Piece
      */
+    mobolologyOne = new MobilologyOne();
+//    add(mobolologyOne);
+//    activeLayer = mobolologyOne;
     
-//    mobolologyOne = new MobilologyOne();
-////    add(mobolologyOne);
-////    activeLayer = mobolologyOne;
-//    
-//    mobolologyTwo = new MobilologyTwo();
-////    add(mobolologyTwo);
-////    activeLayer = mobolologyTwo;
-//    
-//    mobolologyThree = new MobilologyThree();
-////    add(mobolologyThree);
-////    activeLayer = mobolologyThree;
-//    
+    mobolologyTwo = new MobilologyTwo();
+//    add(mobolologyTwo);
+//    activeLayer = mobolologyTwo;
+    
+    mobolologyThree = new MobilologyThree();
+//    add(mobolologyThree);
+//    activeLayer = mobolologyThree;
+    
     Consumer<Layer> prepare = (layer)->
     {
       layer.applet = this;
@@ -305,12 +306,12 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
-//    prepare.accept(mobolologyOne);
-//    prepare.accept(mobolologyTwo);
-//    prepare.accept(mobolologyThree);
-    prepare.accept(new BlackoutLayer());
     prepare.accept(new SpriteLayer(this));
-    
+    prepare.accept(new KinectTracker(this));
+    prepare.accept(mobolologyOne);
+    prepare.accept(mobolologyTwo);
+    prepare.accept(mobolologyThree);
+    prepare.accept(new BlackoutLayer());
   }
   
 
@@ -361,7 +362,6 @@ public class MotionEngine extends PApplet
 
     if (event.getKey() == 'S')
     {
-      Random rand = new Random();
       System.out.println("Splitting paragraph...");
       // paragraph.split(physics, rand.nextFloat() % 3f);
       paragraph.split(physics, 0f);
@@ -587,11 +587,12 @@ public class MotionEngine extends PApplet
     if(event.getKey() == 'x')
     {
       showCoordinates = !showCoordinates;
+      highlightMouse = showCoordinates;
     }
     
-    if(event.getKey() == 'v')
+    if(event.getKey() == 'c')
     {
-      highlightMouse = !highlightMouse;
+      showControls();
     }
   }
 
@@ -688,8 +689,8 @@ public class MotionEngine extends PApplet
     if (behavior instanceof SaveableParticleBehavior3D)
     {
       System.out.println("Marking behavior as running: " + behavior);
-      ((SaveableParticleBehavior3D) behavior).setRunning(true);
-      System.out.println(((SaveableParticleBehavior3D) behavior).vars.running);
+      ((SaveableParticleBehavior3D<?>) behavior).setRunning(true);
+      System.out.println(((SaveableParticleBehavior3D<?>) behavior).vars.running);
     }
 
     activeBehaviors.add(behavior);
@@ -705,8 +706,8 @@ public class MotionEngine extends PApplet
     if (behavior instanceof SaveableParticleBehavior3D)
     {
       System.out.println("Marking behavior as not running: " + behavior);
-      ((SaveableParticleBehavior3D) behavior).setRunning(false);
-      System.out.println(((SaveableParticleBehavior3D) behavior).vars.running);
+      ((SaveableParticleBehavior3D<?>) behavior).setRunning(false);
+      System.out.println(((SaveableParticleBehavior3D<?>) behavior).vars.running);
     }
   }
 
@@ -733,6 +734,12 @@ public class MotionEngine extends PApplet
       physics.removeBehavior(osc);
       osc.setEnabled(enable);
     }
+  }
+  
+  public void showControls()
+  {
+    SceneController controller = new SceneController(this);
+    controller.setVisible(true);
   }
 
 }

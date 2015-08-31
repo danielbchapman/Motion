@@ -231,7 +231,7 @@ public class Paragraph
         Word w = wordList.get(i);
         points[i] = w.parent;
         words[i] = w;
-        System.out.println(words[i].letters + " @ " + points[i].x + ", " + points[i].y + ", " + points[i].z);
+        System.out.println(new String(words[i].letters) + " @ " + points[i].x + ", " + points[i].y + ", " + points[i].z);
       }
     }
     else
@@ -292,7 +292,7 @@ public class Paragraph
       Word w = wordList.get(i);
       points[i] = w.parent;
       words[i] = w;
-      System.out.println(words[i].letters + " @ " + points[i].x + ", " + points[i].y + ", " + points[i].z);
+      System.out.println(new String(words[i].letters) + " @ " + points[i].x + ", " + points[i].y + ", " + points[i].z);
     }
   }
 

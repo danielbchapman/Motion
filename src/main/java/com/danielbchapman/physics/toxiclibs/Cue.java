@@ -9,8 +9,6 @@ import com.danielbchapman.groups.Item;
 public class Cue
 {
   private ArrayList<Action> actions = new ArrayList<>();
-  private long start;
-  private long total;
   private boolean running;
   private String label = "Unknown";
   public static final ScheduledThreadPoolExecutor SCHEDULER = new ScheduledThreadPoolExecutor(8);

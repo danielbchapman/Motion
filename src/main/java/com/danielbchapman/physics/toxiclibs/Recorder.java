@@ -21,7 +21,6 @@ import lombok.Getter;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
 
-import com.danielbchapman.text.Utility;
 import com.danielbchapman.utility.FileUtil;
 import com.danielbchapman.utility.UiUtility;
 

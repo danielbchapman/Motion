@@ -10,7 +10,6 @@ public class Cubes
 {
   PImage texture;
   
-  private char character;
   int size = 16;
   PVector rotation = new PVector();
   

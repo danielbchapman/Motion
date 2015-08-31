@@ -1,10 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import java.util.ArrayList;
-
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.event.KeyEvent;
 
 
 /**

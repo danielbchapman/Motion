@@ -1,12 +1,9 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import java.util.Random;
-
 import processing.core.PGraphics;
 import toxi.physics3d.VerletPhysics3D;
 
 import com.danielbchapman.artwork.Paragraph;
-import com.danielbchapman.artwork.Word;
 import com.danielbchapman.artwork.Paragraph.FadeType;
 
 public class ParagraphsLayer extends Layer

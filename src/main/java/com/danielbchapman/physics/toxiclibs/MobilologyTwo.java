@@ -44,7 +44,7 @@ public class MobilologyTwo extends Layer
     Point[] pointsX = new Point[gridX * gridY];
     Point[] pointsY = new Point[gridX * gridY];
     
-    int total = gridX + gridY;
+//    int total = gridX + gridY;
     xAxis = new Line[gridY]; //lines
     yAxis = new Line[gridX];
     
@@ -278,7 +278,12 @@ public class MobilologyTwo extends Layer
          load("[41] Line Enters",
              "content/scene_two/rec/2-line-enters",
              "content/scene_two/brush/scene-two-squeeze"),   
-             
+         load("[42] We're Bored",
+             "content/scene_two/rec/cyc-dance",
+             "content/scene_two/brush/scene-2-jitter"),
+         load("[43] We're Bored",
+             "content/scene_two/rec/cyc-dance",
+             "content/scene_two/brush/scene-2-jitter"),               
              //jitter -> 
          cue("[45] Restore Grid", 
              Actions.stopPlayback(), 

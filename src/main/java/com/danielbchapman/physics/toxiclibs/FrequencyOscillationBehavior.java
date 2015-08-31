@@ -45,7 +45,6 @@ public class FrequencyOscillationBehavior extends SineWave implements ParticleBe
   @Override
   public float update()
   {
-    long elapsed = start - System.currentTimeMillis();
     //offset = ((float)elapsed) / 1000f;
     offset++;
     //offset = ((float)(System.currentTimeMillis() - start)) / 1000f * 20f;

@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
+import processing.core.PGraphics;
+import toxi.geom.Vec3D;
+
 import com.danielbchapman.artwork.Word;
 import com.danielbchapman.utility.FileUtil;
-
-import processing.core.PGraphics;
-import processing.core.PImage;
-import toxi.geom.Vec3D;
-import toxi.physics3d.VerletPhysics3D;
 
 public class MobilologyThree extends Layer
 {
@@ -267,7 +265,7 @@ public class MobilologyThree extends Layer
     }
       
     g.textSize(size);
-    for(Emitter e : emitters)
+    for(Emitter<?> e : emitters)
       e.draw(g);
     
     g.popMatrix();
@@ -287,7 +285,6 @@ public class MobilologyThree extends Layer
   {
     if(started > 0)
     {
-      long step = 800;
       long now = System.currentTimeMillis();
       
       if(now - lastCount > 800)
