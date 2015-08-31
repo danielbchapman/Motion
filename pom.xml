@@ -22,13 +22,6 @@
 	    </dependency>
 	    <dependency>
 			<groupId>gluegen-rt</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
-	    </dependency>
-	    <dependency>
-			<groupId>gluegen-rt</groupId>
 			<artifactId>core</artifactId>
 	        <scope>system</scope>
 	        <version>2.1.1</version>
@@ -48,13 +41,7 @@
 	        <version>2.1.1</version>
 	        <systemPath>${basedir}/lib/jna.jar</systemPath>
 	    </dependency>
-	    <dependency>
-			<groupId>jogl-all</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
-	    </dependency>
+
 	    <dependency>
 			<groupId>jogl-all</groupId>
 			<artifactId>core</artifactId>
@@ -84,6 +71,38 @@
 			<artifactId>lombok</artifactId>
 			<version>1.16.2</version>
 		</dependency>
+		
+		<!-- WIN 32 
+	    <dependency>
+			<groupId>jogl-all</groupId>
+			<artifactId>natives</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
+	    </dependency>
+	    <dependency>
+			<groupId>gluegen-rt</groupId>
+			<artifactId>natives</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
+	    </dependency>
+		-->
+		<!-- MAC OSX 64 -->
+		<dependency>
+			<groupId>gluegen-rt</groupId>
+			<artifactId>natives</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/gluegen-rt-natives-macosx-universal.jar</systemPath>
+	    </dependency>
+   	    <dependency>
+			<groupId>jogl-all</groupId>
+			<artifactId>natives</artifactId>
+	        <scope>system</scope>
+	        <version>2.1.1</version>
+	        <systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath>
+	    </dependency>
 	</dependencies>
   <build>
     <plugins>
