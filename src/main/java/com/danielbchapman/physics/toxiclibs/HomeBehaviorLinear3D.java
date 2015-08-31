@@ -1,12 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import java.sql.Savepoint;
-
-import org.junit.Test;
-
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
-import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 
 /**

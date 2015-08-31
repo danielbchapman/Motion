@@ -56,6 +56,14 @@
 	        <version>2.1.1</version>
 	        <systemPath>${basedir}/lib/video.jar</systemPath>
 	    </dependency>
+   		<dependency>
+			<groupId>SimpleOni</groupId>
+			<artifactId>oni</artifactId>
+	        <scope>system</scope>
+	        <version>1.0</version>
+	        <systemPath>${basedir}/lib/SimpleOpenNI.jar</systemPath>
+	    </dependency>
+	    
 		<dependency>
 			<groupId>com.danielbchapman.data</groupId>
 			<artifactId>groups</artifactId>

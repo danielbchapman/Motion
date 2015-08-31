@@ -1,6 +1,7 @@
 package dance2015;
 
-import java.util.Random;
+import processing.core.PApplet;
+import processing.core.PVector;
 
 import com.danielbchapman.artwork.Cubes;
 import com.danielbchapman.artwork.Letter;
@@ -8,10 +9,7 @@ import com.danielbchapman.artwork.Line;
 import com.danielbchapman.debug.Debug;
 import com.danielbchapman.physics.vertlet.Point3D;
 
-import processing.core.PApplet;
-import processing.core.PVector;
 import dance2015.DrawUtil.FrameCounter;
-
 
 public class Dance2015 extends PApplet {
   private static final long serialVersionUID = 1L;
@@ -110,22 +108,10 @@ public class Dance2015 extends PApplet {
 	  if(frameCount > 20000){
 	    return;
 	  }
-	 
-	  int randomSleep = (int) random(10, 30);
-//	  try {
-//	    Thread.sleep(randomSleep);
-//	  } catch (Exception e){
-//	  }
-	  //Step
+	 	  //Step
 	  int time = millis();
 	  float dTime = ((float)time - (float) lastTime)/ 1000.0f;
 	  
-//	  pushMatrix();
-//	  fill(0, 0, 0 , 50);
-//	  rect(0, 0, 800, 600);
-//	  fill(255);
-//	  popMatrix();
-	  //background(0);
 	  stroke(255);
 	  strokeWeight(1);
 	  PVector gravity = new PVector(0f, 9.8f, 0f);

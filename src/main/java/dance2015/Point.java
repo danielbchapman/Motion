@@ -12,7 +12,7 @@ class Point {
   
   //Private
   private PVector acceleration = new PVector();
-  private PVector lastVelocity = new PVector();
+  //private PVector lastVelocity = new PVector();
   private PVector lastAcceleration = new PVector();
   
   float mass = 2.0f;

@@ -2,12 +2,11 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.io.File;
 import java.util.Map;
-import java.util.function.BiConsumer;
-
-import com.danielbchapman.utility.FileUtil;
 
 import toxi.geom.Vec3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
+
+import com.danielbchapman.utility.FileUtil;
 
 public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
 {
@@ -122,14 +121,5 @@ public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
       return null;
     }
 
-  }
-
-  public static void mapNames(Map<String, String> map, String ... names)
-  {
-    int max = Math.max(names.length,ForceVariables.Fields.ALL_FIELDS.length);
-    BiConsumer<String, Integer> process = (x, i) ->
-    {
-      map.put(ForceVariables.Fields.ALL_FIELDS[i], names[i]);
-    };
   }
 }

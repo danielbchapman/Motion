@@ -25,7 +25,7 @@ public class Playback
   public Playback(String label, ArrayList<RecordAction> actions, MotionInteractiveBehavior brush)
   {
     if(brush == null)
-      brush = Actions.engine.brush.copy();
+      brush = MotionEngine.brush.copy();
     this.brush = brush.copy();
     
     this.actions = new RecordAction[actions.size()];

@@ -1,7 +1,6 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;

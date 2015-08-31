@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
-import toxi.physics3d.behaviors.GravityBehavior3D;
 
 import com.danielbchapman.artwork.Paragraph;
 import com.danielbchapman.utility.FileUtil;
-import com.sun.scenario.effect.InvertMask;
 
 public class MobilologyOne extends Layer
 {
@@ -48,7 +45,6 @@ public class MobilologyOne extends Layer
   { 
     g.background(0);
     g.fill(255);
-    ArrayList<Paragraph> active = new ArrayList<>();
     
     for(int i = 0; i < stack.active.size(); i++)
     {
@@ -62,6 +58,7 @@ public class MobilologyOne extends Layer
   
   public class SectionOneCueStack extends CueStack
   {
+    private static final long serialVersionUID = 1L;
     ArrayList<Paragraph> tweets = new ArrayList<>();
     ArrayList<Paragraph> active = new ArrayList<>();
 
@@ -295,16 +292,9 @@ public class MobilologyOne extends Layer
       return new Action(label, delay, fL, fE);
     }
     public void makeTweets()
-    {
-
-      final ArrayList<String> data = new ArrayList<>();
-      
-      Consumer<String> read = (x)->
-      {
-        data.add(FileUtil.readLines(x).stream().collect(Collectors.joining("\n")));
-      };
-      
+    {      
       //creates a paragraph based on the arguments
+      @SuppressWarnings("unused")
       BiFunction<Integer, Integer[], Paragraph> create = (s, a) ->
       {
         int x = a[0];

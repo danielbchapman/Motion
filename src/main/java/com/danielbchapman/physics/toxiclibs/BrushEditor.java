@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -95,7 +94,6 @@ public class BrushEditor extends JFrame
     
     brushClass = new PojoComboBox<>();
     reload = new JButton("Reload");
-    @SuppressWarnings("unchecked")
     BiConsumer<String, Class<? extends MotionInteractiveBehavior>> addItem = (name, clazz)->
     {
       brushClass.addItem(
@@ -137,7 +135,7 @@ public class BrushEditor extends JFrame
     
     add(brushClass, UiUtility.getFillHorizontal(0, 0).size(2, 1));
     add(reload, UiUtility.getFillHorizontal(3, 0));
-    int row = 0;
+    
     content.setLayout(new GridBagLayout());
     GridBagConstraints gbc = UiUtility.getFillHorizontal(0, 50);
     gbc.gridwidth = 5;
@@ -440,6 +438,7 @@ public class BrushEditor extends JFrame
     }
   }
   
+  @SuppressWarnings("unchecked")
   public boolean loadBrush(String file)
   {
     ArrayList<String> lines = FileUtil.readLines(file);
@@ -461,7 +460,7 @@ public class BrushEditor extends JFrame
         loaded.vars = vars;
         
         populate(loaded);
-        Actions.engine.brush = loaded;
+        MotionEngine.brush = loaded;
         return true;
       }
       catch (Throwable t)
@@ -540,7 +539,7 @@ public class BrushEditor extends JFrame
     c.add(new JLabel("<html><h2><b>" + text + "</h2></html>"),g);
   }
   
-  private void subtitle(Container c, String text, int row)
+  void subtitle(Container c, String text, int row)
   {
     GridBagConstraints g = UiUtility.getFillHorizontal(0, row);
     g.gridwidth = 4;

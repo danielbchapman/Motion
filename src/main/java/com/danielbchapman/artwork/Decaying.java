@@ -1,6 +1,5 @@
 package com.danielbchapman.artwork;
 
-import toxi.physics3d.VerletPhysics3D;
 
 public abstract class Decaying extends Fadeable
 {

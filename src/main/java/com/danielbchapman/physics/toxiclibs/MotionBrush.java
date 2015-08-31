@@ -5,8 +5,6 @@ import java.io.Serializable;
 import lombok.Data;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
-import com.danielbchapman.groups.Item;
-
 @Data
 public class MotionBrush implements Serializable
 {

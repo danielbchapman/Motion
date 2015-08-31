@@ -2,7 +2,6 @@ package com.danielbchapman.physics.toxiclibs;
 
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
-import toxi.physics3d.behaviors.ConstantForceBehavior3D;
 
 public class HomeBehavior3D extends SaveableConstantForce3D
 {

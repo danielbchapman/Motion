@@ -9,12 +9,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.utility.UiUtility;
 
 public class SceneController extends JFrame
 {
+  private static final long serialVersionUID = 1L;
   JLabel info;
   JLabel current;
   JButton go;

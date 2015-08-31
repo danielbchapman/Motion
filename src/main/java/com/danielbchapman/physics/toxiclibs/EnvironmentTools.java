@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -20,8 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import toxi.geom.Vec3D;
 
 import com.danielbchapman.physics.ui.BehaviorSlider;
 import com.danielbchapman.physics.ui.PropertySlider;
@@ -65,7 +62,6 @@ public class EnvironmentTools extends JFrame
   JButton save;
   JButton open;
 
-  private boolean apply = false;
 
   //TEST METHODS
   public static void main(String ... args)

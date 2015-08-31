@@ -13,8 +13,6 @@ public class RandomPlacement
   
   public static ArrayList<Integer> randomCounts(int millis, int count)
   {
-    Random rand = new Random();
-    
     int range = millis / count;
     
     ArrayList<Integer> values = new ArrayList<>();
@@ -34,7 +32,6 @@ public class RandomPlacement
   }
   public static float bind(float f, float low, float high)
   {
-    float original = f;
     float spread = high - low;
     f = f * spread + low;
     //System.out.println("Returning -> " + f + " spread " + spread + " | b(" + low + ", " + high +") " + original);

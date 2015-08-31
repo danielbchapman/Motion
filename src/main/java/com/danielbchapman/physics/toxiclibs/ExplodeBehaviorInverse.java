@@ -3,11 +3,9 @@ package com.danielbchapman.physics.toxiclibs;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
-import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 
 /**

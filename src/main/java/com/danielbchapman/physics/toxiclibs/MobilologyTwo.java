@@ -44,7 +44,7 @@ public class MobilologyTwo extends Layer
     Point[] pointsX = new Point[gridX * gridY];
     Point[] pointsY = new Point[gridX * gridY];
     
-    int total = gridX + gridY;
+//    int total = gridX + gridY;
     xAxis = new Line[gridY]; //lines
     yAxis = new Line[gridX];
     

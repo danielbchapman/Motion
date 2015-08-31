@@ -30,7 +30,7 @@ public class DrawUtil
     {
       int old = g.backgroundColor;
       g.color(color);
-      long diff = current - last;
+//      long diff = current - last;
       g.text("Frame Rate: " + ((current - last)), x, y);
       g.color(old);
       this.last = current;

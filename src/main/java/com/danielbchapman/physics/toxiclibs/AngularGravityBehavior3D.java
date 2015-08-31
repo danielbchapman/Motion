@@ -1,11 +1,8 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import java.sql.Savepoint;
-
 import lombok.Data;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
-import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 @Data
 public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<AngularGravityBehavior3D>
@@ -21,7 +18,6 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
   {
     vars.force = gravity;
     vars.backup = gravity.copy();
-    float h = (float) Actions.HEIGHT;
     vars.userC = Actions.HEIGHT;
   }
 

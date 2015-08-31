@@ -1,6 +1,5 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import java.io.Serializable;
 import java.util.function.Consumer;
 
 import lombok.Data;

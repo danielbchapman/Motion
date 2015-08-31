@@ -2,15 +2,10 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.function.Function;
-
-
-
-import com.danielbchapman.utility.FileUtil;
 
 import toxi.geom.Vec3D;
-import toxi.physics3d.behaviors.GravityBehavior3D;
-import toxi.physics3d.behaviors.ParticleBehavior3D;
+
+import com.danielbchapman.utility.FileUtil;
 
 
 /**
@@ -23,8 +18,8 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 public class Actions
 {
   public static MotionEngine engine;
-  public static int WIDTH = 720;
-  public static int HEIGHT = 1280;
+  public static int WIDTH = 800;
+  public static int HEIGHT = 600;
   //Forces
   
   public static Action advanceScene(int delay)
@@ -129,7 +124,7 @@ public class Actions
   public static Action loadBrush(File file){
     return new Action("Brush: " + file.getName(), 0, null,
       (x)->{
-        engine.brush = MotionInteractiveBehavior.load(
+        MotionEngine.brush = MotionInteractiveBehavior.load(
             FileUtil.readFile(file.getAbsolutePath()));
       });
   };
