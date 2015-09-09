@@ -1,20 +1,26 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
 import lombok.Getter;
 import lombok.Setter;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 import com.danielbchapman.artwork.Word;
+import com.danielbchapman.logging.Log;
 import com.danielbchapman.physics.kinect.KinectTracker;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
 import com.danielbchapman.physics.ui.SceneController;
+import com.sun.jna.Platform;
 
 @SuppressWarnings("unused")
 public class MotionEngine extends PApplet
@@ -32,7 +38,13 @@ public class MotionEngine extends PApplet
   EnvironmentTools tools;
   BrushEditor brushTools;
   PalletEditor pallets;
+  @Getter
+  @Setter
+  boolean enableSpout = false;
   boolean highlightMouse = false;
+  private Object spout;
+  private Class<?> spoutClass;
+  private Method spoutSend;
   private final static Recorder RECORDER = new Recorder();
   private RecordUI recordUi;
   @Getter
@@ -197,7 +209,21 @@ public class MotionEngine extends PApplet
       popMatrix();
        
     }
-     
+    
+    if(enableSpout)
+    	if(spout != null)
+    	{
+    	  System.err.println("Spout called...");
+    	  try
+        {
+          spoutSend.invoke(spout);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+        {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+    	}
   }
 
   public void setup()
@@ -514,7 +540,7 @@ public class MotionEngine extends PApplet
     {
       if(activeLayer != null)
         activeLayer.go(this);
-     }
+    }
 
     if (event.getKey() == 'o')
     {
@@ -594,6 +620,38 @@ public class MotionEngine extends PApplet
     {
       showControls();
     }
+    
+    if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F1)
+    {
+      System.out.println("F1");
+      if(enableSpout)
+        try
+        {
+          disableSpoutBroadcast();
+        }
+        catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1)
+        {
+          enableSpout = false;
+          Log.exception(e1);
+        }
+      else
+        try
+        {
+          try
+          {
+            enableSpoutBroadcast(g);
+          }
+          catch (NoSuchMethodException | SecurityException | IllegalAccessException e)
+          {
+            Log.exception(e);
+          }
+        }
+        catch (IllegalArgumentException | InvocationTargetException e)
+        {
+          Log.exception(e);
+        }
+    }
+
   }
 
   @Override
@@ -741,5 +799,55 @@ public class MotionEngine extends PApplet
     SceneController controller = new SceneController(this);
     controller.setVisible(true);
   }
+  
+  public void enableSpoutBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException
+  {
+    if(Platform.isWindows() || Platform.isWindowsCE())
+      enableSpout = true;
+    
+    if(spout == null && enableSpout)
+    {
+      try
+      {
+        Class<?> spoutProvider = Class.forName("SpoutProvider");
+        Method method = spoutProvider.getMethod("getInstance", PGraphics.class);
+        
+        spout = method.invoke(null, g);
+        
+      }
+      catch (ClassNotFoundException | IllegalAccessException e)
+      {
+        Log.LOG.log(Level.SEVERE, "Unable to initialize Spout\r\n", e);
+      }
 
+      if(spout != null)
+      {
+        if(spoutClass == null)
+        {
+          try
+          {
+            spoutClass = Class.forName("SpoutImplementation");
+            spoutSend = spoutClass.getMethod("sendTexture");
+            Method init = spoutClass.getMethod("initSender", String.class, int.class, int.class);
+            init.invoke(spout, "Motion", this.displayWidth, this.displayHeight);
+          }
+          catch (ClassNotFoundException e)
+          {
+            e.printStackTrace();
+          }
+        }
+
+      }
+    }
+  }
+  
+  public void disableSpoutBroadcast() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+  {
+    enableSpout = false;
+    if(spout != null)
+    {
+      Method close = spoutClass.getMethod("closeSender");
+      close.invoke(spout);
+    }
+  }
 }
