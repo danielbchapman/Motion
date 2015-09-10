@@ -677,12 +677,6 @@ public class MotionEngine extends PApplet
 
   }
 
-  @Override
-  public void mouseDragged()
-  {
-    
-  }
-  
   public void mouseDraggedFromDraw(int x, int y)
   {
     if (Mode.SUCK_FORCE == mode)
@@ -715,7 +709,6 @@ public class MotionEngine extends PApplet
         if(!paint.isDrawing())
           paint.startDraw();  
         
-        System.out.println("Adding brush -> " + paint);
         behavior.setPosition(behavior.vars.position);
         paintBrushes.add(paint);
       }
@@ -757,7 +750,6 @@ public class MotionEngine extends PApplet
             {
               SaveableBrush b = (SaveableBrush) brush;
               b.startDraw();
-              System.out.println("Starting drawing!");
             }
             brush.vars.position = new Vec3D(mouseX, mouseY, 0);
             physics.addBehavior(brush);
@@ -783,15 +775,9 @@ public class MotionEngine extends PApplet
             {
               SaveableBrush b = (SaveableBrush) brush;
               b.endDraw();
-              System.out.println("\t->Ending drawing");
             }
-            System.out.println("ACTIVE BEFORE REMOVE");
-            for(Object o : physics.behaviors)
-              System.out.println("\t->" + o);
-            System.out.println("\nRemoving behavior: " + brush);
             physics.removeBehavior(brush);
             
-            System.out.println("ACTIVE BEHAVIORS AFTER REMOVE");
             for(Object o : physics.behaviors)
               System.out.println("\t->" + o);
           }
