@@ -59,14 +59,14 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
   @Override
   public AngularGravityBehavior3D load(String data)
   {
-    this.vars = ForceVariables.fromLine(data);
+    this.vars = PersistentVariables.fromLine(data);
     return this;
   }
   @Override
   public String save()
   {
     System.out.println(this + " AngularGravity? " + vars.running);
-    return ForceVariables.toLine(vars);
+    return PersistentVariables.toLine(vars);
   }
 
   public void setForce(Vec3D force) {

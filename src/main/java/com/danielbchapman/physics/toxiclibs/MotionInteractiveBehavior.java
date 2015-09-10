@@ -11,7 +11,7 @@ import com.danielbchapman.utility.FileUtil;
 public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
 {
   
-  public ForceVariables vars = new ForceVariables();
+  public PersistentVariables vars = new PersistentVariables();
   
   /**
    * <p>
@@ -58,8 +58,9 @@ public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
     StringBuilder b = new StringBuilder();
     b.append(behavior.getClass().getName());
     b.append("\n");
-    b.append(ForceVariables.toLine(behavior.vars));
+    b.append(PersistentVariables.toLine(behavior.vars));
     b.append("\n");
+//    @formatter:off
 //    Map<String, String> names = behavior.getFieldNames();
 //    boolean first = true;
 //    for(String k : ForceVariables.Fields.ALL_FIELDS)
@@ -77,6 +78,7 @@ public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
 //    }
 //      
 //    b.append("\n");
+//  @formatter:on    
     return b.toString();
   }
 
@@ -104,7 +106,7 @@ public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
       throw new RuntimeException("Unable to load this data, there is not enough information");
     
     String className = lines[0].trim();
-    ForceVariables vars = ForceVariables.fromLine(lines[1]);
+    PersistentVariables vars = PersistentVariables.fromLine(lines[1]);
 //    HashMap<String, String> names = new HashMap<String, String>();
     
     try

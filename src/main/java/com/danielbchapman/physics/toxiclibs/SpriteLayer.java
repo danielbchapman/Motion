@@ -2,6 +2,8 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.io.File;
 
+import com.danielbchapman.brushes.SaveableBrush;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -102,5 +104,4 @@ public class SpriteLayer extends Layer
   public void go(MotionEngine engine)
   {
   }
-
 }

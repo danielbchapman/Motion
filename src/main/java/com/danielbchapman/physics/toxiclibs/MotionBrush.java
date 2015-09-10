@@ -23,7 +23,7 @@ public class MotionBrush implements Serializable
   }
     
   public String brushName;
-  ForceVariables variables = new ForceVariables();
+  PersistentVariables variables = new PersistentVariables();
   public Class<? extends ParticleBehavior3D> behaviorClass; 
   
 //  public Item save(Item item)

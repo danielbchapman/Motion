@@ -7,8 +7,20 @@ import toxi.geom.Vec3D;
 
 import com.danielbchapman.text.Utility;
 
+
+/**
+ * The PersistentVariables class is a collection of 
+ * common values that can be easily serialized and copied by the 
+ * user interface. 
+ * 
+ * Using these values will allow the engine to easily save your brush to 
+ * a text file and restore it using the interfaces.
+ * 
+ * Note: this is a primitive start and should be replaced by 
+ * something far more dynamic.
+ */
 @Data
-public class ForceVariables implements Cloneable
+public class PersistentVariables implements Cloneable
 {
   public static class Fields
   {
@@ -199,9 +211,9 @@ public class ForceVariables implements Cloneable
 //    return vars;
 //  }
   
-  public static ForceVariables fromLine(String line)
+  public static PersistentVariables fromLine(String line)
   {
-    ForceVariables v = new ForceVariables();
+    PersistentVariables v = new PersistentVariables();
     String[] values = line.split(",");//CSV
     int i = 0;
 //    if(values.length != 15)//format error
@@ -258,7 +270,7 @@ public class ForceVariables implements Cloneable
     
     return v;
   }
-  public static String toLine(ForceVariables v)
+  public static String toLine(PersistentVariables v)
   {
     StringBuilder b = new StringBuilder();
     Consumer<Object> add = (x)->
@@ -321,10 +333,10 @@ public class ForceVariables implements Cloneable
   }
   
   @Override
-  public ForceVariables clone()
+  public PersistentVariables clone()
   {
     System.err.println("[WARN]: This implemention is slow and needs to be implemented property");
-    return ForceVariables.fromLine(ForceVariables.toLine(this));
+    return PersistentVariables.fromLine(PersistentVariables.toLine(this));
   }
   
   /**
@@ -332,7 +344,7 @@ public class ForceVariables implements Cloneable
    * @return a copy of this  
    * 
    */
-  public ForceVariables copy()
+  public PersistentVariables copy()
   {
     return clone();
   }

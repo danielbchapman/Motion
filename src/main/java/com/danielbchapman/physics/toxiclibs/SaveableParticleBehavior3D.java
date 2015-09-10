@@ -4,7 +4,7 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 public abstract class SaveableParticleBehavior3D<T> implements ParticleBehavior3D, StringSerialize<T>
 {
-  ForceVariables vars = new ForceVariables(); 
+  PersistentVariables vars = new PersistentVariables(); 
 
   public synchronized void setRunning(boolean running)
   {

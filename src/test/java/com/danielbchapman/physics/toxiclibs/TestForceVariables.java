@@ -10,10 +10,10 @@ import toxi.geom.Vec3D;
 
 public class TestForceVariables
 {
-  private ForceVariables createTestData()
+  private PersistentVariables createTestData()
   {
     Random rand = new Random();
-    ForceVariables x = new ForceVariables();
+    PersistentVariables x = new PersistentVariables();
     x.force = Vec3D.randomVector();
     x.position = Vec3D.randomVector();
     x.backup = Vec3D.randomVector();
@@ -58,14 +58,14 @@ public class TestForceVariables
   @Test
   public void testLineSerialization()
   {
-    ForceVariables x = createTestData();
-    String line = ForceVariables.toLine(x);
-    ForceVariables y = ForceVariables.fromLine(line);
-    String debug = "\n\n" + x.toString() + "\n" + "==\n" + y.toString() + "\n" + ForceVariables.toLine(x) + "\n" + ForceVariables.toLine(y) + "\n";
+    PersistentVariables x = createTestData();
+    String line = PersistentVariables.toLine(x);
+    PersistentVariables y = PersistentVariables.fromLine(line);
+    String debug = "\n\n" + x.toString() + "\n" + "==\n" + y.toString() + "\n" + PersistentVariables.toLine(x) + "\n" + PersistentVariables.toLine(y) + "\n";
 
 
-    String a = ForceVariables.toLine(x);
-    String b = ForceVariables.toLine(y);
+    String a = PersistentVariables.toLine(x);
+    String b = PersistentVariables.toLine(y);
     if(!a.equals(b))
     {
         for(int i = 0; i <a.length(); i++)

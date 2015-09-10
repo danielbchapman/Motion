@@ -19,15 +19,15 @@ public class FalloffAttractionBehaviorInverse extends MotionInteractiveBehavior
   static final Map<String, String> FIELD_NAMES;
   static {
     HashMap<String, String> m = new HashMap<>();
-    m.put(ForceVariables.Fields.MAGNITUDE, "Magniture");
-    m.put(ForceVariables.Fields.MAX_FORCE, "Max Force");
-    m.put(ForceVariables.Fields.MIN_FORCE, "Min Force");
-    m.put(ForceVariables.Fields.POS_X, "Position");
-    m.put(ForceVariables.Fields.POS_Y, "Position");
-    m.put(ForceVariables.Fields.POS_Z, "Position");
-    m.put(ForceVariables.Fields.FOR_X, "Force");
-    m.put(ForceVariables.Fields.FOR_Y, "Force");
-    m.put(ForceVariables.Fields.FOR_Z, "Force");
+    m.put(PersistentVariables.Fields.MAGNITUDE, "Magniture");
+    m.put(PersistentVariables.Fields.MAX_FORCE, "Max Force");
+    m.put(PersistentVariables.Fields.MIN_FORCE, "Min Force");
+    m.put(PersistentVariables.Fields.POS_X, "Position");
+    m.put(PersistentVariables.Fields.POS_Y, "Position");
+    m.put(PersistentVariables.Fields.POS_Z, "Position");
+    m.put(PersistentVariables.Fields.FOR_X, "Force");
+    m.put(PersistentVariables.Fields.FOR_Y, "Force");
+    m.put(PersistentVariables.Fields.FOR_Z, "Force");
     
     FIELD_NAMES = Collections.unmodifiableMap(m);
   }

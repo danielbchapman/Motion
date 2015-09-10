@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.danielbchapman.physics.toxiclibs.ForceVariables.Fields;
+import com.danielbchapman.physics.toxiclibs.PersistentVariables.Fields;
 import com.danielbchapman.physics.ui.CheckBoxProperty;
 import com.danielbchapman.physics.ui.PojoComboBox;
 import com.danielbchapman.physics.ui.PropertySlider;
@@ -58,7 +58,7 @@ public class BrushEditor extends JFrame
   JPanel content = new JPanel();
 
   //Fields
-  private ForceVariables variables;
+  private PersistentVariables variables;
 
   CheckBoxProperty<BrushEditor> enabled;
   
@@ -424,7 +424,7 @@ public class BrushEditor extends JFrame
       StringBuilder b = new StringBuilder();
       b.append(current.getClass().getName());
       b.append("\n");
-      b.append(ForceVariables.toLine(current.vars));
+      b.append(PersistentVariables.toLine(current.vars));
       
       FileUtil.makeDirs(new File(BRUSH_FOLDER));
       FileUtil.writeFile(BRUSH_FOLDER + "/" + file, b.toString().getBytes());
@@ -456,7 +456,7 @@ public class BrushEditor extends JFrame
         Class<? extends MotionInteractiveBehavior> clazz = (Class<? extends MotionInteractiveBehavior>) getClass().getClassLoader().loadClass(clazzName);
         MotionInteractiveBehavior loaded = clazz.newInstance();
         
-        ForceVariables vars = ForceVariables.fromLine(data);
+        PersistentVariables vars = PersistentVariables.fromLine(data);
         loaded.vars = vars;
         
         populate(loaded);

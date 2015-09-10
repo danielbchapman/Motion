@@ -75,14 +75,14 @@ public class FloorSplitGravity extends SaveableParticleBehavior3D<FloorSplitGrav
   @Override
   public FloorSplitGravity load(String data)
   {
-    this.vars = ForceVariables.fromLine(data);
+    this.vars = PersistentVariables.fromLine(data);
     return this;
   }
   @Override
   public String save()
   {
     System.out.println(this + " AngularGravity? " + vars.running);
-    return ForceVariables.toLine(vars);
+    return PersistentVariables.toLine(vars);
   }
 
   public void setForce(Vec3D force) {

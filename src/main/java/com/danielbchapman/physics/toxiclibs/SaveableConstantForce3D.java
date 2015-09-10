@@ -36,13 +36,13 @@ public class SaveableConstantForce3D extends SaveableParticleBehavior3D<Saveable
   public String save()
   {
     System.out.println(this + " running? " + vars.running);
-   return ForceVariables.toLine(vars); 
+   return PersistentVariables.toLine(vars); 
   }
 
   @Override
   public SaveableConstantForce3D load(String data)
   {
-    vars = ForceVariables.fromLine(data);
+    vars = PersistentVariables.fromLine(data);
     return this;
   }
 

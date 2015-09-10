@@ -2,6 +2,8 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
 
+import com.danielbchapman.brushes.SaveableBrush;
+
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 

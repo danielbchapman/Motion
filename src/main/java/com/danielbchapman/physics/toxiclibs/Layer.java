@@ -1,5 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import com.danielbchapman.brushes.SaveableBrush;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -15,6 +17,7 @@ public abstract class Layer
   protected Point[] points;
   protected PApplet applet;
   protected MotionEngine engine;
+  protected SaveableBrush brush;
   /**
    * @param points the objects to draw
    */
@@ -25,13 +28,44 @@ public abstract class Layer
   
   public abstract Point[] init();
   
-  public abstract void render(PGraphics graphics);
+  /**
+   * This is the first call to render a layer. It is called
+   * before the brushes are called to render.
+   * 
+   * @param g  The PGraphics instance
+   * 
+   */
+  public abstract void render(PGraphics g);
+  
+  /**
+   * Actions to take after rendering the brushes {@link #renderBrush(SaveableBrush, PGraphics)}. 
+   * As most layers will not need this it is not mandatory
+   * @param graphics 
+   */
+  public void renderAfterBrushes(PGraphics graphics)
+  {
+  }
   
   /**
    * Called before each draw method  
    */
   public abstract void update();
   
+  /**
+   * If this layer is intended to be painted on then
+   * accept this brush and paint with it using whatever
+   * rules are applicable. Otherwise ignore it.
+   * 
+   * This is called after the render method so it can be applied 
+   * in the drawing loop. An inactive brush will be passed in as null.
+   * The method {@link #renderAfterBrushes(PGraphics)} is called after 
+   * this method.
+   * 
+   * @param brush the brush to draw
+   */
+  public void renderBrush(SaveableBrush brush, PGraphics g)
+  {
+  }
   /**
    * Fire a cue if needed.
    * @param engine the engine to use.

@@ -5,7 +5,7 @@ public interface StringSerialize<T>
   public String save();
   public T load(String data);
   
-  public static String write(ForceVariables vars)
+  public static String write(PersistentVariables vars)
   {
     
     return "not implemented";

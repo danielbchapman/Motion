@@ -13,7 +13,7 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 @Data
 public class FrequencyOscillationBehavior extends SineWave implements ParticleBehavior3D
 {
-  ForceVariables vars = new ForceVariables();
+  PersistentVariables vars = new PersistentVariables();
   boolean enabled = false;
   long start = System.currentTimeMillis();
   float offset = 0L;

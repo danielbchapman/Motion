@@ -11,6 +11,7 @@ import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
 import com.danielbchapman.artwork.Fadeable;
+import com.danielbchapman.brushes.SaveableBrush;
 
 public class GridLayerFlying extends Layer
 {

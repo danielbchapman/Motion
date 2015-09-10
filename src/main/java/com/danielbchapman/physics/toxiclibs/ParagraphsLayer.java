@@ -5,6 +5,7 @@ import toxi.physics3d.VerletPhysics3D;
 
 import com.danielbchapman.artwork.Paragraph;
 import com.danielbchapman.artwork.Paragraph.FadeType;
+import com.danielbchapman.brushes.SaveableBrush;
 
 public class ParagraphsLayer extends Layer
 {

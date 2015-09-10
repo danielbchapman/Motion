@@ -10,6 +10,7 @@ import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
 import com.danielbchapman.artwork.Word;
+import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.utility.FileUtil;
 
 public class MobilologyThree extends Layer

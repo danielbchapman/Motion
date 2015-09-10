@@ -12,7 +12,7 @@ import toxi.physics3d.VerletPhysics3D;
 
 public abstract class Emitter<T extends Point>
 {
-  ForceVariables vars = new ForceVariables();
+  PersistentVariables vars = new PersistentVariables();
   ArrayList<T> children = new ArrayList<>();
   Random rand = new Random();
   long lastTime = -1L;

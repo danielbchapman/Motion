@@ -1,5 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import com.danielbchapman.brushes.SaveableBrush;
+
 import processing.core.PGraphics;
 
 public class BlackoutLayer extends Layer
@@ -26,5 +28,4 @@ public class BlackoutLayer extends Layer
   public void go(MotionEngine engine)
   { 
   }
-
 }

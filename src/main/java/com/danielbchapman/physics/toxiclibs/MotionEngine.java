@@ -16,6 +16,10 @@ import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 import com.danielbchapman.artwork.Word;
+import com.danielbchapman.brushes.EllipseBrush;
+import com.danielbchapman.brushes.IBrush;
+import com.danielbchapman.brushes.SaveableBrush;
+import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.physics.kinect.KinectTracker;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
@@ -76,7 +80,10 @@ public class MotionEngine extends PApplet
   private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 1000f);
   private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
   private static FrequencyOscillationBehavior osc = new FrequencyOscillationBehavior();
-
+  //A list of active brushes for this drawing cycle
+  private ArrayList<SaveableBrush> paintBrushes = new ArrayList<>();
+  
+  //Layers
   public Layer activeLayer;
   
   // Mobilology
@@ -139,6 +146,7 @@ public class MotionEngine extends PApplet
   @SuppressWarnings("deprecation")
   public void draw()
   {
+
     // Model updates
     // physics.setTimeStep(frameRate / 60f);
     if(stopPlayback)
@@ -152,6 +160,9 @@ public class MotionEngine extends PApplet
     }
     if(stopPlayback)
       stopPlayback = false;
+    
+    //Do the drag events before the updates and painting.
+    mouseDraggedFromDraw(mouseX, mouseY);
     try{
       physics.update();
       osc.update();  
@@ -163,6 +174,10 @@ public class MotionEngine extends PApplet
     if (RECORDER.isRecording())
       RECORDER.capture(mouseEvent);
 
+    SaveableBrush painter = null;
+    if(brush instanceof SaveableBrush)
+      painter = (SaveableBrush) brush;
+    
     if (layers != null)
       for (Layer l : layers)
       {
@@ -173,6 +188,16 @@ public class MotionEngine extends PApplet
 //          translate(0, height);
 //          rotateZ(-PConstants.HALF_PI);
         l.render(g);
+        
+        //Render all robot brushes 
+        for(SaveableBrush b : paintBrushes)
+          l.renderBrush(b, g);
+        
+        //Render this brush inside the layer matrix
+        if(painter != null && painter.isDrawing())
+          l.renderBrush(painter, g);
+        
+        l.renderAfterBrushes(g);
         g.popMatrix();
       }
 
@@ -332,6 +357,7 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
+    prepare.accept(new BleedingCanvasLayer(this));
     prepare.accept(new SpriteLayer(this));
     prepare.accept(new KinectTracker(this));
     prepare.accept(mobolologyOne);
@@ -447,11 +473,8 @@ public class MotionEngine extends PApplet
     // Animation tests
     if (event.getKey() == '0')
     {
-      physics.clear();
-      add(gridFly);
-
-      gridFly.offscreen();
-      gridFly.lockAll();
+      mode = Mode.BRUSH_PALLET;
+      brush = new EllipseBrush();
     }
 
     if (event.getKey() == 'd')
@@ -657,16 +680,19 @@ public class MotionEngine extends PApplet
   @Override
   public void mouseDragged()
   {
+    
+  }
+  
+  public void mouseDraggedFromDraw(int x, int y)
+  {
     if (Mode.SUCK_FORCE == mode)
-      sucker.setPosition(new Vec3D(mouseX, mouseY, -10f));
+      sucker.setPosition(new Vec3D(x, y, -10f));
     else
       if (Mode.BRUSH_PALLET == mode)
       {
         // Maintain the Z index of the brush
-
-        brush.setPosition(new Vec3D(mouseX, mouseY, brush.vars.position.z));
+        brush.setPosition(new Vec3D(x, y, brush.vars.position.z));
       }
-
   }
 
   /**
@@ -677,13 +703,29 @@ public class MotionEngine extends PApplet
   public void robot(RecordAction action, MotionInteractiveBehavior behavior)
   {
 //    System.out.println("Recorder Running");
+    SaveableBrush paint = null;
+    if(behavior instanceof SaveableBrush)
+      paint = (SaveableBrush) behavior;
+    
     if (action.leftClick)
     {
       behavior.vars.position = new Vec3D(action.x, action.y, 0);
+      if(paint != null)
+      {
+        if(!paint.isDrawing())
+          paint.startDraw();  
+        
+        System.out.println("Adding brush -> " + paint);
+        behavior.setPosition(behavior.vars.position);
+        paintBrushes.add(paint);
+      }
+        
       addBehavior(behavior);
     }
     else
     {
+      if(paint != null)
+        paint.endDraw();
       removeBehavior(behavior);
     }
   }
@@ -711,6 +753,12 @@ public class MotionEngine extends PApplet
         else
           if (Mode.BRUSH_PALLET == mode)
           {
+            if(brush instanceof SaveableBrush)
+            {
+              SaveableBrush b = (SaveableBrush) brush;
+              b.startDraw();
+              System.out.println("Starting drawing!");
+            }
             brush.vars.position = new Vec3D(mouseX, mouseY, 0);
             physics.addBehavior(brush);
           }
@@ -719,6 +767,7 @@ public class MotionEngine extends PApplet
 
   public void mouseReleased()
   {
+    System.out.println("Mouse released!");
     if (Mode.SUCK_FORCE == mode)
       physics.removeBehavior(sucker);
     else
@@ -729,7 +778,24 @@ public class MotionEngine extends PApplet
           physics.removeBehavior(explode);
         else
           if (Mode.BRUSH_PALLET == mode)
+          {
+            if(brush instanceof SaveableBrush)
+            {
+              SaveableBrush b = (SaveableBrush) brush;
+              b.endDraw();
+              System.out.println("\t->Ending drawing");
+            }
+            System.out.println("ACTIVE BEFORE REMOVE");
+            for(Object o : physics.behaviors)
+              System.out.println("\t->" + o);
+            System.out.println("\nRemoving behavior: " + brush);
             physics.removeBehavior(brush);
+            
+            System.out.println("ACTIVE BEHAVIORS AFTER REMOVE");
+            for(Object o : physics.behaviors)
+              System.out.println("\t->" + o);
+          }
+            
   };
 
   // FIXME this needs to be HashMaps This probably isn't an issue for less than 10-20 forces
@@ -849,5 +915,11 @@ public class MotionEngine extends PApplet
       Method close = spoutClass.getMethod("closeSender");
       close.invoke(spout);
     }
+  }
+  
+  public void setBrush(MotionInteractiveBehavior b)
+  {
+    mode = Mode.BRUSH_PALLET;
+    brush = b;
   }
 }
