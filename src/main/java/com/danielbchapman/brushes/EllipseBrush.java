@@ -2,10 +2,11 @@ package com.danielbchapman.brushes;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import toxi.geom.Vec3D;
 
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 
-public class EllipseBrush extends SaveableBrush
+public class EllipseBrush extends VectorBrush
 {
   
   @Override
@@ -15,27 +16,20 @@ public class EllipseBrush extends SaveableBrush
   }
 
   @Override
-  public void draw(PGraphics g)
+  public void applyBrush(PGraphics g, Vec3D p)
   {
-    if(vars.position == null)
-      return;
     g.pushMatrix();
-    g.stroke(255);
-    g.fill(255);
-    g.translate(vars.position.x, vars.position.y);
+    g.translate(p.x, p.y, p.z);
     g.ellipseMode(PConstants.CENTER);
     g.ellipse(0, 0, 10, 10);
     g.popMatrix();
-    
-    //Update position
-    lastPosition = this.vars.position;
   }
-
+  
   @Override
   public MotionInteractiveBehavior copy()
   {
-    //TODO Auto Generated Sub
-    throw new RuntimeException("Not Implemented...");
-    
+    EllipseBrush x = new EllipseBrush();
+    x.vars = this.vars.clone();
+    return x;
   }
 }

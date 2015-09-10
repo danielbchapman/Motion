@@ -2,6 +2,8 @@ package com.danielbchapman.layers;
 
 import processing.core.PGraphics;
 
+import com.danielbchapman.brushes.EllipseBrush;
+import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.brushes.VectorBrush;
 import com.danielbchapman.physics.toxiclibs.Layer;
@@ -12,6 +14,7 @@ public class BleedingCanvasLayer extends Layer
 {
   boolean blank;
   MotionEngine engine;
+  int mode = 0;
   
   public BleedingCanvasLayer(MotionEngine engine)
   {
@@ -45,8 +48,18 @@ public class BleedingCanvasLayer extends Layer
   public void go(MotionEngine engine)
   {
     System.out.println("GO FIRED");
-    VectorBrush brush = new VectorBrush();
-    engine.setBrush(brush);  
+    if(mode % 2 == 0)
+    {
+      ImageBrush brush = new ImageBrush();
+      engine.setBrush(brush);
+    }
+    else
+    {
+      EllipseBrush brush = new EllipseBrush();
+      engine.setBrush(brush);      
+    }
+    mode++;
+        
     blank = false;//clear the canvas
   }
   @Override

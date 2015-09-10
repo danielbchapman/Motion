@@ -2,6 +2,8 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
 
+import com.danielbchapman.brushes.VectorBrush;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,32 +52,79 @@ public class Playback
     if(!running)
       return;
     
-    long max = System.currentTimeMillis() - start;
-    if(last == -1)
-      last = 0;
+    //Set this to use only the last point in the last rather than ALL points
+    boolean objectHandlesDeltaTime = (brush instanceof VectorBrush);
     
-    for(; last < size; last++)
+    //Create and add a series of points to simulate real-time behaviors
+    if(!objectHandlesDeltaTime) 
     {
-      if(actions[last].stamp > max)
-        return; // try again next loop
+      long max = System.currentTimeMillis() - start;
+      if(last == -1)
+        last = 0;
       
-      e.robot(actions[last], brush);
+      for(; last < size; last++)
+      {
+        if(actions[last].stamp > max)
+          return; // try again next loop
+        
+        e.robot(actions[last], brush);
+      }
+      
+      RecordAction copy = actions[last -1];
+      copy.leftClick = false;
+      copy.rightClick = false;
+      copy.keyEvent = false;
+      
+      //FIXME use a specific brush here.
+      e.robot(copy, brush);
+//      System.out.println("Polling complete");
+//      ArrayList<RecordAction> cp = new ArrayList<>();
+//      for(int i = 0; i < actions.length; i++)
+//        cp.add(actions[i]);
+//      //Recorder.save(cp, e.getWidth(), e.getHeight());
+      running = false;
+      last = -1;
+      size = -1;
+    }
+    //Object has internal cacluations so don't add 27 poitns for a frame
+    else
+    {
+      long max = System.currentTimeMillis() - start;
+      if(last == -1)
+        last = 0;
+      
+      RecordAction nextAction = null;
+      for(; last < size; last++)
+      {
+        if(actions[last].stamp > max)
+        {
+          if(nextAction != null)
+            e.robot(nextAction, brush);
+          return;
+        }
+        
+        RecordAction tmp = actions[last];
+        if(tmp != null)
+          nextAction = tmp;
+      }
+      
+      //Fire the final action...
+      RecordAction copy = actions[last -1];
+      copy.leftClick = false;
+      copy.rightClick = false;
+      copy.keyEvent = false;
+      
+      //FIXME use a specific brush here.
+      e.robot(copy, brush);
+//      System.out.println("Polling complete");
+//      ArrayList<RecordAction> cp = new ArrayList<>();
+//      for(int i = 0; i < actions.length; i++)
+//        cp.add(actions[i]);
+//      //Recorder.save(cp, e.getWidth(), e.getHeight());
+      running = false;
+      last = -1;
+      size = -1;
     }
     
-    RecordAction copy = actions[last -1];
-    copy.leftClick = false;
-    copy.rightClick = false;
-    copy.keyEvent = false;
-    
-    //FIXME use a specific brush here.
-    e.robot(copy, brush);
-//    System.out.println("Polling complete");
-//    ArrayList<RecordAction> cp = new ArrayList<>();
-//    for(int i = 0; i < actions.length; i++)
-//      cp.add(actions[i]);
-//    //Recorder.save(cp, e.getWidth(), e.getHeight());
-    running = false;
-    last = -1;
-    size = -1;
   }
 }

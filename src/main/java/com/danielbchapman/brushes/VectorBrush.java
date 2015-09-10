@@ -1,24 +1,21 @@
 package com.danielbchapman.brushes;
 
-import processing.core.PConstants;
 import processing.core.PGraphics;
-import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
-import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
-
-public class VectorBrush extends SaveableBrush
+public abstract class VectorBrush extends SaveableBrush
 {
   float splitSize = 2f;
-  
-  public void applyBrush(PGraphics g, Vec3D p)
-  {
-    g.pushMatrix();
-    g.translate(p.x, p.y, p.z);
-    g.ellipseMode(PConstants.CENTER);
-    g.ellipse(0, 0, 10, 10);
-    g.popMatrix();
-  }
+  boolean idle = false;
+  /**
+   * A method to draw this brush at a specific point. This 
+   * will be called multiple times per large vector so 
+   * speed would be advised.
+   * @param g the graphics context
+   * @param p the point to draw at (world based, not change based)  
+   * 
+   */
+  public abstract void applyBrush(PGraphics g, Vec3D p);
   
   @Override
   public void draw(PGraphics g)
@@ -32,8 +29,10 @@ public class VectorBrush extends SaveableBrush
     if(lastPosition == null || !firstPass) //start the brush
     {
       this.lastPosition = vars.position;
-      applyBrush(g, vars.position);
+      if(!idle)
+        applyBrush(g, vars.position);
       firstPass = true;
+      idle = true;
     }
     else
     {
@@ -44,7 +43,12 @@ public class VectorBrush extends SaveableBrush
       //Paint a single point
       if(steps <= 1)
       {
-        applyBrush(g, vars.position);
+        if(vars.position.equals(lastPosition))
+        {
+          idle = true;
+        }
+        if(!idle)
+          applyBrush(g, vars.position);
       }
       else //Paint multiple points
       {
@@ -58,21 +62,13 @@ public class VectorBrush extends SaveableBrush
         }
         //Draw the new point
         applyBrush(g, vars.position);
+        lastPosition = this.vars.position;
       }
     }
     
     g.popMatrix();
     
     //Update position
-    lastPosition = this.vars.position;
-  }
-
-  @Override
-  public MotionInteractiveBehavior copy()
-  {
-    VectorBrush x = new VectorBrush();
-    x.vars = this.vars.clone();
-    return x;
   }
 
   @Override

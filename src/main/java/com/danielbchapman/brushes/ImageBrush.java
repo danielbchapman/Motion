@@ -4,15 +4,20 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
+import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 import com.danielbchapman.physics.toxiclibs.PersistentVariables;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import toxi.geom.Vec3D;
 
-public class ImageBrush extends SaveableBrush
+
+//FIXME DOCUMENT THIS IN WHAT FIELDS ARE USED
+public class ImageBrush extends VectorBrush
 {
   static final Map<String, String> FIELD_NAMES;
   static {
@@ -26,10 +31,16 @@ public class ImageBrush extends SaveableBrush
     m.put(PersistentVariables.Fields.FOR_X, "Force");
     m.put(PersistentVariables.Fields.FOR_Y, "Force");
     m.put(PersistentVariables.Fields.FOR_Z, "Force");
+    m.put(PersistentVariables.Fields.USER_C, "Image");
     
     FIELD_NAMES = Collections.unmodifiableMap(m);
   }
   
+  public ImageBrush()
+  {
+    vars.userAMax = 100;
+    vars.userAMin = 100;
+  }
   //Cache
   PImage loadedImage;
   
@@ -40,24 +51,27 @@ public class ImageBrush extends SaveableBrush
   }
 
   @Override
-  public void draw(PGraphics g)
-  {
-    g.pushMatrix();
-    g.stroke(255);
-    g.fill(255);
-    g.translate(vars.position.x, vars.position.y);
-    g.ellipseMode(PConstants.CENTER);
-    g.ellipse(0, 0, 10, 10);
-    g.popMatrix();
-    
-    lastPosition = this.vars.position;
-  }
-
-  @Override
   public MotionInteractiveBehavior copy()
   {
     ImageBrush copy = new ImageBrush();
     copy.vars = this.vars.clone();
     return copy;
+  }
+
+  @Override
+  public void applyBrush(PGraphics g, Vec3D p)
+  {
+    if(loadedImage == null)
+    {
+      loadedImage = Actions.engine.loadImage("core/brushes/images/soft-messy.png");
+    }
+    
+    g.pushMatrix();
+    g.translate(p.x, p.y, p.z);
+    g.tint(255, 128); //use opacity in the future
+    g.imageMode(PConstants.CENTER);
+    g.image(loadedImage, 0, 0, vars.userAMax, vars.userAMin);
+    g.imageMode(PConstants.CORNER);
+    g.popMatrix();
   }
 }
