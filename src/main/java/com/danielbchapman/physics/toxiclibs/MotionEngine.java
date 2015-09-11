@@ -47,6 +47,11 @@ public class MotionEngine extends PApplet
   boolean enableSpout = false;
   boolean highlightMouse = false;
   private Object spout;
+  private IGraphicShare syphonOrSpout;
+  private Method shareInitialize;
+  private Method shareCleanup;
+  private Method shareDraw;
+  
   private Class<?> spoutClass;
   private Method spoutSend;
   private final static Recorder RECORDER = new Recorder();
@@ -236,26 +241,39 @@ public class MotionEngine extends PApplet
     }
     
     if(enableSpout)
-    	if(spout != null)
+    {
+    	if(Platform.isWindows() || Platform.isWindowsCE())
     	{
-    	  System.err.println("Spout called...");
-    	  try
-        {
-          spoutSend.invoke(spout);
-        }
-        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-        {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
+    		if(spout != null)
+        	{
+        	  System.err.println("Spout called...");
+        	  try
+	            {
+	              spoutSend.invoke(spout);
+	            }
+	            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+	            {
+	              // TODO Auto-generated catch block
+	              e.printStackTrace();
+	            }	
+        	}
     	}
+    	else if (Platform.isMac())
+    	{
+    		if(syphonOrSpout != null)
+    		{
+    			syphonOrSpout.send(g);
+    		}
+    	}
+    	
+    }
   }
 
   public void setup()
   {
     Actions.engine = this;
     size(Actions.WIDTH, Actions.HEIGHT, OPENGL);//FIXME Needs a resize listener (though not critical)
-    frameRate(60);
+    frameRate(30); //QLab will limit this to 30 FPS
     // physics.addBehavior(world);
     physics.setDrag(0.5f);
     postSetup();
@@ -359,7 +377,7 @@ public class MotionEngine extends PApplet
     
     prepare.accept(new BleedingCanvasLayer(this));
     prepare.accept(new SpriteLayer(this));
-    prepare.accept(new KinectTracker(this));
+    //prepare.accept(new KinectTracker(this));
     prepare.accept(mobolologyOne);
     prepare.accept(mobolologyTwo);
     prepare.accept(mobolologyThree);
@@ -664,7 +682,7 @@ public class MotionEngine extends PApplet
           {
             enableSpoutBroadcast(g);
           }
-          catch (NoSuchMethodException | SecurityException | IllegalAccessException e)
+          catch (NoSuchMethodException | SecurityException | IllegalAccessException | ClassNotFoundException | InstantiationException e)
           {
             Log.exception(e);
           }
@@ -852,8 +870,21 @@ public class MotionEngine extends PApplet
     controller.setVisible(true);
   }
   
-  public void enableSpoutBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException
+  public void enableSpoutBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException, ClassNotFoundException, InstantiationException
   {
+	if(Platform.isMac() && syphonOrSpout == null && !enableSpout)
+	{
+		//We do this to avoid native library initialization 
+		Class<?> syphonClass = Class.forName("com.danielbchapman.physics.toxiclibs.SyphonGraphicsShare");
+		shareInitialize = syphonClass.getMethod("initialize", PApplet.class);
+		shareCleanup = syphonClass.getMethod("cleanup");
+		shareDraw = syphonClass.getMethod("send", PGraphics.class);
+		
+		syphonOrSpout = (IGraphicShare) syphonClass.newInstance();
+		shareInitialize.invoke(syphonOrSpout, this);
+		enableSpout = true;
+		return;
+	}
     if(Platform.isWindows() || Platform.isWindowsCE())
       enableSpout = true;
     
@@ -895,6 +926,20 @@ public class MotionEngine extends PApplet
   
   public void disableSpoutBroadcast() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
   {
+	  if(Platform.isMac())
+	  {
+		  if(syphonOrSpout != null)
+		  {
+			  shareCleanup.invoke(syphonOrSpout);
+			  shareCleanup = null;
+			  shareDraw = null;
+			  shareInitialize = null;
+			  syphonOrSpout = null;
+		  }
+
+		  enableSpout = false;
+		  return;
+	  }
     enableSpout = false;
     if(spout != null)
     {
