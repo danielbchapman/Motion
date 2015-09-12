@@ -16,10 +16,12 @@ public class EllipseBrush extends VectorBrush
   }
 
   @Override
-  public void applyBrush(PGraphics g, Vec3D p)
+  public void applyBrush(PGraphics g, Vec3D p, int opacity, float sizeMod)
   {
     g.pushMatrix();
     g.translate(p.x, p.y, p.z);
+    g.fill(color);
+    g.stroke(color);
     g.ellipseMode(PConstants.CENTER);
     g.ellipse(0, 0, 10, 10);
     g.popMatrix();
@@ -31,5 +33,17 @@ public class EllipseBrush extends VectorBrush
     EllipseBrush x = new EllipseBrush();
     x.vars = this.vars.clone();
     return x;
+  }
+
+  @Override
+  public boolean isFadingBrush()
+  {
+    return false;
+  }
+
+  @Override
+  public boolean isVariableBrush()
+  {
+    return false;
   }
 }

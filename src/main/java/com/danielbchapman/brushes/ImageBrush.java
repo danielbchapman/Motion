@@ -59,7 +59,7 @@ public class ImageBrush extends VectorBrush
   }
 
   @Override
-  public void applyBrush(PGraphics g, Vec3D p)
+  public void applyBrush(PGraphics g, Vec3D p, int opacity, float sizeMod)
   {
     if(loadedImage == null)
     {
@@ -70,8 +70,21 @@ public class ImageBrush extends VectorBrush
     g.translate(p.x, p.y, p.z);
     g.tint(255, 128); //use opacity in the future
     g.imageMode(PConstants.CENTER);
-    g.image(loadedImage, 0, 0, vars.userAMax, vars.userAMin);
+    g.tint(255, opacity);
+    g.image(loadedImage, 0, 0, vars.userAMax * sizeMod, vars.userAMin * sizeMod);
     g.imageMode(PConstants.CORNER);
     g.popMatrix();
+  }
+
+  @Override
+  public boolean isFadingBrush()
+  {
+    return true;
+  }
+
+  @Override
+  public boolean isVariableBrush()
+  {
+    return true;
   }
 }

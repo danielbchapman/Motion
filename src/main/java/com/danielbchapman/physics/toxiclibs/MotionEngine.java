@@ -181,8 +181,10 @@ public class MotionEngine extends PApplet
 
     SaveableBrush painter = null;
     if(brush instanceof SaveableBrush)
+    {
       painter = (SaveableBrush) brush;
-    
+    }
+      
     if (layers != null)
       for (Layer l : layers)
       {
@@ -196,11 +198,11 @@ public class MotionEngine extends PApplet
         
         //Render all robot brushes 
         for(SaveableBrush b : paintBrushes)
-          l.renderBrush(b, g);
+          l.renderBrush(b, g, frameCount);
         
         //Render this brush inside the layer matrix
         if(painter != null && painter.isDrawing())
-          l.renderBrush(painter, g);
+          l.renderBrush(painter, g, frameCount);
         
         l.renderAfterBrushes(g);
         g.popMatrix();
@@ -273,7 +275,9 @@ public class MotionEngine extends PApplet
   {
     Actions.engine = this;
     size(Actions.WIDTH, Actions.HEIGHT, OPENGL);//FIXME Needs a resize listener (though not critical)
-    frameRate(30); //QLab will limit this to 30 FPS
+    //QLab will limit the rate to 30 FPS it seems
+    //Older Intel graphics seem to limit the rate to an odd count. 30 = 20, 60 = 30;
+    frameRate(60);
     // physics.addBehavior(world);
     physics.setDrag(0.5f);
     postSetup();

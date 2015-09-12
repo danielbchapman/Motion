@@ -63,8 +63,9 @@ public class BleedingCanvasLayer extends Layer
     blank = false;//clear the canvas
   }
   @Override
-  public void renderBrush(SaveableBrush brush, PGraphics g)
+  public void renderBrush(SaveableBrush brush, PGraphics g, int currentFrame)
   {
+    brush.update();
     brush.draw(g);
   }
 }

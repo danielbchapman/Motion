@@ -63,7 +63,7 @@ public abstract class Layer
    * 
    * @param brush the brush to draw
    */
-  public void renderBrush(SaveableBrush brush, PGraphics g)
+  public void renderBrush(SaveableBrush brush, PGraphics g, int currentFrame)
   {
   }
   /**
