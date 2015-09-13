@@ -2,16 +2,13 @@ package shows.troubledwater;
 
 import java.util.ArrayList;
 
-import processing.core.PGraphics;
-import toxi.geom.Vec3D;
-
-import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.physics.toxiclibs.Actions;
-import com.danielbchapman.physics.toxiclibs.Emitter;
-import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.Point;
+
+import processing.core.PGraphics;
+import toxi.geom.Vec3D;
 
 public class RainLayer extends BleedingCanvasLayer
 {
@@ -21,14 +18,19 @@ public class RainLayer extends BleedingCanvasLayer
   }
 
   boolean first = true;
-  RainEmitter rain;
+  ArrayList<RainEmitter> rain;
 
   ArrayList<BrushPoint> list = new ArrayList<>();
   
   @Override
   public Point[] init()
   {
-    rain = new RainEmitter(this, new Vec3D(200, 200, 0), Vec3D.randomVector(), 15000, 1000, 2f, 1000);
+	  if(rain == null)
+		  rain = new ArrayList<>();
+	  rain.add(new RainEmitter(this, new Vec3D(200, 200, 0), Vec3D.randomVector(), 15000, 1000, 2f, 1000));
+	  rain.add(new RainEmitter(this, new Vec3D(-100, 150, 0), Vec3D.randomVector(), 20000, 1000, 2f, 2000));
+	  rain.add(new RainEmitter(this, new Vec3D(600, 75, 0), Vec3D.randomVector(), 10000, 1000, 2f, 3000));
+    
     return new Point[0];
   }
 
@@ -37,19 +39,22 @@ public class RainLayer extends BleedingCanvasLayer
   {
     if (first)
     { 
+    	g.background(0);
       first = false;
     }
-    g.fill(0,0,255, 2);
-    g.stroke(0,0,255, 2);
+    g.fill(0,0,0, 2);
+    g.stroke(0,0,0, 2);
     g.rect(0, 0, this.engine.getWidth(), this.engine.getHeight());
-    rain.draw(g);      
+    for(RainEmitter e : rain)
+    	e.draw(g);      
   }
 
   @Override
   public void update()
   {
     long sysTime = System.currentTimeMillis();
-    rain.update(sysTime);
+    for(RainEmitter e : rain)
+    	e.update(sysTime);
 
   }
 

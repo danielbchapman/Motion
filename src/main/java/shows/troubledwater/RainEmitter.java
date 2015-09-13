@@ -41,9 +41,7 @@ public class RainEmitter extends Emitter<BrushPoint>
       if(!b.isDrawing())
       {
         b.startDraw();
-        System.out.println("Starting drawing...");
       }
-        
       
       b.setPosition(new Vec3D(p.x, p.y, p.z));
       parent.renderBrush(b, g, -1);

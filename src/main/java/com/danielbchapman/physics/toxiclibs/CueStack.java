@@ -1,7 +1,9 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.danielbchapman.groups.Item;
 
@@ -56,7 +58,7 @@ public class CueStack implements Serializable
     
   }
   
-  public static CueStack load(Item item)
+  public static CueStack loadFromGroup(Item item)
   {
     return null;
   }
