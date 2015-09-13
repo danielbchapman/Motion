@@ -42,10 +42,6 @@ public class Util
    */
   public static float fade(float current, float target, float totalTime, float currentTime, float min, float max)
   {
-    if(Log.IS_DEBUG)
-    {
-      
-    }
     float percentComplete = 0f;
     if(totalTime < 1) //complete fade
     {
@@ -61,7 +57,7 @@ public class Util
       if(percentComplete > 1f)
         percentComplete = 1f;
     }
-  if(Log.IS_DEBUG)
+  if(false && Log.IS_DEBUG)
   {
     Log.debug("\nFADE:\tCurrent value " + current);
     Log.debug("\tTarget Value " + target);
@@ -71,8 +67,8 @@ public class Util
     Log.debug("\tMax: " + max);
     Log.debug("\tPercent: " + percentComplete);
   }
+  
 	float lerp = PApplet.lerp(current, target, percentComplete);  
-  System.out.println("Returing value " + lerp + " at percent " + percentComplete);
 	if(lerp < min)
 		return min;
 	if(lerp > max)

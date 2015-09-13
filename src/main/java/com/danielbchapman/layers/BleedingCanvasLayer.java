@@ -1,11 +1,12 @@
 package com.danielbchapman.layers;
 
+import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.core.PImage;
 
 import com.danielbchapman.brushes.EllipseBrush;
 import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.brushes.SaveableBrush;
-import com.danielbchapman.brushes.VectorBrush;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.Point;
@@ -13,7 +14,6 @@ import com.danielbchapman.physics.toxiclibs.Point;
 public class BleedingCanvasLayer extends Layer
 {
   boolean blank;
-  MotionEngine engine;
   int mode = 0;
   
   public BleedingCanvasLayer(MotionEngine engine)
@@ -34,6 +34,15 @@ public class BleedingCanvasLayer extends Layer
     if(!blank)
     {
       g.background(0);
+      try{
+        PImage image = engine.loadImage("show/OneLeaf.PNG");
+        image.filter(PConstants.INVERT);
+        g.image(image, 100, 50, 600, 600);
+      }
+      catch(Throwable t)
+      {
+        t.printStackTrace();
+      }
       blank = true;
     }
   }

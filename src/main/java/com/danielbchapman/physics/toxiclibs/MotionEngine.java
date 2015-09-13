@@ -11,6 +11,7 @@ import lombok.Setter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
+import shows.troubledwater.RainLayer;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
@@ -370,6 +371,7 @@ public class MotionEngine extends PApplet
 //    add(mobolologyThree);
 //    activeLayer = mobolologyThree;
     
+    RainLayer rainLayer = new RainLayer(this);
     Consumer<Layer> prepare = (layer)->
     {
       layer.applet = this;
@@ -380,6 +382,7 @@ public class MotionEngine extends PApplet
     };
     
     prepare.accept(new BleedingCanvasLayer(this));
+    prepare.accept(rainLayer);
     prepare.accept(new SpriteLayer(this));
     //prepare.accept(new KinectTracker(this));
     prepare.accept(mobolologyOne);

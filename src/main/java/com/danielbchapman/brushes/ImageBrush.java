@@ -19,6 +19,8 @@ import toxi.geom.Vec3D;
 //FIXME DOCUMENT THIS IN WHAT FIELDS ARE USED
 public class ImageBrush extends VectorBrush
 {
+  public boolean isFadingBrush = true;
+  public boolean isVariableBrush = true;
   static final Map<String, String> FIELD_NAMES;
   static {
     HashMap<String, String> m = new HashMap<>();
@@ -67,7 +69,7 @@ public class ImageBrush extends VectorBrush
     }
     
     g.pushMatrix();
-    g.translate(p.x, p.y, p.z);
+    g.translate(p.x, p.y);//p.z);
     g.tint(255, 128); //use opacity in the future
     g.imageMode(PConstants.CENTER);
     g.tint(255, opacity);

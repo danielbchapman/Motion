@@ -12,11 +12,11 @@ import toxi.physics3d.VerletPhysics3D;
 
 public abstract class Emitter<T extends Point>
 {
-  PersistentVariables vars = new PersistentVariables();
-  ArrayList<T> children = new ArrayList<>();
-  Random rand = new Random();
-  long lastTime = -1L;
-  long nextDelta = -1L;
+  protected PersistentVariables vars = new PersistentVariables();
+  protected ArrayList<T> children = new ArrayList<>();
+  protected Random rand = new Random();
+  protected long lastTime = -1L;
+  protected long nextDelta = -1L;
   @Getter
   @Setter 
   VerletPhysics3D physics = Actions.engine.getPhysics();

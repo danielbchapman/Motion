@@ -17,17 +17,17 @@ public abstract class VectorBrush extends SaveableBrush
   protected int color;
   @Getter
   @Setter
-  protected int opacityStart = 255;
-  protected int opacityEnd = 16;
-  protected int minOpacity = 16;
-  protected int maxOpacity = 255;
+  public int opacityStart = 255;
+  public int opacityEnd = 16;
+  public int minOpacity = 16;
+  public int maxOpacity = 255;
   
-  protected float sizeStart = 1.0f;
-  protected float sizeEnd = 0.2f;
-  protected float minSize = 0.1f;
-  protected float maxSize = 2.0f;
+  public float sizeStart = 1.0f;
+  public float sizeEnd = 0.2f;
+  public float minSize = 0.1f;
+  public float maxSize = 2.0f;
   
-  protected long fadeTime = 1000; // 1 second
+  protected long fadeTime = 3000; // 1 second
   protected long sizeTime = 2000;
   public abstract boolean isFadingBrush();
   public abstract boolean isVariableBrush();
@@ -85,30 +85,34 @@ public abstract class VectorBrush extends SaveableBrush
           minSize,
           maxSize);
     }
-    
-    if(lastPosition == null || !firstPass) //start the brush
+    if(drawLastPosition == null || !firstPass) //start the brush
     {
-      this.lastPosition = vars.position;
+      this.drawLastPosition = vars.position;
       if(!idle)
         applyBrush(g, vars.position, currentOpacity, sizeModifier);
       firstPass = true;
       idle = true;
+      //System.out.println("idle");
     }
     else
     {
       Vec3D scalar = new Vec3D(vars.position.x, vars.position.y, vars.position.z);
-      scalar.subSelf(lastPosition);
+      scalar.subSelf(drawLastPosition);
       float length = scalar.magnitude();
       int steps = (int) (length / splitSize);
       //Paint a single point
       if(steps <= 1)
       {
-        if(vars.position.equals(lastPosition))
+        if(vars.position.equals(drawLastPosition))
         {
+          //System.out.println( vars.position.x + " ->" + drawLastPosition);
           idle = true;
         }
         if(!idle)
+        {
           applyBrush(g, vars.position, currentOpacity, sizeModifier);
+          drawLastPosition = vars.position;
+        }
       }
       else //Paint multiple points
       {
@@ -117,12 +121,13 @@ public abstract class VectorBrush extends SaveableBrush
         {
           float subset = i * splitSize;
           Vec3D newSub = scalar.getNormalizedTo(subset);
-          Vec3D newPos = lastPosition.add(newSub);
+          Vec3D newPos = drawLastPosition.add(newSub);
           applyBrush(g, newPos, currentOpacity, sizeModifier);
         }
         //Draw the new point
         applyBrush(g, vars.position, currentOpacity, sizeModifier);
-        lastPosition = this.vars.position;
+        drawLastPosition = this.vars.position;
+//        System.out.println("Paining multiple!");
       }
     }
     

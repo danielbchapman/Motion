@@ -39,13 +39,13 @@ public abstract class SaveableBrush extends MotionInteractiveBehavior implements
   @Getter
   protected boolean drawing = false;
   protected boolean firstPass = false;
-  protected Vec3D lastPosition = null;
+  protected Vec3D drawLastPosition = null;
   protected long mouseDown;
   protected int framesDrawn;
-  /**
-   * The variables used for storage.
-   */
-  protected PersistentVariables vars = new PersistentVariables();
+//  /**
+//   * The variables used for storage.
+//   */
+//  protected PersistentVariables vars = new PersistentVariables();
 
   /**
    * A method called one per drawing cycle for this brush. However
@@ -85,7 +85,7 @@ public abstract class SaveableBrush extends MotionInteractiveBehavior implements
   @Override
   public Vec3D getLastPosition()
   {
-    return lastPosition;
+    return drawLastPosition;
   }
 
   @Override
@@ -103,7 +103,7 @@ public abstract class SaveableBrush extends MotionInteractiveBehavior implements
   {
     drawing = false;
     firstPass = false;
-    lastPosition = null;
+    drawLastPosition = null;
     mouseDown = -1;
     framesDrawn = -1;
   }
@@ -119,7 +119,7 @@ public abstract class SaveableBrush extends MotionInteractiveBehavior implements
     framesDrawn = 0;
     drawing = true;
     firstPass = false;
-    lastPosition = null;
+    drawLastPosition = null;
   }
 
   /**
