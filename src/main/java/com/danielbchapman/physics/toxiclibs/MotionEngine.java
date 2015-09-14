@@ -2,7 +2,9 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -26,6 +28,10 @@ import com.danielbchapman.logging.Log;
 import com.danielbchapman.physics.kinect.KinectTracker;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
 import com.danielbchapman.physics.ui.SceneController;
+import com.illposed.osc.OSCListener;
+import com.illposed.osc.OSCMessage;
+import com.illposed.osc.OSCPort;
+import com.illposed.osc.OSCPortIn;
 import com.sun.jna.Platform;
 
 @SuppressWarnings("unused")
@@ -90,6 +96,9 @@ public class MotionEngine extends PApplet
   //A list of active brushes for this drawing cycle
   private ArrayList<SaveableBrush> paintBrushes = new ArrayList<>();
   
+  //SHOW CONTROL
+  public static int OSC_PORT = 44321;
+  public OSCPortIn oscReceiver;
   //Layers
   public Layer activeLayer;
   
@@ -130,6 +139,67 @@ public class MotionEngine extends PApplet
     testCue = new Cue("Test Cue", test);
   }
 
+  /**
+   * Start the OSC listeners for this instance
+   */
+  public void startOSC()
+  {
+	  try {
+		oscReceiver= new OSCPortIn(OSC_PORT);
+		 
+		OSCListener listener = new OSCListener() {
+			public void acceptMessage(java.util.Date time, OSCMessage message) {
+				List<Object> args =message.getArguments();
+				
+				if(args == null || args.size() < 1)
+				{
+					System.out.println("Args: " + args);
+					if(args != null)
+						for(int i = 0; i < args.size(); i++)
+							System.out.println(i + " -> " + args.get(i));
+				}
+				else if (args.size() == 3)//Cue
+				{
+					String command = (String)args.get(0);
+					String layer = (String)args.get(1);
+					Integer cue = (Integer)args.get(2);
+					System.out.println("Args: " + args);
+					if(args != null)
+						for(int i = 0; i < args.size(); i++)
+							System.out.println(i + " -> " + args.get(i));
+					
+					if(activeLayer != null)
+					 activeLayer.go(MotionEngine.this);
+				}
+				else
+				{
+					String command = (String) args.get(0);
+					if(!"advance".equalsIgnoreCase(command))
+					{
+						System.out.println("UNKNOWN COMMAND " + command);
+						return;
+					}
+					try
+					{
+						String x = (String) args.get(1);
+						System.out.println("Find the layer here!");
+						advanceScene();
+						return;
+					}
+					catch (Throwable t)
+					{
+						advanceScene();
+					}
+					advanceScene();
+				}
+			}
+		};
+		oscReceiver.addListener("/motion", listener);
+		oscReceiver.startListening();
+	} catch (SocketException e) {
+		e.printStackTrace();
+	}
+  }
   // public Force gravity;
   // public Force wind;
   // public Force
@@ -156,6 +226,7 @@ public class MotionEngine extends PApplet
 
     // Model updates
     // physics.setTimeStep(frameRate / 60f);
+	  physics.setTimeStep(60f/(float)frameRate);
     if(stopPlayback)
     {
         clearPlaybacksPrivate();
@@ -283,6 +354,13 @@ public class MotionEngine extends PApplet
     // physics.addBehavior(world);
     physics.setDrag(0.5f);
     postSetup();
+    startOSC();
+    try {
+		enableSpoutBroadcast(this.g);
+	} catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
+			| IllegalAccessException | ClassNotFoundException | InstantiationException e) {
+		e.printStackTrace();
+	}
 
     // Add constraints
 

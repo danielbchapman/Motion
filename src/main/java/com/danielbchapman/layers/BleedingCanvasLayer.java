@@ -35,9 +35,9 @@ public class BleedingCanvasLayer extends Layer
     {
       g.background(0);
       try{
-        PImage image = engine.loadImage("show/OneLeaf.PNG");
-        image.filter(PConstants.INVERT);
-        g.image(image, 100, 50, 600, 600);
+       // PImage image = engine.loadImage("show/OneLeaf.PNG");
+//        image.filter(PConstants.INVERT);
+//        g.image(image, 100, 50, 600, 600);
       }
       catch(Throwable t)
       {
