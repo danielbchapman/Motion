@@ -16,7 +16,7 @@ public abstract class Layer
 {
   protected Point[] points;
   protected PApplet applet;
-  protected MotionEngine engine;
+  public MotionEngine engine;
   protected SaveableBrush brush;
   /**
    * @param points the objects to draw
@@ -24,6 +24,14 @@ public abstract class Layer
   public Layer()
   {
     points = init();
+  }
+  /**
+   * Return the name for this layer (unique) to be controlled by OSC
+   * @return by default this returns the class name.
+   */
+  public String getName()
+  {
+    return this.getClass().getName();
   }
   
   public abstract Point[] init();

@@ -8,10 +8,10 @@ import processing.core.PGraphics;
 
 public class GridLayer extends Layer
 {
-  int gridX;
-  int gridY;
-  int spacing;
-  Line[] lines;
+  public int gridX;
+  public int gridY;
+  public int spacing;
+  public Line[] lines;
   
   public GridLayer()
   {

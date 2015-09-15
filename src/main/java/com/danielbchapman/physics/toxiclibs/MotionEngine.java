@@ -15,6 +15,8 @@ import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import shows.troubledwater.CourtesanLayer;
 import shows.troubledwater.RainLayer;
+import shows.troubledwater.RestLayer;
+import shows.troubledwater.Scene5Grid;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
@@ -174,28 +176,36 @@ public class MotionEngine extends PApplet
 				else
 				{
 					String command = (String) args.get(0);
-					if(!"advance".equalsIgnoreCase(command))
+					if("advance".equalsIgnoreCase(command))
 					{
-						System.out.println("UNKNOWN COMMAND " + command);
+					  if(args.size() < 2)
+					  {
+					    advanceScene();
+					  }
+					  else
+					  {
+					    try
+					    {
+					      String name = (String) args.get(1);
+					      advanceSceneTo(name);
+					    }
+					    catch(Throwable t)
+					    {
+					      System.out.println("Unable to process scene name: " + args.get(1));
+					    }
+					  }
 						return;
 					}
-					else if (!"play".equalsIgnoreCase(command))
+					else if ("play".equalsIgnoreCase(command))
 					{
 						System.out.println("Play...");
 						playCapture();
 					}
-					try
+					else
 					{
-						String x = (String) args.get(1);
-						System.out.println("Find the layer here!");
-						advanceScene();
-						return;
+            System.out.println("UNKNOWN COMMAND " + command);
+            return;
 					}
-					catch (Throwable t)
-					{
-						advanceScene();
-					}
-					advanceScene();
 				}
 			}
 		};
@@ -391,6 +401,51 @@ public class MotionEngine extends PApplet
     physics.clear();
     activeBehaviors.clear();
   }
+  
+  public synchronized void advanceSceneTo(String name)
+  {
+    layers.clear();
+    playbacks.clear(); //STOP PLAYBACKS
+    
+    clearPhysics();
+    
+    int index = -1;
+    
+    for(int i = 0; i < scenes.size(); i++)
+    {
+      Layer s = scenes.get(i);
+      if(s != null)
+      {
+        String layerName = s.getName();
+        if(layerName != null)
+        {
+          if(layerName.equalsIgnoreCase(name))
+          {
+            index = i;
+            break;
+          }
+        }
+      }
+    }
+    
+    if(index > -1)
+    {
+      sceneIndex = index;
+
+      System.out.println("Advancing to scene: " + sceneIndex);
+      
+      Layer tmp = scenes.get(sceneIndex);
+      if(tmp == null)
+      {
+        throw new RuntimeException("Layer was not found, simulation may crash");
+      }
+      layers.clear();//Remove all
+      add(tmp);
+    }
+    else
+      System.out.println("Unable to load scene '" + name + "' was not found.");
+  }
+  
   public synchronized void advanceScene()
   {
     layers.clear();
@@ -475,7 +530,9 @@ public class MotionEngine extends PApplet
     prepare.accept(mobolologyOne);
     prepare.accept(mobolologyTwo);
     prepare.accept(mobolologyThree);
+    prepare.accept(new Scene5Grid());
     prepare.accept(new BlackoutLayer());
+    prepare.accept(new RestLayer(this));//Blackout layer...
   }
   
 

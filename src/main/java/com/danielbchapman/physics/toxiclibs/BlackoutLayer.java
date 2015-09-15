@@ -28,4 +28,10 @@ public class BlackoutLayer extends Layer
   public void go(MotionEngine engine)
   { 
   }
+  
+  @Override
+  public String getName()
+  {
+    return this.getClass().getName();
+  }
 }

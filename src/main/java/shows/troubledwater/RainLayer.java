@@ -74,4 +74,10 @@ public class RainLayer extends BleedingCanvasLayer
       e.printStackTrace();
     }
   }
+  
+  @Override
+  public String getName()
+  {
+    return "RainLayer";
+  }
 }
