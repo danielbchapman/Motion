@@ -179,6 +179,11 @@ public class MotionEngine extends PApplet
 						System.out.println("UNKNOWN COMMAND " + command);
 						return;
 					}
+					else if (!"play".equalsIgnoreCase(command))
+					{
+						System.out.println("Play...");
+						playCapture();
+					}
 					try
 					{
 						String x = (String) args.get(1);
@@ -461,7 +466,8 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
-    prepare.accept(new BleedingCanvasLayer(this));
+    prepare.accept(new BleedingCanvasLayer(this)); //Motion Sketches
+    prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
     prepare.accept(rainLayer);
     prepare.accept(courteseanLayer);
     prepare.accept(new SpriteLayer(this));
@@ -515,7 +521,8 @@ public class MotionEngine extends PApplet
     if (event.getKey() == 's')
     {
       System.out.println("Splitting words...");
-      words.randomSplits(physics);
+      if(words != null)
+    	  words.randomSplits(physics);
     }
 
     if (event.getKey() == 'S')
@@ -723,14 +730,8 @@ public class MotionEngine extends PApplet
 
     if (event.getKey() == 't')
     {
-      if (!capture.isEmpty())
-      {
+    	playCapture();
 
-        Playback p = Recorder.playback(capture, null, this);
-        playbacks.clear();
-        playbacks.add(p);
-        p.start();
-      }
     }
     
     if(event.getKey() == 'b')
@@ -782,7 +783,20 @@ public class MotionEngine extends PApplet
     }
 
   }
+/**
+ * Play back the last captured recording.
+ */
+  public void playCapture()
+  {
+      if (!capture.isEmpty())
+      {
 
+        Playback p = Recorder.playback(capture, null, this);
+        playbacks.clear();
+        playbacks.add(p);
+        p.start();
+      }
+  }
   public void mouseDraggedFromDraw(int x, int y)
   {
     if (Mode.SUCK_FORCE == mode)
@@ -1042,3 +1056,4 @@ public class MotionEngine extends PApplet
     brush = b;
   }
 }
+	
