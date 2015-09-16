@@ -18,7 +18,8 @@ public abstract class Emitter<T extends Point>
   protected long lastTime = -1L;
   protected long nextDelta = -1L;
   @Getter
-  @Setter 
+  @Setter
+  public 
   VerletPhysics3D physics = Actions.engine.getPhysics();
   
   public Emitter(Vec3D position, Vec3D heading, int lifeSpan, int rate, float randomVector, int randomTime)
