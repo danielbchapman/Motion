@@ -16,27 +16,13 @@ import processing.core.PImage;
 import toxi.geom.Vec3D;
 
 
-//FIXME DOCUMENT THIS IN WHAT FIELDS ARE USED
+//FIXME DOCUMENT THIS IN WHAT FIELDS ARE USED and make this editable
 public class ImageBrush extends VectorBrush
 {
   public boolean isFadingBrush = true;
   public boolean isVariableBrush = true;
-  static final Map<String, String> FIELD_NAMES;
-  static {
-    HashMap<String, String> m = new HashMap<>();
-    m.put(PersistentVariables.Fields.MAGNITUDE, "Magniture");
-    m.put(PersistentVariables.Fields.MAX_FORCE, "Max Force");
-    m.put(PersistentVariables.Fields.MIN_FORCE, "Min Force");
-    m.put(PersistentVariables.Fields.POS_X, "Position");
-    m.put(PersistentVariables.Fields.POS_Y, "Position");
-    m.put(PersistentVariables.Fields.POS_Z, "Position");
-    m.put(PersistentVariables.Fields.FOR_X, "Force");
-    m.put(PersistentVariables.Fields.FOR_Y, "Force");
-    m.put(PersistentVariables.Fields.FOR_Z, "Force");
-    m.put(PersistentVariables.Fields.USER_C, "Image");
-    
-    FIELD_NAMES = Collections.unmodifiableMap(m);
-  }
+  
+  public String brushFileName = "core/brushes/images/soft-messy.png";
   
   public ImageBrush()
   {
@@ -65,7 +51,7 @@ public class ImageBrush extends VectorBrush
   {
     if(loadedImage == null)
     {
-      loadedImage = Actions.engine.loadImage("core/brushes/images/soft-messy.png");
+      loadedImage = Actions.engine.loadImage(brushFileName);
     }
     
     g.pushMatrix();

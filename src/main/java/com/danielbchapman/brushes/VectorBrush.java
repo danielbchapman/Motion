@@ -1,6 +1,11 @@
 package com.danielbchapman.brushes;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
+import com.danielbchapman.physics.toxiclibs.PersistentVariables;
 import com.danielbchapman.physics.toxiclibs.Util;
 
 import lombok.Getter;
@@ -10,6 +15,23 @@ import toxi.geom.Vec3D;
 
 public abstract class VectorBrush extends SaveableBrush
 {
+  static final Map<String, String> FIELD_NAMES;
+  static {
+    HashMap<String, String> m = new HashMap<>();
+    m.put(PersistentVariables.Fields.MAGNITUDE, "Magniture");
+    m.put(PersistentVariables.Fields.MAX_FORCE, "Max Force");
+    m.put(PersistentVariables.Fields.MIN_FORCE, "Min Force");
+    m.put(PersistentVariables.Fields.POS_X, "Position");
+    m.put(PersistentVariables.Fields.POS_Y, "Position");
+    m.put(PersistentVariables.Fields.POS_Z, "Position");
+    m.put(PersistentVariables.Fields.FOR_X, "Force");
+    m.put(PersistentVariables.Fields.FOR_Y, "Force");
+    m.put(PersistentVariables.Fields.FOR_Z, "Force");
+    m.put(PersistentVariables.Fields.USER_C, "Image");
+    
+    FIELD_NAMES = Collections.unmodifiableMap(m);
+  }
+  
   float splitSize = 2f;
   boolean idle = false;
   @Getter
@@ -142,10 +164,15 @@ public abstract class VectorBrush extends SaveableBrush
     return "Vector Brush";
   } 
   
-
-@Override
-public MotionInteractiveBehavior copy() {
-	// TODO Auto-generated method stub
-	return null;
-}
+  @Override
+  public MotionInteractiveBehavior copy() {
+  	// TODO Auto-generated method stub
+  	return null;
+  }
+  
+  @Override
+  public Map<String, String> getFieldNames()
+  {
+    return FIELD_NAMES;
+  }
 }

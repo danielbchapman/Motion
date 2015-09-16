@@ -24,7 +24,10 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 import com.danielbchapman.artwork.Word;
 import com.danielbchapman.brushes.EllipseBrush;
 import com.danielbchapman.brushes.IBrush;
+import com.danielbchapman.brushes.ImageBrush;
+import com.danielbchapman.brushes.ImageBrushRound;
 import com.danielbchapman.brushes.SaveableBrush;
+import com.danielbchapman.brushes.SmallBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.physics.kinect.KinectTracker;
@@ -332,7 +335,7 @@ public class MotionEngine extends PApplet
        
     }
     
-    if(enableSpout)
+    if(enableSpout && false)
     {
     	if(Platform.isWindows() || Platform.isWindowsCE())
     	{
@@ -637,16 +640,22 @@ public class MotionEngine extends PApplet
 
     if (event.getKey() == '8')
     {
-      mode = Mode.SUCK_FORCE;
-      sucker.vars.magnitude = -100f;
-      sucker.setJitter(0f);
+      mode = Mode.BRUSH_PALLET;
+      brush = new SmallBrush();
     }
 
+ // Animation tests
+    if (event.getKey() == '9')
+    {
+      mode = Mode.BRUSH_PALLET;
+      brush = new ImageBrushRound();
+    }
+    
     // Animation tests
     if (event.getKey() == '0')
     {
       mode = Mode.BRUSH_PALLET;
-      brush = new EllipseBrush();
+      brush = new ImageBrush();
     }
 
     if (event.getKey() == 'd')

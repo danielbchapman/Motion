@@ -18,23 +18,6 @@ import com.danielbchapman.physics.toxiclibs.PersistentVariables;
  */
 public abstract class SaveableBrush extends MotionInteractiveBehavior implements IBrush
 {
-  static final Map<String, String> FIELD_NAMES;
-  static
-  {
-    HashMap<String, String> m = new HashMap<>();
-    m.put(PersistentVariables.Fields.MAGNITUDE, "Magniture");
-    m.put(PersistentVariables.Fields.MAX_FORCE, "Max Force");
-    m.put(PersistentVariables.Fields.MIN_FORCE, "Min Force");
-    m.put(PersistentVariables.Fields.POS_X, "Position");
-    m.put(PersistentVariables.Fields.POS_Y, "Position");
-    m.put(PersistentVariables.Fields.POS_Z, "Position");
-    m.put(PersistentVariables.Fields.FOR_X, "Force");
-    m.put(PersistentVariables.Fields.FOR_Y, "Force");
-    m.put(PersistentVariables.Fields.FOR_Z, "Force");
-
-    FIELD_NAMES = Collections.unmodifiableMap(m);
-  }
-
   // Volatile variables
   @Getter
   protected boolean drawing = false;
@@ -68,12 +51,6 @@ public abstract class SaveableBrush extends MotionInteractiveBehavior implements
   public void configure(float timeStep)
   {
     vars.timeStep = timeStep;
-  }
-
-  @Override
-  public Map<String, String> getFieldNames()
-  {
-    return FIELD_NAMES;
   }
 
   @Override
