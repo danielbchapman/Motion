@@ -1,8 +1,8 @@
 package shows.troubledwater;
 
-import com.danielbchapman.physics.toxiclibs.GridLayer;
+import com.danielbchapman.physics.toxiclibs.LetterGrid;
 
-public class Scene5Grid extends GridLayer
+public class Scene5Grid extends LetterGrid
 {
   TWCueStack stack;
   

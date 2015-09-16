@@ -160,23 +160,25 @@ public class MotionEngine extends PApplet
 						for(int i = 0; i < args.size(); i++)
 							System.out.println(i + " -> " + args.get(i));
 				}
-				else if (args.size() == 3)//Cue
-				{
-					String command = (String)args.get(0);
-					String layer = (String)args.get(1);
-					Integer cue = (Integer)args.get(2);
-					System.out.println("Args: " + args);
-					if(args != null)
-						for(int i = 0; i < args.size(); i++)
-							System.out.println(i + " -> " + args.get(i));
-					
-					if(activeLayer != null)
-					 activeLayer.go(MotionEngine.this);
-				}
 				else
 				{
 					String command = (String) args.get(0);
-					if("advance".equalsIgnoreCase(command))
+					if("go".equalsIgnoreCase(command))
+					{
+						System.out.println("FIRING GO");
+						try
+						{
+							Integer cue = (Integer)args.get(1);
+							if(activeLayer != null)
+							 activeLayer.go(MotionEngine.this);		
+						}
+						catch (Throwable t)
+						{
+							t.printStackTrace();
+							System.out.println("Unable to fire cue!");
+						}
+					}
+					else if("advance".equalsIgnoreCase(command))
 					{
 					  if(args.size() < 2)
 					  {
