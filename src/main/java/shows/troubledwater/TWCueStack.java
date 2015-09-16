@@ -12,6 +12,7 @@ import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.CueStack;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
+import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 
 public abstract class TWCueStack extends CueStack
 {
@@ -93,6 +94,24 @@ public abstract class TWCueStack extends CueStack
   public Cue load(String file, String brushFile)
   {
     return Actions.loadRecording(new File(file), new File(brushFile));
+  }
+  
+  public Cue load(int x, int y, int w, int h, String label, String file, MotionInteractiveBehavior brush, Action... post)
+  {
+    ArrayList<Action> acts = Actions.loadRecordingAsAction(x, y, w, h, new File(file), brush);
+    if(post != null)
+      for(Action a : post)
+        acts.add(a);
+    return cue(label, acts);
+  }
+  
+  public Cue load(String label, String file, MotionInteractiveBehavior brush, Action ... post)
+  {
+    ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), brush);
+    if(post != null)
+      for(Action a : post)
+        acts.add(a);
+    return cue(label, acts);
   }
   
   public Cue load(String label, String file, String brushFile, Action ... post)

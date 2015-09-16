@@ -143,11 +143,23 @@ public class Actions
   
   public static ArrayList<Action> loadRecordingAsAction(File recording, File brush)
   {
-    ArrayList<Action> actions = new ArrayList<>();
     MotionInteractiveBehavior instance = MotionInteractiveBehavior.load(brush);
-    ArrayList<RecordAction> brushInstance = Recorder.load(recording.getAbsolutePath(), WIDTH, HEIGHT, 0, 0);
+    return loadRecordingAsAction(recording, instance);
+  
+  }
+  
+  public static ArrayList<Action> loadRecordingAsAction(File recording, MotionInteractiveBehavior brush)
+  {
+    return loadRecordingAsAction(0, 0, WIDTH, HEIGHT, recording, brush);
+  }
+  
+  public static ArrayList<Action> loadRecordingAsAction(int x, int y, int w, int h, File recording, MotionInteractiveBehavior brush)
+  {
+    ArrayList<RecordAction> brushInstance = Recorder.load(recording.getAbsolutePath(), w, h, x, y);
     
-    Playback p = new Playback("Playback from: " + recording.getName(), brushInstance, instance);
+    ArrayList<Action> actions = new ArrayList<>();
+  
+    Playback p = new Playback("Playback from: " + recording.getName(), brushInstance, brush);
     actions.add(new Action("Playback", 0, 
         null,
         (e)->
@@ -156,7 +168,7 @@ public class Actions
         } 
         ));
    
-    return actions;
+    return actions;  
   }
   
   public static Cue loadRecording(File recording, File brush){

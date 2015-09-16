@@ -14,7 +14,9 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import shows.troubledwater.CourtesanLayer;
+import shows.troubledwater.Prologue;
 import shows.troubledwater.RainLayer;
+import shows.troubledwater.RecordingLayer;
 import shows.troubledwater.RestLayer;
 import shows.troubledwater.Scene5Grid;
 import toxi.geom.Vec3D;
@@ -22,20 +24,17 @@ import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 import com.danielbchapman.artwork.Word;
-import com.danielbchapman.brushes.EllipseBrush;
-import com.danielbchapman.brushes.IBrush;
 import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.brushes.ImageBrushRound;
 import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.brushes.SmallBrush;
+import com.danielbchapman.brushes.TinyBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.logging.Log;
-import com.danielbchapman.physics.kinect.KinectTracker;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
 import com.danielbchapman.physics.ui.SceneController;
 import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
-import com.illposed.osc.OSCPort;
 import com.illposed.osc.OSCPortIn;
 import com.sun.jna.Platform;
 
@@ -526,7 +525,8 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
-    prepare.accept(new BleedingCanvasLayer(this)); //Motion Sketches
+    prepare.accept(new RecordingLayer(this)); //Motion Sketches
+    prepare.accept(new Prologue(this));
     prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
     prepare.accept(rainLayer);
     prepare.accept(courteseanLayer);
@@ -633,9 +633,8 @@ public class MotionEngine extends PApplet
 
     if (event.getKey() == '7')
     {
-      mode = Mode.SUCK_FORCE;
-      sucker.vars.magnitude = 100f;
-      sucker.setJitter(0f);
+      mode = Mode.BRUSH_PALLET;
+      brush = new TinyBrush();
     }
 
     if (event.getKey() == '8')
