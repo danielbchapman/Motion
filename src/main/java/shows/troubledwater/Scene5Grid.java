@@ -1,6 +1,7 @@
 package shows.troubledwater;
 
-import com.danielbchapman.physics.toxiclibs.Action;
+import java.io.File;
+
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.LetterGrid;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -19,15 +20,27 @@ public class Scene5Grid extends LetterGrid
       public void load()
       {
         add(
-        		cue("Load Grid"),
-        		cue("Start Sine Waves", Actions.lfoOn),
-        		cue("FIRE SHATTERING LINES")
+        		cue("Load Grid", 
+        				Actions.dragTo(0.1133f),
+        				Actions.loadEnvironment(new File("show/scene5/shatter-environment.env"))
+        			),
+        		cue("Start Sine Waves", 
+        				Actions.lfoOn),
+        		load("SHATTER",
+        				"show/scene5/shatter",
+        				"show/scene5/shatter-brush",
+        				Actions.homeOff,
+        				Actions.dragToNone,
+        				Actions.homeLinearOff
+        				)
         		//Load Grid
         		//Start Sine Waves
         		//Shatter Cues
             );
       }
     };
+    
+    stack.load();
   }
   
   public void go(MotionEngine engine)
