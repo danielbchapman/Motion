@@ -121,6 +121,17 @@ public class Actions
         home.vars.maxForce = 10f;
       });
   
+  
+  public static Action lfoOn = new Action("LFO ON", 0, null, 
+	      (x)->{
+	    	  engine.startOscillation();
+	      });
+  
+  public static Action lfoOff = new Action("Home to 2f", 0, null, 
+	      (x)->{
+	    	  engine.stopOscillation();
+	      });
+  
   public static Action loadBrush(File file){
     return new Action("Brush: " + file.getName(), 0, null,
       (x)->{

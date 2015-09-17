@@ -5,10 +5,10 @@ import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
-public class Prologue extends PaintingLayer
+public class OneLeafEnd extends PaintingLayer
 {
 
-  public Prologue(MotionEngine engine)
+  public OneLeafEnd(MotionEngine engine)
   {
     super(engine);
     stack.load();
@@ -17,7 +17,7 @@ public class Prologue extends PaintingLayer
   @Override
   public String getSpecificName()
   {
-    return "Prologue";
+    return "OneLeafEnd";
   }
   
   public void go(MotionEngine engine)
@@ -45,24 +45,13 @@ public class Prologue extends PaintingLayer
               -300, 0, 800, 600,
             "One",
             "show/prologue/leaf-1",
-            pen),
+            pen, Actions.follow(3000)),
           load(
               -250, 0, 800, 600,
               "Leaf",
               "show/prologue/leaf-2",
-              pen, Actions.follow(3000))     
-      );
-      
-      add(
-          load("One",
-            "show/prologue/leaf-1",
-            pen,
-            Actions.follow(3000)),
-          load("Leaf",
-              "show/prologue/leaf-2",
               pen)     
       );
-      
     }
     
   }

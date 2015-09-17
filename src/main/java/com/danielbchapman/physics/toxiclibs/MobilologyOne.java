@@ -413,4 +413,9 @@ public class MobilologyOne extends Layer
     for(Emitter<?> e : emitters)
       e.update(time);
   }
+  
+  public String getName()
+  {
+    return "mobile1";  
+  }
 }

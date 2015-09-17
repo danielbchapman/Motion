@@ -8,22 +8,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-import lombok.Getter;
-import lombok.Setter;
-import processing.core.PApplet;
-import processing.core.PGraphics;
-import processing.event.KeyEvent;
-import shows.troubledwater.CourtesanLayer;
-import shows.troubledwater.Prologue;
-import shows.troubledwater.RainLayer;
-import shows.troubledwater.RecordingLayer;
-import shows.troubledwater.RestLayer;
-import shows.troubledwater.Scene5Grid;
-import shows.troubledwater.Scene7;
-import toxi.geom.Vec3D;
-import toxi.physics3d.VerletPhysics3D;
-import toxi.physics3d.behaviors.ParticleBehavior3D;
-
 import com.danielbchapman.artwork.Word;
 import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.brushes.ImageBrushRound;
@@ -38,6 +22,26 @@ import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
 import com.sun.jna.Platform;
+
+import lombok.Getter;
+import lombok.Setter;
+import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.event.KeyEvent;
+import shows.troubledwater.CourtesanLayer;
+import shows.troubledwater.FinalLayer;
+import shows.troubledwater.HeroLayer;
+import shows.troubledwater.OneLeafEnd;
+import shows.troubledwater.Prologue;
+import shows.troubledwater.RainLayer;
+import shows.troubledwater.RecordingLayer;
+import shows.troubledwater.RestLayer;
+import shows.troubledwater.Scene3;
+import shows.troubledwater.Scene5Grid;
+import shows.troubledwater.Scene7;
+import toxi.geom.Vec3D;
+import toxi.physics3d.VerletPhysics3D;
+import toxi.physics3d.behaviors.ParticleBehavior3D;
 
 @SuppressWarnings("unused")
 public class MotionEngine extends PApplet
@@ -335,7 +339,7 @@ public class MotionEngine extends PApplet
        
     }
     
-    if(enableSpout && false)
+    if(enableSpout)
     {
     	if(Platform.isWindows() || Platform.isWindowsCE())
     	{
@@ -529,7 +533,9 @@ public class MotionEngine extends PApplet
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
     prepare.accept(new Prologue(this));
     prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
+    prepare.accept(new Scene3(this));
     prepare.accept(new Scene7());
+    prepare.accept(new HeroLayer(this));
     prepare.accept(rainLayer);
     prepare.accept(courteseanLayer);
     prepare.accept(new SpriteLayer(this));
@@ -537,8 +543,9 @@ public class MotionEngine extends PApplet
     prepare.accept(mobolologyOne);
     prepare.accept(mobolologyTwo);
     prepare.accept(mobolologyThree);
+    prepare.accept(new FinalLayer());
     prepare.accept(new Scene5Grid());
-    prepare.accept(new BlackoutLayer());
+    prepare.accept(new OneLeafEnd(this));
     prepare.accept(new RestLayer(this));//Blackout layer...
   }
   
@@ -1123,6 +1130,20 @@ public class MotionEngine extends PApplet
   {
     mode = Mode.BRUSH_PALLET;
     brush = b;
+  }
+  
+  public void stopOscillation()
+  {
+	osc.setEnabled(false);
+	physics.removeBehavior(osc);
+    System.out.println("Turning off 20hz Wave");
+  }
+  
+  public void startOscillation()
+  {
+	  osc.setEnabled(true);
+	  physics.addBehavior(osc);
+	  System.out.println("Turning on 20hz Wave");  
   }
 }
 	

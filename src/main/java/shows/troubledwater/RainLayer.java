@@ -19,6 +19,7 @@ public class RainLayer extends BleedingCanvasLayer
 
   boolean first = true;
   ArrayList<RainEmitter> rain;
+  TWCueStack stack;
 
   ArrayList<BrushPoint> list = new ArrayList<>();
   
@@ -31,6 +32,30 @@ public class RainLayer extends BleedingCanvasLayer
 	  rain.add(new RainEmitter(this, new Vec3D(-100, 150, 0), Vec3D.randomVector(), 20000, 1000, 2f, 2000));
 	  rain.add(new RainEmitter(this, new Vec3D(600, 75, 0), Vec3D.randomVector(), 10000, 1000, 2f, 3000));
     
+	  if(stack == null)
+	  {
+		  stack = 
+				  new TWCueStack(this)
+				  {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void load() {
+						add(
+								//basic rain
+								//Harder rain
+								//freeze rain, stop bleeding away
+								//76 Start the rain allow bleeding and stop again
+								//82 a large brush runs over the stage--stop the bleeding
+								//85 start an actual bleed effect on the rain --per processing
+								);
+					}
+			  
+				  };
+				  
+				  stack.load();
+	  }
+	  
     return new Point[0];
   }
 
