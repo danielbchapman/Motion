@@ -6,14 +6,14 @@ import com.danielbchapman.brushes.SaveableBrush;
 
 import processing.core.PGraphics;
 
-public class LetterGrid extends Layer
+public class SquareGrid extends Layer
 {
   public int gridX;
   public int gridY;
   public int spacing;
   public Line[] lines;
   
-  public LetterGrid()
+  public SquareGrid()
   {
   }
   
@@ -54,23 +54,6 @@ public class LetterGrid extends Layer
       lines[i+gridY] = line;
     }
     
-    for(int i = 0; i < lines.length; i++)
-      System.out.println(lines[i]);
-    
-    try
-    {
-      Thread.sleep(200);
-    }
-    catch (InterruptedException e)
-    {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    
-    for(int i = 0 ; i < lines.length; i++)
-    {
-      System.out.println("Line from -> " + lines[i].points[0] + " to " + lines[i].points[lines[i].points.length -1]);
-    }
     return grid;
   }
 

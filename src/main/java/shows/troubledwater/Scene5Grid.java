@@ -3,10 +3,10 @@ package shows.troubledwater;
 import java.io.File;
 
 import com.danielbchapman.physics.toxiclibs.Actions;
-import com.danielbchapman.physics.toxiclibs.LetterGrid;
+import com.danielbchapman.physics.toxiclibs.SquareGrid;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
-public class Scene5Grid extends LetterGrid
+public class Scene5Grid extends SquareGrid
 {
   TWCueStack stack;
   

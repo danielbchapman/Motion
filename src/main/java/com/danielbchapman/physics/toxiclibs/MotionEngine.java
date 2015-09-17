@@ -507,15 +507,15 @@ public class MotionEngine extends PApplet
     /*
      * Mobilology Dance Piece
      */
-    mobolologyOne = new MobilologyOne();
+//    mobolologyOne = new MobilologyOne();
 //    add(mobolologyOne);
 //    activeLayer = mobolologyOne;
     
-    mobolologyTwo = new MobilologyTwo();
+//    mobolologyTwo = new MobilologyTwo();
 //    add(mobolologyTwo);
 //    activeLayer = mobolologyTwo;
     
-    mobolologyThree = new MobilologyThree();
+//    mobolologyThree = new MobilologyThree();
 //    add(mobolologyThree);
 //    activeLayer = mobolologyThree;
     
@@ -530,6 +530,7 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
+    prepare.accept(new HeroLayer(this));
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
     prepare.accept(new Prologue(this));
     prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
@@ -538,11 +539,11 @@ public class MotionEngine extends PApplet
     prepare.accept(new HeroLayer(this));
     prepare.accept(rainLayer);
     prepare.accept(courteseanLayer);
-    prepare.accept(new SpriteLayer(this));
+    //prepare.accept(new SpriteLayer(this));
     //prepare.accept(new KinectTracker(this));
-    prepare.accept(mobolologyOne);
-    prepare.accept(mobolologyTwo);
-    prepare.accept(mobolologyThree);
+    //prepare.accept(mobolologyOne);
+    //prepare.accept(mobolologyTwo);
+    //prepare.accept(mobolologyThree);
     prepare.accept(new FinalLayer());
     prepare.accept(new Scene5Grid());
     prepare.accept(new OneLeafEnd(this));
