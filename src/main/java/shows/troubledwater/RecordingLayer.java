@@ -41,6 +41,9 @@ public class RecordingLayer extends Layer
           {
             "show/one-leaf-draw.png",
             "show/HeroPoem.png",
+            "show/hero2.png",
+            "show/hero22.png",
+            "show/hero23.png",
             "show/Hero-1.jpeg",
             "show/Hero-2.jpeg",
             "show/Hero-3.jpeg",
