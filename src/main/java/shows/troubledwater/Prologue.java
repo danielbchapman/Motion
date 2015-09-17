@@ -1,6 +1,5 @@
 package shows.troubledwater;
 
-import com.danielbchapman.brushes.SmallRoundBrush;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -38,11 +37,11 @@ public class Prologue extends PaintingLayer
     @Override
     public void load()
     {
-    	SmallRoundBrush pen = new SmallRoundBrush();
+    	CharacterBrush pen = new CharacterBrush();
       
 //      add(
 //          load(
-//              -300, 0, 800, 600,
+//              -300, 0, 800, 600,  
 //            "One",
 //            "show/prologue/leaf-1",
 //            pen),

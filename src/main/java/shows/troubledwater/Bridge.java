@@ -62,7 +62,7 @@ public class Bridge extends BleedingCanvasLayer
 								load("Water and Chaos on the Bridge",
 										"show/bridge/shake-a-sheet",
 										brush,
-										startBleed()),
+										startBleed())
 								);
 					}
 			
