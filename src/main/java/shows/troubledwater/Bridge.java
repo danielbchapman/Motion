@@ -27,6 +27,7 @@ public class Bridge extends BleedingCanvasLayer
 										"show/bridge/shake-a-sheet",
 										brush,
 										startBleed()),
+										
 								cue("Freeze the water",
 										stopBleed(),
 										Actions.follow(700)),
@@ -47,8 +48,12 @@ public class Bridge extends BleedingCanvasLayer
 								load("Slash 3",
 										"show/bridge/slash-3",
 										brush,
-										stopBleed()
+										Actions.follow(1000)
 										),
+								cue("AF: Stop Bleeding",
+								    stopBleed()
+								    ),
+								    
 								//Do wee need this?
 								cue("Stop Playback", Actions.stopPlayback()),
 								

@@ -986,13 +986,13 @@ public class MotionEngine extends PApplet
   {
     if (activeBehaviors.contains(behavior))
       return false;
-    System.out.println("Adding Behavior: " + behavior);
+//    System.out.println("Adding Behavior: " + behavior);
     physics.addBehavior(behavior);
     if (behavior instanceof SaveableParticleBehavior3D)
     {
-      System.out.println("Marking behavior as running: " + behavior);
+//      System.out.println("Marking behavior as running: " + behavior);
       ((SaveableParticleBehavior3D<?>) behavior).setRunning(true);
-      System.out.println(((SaveableParticleBehavior3D<?>) behavior).vars.running);
+//      System.out.println(((SaveableParticleBehavior3D<?>) behavior).vars.running);
     }
 
     activeBehaviors.add(behavior);
@@ -1002,8 +1002,8 @@ public class MotionEngine extends PApplet
   public void removeBehavior(ParticleBehavior3D behavior)
   {
     physics.removeBehavior(behavior);
-    if (activeBehaviors.remove(behavior))
-      System.out.println("Removing Behavior: " + behavior);
+//    if (activeBehaviors.remove(behavior))
+//      System.out.println("Removing Behavior: " + behavior);
 
     if (behavior instanceof SaveableParticleBehavior3D)
     {
