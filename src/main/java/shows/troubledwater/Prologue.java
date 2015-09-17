@@ -39,28 +39,28 @@ public class Prologue extends PaintingLayer
     {
     	CharacterBrush pen = new CharacterBrush();
       
-//      add(
-//          load(
-//              -300, 0, 800, 600,  
-//            "One",
-//            "show/prologue/leaf-1",
-//            pen),
-//          load(
-//              -250, 0, 800, 600,
-//              "Leaf",
-//              "show/prologue/leaf-2",
-//              pen, Actions.follow(3000))     
-//      );
-      
       add(
-          load("One",
+          load(
+              40, 0, 533, 400,  
+            "One",
             "show/prologue/leaf-1",
-            pen,
-            Actions.follow(3000)),
-          load("Leaf",
+            pen),
+          load(
+              40, -25, 533, 533,
+              "Leaf",
               "show/prologue/leaf-2",
-              pen)     
+              pen, Actions.follow(3000))     
       );
+      
+//      add(
+//          load("One",
+//            "show/prologue/leaf-1",
+//            pen,
+//            Actions.follow(3000)),
+//          load("Leaf",
+//              "show/prologue/leaf-2",
+//              pen)     
+//      );
       
     }
     
