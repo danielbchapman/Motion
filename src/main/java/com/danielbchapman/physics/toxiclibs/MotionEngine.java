@@ -667,11 +667,6 @@ public class MotionEngine extends PApplet
       brush = new ImageBrush();
     }
 
-    if (event.getKey() == 'd')
-    {
-      gridFly.debugXAxis();
-    }
-
     if (event.getKey() == 'z')
     {
       clearPlaybacks();

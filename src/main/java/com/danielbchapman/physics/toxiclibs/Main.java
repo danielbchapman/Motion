@@ -72,6 +72,7 @@ public class Main
     MAIN_CONTAINER.add(ENGINE, BorderLayout.CENTER);
     ENGINE.init();
     MAIN_CONTAINER.setVisible(true);
+    MAIN_CONTAINER.setSize(800, 601);//FORCE REFRESH
     //PApplet.main(MotionEngine.class.getName());
   }
 }
