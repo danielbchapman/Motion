@@ -42,6 +42,21 @@ public class RainLayer extends BleedingCanvasLayer
 					@Override
 					public void load() {
 						add(
+//							cue("Rain Falls",
+//								null,
+//								Actions.dragTo(0.5f),
+//								Actions.gravity.setGravity(new Vec3D(.45f, .85f, 0))
+//							),
+//							cue("Harder Rain",
+//									null,
+//									Actions.dragTo(0f),
+//									Actions.follow(500)
+//									),
+//							cue("Freeze Paint")
+//								.addAction(new Action());
+//							
+//								
+//								cue("Basic Rain--do nothing");
 								//basic rain
 								//Harder rain
 								//freeze rain, stop bleeding away
@@ -106,3 +121,4 @@ public class RainLayer extends BleedingCanvasLayer
     return "RainLayer";
   }
 }
+

@@ -28,6 +28,7 @@ import lombok.Setter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
+import shows.troubledwater.Bridge;
 import shows.troubledwater.CourtesanLayer;
 import shows.troubledwater.FinalLayer;
 import shows.troubledwater.HeroLayer;
@@ -36,7 +37,6 @@ import shows.troubledwater.Prologue;
 import shows.troubledwater.RainLayer;
 import shows.troubledwater.RecordingLayer;
 import shows.troubledwater.RestLayer;
-import shows.troubledwater.Scene3;
 import shows.troubledwater.Scene5Grid;
 import shows.troubledwater.Scene7;
 import toxi.geom.Vec3D;
@@ -533,7 +533,7 @@ public class MotionEngine extends PApplet
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
     prepare.accept(new Prologue(this));
     prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
-    prepare.accept(new Scene3(this));
+    prepare.accept(new Bridge(this));
     prepare.accept(new Scene7());
     prepare.accept(new HeroLayer(this));
     prepare.accept(rainLayer);
