@@ -94,6 +94,27 @@ public class Actions
         });
   }
   
+  public static Action gravityTo(float x)
+  {
+    return new Action("Gravity Scaling to " + x,
+        0,
+        null,
+        (e)->{Actions.gravity.updateMagnitude(x);}
+        );
+    
+  }
+  public static Action gravityTo(Vec3D dir)
+  {
+    return new Action("Gravity to" + dir,
+        0,
+        null,
+        (x)->
+        {
+          Actions.gravity.setGravity(dir);
+        }
+        );
+  }
+  
   public static Action dragTo(float f)
   {
     return new Action("Drag to " + f, 0, null, 

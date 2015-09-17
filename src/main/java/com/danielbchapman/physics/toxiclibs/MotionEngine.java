@@ -467,12 +467,12 @@ public class MotionEngine extends PApplet
     else
       sceneIndex++;
     
-    System.out.println("Advancing to scene: " + sceneIndex);
     Layer tmp = scenes.get(sceneIndex);
     if(tmp == null)
     {
       throw new RuntimeException("Layer was not found, simulation may crash");
     }
+    System.out.println("Advancing to scene [" + sceneIndex + "] " + tmp.getName());
     layers.clear();//Remove all
     add(tmp);
   }
