@@ -28,6 +28,7 @@ import lombok.Setter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
+import shows.shekillsmonsters.BeholderPuppet;
 import shows.troubledwater.Bridge;
 import shows.troubledwater.CourtesanLayer;
 import shows.troubledwater.FinalLayer;
@@ -339,7 +340,7 @@ public class MotionEngine extends PApplet
        
     }
     
-    if(enableSpout)
+    if(enableSpout &&false)
     {
     	if(Platform.isWindows() || Platform.isWindowsCE())
     	{
@@ -530,22 +531,23 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
+    prepare.accept(new BeholderPuppet());
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
-    prepare.accept(new Prologue(this));
-    prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
-    prepare.accept(new Bridge(this));
-    prepare.accept(new Scene7());
-    prepare.accept(new HeroLayer(this));
-    prepare.accept(rainLayer);
-    prepare.accept(courteseanLayer);
-    prepare.accept(new SpriteLayer(this));
-    //prepare.accept(new KinectTracker(this));
-    prepare.accept(mobolologyOne);
-    prepare.accept(mobolologyTwo);
-    prepare.accept(mobolologyThree);
-    prepare.accept(new FinalLayer());
-    prepare.accept(new Scene5Grid());
-    prepare.accept(new OneLeafEnd(this));
+//    prepare.accept(new Prologue(this));
+//    prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
+//    prepare.accept(new Bridge(this));
+//    prepare.accept(new Scene7());
+//    prepare.accept(new HeroLayer(this));
+//    prepare.accept(rainLayer);
+//    prepare.accept(courteseanLayer);
+//    prepare.accept(new SpriteLayer(this));
+//    //prepare.accept(new KinectTracker(this));
+//    prepare.accept(mobolologyOne);
+//    prepare.accept(mobolologyTwo);
+//    prepare.accept(mobolologyThree);
+//    prepare.accept(new FinalLayer());
+//    prepare.accept(new Scene5Grid());
+//    prepare.accept(new OneLeafEnd(this));
     prepare.accept(new RestLayer(this));//Blackout layer...
   }
   
