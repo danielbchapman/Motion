@@ -176,6 +176,11 @@ public class Actions
   public static ArrayList<Action> loadRecordingAsAction(File recording, File brush)
   {
     MotionInteractiveBehavior instance = MotionInteractiveBehavior.load(brush);
+    if(instance == null)
+    {
+    	System.out.println("[ERROR] unable to load recording:'" + recording + "' brush:'" + brush + "'");
+    	return new ArrayList<Action>();
+    }
     return loadRecordingAsAction(recording, instance);
   
   }

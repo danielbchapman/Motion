@@ -54,7 +54,12 @@ public class Recorder
     ArrayList<RecordAction> results = new ArrayList<>();
 
     ArrayList<String> lines = FileUtil.readLines(file);
-
+    if(lines == null)
+    {
+    	System.out.println("[ERROR] unable to load file:'" + file + "'");
+    	return results;
+    }
+    	
     for (String s : lines)
     {
       RecordAction tmp = RecordAction.fromFloatFormat(s, w, h); 

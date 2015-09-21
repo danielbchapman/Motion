@@ -99,6 +99,11 @@ public abstract class MotionInteractiveBehavior implements ParticleBehavior3D
   @SuppressWarnings("unchecked")
   public static <T extends MotionInteractiveBehavior> MotionInteractiveBehavior load(String data)
   {
+	  if(data == null)
+	  {
+		  System.out.println("Unabel to load behavior with null data: ");
+		  return null;
+	  }
     Class<T> clazz = null;
     String[] lines = data.split("\n");
     
