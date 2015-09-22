@@ -105,7 +105,7 @@ public class BeholderPuppet extends Layer
     Vec3D from = new Vec3D(mX, 0, mY-zOffset);
     viewFrom(g,  from, new Vec3D(beholder.x, beholder.y, 0));
     //g.shape(mainEye);
-    g.shape(mainEye);
+    g.rect(0, 0, 50,50);
     g.shape(axes);
     g.popMatrix();
   }
