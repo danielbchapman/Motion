@@ -1,15 +1,10 @@
 package com.danielbchapman.brushes;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.Getter;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
 
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
-import com.danielbchapman.physics.toxiclibs.PersistentVariables;
 
 /**
  * A simple implementation of the String Serialize pattern that

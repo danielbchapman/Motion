@@ -306,7 +306,7 @@ public class MotionEngine extends PApplet
         g.popMatrix();
       }
 
-    // Framerate
+    // Frame-rate
     pushMatrix();
     translate(0, 0, 50);
     noStroke();
@@ -345,17 +345,17 @@ public class MotionEngine extends PApplet
     	if(Platform.isWindows() || Platform.isWindowsCE())
     	{
     		if(spout != null)
-        	{
-        	  try
-	            {
-	              spoutSend.invoke(spout);
-	            }
-	            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-	            {
-	              // TODO Auto-generated catch block
-	              e.printStackTrace();
-	            }	
-        	}
+      	{
+      	  try
+          {
+            spoutSend.invoke(spout);
+          }
+          catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+          {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }	
+      	}
     	}
     	else if (Platform.isMac())
     	{
