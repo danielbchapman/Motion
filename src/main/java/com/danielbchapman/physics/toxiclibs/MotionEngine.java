@@ -346,7 +346,6 @@ public class MotionEngine extends PApplet
     	{
     		if(spout != null)
         	{
-        	  System.err.println("Spout called...");
         	  try
 	            {
 	              spoutSend.invoke(spout);
