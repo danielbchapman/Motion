@@ -43,4 +43,9 @@ public class HealingSpellLayer extends SpriteLayer
 		x.go(this,  engine);
 		
 	}
+	
+	public String getName()
+	{
+		return "HealingSpell";
+	}
 }
