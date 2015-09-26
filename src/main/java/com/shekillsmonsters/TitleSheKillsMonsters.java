@@ -23,9 +23,9 @@ public class TitleSheKillsMonsters extends BleedingCanvasLayer
 			public void load()
 			{
 				CharacterBrush pen = new CharacterBrush();
-
-				add(load(40, 0, 533, 400, "One", "show/prologue/leaf-1", pen),
-						load(40, -25, 533, 533, "Leaf", "show/prologue/leaf-2", pen, Actions.follow(3000)));
+				
+//				add(load(40, 0, 533, 400, "One", "show/prologue/leaf-1", pen),
+//						load(40, -25, 533, 533, "Leaf", "show/prologue/leaf-2", pen, Actions.follow(3000)));
 			}
 		};
 

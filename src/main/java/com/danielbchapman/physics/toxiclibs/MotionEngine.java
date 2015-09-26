@@ -21,6 +21,9 @@ import com.danielbchapman.physics.ui.SceneController;
 import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
+import com.shekillsmonsters.HealingSpellLayer;
+import com.shekillsmonsters.MagicMissleLayer;
+import com.shekillsmonsters.TitleSheKillsMonsters;
 import com.sun.jna.Platform;
 
 import lombok.Getter;
@@ -530,23 +533,26 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
-    prepare.accept(new HeroLayer(this));
+//    prepare.accept(new HeroLayer(this));
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
-    prepare.accept(new Prologue(this));
-    prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
-    prepare.accept(new Bridge(this));
-    prepare.accept(new Scene7());
-    prepare.accept(new HeroLayer(this));
-    prepare.accept(rainLayer);
-    prepare.accept(courteseanLayer);
+    prepare.accept(new TitleSheKillsMonsters(this));
+    prepare.accept(new MagicMissleLayer(this));
+    prepare.accept(new HealingSpellLayer(this));
+//    prepare.accept(new Prologue(this));
+//    prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
+//    prepare.accept(new Bridge(this));
+//    prepare.accept(new Scene7());
+//    prepare.accept(new HeroLayer(this));
+//    prepare.accept(rainLayer);
+//    prepare.accept(courteseanLayer);
     //prepare.accept(new SpriteLayer(this));
     //prepare.accept(new KinectTracker(this));
     //prepare.accept(mobolologyOne);
     //prepare.accept(mobolologyTwo);
     //prepare.accept(mobolologyThree);
-    prepare.accept(new FinalLayer());
-    prepare.accept(new Scene5Grid());
-    prepare.accept(new OneLeafEnd(this));
+//    prepare.accept(new FinalLayer());
+//    prepare.accept(new Scene5Grid());
+//    prepare.accept(new OneLeafEnd(this));
     prepare.accept(new RestLayer(this));//Blackout layer...
   }
   
