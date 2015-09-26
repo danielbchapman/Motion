@@ -17,7 +17,7 @@ public class HealingSpellLayer extends SpriteLayer
 	public HealingSpellLayer(PApplet app)
 	{
 		super(app);
-		super.image = app.loadImage("test/sprite/sprite-light.png");
+		super.image = app.loadImage("test/sprite/white.png");
 	    quad = app.createShape();
 	    quad.beginShape();
 	    quad.noFill();
