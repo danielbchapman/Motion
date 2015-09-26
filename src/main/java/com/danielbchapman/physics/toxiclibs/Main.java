@@ -74,17 +74,17 @@ public class Main
     ENGINE.init();
     MAIN_CONTAINER.setVisible(true);
     //
-    SwingUtilities.invokeLater(
-    		new Runnable()
-    		{
-
-				@Override
-				public void run() 
-				{
-					MAIN_CONTAINER.setSize(1280, 721);	
-				}
-			}
-    		);
+//    SwingUtilities.invokeLater(
+//    		new Runnable()
+//    		{
+//
+//				@Override
+//				public void run() 
+//				{
+//					MAIN_CONTAINER.setSize(1280, 721);	
+//				}
+//			}
+//    		);
     //MAIN_CONTAINER.setSize(1280, 721);//FORCE REFRESH
     //PApplet.main(MotionEngine.class.getName());
   }
