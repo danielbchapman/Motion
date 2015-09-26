@@ -4,6 +4,7 @@ import shows.troubledwater.CharacterBrush;
 import shows.troubledwater.PaintingLayer;
 import shows.troubledwater.TWCueStack;
 
+import com.danielbchapman.brushes.ImageBrushRound;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -41,38 +42,43 @@ public class TilliusWWE extends PaintingLayer
     @Override
     public void load()
     {
-    	CharacterBrush pen = new CharacterBrush();
+    	CharacterNameBrush pen = new CharacterNameBrush();
       
       add(
-          load(  
-            "T",
-            "show/scene4/tillius/t",
-            pen),
-          load(
-              "Leaf",
-              "show/scene4/tillius/i",
-              pen),
-              
-          load(
-	          "Leaf",
-	          "show/scene4/tillius/l1",
-	          pen),
-          load(
-              "Leaf",
-              "show/scene4/tillius/l2",
-              pen),
-          load(
-              "Leaf",
-              "show/scene4/tillius/i2",
-              pen),
-          load(
-              "Leaf",
-              "show/scene4/tillius/u",
-              pen),
-          load(
-              "Leaf",
-              "show/scene4/tillius/s",
-              pen)
+    		  load(  
+    	            "fullname",
+    	            "show/scene4/tillius/tillius-full",
+    	            pen)
+    		  
+//          load(  
+//            "T",
+//            "show/scene4/tillius/t",
+//            pen),
+//          load(
+//              "Leaf",
+//              "show/scene4/tillius/i",
+//              pen),
+//              
+//          load(
+//	          "Leaf",
+//	          "show/scene4/tillius/l1",
+//	          pen),
+//          load(
+//              "Leaf",
+//              "show/scene4/tillius/l2",
+//              pen),
+//          load(
+//              "Leaf",
+//              "show/scene4/tillius/i2",
+//              pen),
+//          load(
+//              "Leaf",
+//              "show/scene4/tillius/u",
+//              pen),
+//          load(
+//              "Leaf",
+//              "show/scene4/tillius/s",
+//              pen)
       );     
     }
     
