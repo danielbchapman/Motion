@@ -33,9 +33,9 @@ public class TitleSheKillsMonsters extends BleedingCanvasLayer
 	}
 
 	@Override
-	public String getSpecificName()
+	public String getName()
 	{
-		return "Prologue";
+		return "SheKillsMonstersTitle";
 	}
 
 	public void go(MotionEngine engine)
