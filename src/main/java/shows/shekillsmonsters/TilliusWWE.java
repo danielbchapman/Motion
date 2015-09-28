@@ -1,4 +1,4 @@
-package com.shekillsmonsters;
+package shows.shekillsmonsters;
 
 import shows.troubledwater.CharacterBrush;
 import shows.troubledwater.PaintingLayer;

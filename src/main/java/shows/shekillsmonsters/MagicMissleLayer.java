@@ -1,4 +1,4 @@
-package com.shekillsmonsters;
+package shows.shekillsmonsters;
 
 import processing.core.PApplet;
 import shows.troubledwater.TWCueStack;

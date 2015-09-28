@@ -1,4 +1,4 @@
-package com.shekillsmonsters;
+package shows.shekillsmonsters;
 
 import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
