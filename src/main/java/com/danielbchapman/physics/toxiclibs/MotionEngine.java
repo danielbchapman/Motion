@@ -28,6 +28,7 @@ import lombok.Setter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
+import shows.shekillsmonsters.BeholderPuppet;
 import shows.shekillsmonsters.HealingSpellLayer;
 import shows.shekillsmonsters.MagicMissleLayer;
 import shows.shekillsmonsters.SpinningSquares;
@@ -542,6 +543,7 @@ public class MotionEngine extends PApplet
     prepare.accept(new HealingSpellLayer(this));
     prepare.accept(new TilliusWWE(this));
     prepare.accept(new SpinningSquares(Actions.WIDTH, Actions.HEIGHT));
+    prepare.accept(new BeholderPuppet());
     prepare.accept(rainLayer);
 //    prepare.accept(new Prologue(this));
 //    prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
