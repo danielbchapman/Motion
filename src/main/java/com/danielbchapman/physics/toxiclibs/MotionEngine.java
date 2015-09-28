@@ -23,6 +23,7 @@ import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
 import com.shekillsmonsters.HealingSpellLayer;
 import com.shekillsmonsters.MagicMissleLayer;
+import com.shekillsmonsters.SpinningSquares;
 import com.shekillsmonsters.TilliusWWE;
 import com.shekillsmonsters.TitleSheKillsMonsters;
 import com.sun.jna.Platform;
@@ -540,6 +541,8 @@ public class MotionEngine extends PApplet
     prepare.accept(new MagicMissleLayer(this));
     prepare.accept(new HealingSpellLayer(this));
     prepare.accept(new TilliusWWE(this));
+    prepare.accept(new SpinningSquares(Actions.WIDTH, Actions.HEIGHT));
+    prepare.accept(rainLayer);
 //    prepare.accept(new Prologue(this));
 //    prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
 //    prepare.accept(new Bridge(this));
