@@ -71,8 +71,11 @@ There is no fee for using Motion in your production. I simply ask that you credi
 Project History
 ---------------
 **In performance...**
+
 *Mobilology*, Western Illinois University, choreography by Candace Winters-March
+
 *Troubled Water*, Guerilla Opera, directed by Allegra Libonati
+
 *She Kills Monsters*, Western Illinois University, directed by D.C.Wright
 
 **In words...**
