@@ -9,3 +9,6 @@
 /show/
 /.settings/
 /environment/
+*.classpath
+Java/VideoNetwork/.project
+*.prefs
