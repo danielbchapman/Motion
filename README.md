@@ -1,6 +1,12 @@
 #Motion
 ***Motion***: a framework for kinetic projections inspired originally by the fantastic work of Adrien M / Claire B http://www.am-cb.net/ and relentless risk-taking with Candace Winters-March.
 
+###Installation Guide
+https://github.com/danielbchapman/Motion/wiki/Building-Motion
+
+###Wiki
+https://github.com/danielbchapman/Motion/wiki/
+
 What is Motion?
 ---------------
 Motion is a piece of software built over toxiclibs and Processing that provides a framework for kinetic (responsive) projections for use in live performance and installation art. Motion combines a physics engine and rendering engine in an accessible cross platform framework with an accessible open-source license. 
