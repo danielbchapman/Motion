@@ -29,6 +29,11 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import shows.shekillsmonsters.BeholderPuppet;
+import shows.shekillsmonsters.HealingSpellLayer;
+import shows.shekillsmonsters.MagicMissleLayer;
+import shows.shekillsmonsters.SpinningSquares;
+import shows.shekillsmonsters.TilliusWWE;
+import shows.shekillsmonsters.TitleSheKillsMonsters;
 import shows.troubledwater.Bridge;
 import shows.troubledwater.CourtesanLayer;
 import shows.troubledwater.FinalLayer;
@@ -530,8 +535,15 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
-    prepare.accept(new BeholderPuppet());
+//    prepare.accept(new HeroLayer(this));
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
+    prepare.accept(new TitleSheKillsMonsters(this));
+    prepare.accept(new MagicMissleLayer(this));
+    prepare.accept(new HealingSpellLayer(this));
+    prepare.accept(new TilliusWWE(this));
+    prepare.accept(new SpinningSquares(Actions.WIDTH, Actions.HEIGHT));
+    prepare.accept(new BeholderPuppet());
+    prepare.accept(rainLayer);
 //    prepare.accept(new Prologue(this));
 //    prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
 //    prepare.accept(new Bridge(this));
@@ -539,11 +551,11 @@ public class MotionEngine extends PApplet
 //    prepare.accept(new HeroLayer(this));
 //    prepare.accept(rainLayer);
 //    prepare.accept(courteseanLayer);
-//    prepare.accept(new SpriteLayer(this));
-//    //prepare.accept(new KinectTracker(this));
-//    prepare.accept(mobolologyOne);
-//    prepare.accept(mobolologyTwo);
-//    prepare.accept(mobolologyThree);
+    //prepare.accept(new SpriteLayer(this));
+    //prepare.accept(new KinectTracker(this));
+    //prepare.accept(mobolologyOne);
+    //prepare.accept(mobolologyTwo);
+    //prepare.accept(mobolologyThree);
 //    prepare.accept(new FinalLayer());
 //    prepare.accept(new Scene5Grid());
 //    prepare.accept(new OneLeafEnd(this));

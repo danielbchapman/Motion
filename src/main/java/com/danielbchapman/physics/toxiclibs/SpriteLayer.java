@@ -13,8 +13,8 @@ import processing.opengl.PGraphicsOpenGL;
 public class SpriteLayer extends Layer
 {
 
-  PImage image; 
-  PShape quad;
+  public PImage image; 
+  public PShape quad;
   public SpriteLayer(PApplet app)
   {
     image = app.loadImage("test/sprite/sprite.png");

@@ -5,6 +5,7 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -72,7 +73,19 @@ public class Main
     MAIN_CONTAINER.add(ENGINE, BorderLayout.CENTER);
     ENGINE.init();
     MAIN_CONTAINER.setVisible(true);
-    MAIN_CONTAINER.setSize(800, 601);//FORCE REFRESH
+    //
+//    SwingUtilities.invokeLater(
+//    		new Runnable()
+//    		{
+//
+//				@Override
+//				public void run() 
+//				{
+//					MAIN_CONTAINER.setSize(1280, 721);	
+//				}
+//			}
+//    		);
+    //MAIN_CONTAINER.setSize(1280, 721);//FORCE REFRESH
     //PApplet.main(MotionEngine.class.getName());
   }
 }

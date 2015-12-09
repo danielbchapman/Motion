@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
@@ -164,7 +165,8 @@ public class RainLayer extends BleedingCanvasLayer
     {
       g.fill(0,0,0, 2);
       g.stroke(0,0,0, 2);
-      g.rect(0, 0, this.engine.getWidth(), this.engine.getHeight());
+      g.rectMode(PConstants.CORNER);
+      g.rect(0, 0, Actions.WIDTH, Actions.HEIGHT);
         
     }
     
