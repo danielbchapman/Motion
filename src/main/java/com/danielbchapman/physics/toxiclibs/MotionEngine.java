@@ -1057,23 +1057,33 @@ public class MotionEngine extends PApplet
   }
   
   public void enableSpoutBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException, ClassNotFoundException, InstantiationException
-  {
-	if(Platform.isMac() && syphonOrSpout == null && !enableSpout)
-	{
-		//We do this to avoid native library initialization 
-		Class<?> syphonClass = Class.forName("com.danielbchapman.physics.toxiclibs.SyphonGraphicsShare");
-		shareInitialize = syphonClass.getMethod("initialize", PApplet.class);
-		shareCleanup = syphonClass.getMethod("cleanup");
-		shareDraw = syphonClass.getMethod("send", PGraphics.class);
+  {  
+	 try
+	 {
+		if(Platform.isMac() && syphonOrSpout == null && !enableSpout)
+		{
+			//We do this to avoid native library initialization 
+			Class<?> syphonClass = Class.forName("com.danielbchapman.physics.toxiclibs.SyphonGraphicsShare");
+			shareInitialize = syphonClass.getMethod("initialize", PApplet.class);
+			shareCleanup = syphonClass.getMethod("cleanup");
+			shareDraw = syphonClass.getMethod("send", PGraphics.class);
+			
+			syphonOrSpout = (IGraphicShare) syphonClass.newInstance();
+			shareInitialize.invoke(syphonOrSpout, this);
+			enableSpout = true;
+			return;
+		}
 		
-		syphonOrSpout = (IGraphicShare) syphonClass.newInstance();
-		shareInitialize.invoke(syphonOrSpout, this);
-		enableSpout = true;
-		return;
-	}
-    if(Platform.isWindows() || Platform.isWindowsCE())
-      enableSpout = true;
-    
+	    if(Platform.isWindows() || Platform.isWindowsCE())
+	      enableSpout = true;
+	 }
+	 catch (Throwable t)
+	 {
+		 t.printStackTrace();
+		 enableSpout = false;
+		 return;
+	 }
+	
     if(spout == null && enableSpout)
     {
       try
@@ -1087,6 +1097,7 @@ public class MotionEngine extends PApplet
       catch (ClassNotFoundException | IllegalAccessException e)
       {
         Log.LOG.log(Level.SEVERE, "Unable to initialize Spout\r\n", e);
+        enableSpout = false;
       }
 
       if(spout != null)
