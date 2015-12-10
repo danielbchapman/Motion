@@ -78,7 +78,7 @@
 		<dependency>
 			<groupId>com.danielbchapman.data</groupId>
 			<artifactId>groups</artifactId>
-			<version>1.0.0</version>
+			<version>1.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.danielbchapman</groupId>
@@ -122,6 +122,7 @@
 	        <version>2.1.1</version>
 	        <systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath>
 	    </dependency>
+	    <!--
 	    <dependency>
 			<groupId>Syphon</groupId>
 			<artifactId>natives</artifactId>
@@ -136,6 +137,7 @@
 	        <version>1.0.0</version>
 	        <systemPath>${basedir}/lib/jsyphon.jar</systemPath>
 	    </dependency>
+	     -->
 	</dependencies>
   <build>
     <plugins>
