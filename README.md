@@ -11,7 +11,7 @@ What is Motion?
 ---------------
 Motion is a piece of software built over toxiclibs and Processing that provides a framework for kinetic (responsive) projections for use in live performance and installation art. Motion combines a physics engine and rendering engine in an accessible cross platform framework with an accessible open-source license. 
 
-How to I use Motion?
+How do I use Motion?
 --------------------
 
 Download and compile the source! You’ll need access to a couple other projects, most notably toxiclibs and Processing. Due to the nature of Maven (and my shear laziness) there is a bit of manual configuration required to get it up and running. Just send me an e-mail chapman@danielbchapman.com and I’ll be happy to walk you through it.
