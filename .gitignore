@@ -14,3 +14,4 @@ Processing/motion/lib
 /.settings/
 /environment/
 .settings
+settings.properties
