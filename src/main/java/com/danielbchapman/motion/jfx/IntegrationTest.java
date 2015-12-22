@@ -127,7 +127,7 @@ public class IntegrationTest extends Application
         
         createAction("about", "about-description", (x)->
         {
-          this.showInformationDialog(msg("help-title"), "help-description");
+          this.showInformationDialog(msg("help-title"), msg("help-description"));
         }).asMenuItem()
         );
     
