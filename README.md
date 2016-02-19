@@ -46,7 +46,7 @@ At the moment: ***probably***. Here's an example of a cue stack:
 
 **Damn!** 
 
-Will I always need to be a programmer. 
+Will I always need to be a programmer?
 
 ***No.*** 
 
