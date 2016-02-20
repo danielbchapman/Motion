@@ -9,8 +9,34 @@
 
 	<!-- Windows 32 bit for the natives please adjust as needed -->
 	<dependencies>
-		<!-- Dependencies via Daniel B. Chapman (GPL) http://www.github.com/danielbchapman-->
+		<!-- Toxiclibs Fork via Maven https://bitbucket.org/danielbchapman/toxiclibs -->
+		<dependency>
+			<groupId>org.toxiclibs</groupId>
+			<artifactId>core</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 		
+		<dependency>
+			<groupId>org.toxiclibs</groupId>
+			<artifactId>physics</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- Dependencies via Daniel B. Chapman (GPL) http://www.github.com/danielbchapman-->
+		<dependency>
+			<groupId>com.danielbchapman.data</groupId>
+			<artifactId>groups</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.danielbchapman</groupId>
+			<artifactId>utilities</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.2</version>
+		</dependency>
 		
 		<!-- Processing Dependencies -->
 		<dependency>
@@ -74,23 +100,7 @@
 	        <version>1.0</version>
 	        <systemPath>${basedir}/lib/SimpleOpenNI.jar</systemPath>
 	    </dependency>
-	    -->
-		<dependency>
-			<groupId>com.danielbchapman.data</groupId>
-			<artifactId>groups</artifactId>
-			<version>1.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.danielbchapman</groupId>
-			<artifactId>utilities</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.16.2</version>
-		</dependency>
-		
+	    -->		
 		<!-- WIN 32  
 	    <dependency>
 			<groupId>jogl-all</groupId>
@@ -107,7 +117,7 @@
 	        <systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
 	    </dependency>
 		-->
-		<!-- MAC OSX 64 **Currently a bug in the JDK 8 for Mac preventing OpenGL from loading 3D -->
+		<!-- MAC OSX 64 
 		<dependency>
 			<groupId>gluegen-rt</groupId>
 			<artifactId>natives</artifactId>
@@ -122,6 +132,7 @@
 	        <version>2.1.1</version>
 	        <systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath>
 	    </dependency>
+	     -->
 	    <!--
 	    <dependency>
 			<groupId>Syphon</groupId>
