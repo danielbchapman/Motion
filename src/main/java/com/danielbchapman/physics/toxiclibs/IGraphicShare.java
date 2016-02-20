@@ -2,7 +2,6 @@ package com.danielbchapman.physics.toxiclibs;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PImage;
 
 /**
  * A simple interface that could be used for Syphon or Spout or something

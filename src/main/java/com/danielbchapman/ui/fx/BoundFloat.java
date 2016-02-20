@@ -1,13 +1,7 @@
 package com.danielbchapman.ui.fx;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.function.Consumer;
-
-
-
-
-import com.danielbchapman.utility.Utility;
 
 import javafx.scene.control.TextField;
 import lombok.Getter;

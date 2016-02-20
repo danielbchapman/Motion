@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
-import com.danielbchapman.brushes.EllipseBrush;
-import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;

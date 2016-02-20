@@ -6,14 +6,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import com.danielbchapman.utility.FileUtil;
+import com.danielbchapman.utility.Utility;
 
 @Data
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@SuppressWarnings("PlaybackCue and Cue structure makes no sense, probably this is a bad heirarchy.")
 public class PlaybackCue extends Cue
 {
   String brushFile;
   String motionFile;
   String label;
+  @SuppressWarnings("Why is this variable here?")
   Cue cue;
   MotionInteractiveBehavior brush;
   ArrayList<RecordAction> actions;
@@ -57,4 +60,35 @@ public class PlaybackCue extends Cue
     return ret;
   }
 
+  /** 
+   * OVERRIDE
+   * This checks the persistent data for the structure and compares that. The
+   * Volatile data is not compared (list of actions)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  public boolean equals(Object o)
+  {
+    if(o == null)
+      return false;
+    
+    if(!(o instanceof PlaybackCue ))
+      return false;
+    
+    PlaybackCue other = (PlaybackCue) o;
+    
+    int ret = Utility.compareToNullSafe(brushFile, other.brushFile); 
+    if(ret != 0)
+      return false;
+    
+    ret = Utility.compareToNullSafe(motionFile, other.motionFile); 
+    if(ret != 0)
+      return false;
+    
+    ret = Utility.compareToNullSafe(label, other.label); 
+    if(ret != 0)
+      return false;
+
+    
+    return true;
+  }
 }

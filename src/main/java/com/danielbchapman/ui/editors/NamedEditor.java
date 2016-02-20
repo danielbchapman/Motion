@@ -1,7 +1,5 @@
 package com.danielbchapman.ui.editors;
 
-import java.util.function.Consumer;
-
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;

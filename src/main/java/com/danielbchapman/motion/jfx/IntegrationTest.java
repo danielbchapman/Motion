@@ -6,6 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.SeparatorMenuItem;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -15,12 +19,6 @@ import com.danielbchapman.application.Application;
 import com.danielbchapman.groups.Group;
 import com.danielbchapman.groups.Groups;
 import com.danielbchapman.groups.Groups.GroupFormatException;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.SeparatorMenuItem;
 
 public class IntegrationTest extends Application
 {

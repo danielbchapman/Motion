@@ -2,8 +2,6 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.util.Random;
 
-import com.danielbchapman.brushes.SaveableBrush;
-
 import processing.core.PGraphics;
 
 public class SquareGrid extends Layer
@@ -63,7 +61,6 @@ public class SquareGrid extends Layer
   @Override
   public void render(PGraphics g)
   {
-	  char[] characters = new char[26];
     g.background(0); //black
     g.strokeWeight(2f);
     g.stroke(255);

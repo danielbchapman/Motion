@@ -1,11 +1,9 @@
 package shows.shekillsmonsters;
 
-import javafx.beans.property.SimpleObjectProperty;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PShape;
-import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
 import com.danielbchapman.artwork.Shapes;

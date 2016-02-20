@@ -1,6 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +12,7 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 import toxi.physics3d.constraints.ParticleConstraint3D;
 
 @Data
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper=true)
 public class Point extends VerletParticle3D
 {

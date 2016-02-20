@@ -53,8 +53,6 @@ public class RainLayer extends BleedingCanvasLayer
 		  stack = 
 				  new TWCueStack(this)
 				  {
-  					private static final long serialVersionUID = 1L;
-  					
   					@Override
   					public void load() {
   					  ImageBrush brush = new ImageBrush();

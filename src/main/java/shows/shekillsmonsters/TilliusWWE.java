@@ -1,11 +1,8 @@
 package shows.shekillsmonsters;
 
-import shows.troubledwater.CharacterBrush;
 import shows.troubledwater.PaintingLayer;
 import shows.troubledwater.TWCueStack;
 
-import com.danielbchapman.brushes.ImageBrushRound;
-import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
@@ -36,8 +33,6 @@ public class TilliusWWE extends PaintingLayer
     {
       super(layer);
     }
-
-    private static final long serialVersionUID = 1L;
 
     @Override
     public void load()

@@ -12,7 +12,7 @@ public class TestBundle
   public void testLoadSave() throws ClassNotFoundException
   //public static void main(String ... args) throws ClassNotFoundException
   {
-    throw new RuntimeException("TEST INVALID...");
+    //throw new RuntimeException("TEST INVALID...");
     //TOTALLY INVALID CODE NOW... use the Foethods...rceVariables m
 //    MotionBrush x = new MotionBrush();
 //    x.setBehaviorClass(ExplodeBehavior.class);

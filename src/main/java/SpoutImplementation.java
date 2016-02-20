@@ -169,9 +169,6 @@ public class SpoutImplementation implements ISpoutAPI
   @Override
   public PImage receiveTexture(PImage img)
   {
-
-    boolean bRet = true;
-
     // Quit if no server running
     if (memorymode < 0)
       return img;

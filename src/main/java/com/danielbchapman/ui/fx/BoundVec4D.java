@@ -4,7 +4,6 @@ import java.util.function.Consumer;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import lombok.Getter;
 import lombok.Setter;
 import toxi.geom.Vec4D;

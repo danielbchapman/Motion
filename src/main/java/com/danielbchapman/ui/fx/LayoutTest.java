@@ -1,12 +1,10 @@
 package com.danielbchapman.ui.fx;
 
-import java.util.function.Consumer;
-
-import toxi.geom.Vec4D;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import toxi.geom.Vec4D;
 
 public class LayoutTest extends Application
 {

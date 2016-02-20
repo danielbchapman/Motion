@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.physics.toxiclibs.Action;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Cue;
@@ -16,8 +15,6 @@ import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 
 public abstract class TWCueStack extends CueStack
 {
-  private static final long serialVersionUID = 1L;
-
   public TWCueStack(Layer layer)
   {
 //    String brush = "show/scene3/scene-3-paint";

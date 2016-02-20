@@ -17,7 +17,6 @@ public class Bridge extends BleedingCanvasLayer
 		super(engine);
 		stack = new TWCueStack(this)
 				{
-					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void load() {

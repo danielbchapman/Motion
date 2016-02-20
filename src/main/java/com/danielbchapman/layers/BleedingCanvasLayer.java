@@ -1,8 +1,6 @@
 package com.danielbchapman.layers;
 
-import processing.core.PConstants;
 import processing.core.PGraphics;
-import processing.core.PImage;
 
 import com.danielbchapman.brushes.EllipseBrush;
 import com.danielbchapman.brushes.ImageBrush;

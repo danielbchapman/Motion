@@ -18,8 +18,6 @@ public class Interlude2 extends PaintingLayer
       super(layer);
     }
 
-    private static final long serialVersionUID = 1L;
-
     @Override
     public void load()
     {

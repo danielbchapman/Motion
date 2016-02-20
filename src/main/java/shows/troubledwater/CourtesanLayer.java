@@ -53,12 +53,10 @@ public class CourtesanLayer extends BleedingCanvasLayer {
 	
 	public class Stack extends CueStack
 	{
-		private static final long serialVersionUID = 1L;
-		
 		public Stack()
 		{
 			String brush = "show/scene3/scene-3-paint";
-			CourtesanLayer.this.engine.brush = new ImageBrush();
+			MotionEngine.brush = new ImageBrush();
 			
 			add(
 				load("Stroke 1",

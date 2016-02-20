@@ -1,6 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import toxi.geom.Vec3D;
 import toxi.math.waves.SineWave;
 import toxi.physics3d.VerletParticle3D;
@@ -11,6 +12,7 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
  * An oscillator that works over the X Axis
  */
 @Data
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class FrequencyOscillationBehavior extends SineWave implements ParticleBehavior3D
 {
   PersistentVariables vars = new PersistentVariables();
