@@ -7,86 +7,72 @@
 	<name>Motion</name>
 	<description>A responsive environment based loosely on the standard model of physics.</description>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<!-- Windows 32 bit for the natives please adjust as needed -->
 	<dependencies>
-		<!-- Dependencies via Daniel B. Chapman (GPL) http://www.github.com/danielbchapman-->
-		
-		
+		<!-- Dependencies via Daniel B. Chapman (GPL) http://www.github.com/danielbchapman -->
+
+
 		<!-- Processing Dependencies -->
 		<dependency>
 			<groupId>processing</groupId>
 			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/core.jar</systemPath>
-	    </dependency>
-	    <dependency>
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/core.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>gluegen-rt</groupId>
 			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/gluegen-rt.jar</systemPath>
-	    </dependency>
-	    
-	    <!-- Toxilibs Dependencies -->
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/gluegen-rt.jar</systemPath>
+		</dependency>
+
+		<!-- Toxilibs Dependencies -->
 		<dependency>
-	    	<groupId>org.toxiclibs</groupId>
-	    	<artifactId>core</artifactId>
-	    	<version>1.0.0</version>
-	    </dependency>
-		<dependency>
-	    	<groupId>org.toxiclibs</groupId>
-	    	<artifactId>physics</artifactId>
-	    	<version>1.0.0</version>
-	    </dependency>
-	    
-	    <!-- 
-	    <dependency>
-			<groupId>gstreamer-java</groupId>
+			<groupId>org.toxiclibs</groupId>
 			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/gstreamer-java.jar</systemPath>
-	    </dependency>
-	    -->
-	    <dependency>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.toxiclibs</groupId>
+			<artifactId>physics</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>gstreamer-java</groupId> <artifactId>core</artifactId> 
+			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/gstreamer-java.jar</systemPath> 
+			</dependency> -->
+		<dependency>
 			<groupId>jna</groupId>
 			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/jna.jar</systemPath>
-	    </dependency>
- 		
-	    <dependency>
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/jna.jar</systemPath>
+		</dependency>
+
+		<dependency>
 			<groupId>jogl-all</groupId>
 			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/jogl-all.jar</systemPath>
-	    </dependency>
-	    
-	    <!-- OSC Library -->
-	    <dependency>
-	    	<groupId>com.illposed.osc</groupId>
-	    	<artifactId>javaosc-core</artifactId>
-	    	<version>0.3</version>
-	    </dependency>
-	    <!-- 
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/jogl-all.jar</systemPath>
+		</dependency>
+
+		<!-- OSC Library -->
 		<dependency>
-			<groupId>processing</groupId>
-			<artifactId>video</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/video.jar</systemPath>
-	    </dependency>
-   		<dependency>
-			<groupId>SimpleOni</groupId>
-			<artifactId>oni</artifactId>
-	        <scope>system</scope>
-	        <version>1.0</version>
-	        <systemPath>${basedir}/lib/SimpleOpenNI.jar</systemPath>
-	    </dependency>
-	    -->
+			<groupId>com.illposed.osc</groupId>
+			<artifactId>javaosc-core</artifactId>
+			<version>0.3</version>
+		</dependency>
+		<!-- <dependency> <groupId>processing</groupId> <artifactId>video</artifactId> 
+			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/video.jar</systemPath> 
+			</dependency> <dependency> <groupId>SimpleOni</groupId> <artifactId>oni</artifactId> 
+			<scope>system</scope> <version>1.0</version> <systemPath>${basedir}/lib/SimpleOpenNI.jar</systemPath> 
+			</dependency> -->
 		<dependency>
 			<groupId>com.danielbchapman.data</groupId>
 			<artifactId>groups</artifactId>
@@ -101,72 +87,126 @@
 			<groupId>com.danielbchapman</groupId>
 			<artifactId>fxapplication</artifactId>
 			<version>0.0.1</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.2</version>
 		</dependency>
-		
-		<!-- WIN 32 -->  
-	    <dependency>
+
+		<!-- WIN 32 -->
+		<dependency>
 			<groupId>jogl-all</groupId>
 			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
-	    </dependency>
-	    <dependency>
-			<groupId>gluegen-rt</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
-	    </dependency>
-		
-		<!-- MAC OSX 64 **Currently a bug in the JDK 8 for Mac preventing OpenGL from loading 3D 
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
+		</dependency>
 		<dependency>
 			<groupId>gluegen-rt</groupId>
 			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/gluegen-rt-natives-macosx-universal.jar</systemPath>
-	    </dependency>
-   	    <dependency>
-			<groupId>jogl-all</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath>
-	    </dependency>
-	    -->
-	    <!--
-	    <dependency>
-			<groupId>Syphon</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>1.0.0</version>
-	        <systemPath>${basedir}/lib/Syphon.jar</systemPath>
-	    </dependency>
-	    <dependency>
-			<groupId>jsyphon</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>1.0.0</version>
-	        <systemPath>${basedir}/lib/jsyphon.jar</systemPath>
-	    </dependency>
-	     -->
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
+		</dependency>
+
+		<!-- MAC OSX 64 **Currently a bug in the JDK 8 for Mac preventing OpenGL 
+			from loading 3D <dependency> <groupId>gluegen-rt</groupId> <artifactId>natives</artifactId> 
+			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/gluegen-rt-natives-macosx-universal.jar</systemPath> 
+			</dependency> <dependency> <groupId>jogl-all</groupId> <artifactId>natives</artifactId> 
+			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath> 
+			</dependency> -->
+		<!-- <dependency> <groupId>Syphon</groupId> <artifactId>natives</artifactId> 
+			<scope>system</scope> <version>1.0.0</version> <systemPath>${basedir}/lib/Syphon.jar</systemPath> 
+			</dependency> <dependency> <groupId>jsyphon</groupId> <artifactId>natives</artifactId> 
+			<scope>system</scope> <version>1.0.0</version> <systemPath>${basedir}/lib/jsyphon.jar</systemPath> 
+			</dependency> -->
 	</dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<id>copy-artwork</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+
+						<configuration>
+							<outputDirectory>${basedir}/core</outputDirectory>
+							<resources>
+								<resource>
+									<directory>/core</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-language</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+
+						<configuration>
+							<outputDirectory>${basedir}/language</outputDirectory>
+							<resources>
+								<resource>
+									<directory>/language</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<!-- This looks redundant, probably an aging library in the Application project... -->
+					<execution>
+						<id>copy-i1n8</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+
+						<configuration>
+							<outputDirectory>${basedir}/i1n8</outputDirectory>
+							<resources>
+								<resource>
+									<directory>/i1n8</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-sample-content</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+
+						<configuration>
+							<outputDirectory>${basedir}/content</outputDirectory>
+							<resources>
+								<resource>
+									<directory>/content</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>					
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
