@@ -18,7 +18,7 @@ public class TestLambdaLoader
     File tmp = new File(fileName);
     try
     {
-    //FIXME this needs a custom class loader
+    //FIXME this needs a custom class loader to work
       LambdaBrush brush = new LambdaBrush();
       brush.lambda = "(x)->{System.out.println(\"TEST\");};";
       brush.name = "TestBrushBeta";

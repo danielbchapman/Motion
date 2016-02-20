@@ -10,20 +10,20 @@ import lombok.Setter;
 /**
  * A simple extension of the Slider class that automatically updates when the value is changed.
  */
-public class BoundSlider extends Slider implements IBound
+public class BoundSlider extends Slider implements IBound<Float>
 {
   @Getter
   @Setter
-  private Consumer<Double> onUpdate;
+  private Consumer<Float> onUpdate;
   
   /**
-   * The cached value of the double
+   * The cached value of the Float
    */
   @Getter
-  private double cache;
+  private Float cache;
   
   /**
-   * Binds the slider to a listener (Consumer&lt;double&gt;) that fires
+   * Binds the slider to a listener (Consumer&lt;Float&gt;) that fires
    * whenever the value of this slider is not equal to the previous value
    * that was cached.
    * @param value
@@ -31,31 +31,33 @@ public class BoundSlider extends Slider implements IBound
    * @param max
    * @param onUpdate
    */
-  public BoundSlider(double value, double min, double max, Consumer<Double> onUpdate)
+  public BoundSlider(float value, float min, float max, Consumer<Float> onUpdate)
   {
     super(min, max, value);
     cache = value;
+    this.onUpdate = onUpdate;
     valueProperty().addListener(
         (observed, oldVal, newVal) -> 
         {
           if(onUpdate == null)
             return;
-          else 
-            set(newVal);
+          else
+            set(newVal.floatValue());
         } );
   }
   
   /* (non-Javadoc)
    * @see com.danielbchapman.ui.fx.IBound#set(java.lang.Number)
    */
-  public void set(Number number)
+  public void set(Float number)
   {
     if(number != null)
     {
-      double d = number.doubleValue();
+      Float d = number.floatValue();
       if(d != cache)
       {
-        cache = d;
+        this.setValue(number);
+        cache = (float) this.getValue();
         onUpdate.accept(cache);
       }
     }
@@ -64,8 +66,16 @@ public class BoundSlider extends Slider implements IBound
   /* (non-Javadoc)
    * @see com.danielbchapman.ui.fx.IBound#get()
    */
-  public double get()
+  public Float get()
   {
     return cache;
+  }
+  
+  /* (non-Javadoc)
+   * @see javafx.scene.Node#toString()
+   */
+  public String toString()
+  {
+    return super.toString() + " [" + cache + "]";
   }
 }

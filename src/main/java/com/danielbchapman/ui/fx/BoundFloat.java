@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 
 
+
 import com.danielbchapman.utility.Utility;
 
 import javafx.scene.control.TextField;
@@ -18,25 +19,25 @@ import lombok.Setter;
  * the decimal format as well as the 
  *
  */
-public class BoundDecimal extends TextField implements IBound
+public class BoundFloat extends TextField implements IBound<Float>
 {
   @Getter
   @Setter
-  private Consumer<Double> onUpdate;
-  private double cache;
+  private Consumer<Float> onUpdate;
+  private float cache;
   
   @Getter
   @Setter
   private DecimalFormat format;
   
-  public BoundDecimal(double val, Consumer<Double> onUpdate)
+  public BoundFloat(float val, Consumer<Float> onUpdate)
   {
     this(val, null, onUpdate);
   }
   
-  public BoundDecimal(double val, DecimalFormat df, Consumer<Double> onUpdate)
+  public BoundFloat(float val, DecimalFormat df, Consumer<Float> onUpdate)
   {
-    super(df == null ? Double.toString(val) : df.format(val));
+    super(df == null ? Float.toString(val) : df.format(val));
     if(df == null)
       this.format = new DecimalFormat("#.##");
     else
@@ -50,7 +51,8 @@ public class BoundDecimal extends TextField implements IBound
       {
         try
         {
-          double d = Double.parseDouble(newVal);
+          float f = Float.parseFloat(newVal);
+          set(f);
         }
         catch(NumberFormatException e)
         {
@@ -63,14 +65,14 @@ public class BoundDecimal extends TextField implements IBound
   /* (non-Javadoc)
    * @see com.danielbchapman.ui.fx.IBound#set(java.lang.Number)
    */
-  public void set(Number number)
+  public void set(Float number)
   {
     if(number != null)
     {
-      double d = number.doubleValue();
-      if(d != cache)
+      float f = number.floatValue();
+      if(f != cache)
       {
-        cache = d;
+        cache = f;
         onUpdate.accept(cache);
       }
     }
@@ -79,9 +81,16 @@ public class BoundDecimal extends TextField implements IBound
   /* (non-Javadoc)
    * @see com.danielbchapman.ui.fx.IBound#get()
    */
-  public double get()
+  public Float get()
   {
     return cache;
-  }
+  } 
   
+  /* (non-Javadoc)
+   * @see javafx.scene.Node#toString()
+   */
+  public String toString()
+  {
+    return super.toString() + " [" + cache + "]";
+  }
 }

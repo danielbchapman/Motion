@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  * different editors so that the software does not need to be rewritten 
  * when editors are updated.
  */
-public interface IBound
+public interface IBound<T>
 {
   
   /**
@@ -19,25 +19,25 @@ public interface IBound
    * (which is called when the object is updated).
    * 
    */
-  public Consumer<Double> getOnUpdate();
+  public Consumer<T> getOnUpdate();
   
   /**
    * Sets the listener for this object.
    * 
    * @param onUpdate   
    */
-  public void setOnUpdate(Consumer<Double> onUpdate);
+  public void setOnUpdate(Consumer<T> onUpdate);
   
   /**
    * Sets the value of this double to the number provided.
    * If null, no value is set.
-   * @param number The number to set this slider to.
+   * @param t The T to set this slider to.
    */
-  public void set(Number number);
+  public void set(T t);
   /**
    * Returns the current value of the slider.
    * @return 
    * 
    */
-  public double get();
+  public T get();
 }
