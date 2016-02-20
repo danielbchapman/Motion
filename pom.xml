@@ -130,8 +130,25 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<archive>
+
+          			</archive>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-jar-plugin</artifactId>
+			  <configuration>
+			    <archive>
+					<manifest>
+						<addClasspath>true</addClasspath>
+						<mainClass>com.danielbchapman.physics.toxiclibs.Main</mainClass>
+					</manifest>
+			    </archive>
+			  </configuration>
+			</plugin>	
+					
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
