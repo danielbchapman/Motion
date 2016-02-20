@@ -2,11 +2,14 @@ package com.danielbchapman.ui.fx;
 
 import java.util.function.Consumer;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import lombok.Getter;
 import lombok.Setter;
 import toxi.geom.Vec4D;
 
-public class BoundVec4D implements IBound<Vec4D>
+public class BoundVec4D extends GridPane implements IBound<Vec4D>
 {
   @Getter
   @Setter
@@ -31,36 +34,49 @@ public class BoundVec4D implements IBound<Vec4D>
    * @param def the default vector
    * @param onUpdate what to do on change
    */
-  public BoundVec4D(Vec4D def, Consumer<Vec4D> onUpdate)
+  public BoundVec4D(Vec4D v, Consumer<Vec4D> onUpdate)
   {
+    super();
     this.onUpdate = onUpdate;
-    x = new BoundFloat(def.x, 
+    vec = v == null ? new Vec4D(0, 0, 0, 1) : v;
+    x = new BoundFloat(v.x, 
         x -> 
         { 
           vec.x = x;
           fire();
         } );
     
-    y = new BoundFloat(def.y, 
+    y = new BoundFloat(v.y, 
         y -> 
         { 
           vec.y = y;
           fire();
         } );
     
-    z = new BoundFloat(def.z, 
+    z = new BoundFloat(v.z, 
         z -> 
         { 
           vec.z = z;
           fire();
         } );
     
-    w = new BoundFloat(def.w, 
+    w = new BoundFloat(v.w, 
         w -> 
         { 
           vec.w = w;
           fire();
         } );
+    
+    add(new Label("X:"), 1, 1);
+    add(new Label("Y:"), 2, 1);
+    add(new Label("Z:"), 3, 1);
+    add(new Label("W:"), 4, 1);
+    
+    add(x, 1, 2);
+    add(y, 2, 2);
+    add(z, 3, 2);
+    add(w, 4, 2);
+    
   }
   
   /* (non-Javadoc)

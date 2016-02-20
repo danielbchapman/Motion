@@ -46,18 +46,41 @@ public class BoundFloat extends TextField implements IBound<Float>
     this.onUpdate = onUpdate;
     cache = val;
     
+    
     this.textProperty().addListener(
+        (observe, oldVal, newVal)->
+        {
+          //if we don't have focus then fire an update
+          if(!focusedProperty().get())
+          {
+            try
+            {
+              float f = Float.parseFloat(newVal);
+              set(f);
+              this.getStyleClass().removeAll(CSS.ERROR);
+            }
+            catch(NumberFormatException e)
+            {
+              this.getStyleClass().add(CSS.ERROR);
+            }  
+          }
+        });
+    
+    this.focusedProperty().addListener(
       (observe, oldVal, newVal)->
       {
-        try
+        if(!newVal && oldVal)//Focus lost
         {
-          float f = Float.parseFloat(newVal);
-          set(f);
-        }
-        catch(NumberFormatException e)
-        {
-          this.setText(oldVal);//revert
-          Utility.logWarningException(this.getClass().getSimpleName() + "] Number format exception, this should highlight or be more useful...", e);
+          try
+          {
+            float f = Float.parseFloat(this.textProperty().get());
+            set(f);
+            this.getStyleClass().removeAll(CSS.ERROR);
+          }
+          catch(NumberFormatException e)
+          {
+            this.getStyleClass().add(CSS.ERROR);
+          }  
         }
       });
   }
@@ -73,6 +96,7 @@ public class BoundFloat extends TextField implements IBound<Float>
       if(f != cache)
       {
         cache = f;
+        textProperty().set(format.format(number));
         onUpdate.accept(cache);
       }
     }
