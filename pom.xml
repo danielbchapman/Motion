@@ -142,7 +142,7 @@
 			  <artifactId>maven-jar-plugin</artifactId>
 			  <configuration>
 			    <archive>
-			    	<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+			    	<manifestFile>maven/manifests/WIN32.MF</manifestFile>
 			    	 <!-- 
 					<manifest>
 						<addClasspath>true</addClasspath>

@@ -15,6 +15,7 @@ Class-Path: .
  lib/jogl-all-natives-windows-i586.jar  
  lib/gluegen-rt-natives-windows-i586.jar 
  lib/utilities-1.0.0.jar 
+ lib/foo.jar 
  lib/fxapplication-0.0.1.jar    
 Main-Class: com.danielbchapman.physics.toxiclibs.Main
 
