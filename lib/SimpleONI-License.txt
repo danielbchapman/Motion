@@ -1,4 +1,7 @@
+License:
 http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+Source:
+https://code.google.com/archive/p/simple-openni/
 
 GNU GENERAL PUBLIC LICENSE
 
