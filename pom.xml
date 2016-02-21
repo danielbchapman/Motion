@@ -23,6 +23,7 @@
 			<version>2.1.1</version>
 			<systemPath>${basedir}/lib/core.jar</systemPath>
 		</dependency>
+		
 		<dependency>
 			<groupId>gluegen-rt</groupId>
 			<artifactId>core</artifactId>
@@ -70,9 +71,12 @@
 		</dependency>
 		<!-- <dependency> <groupId>processing</groupId> <artifactId>video</artifactId> 
 			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/video.jar</systemPath> 
-			</dependency> <dependency> <groupId>SimpleOni</groupId> <artifactId>oni</artifactId> 
+			</dependency> 
+			
+			<dependency> <groupId>SimpleOni</groupId> <artifactId>oni</artifactId> 
 			<scope>system</scope> <version>1.0</version> <systemPath>${basedir}/lib/SimpleOpenNI.jar</systemPath> 
-			</dependency> -->
+			</dependency> 
+		-->
 		<dependency>
 			<groupId>com.danielbchapman.data</groupId>
 			<artifactId>groups</artifactId>
@@ -130,9 +134,6 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-					<archive>
-
-          			</archive>
 				</configuration>
 			</plugin>
 			
@@ -141,21 +142,51 @@
 			  <artifactId>maven-jar-plugin</artifactId>
 			  <configuration>
 			    <archive>
+			    	<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+			    	 <!-- 
 					<manifest>
 						<addClasspath>true</addClasspath>
 						<mainClass>com.danielbchapman.physics.toxiclibs.Main</mainClass>
+						<classpathPrefix>lib/</classpathPrefix>
 					</manifest>
+					<manifestEntries>
+						<Class-Path>.</Class-Path>
+					</manifestEntries>
+					 -->
 			    </archive>
 			  </configuration>
-			</plugin>	
-					
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>assembly:package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<!-- The filename of the assembled distribution file defualt ${project.build.finalName} -->
+							<finalName>${project.build.finalName}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<!-- A list of descriptor files path to generate from -->
+							<descriptors>
+								<descriptor>assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+								
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
 				<executions>
 					<execution>
 						<id>copy-artwork</id>
-						<phase>install</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
