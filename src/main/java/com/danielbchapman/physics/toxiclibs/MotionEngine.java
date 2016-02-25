@@ -357,7 +357,15 @@ public class MotionEngine extends PApplet
           }
           catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
           {
-            // TODO Auto-generated catch block
+            
+            try
+            {
+              disableSpoutBroadcast();
+            }
+            catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1)
+            {
+              e1.printStackTrace();
+            }
             e.printStackTrace();
           }	
       	}
@@ -1138,10 +1146,13 @@ public class MotionEngine extends PApplet
 		  return;
 	  }
     enableSpout = false;
-    if(spout != null)
+    
+    Object spoutRef = spout;
+    spout = null; //Clear the reference.
+    if(spoutRef != null)
     {
       Method close = spoutClass.getMethod("closeSender");
-      close.invoke(spout);
+      close.invoke(spoutRef);
     }
   }
   

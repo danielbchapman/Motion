@@ -10,7 +10,114 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<!-- Windows 32 bit for the natives please adjust as needed -->
+
+	<profiles>
+		<!-- Windows 32 (default)  -->
+		<profile>
+			<id>Win32</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>jogl-all</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope>
+					<version>2.1.1</version>
+					<systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
+				</dependency>
+				<dependency>
+					<groupId>gluegen-rt</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope>
+					<version>2.1.1</version>
+					<systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
+				</dependency>
+			</dependencies>
+			
+			<properties>
+				<motion.manifest>WIN32.MF</motion.manifest>
+				<motion.platform>WIN32</motion.platform>
+			</properties>
+		</profile>
+		<!-- Windows 64 -->
+		<profile>
+			<id>Win64</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+					<arch>amd64</arch>
+				</os>
+			</activation>
+			
+			<properties>
+				<motion.manifest>WIN64.MF</motion.manifest>
+				<motion.platform>WIN64</motion.platform>
+			</properties>
+			
+			<dependencies>
+				<dependency>
+					<groupId>jogl-all</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope>
+					<version>2.1.1</version>
+					<systemPath>${basedir}/lib/jogl-all-natives-windows-amd64.jar</systemPath>
+				</dependency>
+				<dependency>
+					<groupId>gluegen-rt</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope>
+					<version>2.1.1</version>
+					<systemPath>${basedir}/lib/gluegen-rt-natives-windows-amd64.jar</systemPath>
+				</dependency>			
+			</dependencies>
+		</profile>
+		<!-- MAC x64 -->
+		<profile>
+			<id>mac</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<motion.manifest>MAC.MF</motion.manifest>
+				<motion.platform>OSX</motion.platform>
+			</properties>
+			<dependencies> 
+				<dependency> 
+					<groupId>gluegen-rt</groupId> 
+					<artifactId>natives</artifactId> 
+					<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/gluegen-rt-natives-macosx-universal.jar</systemPath> 
+				</dependency>
+				<dependency> 
+					<groupId>jogl-all</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope> 
+					<version>2.1.1</version> 
+					<systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath> 
+				</dependency>
+				<!-- Syphon, this isn't a hard dependency, but the application is probably useless without it -->
+				<dependency> 
+					<groupId>Syphon</groupId> 
+					<artifactId>natives</artifactId> 
+					<scope>system</scope> 
+					<version>1.0.0</version> 
+					<systemPath>${basedir}/lib/Syphon.jar</systemPath> 
+				</dependency> 
+				<dependency> 
+					<groupId>jsyphon</groupId> 
+					<artifactId>natives</artifactId> 
+					<scope>system</scope> 
+					<version>1.0.0</version> 
+					<systemPath>${basedir}/lib/jsyphon.jar</systemPath> 
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 	<dependencies>
 		<!-- Dependencies via Daniel B. Chapman (GPL) http://www.github.com/danielbchapman -->
 
@@ -99,32 +206,7 @@
 		</dependency>
 
 		<!-- WIN 32 -->
-		<dependency>
-			<groupId>jogl-all</groupId>
-			<artifactId>natives</artifactId>
-			<scope>system</scope>
-			<version>2.1.1</version>
-			<systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gluegen-rt</groupId>
-			<artifactId>natives</artifactId>
-			<scope>system</scope>
-			<version>2.1.1</version>
-			<systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
-		</dependency>
 
-		<!-- MAC OSX 64 **Currently a bug in the JDK 8 for Mac preventing OpenGL 
-			from loading 3D <dependency> <groupId>gluegen-rt</groupId> <artifactId>natives</artifactId> 
-			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/gluegen-rt-natives-macosx-universal.jar</systemPath> 
-			</dependency> <dependency> <groupId>jogl-all</groupId> <artifactId>natives</artifactId> 
-			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath> 
-			</dependency> -->
-		<!-- <dependency> <groupId>Syphon</groupId> <artifactId>natives</artifactId> 
-			<scope>system</scope> <version>1.0.0</version> <systemPath>${basedir}/lib/Syphon.jar</systemPath> 
-			</dependency> <dependency> <groupId>jsyphon</groupId> <artifactId>natives</artifactId> 
-			<scope>system</scope> <version>1.0.0</version> <systemPath>${basedir}/lib/jsyphon.jar</systemPath> 
-			</dependency> -->
 	</dependencies>
 	<build>
 		<plugins>
@@ -142,7 +224,7 @@
 			  <artifactId>maven-jar-plugin</artifactId>
 			  <configuration>
 			    <archive>
-			    	<manifestFile>maven/manifests/WIN32.MF</manifestFile>
+			    	<manifestFile>maven/manifests/${motion.manifest}</manifestFile>
 			    	 <!-- 
 					<manifest>
 						<addClasspath>true</addClasspath>
@@ -169,7 +251,7 @@
 						</goals>
 						<configuration>
 							<!-- The filename of the assembled distribution file defualt ${project.build.finalName} -->
-							<finalName>${project.build.finalName}</finalName>
+							<finalName>${project.build.finalName}-${motion.platform}</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 							<!-- A list of descriptor files path to generate from -->
 							<descriptors>

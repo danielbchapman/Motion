@@ -80,7 +80,6 @@ public class RainLayer extends BleedingCanvasLayer
                     stopRain()
                 ),
   							
-  								
   							cue("76 Start Rain again, bleeding starts",
   							    startBleed(),
   							    startRain(),

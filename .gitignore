@@ -15,3 +15,8 @@ Processing/motion/lib
 /environment/
 .settings
 settings.properties
+/test-classes/
+/surefire-reports/
+/maven-archiver/
+/maven-status/
+/classes/
