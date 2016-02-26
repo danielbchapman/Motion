@@ -4,7 +4,22 @@ public class JSpout
 
   static
   {
-    System.loadLibrary("lib/JSpout");
+    //https://github.com/leadedge/Spout2
+    //https://github.com/leadedge/Spout2/tree/master/PROCESSING
+    //32 or 64 bit
+    String arch = System.getProperty("sun.arch.data.model");
+    //example: lib/JSpout32.dll or JSpout64.dll
+    try
+    {
+      System.loadLibrary("lib/JSpout" + arch);  
+    }
+    catch(SecurityException | UnsatisfiedLinkError e)
+    {
+      //Fallback for people who don't follow instructions
+      e.printStackTrace();
+      System.err.println("[CRITICAL] ^^^ Library was not loaded per the architecture and Spout may not work!");
+      System.loadLibrary("lib/JSpout");
+    }
   }
 
   static native int InitSender(String name, int width, int height, int mode);

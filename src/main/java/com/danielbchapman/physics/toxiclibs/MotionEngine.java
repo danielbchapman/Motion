@@ -28,6 +28,7 @@ import lombok.Setter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
+import processing.opengl.PGraphics3D;
 import shows.shekillsmonsters.BeholderPuppet;
 import shows.shekillsmonsters.HealingSpellLayer;
 import shows.shekillsmonsters.MagicMissleLayer;
@@ -1082,8 +1083,8 @@ public class MotionEngine extends PApplet
 			return;
 		}
 		
-	    if(Platform.isWindows() || Platform.isWindowsCE())
-	      enableSpout = true;
+    if(Platform.isWindows() || Platform.isWindowsCE())
+      enableSpout = true;
 	 }
 	 catch (Throwable t)
 	 {
@@ -1099,7 +1100,7 @@ public class MotionEngine extends PApplet
         Class<?> spoutProvider = Class.forName("SpoutProvider");
         Method method = spoutProvider.getMethod("getInstance", PGraphics.class);
         
-        spout = method.invoke(null, g);
+        spout = method.invoke(null, gl);
         
       }
       catch (ClassNotFoundException | IllegalAccessException e)
@@ -1115,7 +1116,7 @@ public class MotionEngine extends PApplet
           try
           {
             spoutClass = Class.forName("SpoutImplementation");
-            spoutSend = spoutClass.getMethod("sendTexture");
+            spoutSend= spoutClass.getMethod("sendTexture");//spoutClass.getMethod("sendTexture2", PGraphics3D.class);
             Method init = spoutClass.getMethod("initSender", String.class, int.class, int.class);
             init.invoke(spout, "Motion", this.displayWidth, this.displayHeight);
           }
