@@ -7,6 +7,10 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.danielbchapman.motion.fx.BoundFloat;
+import com.danielbchapman.motion.fx.BoundSlider;
+import com.danielbchapman.motion.fx.BoundVec4D;
+
 import toxi.geom.Vec4D;
 
 public class TestJavaFx extends Application

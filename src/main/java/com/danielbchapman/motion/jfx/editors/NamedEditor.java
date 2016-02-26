@@ -1,4 +1,4 @@
-package com.danielbchapman.ui.editors;
+package com.danielbchapman.motion.jfx.editors;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;

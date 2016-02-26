@@ -1,4 +1,4 @@
-package com.danielbchapman.ui.editors;
+package com.danielbchapman.motion.jfx.editors;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -6,9 +6,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import toxi.geom.Vec4D;
 
-import com.danielbchapman.ui.fx.BoundFloat;
-import com.danielbchapman.ui.fx.BoundSlider;
-import com.danielbchapman.ui.fx.BoundVec4D;
+import com.danielbchapman.motion.fx.BoundFloat;
+import com.danielbchapman.motion.fx.BoundSlider;
+import com.danielbchapman.motion.fx.BoundVec4D;
 
 public class ComponentTest extends Application
 {

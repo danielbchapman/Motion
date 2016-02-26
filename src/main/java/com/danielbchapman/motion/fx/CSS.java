@@ -1,4 +1,4 @@
-package com.danielbchapman.ui.fx;
+package com.danielbchapman.motion.fx;
 
 public class CSS
 {

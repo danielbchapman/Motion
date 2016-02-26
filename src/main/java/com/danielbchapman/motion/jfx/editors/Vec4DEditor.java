@@ -1,10 +1,10 @@
-package com.danielbchapman.ui.editors;
+package com.danielbchapman.motion.jfx.editors;
 
 import java.util.function.Consumer;
 
 import toxi.geom.Vec4D;
 
-import com.danielbchapman.ui.fx.BoundVec4D;
+import com.danielbchapman.motion.fx.BoundVec4D;
 
 
 /**
