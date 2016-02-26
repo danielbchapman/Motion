@@ -1,4 +1,4 @@
-package com.danielbchapman.motion.jfx;
+package com.danielbchapman.motion;
 
 import java.math.BigDecimal;
 
