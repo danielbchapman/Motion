@@ -157,6 +157,7 @@ public class Dance2015 extends PApplet {
 	  color(255);
 	  text("Frame Rate: " + frameRate, 20, 50);
 	}
+	
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { dance2015.Dance2015.class.getName() });
 	}

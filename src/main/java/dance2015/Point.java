@@ -42,7 +42,7 @@ class Point {
     //THis is position Verlet, we need Velocity Verlet
     //xi+1 = xi + (xi - xi-1) * (dti / dti-1) + a * dti * dti
     //or
-    //x = x + (x – xl)*h/hl + a*h*(h + hl)/2
+    //x = x + (x ^ xl)*h/hl + a*h*(h + hl)/2
     
     lastAcceleration = acceleration.get();
     
