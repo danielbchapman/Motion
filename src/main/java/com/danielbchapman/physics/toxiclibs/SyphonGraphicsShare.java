@@ -19,7 +19,7 @@ public class SyphonGraphicsShare implements IGraphicShare
 	Constructor<?> syphonConst;
 
 	@Override
-	public void initialize(PApplet app)
+	public synchronized void initialize(PApplet app)
 	{
 		Class<?> syphonServerClass = null;
 		//SyphonServer x = new SyphonServer(app, "Motion");

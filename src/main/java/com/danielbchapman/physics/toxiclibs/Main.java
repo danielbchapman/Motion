@@ -3,6 +3,7 @@ package com.danielbchapman.physics.toxiclibs;
 import java.awt.BorderLayout;
 import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
+import java.lang.reflect.Field;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -13,6 +14,33 @@ public class Main
   public static JFrame MAIN_CONTAINER;
   public static MotionEngine ENGINE;
   
+  static 
+  {
+	  
+	try
+	{
+      System.setProperty( "java.library.path", "lib" );
+      Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
+	  fieldSysPath.setAccessible( true );
+	  fieldSysPath.set( null, null );
+	}
+	catch (NoSuchFieldException | SecurityException e)
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	catch (IllegalArgumentException e)
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	catch (IllegalAccessException e)
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  
+  }
 //  public static int getScreen()
 //  {
 //    MAIN_CONTAINER.getSCre

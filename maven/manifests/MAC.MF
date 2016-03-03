@@ -14,9 +14,9 @@ Class-Path: .
  lib/lombok-1.16.2.jar 
  lib/jogl-all-natives-macosx-universal.jar  
  lib/gluegen-rt-natives-macosx-universal.jar  
- lib/jsyphon.jar  
+ lib/jsyphon.jar 
  lib/Syphon.jar 
- lib/utilities-1.0.0.jar  
+ lib/utilities-1.0.0.jar 
  lib/fxapplication-0.0.1.jar    
 Main-Class: com.danielbchapman.physics.toxiclibs.Main
 
