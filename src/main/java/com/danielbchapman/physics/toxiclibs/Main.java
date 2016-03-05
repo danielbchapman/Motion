@@ -26,17 +26,17 @@ public class Main
 	}
 	catch (NoSuchFieldException | SecurityException e)
 	{
-		// TODO Auto-generated catch block
+		System.err.println("Unable to initialize library folder \"/lib\" it is likely that Motion will not function");
 		e.printStackTrace();
 	}
 	catch (IllegalArgumentException e)
 	{
-		// TODO Auto-generated catch block
+		System.err.println("Unable to initialize library folder \"/lib\" it is likely that Motion will not function");
 		e.printStackTrace();
 	}
 	catch (IllegalAccessException e)
 	{
-		// TODO Auto-generated catch block
+		System.err.println("Unable to initialize library folder \"/lib\" it is likely that Motion will not function");
 		e.printStackTrace();
 	}
 	  
