@@ -6,9 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.layout.HBox;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -201,4 +203,12 @@ public class IntegrationTest extends Application
         );
     return file;
   }
+
+	@Override
+	public Scene initializeScene()
+	{
+		HBox root = new HBox();
+		return new Scene(root);
+		
+	}
 }
