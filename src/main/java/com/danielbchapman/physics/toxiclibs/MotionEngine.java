@@ -6,7 +6,17 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.logging.Level;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import javafx.application.Application;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 
 import com.danielbchapman.artwork.Word;
 import com.danielbchapman.brushes.ImageBrush;
@@ -16,6 +26,7 @@ import com.danielbchapman.brushes.SmallBrush;
 import com.danielbchapman.brushes.TinyBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.logging.Log;
+import com.danielbchapman.motion.UI;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
 import com.danielbchapman.physics.ui.SceneController;
 import com.illposed.osc.OSCListener;
@@ -53,15 +64,21 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 @SuppressWarnings("unused")
 public class MotionEngine extends PApplet
 {
+  private static final long serialVersionUID = 1L;
+  // Behavior Checks--map these behaviors
+  public static boolean showCoordinates = false;
+  public static final String VERSION = "0.0.1-ALPHA";
   public enum Mode
   {
     SUCK_FORCE, SLAP_FORCE, EXPLODE_FORCE, BRUSH_PALLET
   }
 
-  private static final long serialVersionUID = 1L;
+  //Java FX Interface
+  @Getter
+  @Setter
+  private UI fxInterface;
 
-  // Behavior Checks--map these behaviors
-  public static boolean showCoordinates = false;
+
   ArrayList<ParticleBehavior3D> activeBehaviors = new ArrayList<>();
   EnvironmentTools tools;
   BrushEditor brushTools;
@@ -575,6 +592,21 @@ public class MotionEngine extends PApplet
   @Override
   public void keyPressed(KeyEvent event)
   {
+  	Predicate<Character> isChar = c -> 
+  	{
+  		if(event.getKey() == c || event.getKey() == Character.toUpperCase(c))
+  		{
+  			return true;
+  		}
+
+  		return false;
+  	};
+	  
+	  if(isChar.test('w'))
+	  {
+	  	initializeFXInterface();
+	  }
+	  
     if (event.getKey() == 'q' || event.getKey() == 'Q')
     {
       if (tools == null)
@@ -997,6 +1029,28 @@ public class MotionEngine extends PApplet
             
   };
 
+  public synchronized void initializeFXInterface()
+  {
+  	if(fxInterface == null)
+  	{
+	  	System.out.println("INITILIZING JFX INTERFACE");
+	  	Thread jfx = new Thread("Motion JFX")
+	  	{
+	  		public void run()
+	  		{
+	  			Application.launch(UI.class);	
+	  		}
+	  	};
+	  	jfx.run();
+  	}
+  	else
+  	{
+  		fxInterface.reset();
+  	}
+  	
+  }
+  
+  
   // FIXME this needs to be HashMaps This probably isn't an issue for less than 10-20 forces
   public boolean isActive(ParticleBehavior3D behavior)
   {

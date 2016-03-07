@@ -1,10 +1,16 @@
 package com.danielbchapman.motion;
 
+import java.io.File;
 import java.math.BigDecimal;
 
-import javafx.application.Application;
+import com.danielbchapman.application.Application;
+import com.danielbchapman.physics.toxiclibs.Main;
+import com.danielbchapman.physics.toxiclibs.MotionEngine;
+
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -12,15 +18,22 @@ import javafx.stage.Stage;
 
 public class UI extends Application
 {
-
+	public MotionEngine motion;
+	
   public static void main(String... args)
   {
     launch(UI.class);
   }
 
+  public void register(MotionEngine motion)
+  {
+  	this.motion = motion;
+  }
+  
   @Override
   public void start(Stage stage) throws Exception
   {
+  	Platform.setImplicitExit(false);
     HBox workspace = new HBox();
     VBox content = new VBox();
     
@@ -59,7 +72,57 @@ public class UI extends Application
     stage.setScene(new Scene(workspace));
     stage.setTitle("Motion 0.0.1 - TEST");
     stage.show();
+    
   }
+
+	@Override
+	public MenuBar getMenuBar()
+	{
+		return new MenuBar();
+	}
+
+	@SuppressWarnings("Engine is only partially initialized")
+	@Override
+	protected void initialize()
+	{
+		motion = Main.ENGINE; //static pointer
+	}
+
+	@SuppressWarnings("Shutdown is not implemented at all.")
+	@Override
+	public void shutdown()
+	{
+		motion = null;
+		System.out.println("[NOT IMPLEMENTED] shutdown NOT CALLED ");
+	}
+
+	@Override
+	protected File getPropertiesFile()
+	{
+		return new File("settings.properties");
+	}
+
+	@SuppressWarnings("ADD EXCEPTION LOGGING HERE IN THE FRAMEWORK")
+	@Override
+	protected void logException(Throwable t)
+	{
+		t.printStackTrace();
+	}
+
+	@SuppressWarnings("Implement the CSS if we go this route!")
+	@Override
+	protected String getStyleSheets()
+	{
+		return null;
+	}
+
+	@Override
+	public Scene initializeScene()
+	{
+		//TODO Auto Generated Sub
+		throw new RuntimeException("Not Implemented...");
+		
+	}
   
   
 }
