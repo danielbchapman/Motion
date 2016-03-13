@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import javax.tools.Tool;
 
 import com.danielbchapman.application.Application;
+import com.danielbchapman.international.MessageUtility;
 import com.danielbchapman.physics.toxiclibs.Main;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
@@ -78,7 +79,7 @@ public class UI extends Application
     stage.setMinWidth(800);
     stage.setMinHeight(600);
     stage.setScene(new Scene(workspace));
-    stage.setTitle("Motion 0.0.1 - TEST");
+    stage.setTitle(MessageUtility.GLOBAL.get("motion-version"));
     stage.show();
     
   }
