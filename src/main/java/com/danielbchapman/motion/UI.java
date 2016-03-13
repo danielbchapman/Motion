@@ -3,6 +3,8 @@ package com.danielbchapman.motion;
 import java.io.File;
 import java.math.BigDecimal;
 
+import javax.tools.Tool;
+
 import com.danielbchapman.application.Application;
 import com.danielbchapman.physics.toxiclibs.Main;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -12,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -19,6 +23,8 @@ import javafx.stage.Stage;
 public class UI extends Application
 {
 	public MotionEngine motion;
+	
+	public MotionTools toolBar;
 	
   public static void main(String... args)
   {
@@ -33,17 +39,24 @@ public class UI extends Application
   @Override
   public void start(Stage stage) throws Exception
   {
-  	Platform.setImplicitExit(false);
-    HBox workspace = new HBox();
-    VBox content = new VBox();
-    
+//  	Platform.setImplicitExit(false);
+  	//Main container
+    VBox workspace = new VBox();
+  	MotionTools tools = new MotionTools();
+  	MotionStatus status = new MotionStatus();
+  	MotionTabs tabs = new MotionTabs();
+    MotionCueList cues = new MotionCueList();
+    MotionCueList2 cues2 = new MotionCueList2();
+  	HBox controls = new HBox();
+  	
+  	controls.getChildren().add(tabs);
     VBox cueList = new VBox();
     cueList.setMinWidth(300);
     cueList.getChildren().add(new Label("Cue List"));
     
-    ScrollPane cueScroll = new ScrollPane(cueList);
-    cueScroll.setMinWidth(300);
-    cueScroll.setContent(cueList);
+//    ScrollPane cueScroll = new ScrollPane(cueList);
+//    cueScroll.setMinWidth(300);
+//    cueScroll.setContent(cueList);
     
     for(int i = 1; i < 11; i++)
     {
@@ -53,18 +66,13 @@ public class UI extends Application
       cueList.getChildren().add(cue);
     }
     
-    content
-      .getChildren()
-      .addAll(
-          new Label("Controls"),
-          new Label("Editor Area"),
-          new Label("Properties")
-          );
-    
     workspace.getChildren()
       .addAll(
-          cueScroll,
-          new ScrollPane(content)
+          tools,
+          cues,
+          cues2,
+          controls,
+          status
           );
     
     stage.setMinWidth(800);
