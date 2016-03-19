@@ -1,10 +1,13 @@
 package com.danielbchapman.motion;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public interface IMotionCue
 {
-  public int getId();
-  public void setId(int id);
+  public SimpleIntegerProperty getId();
+  public void setId(SimpleIntegerProperty id);
   
-  public String getLabel();
-  public void setLabel(String label);
+  public SimpleStringProperty getLabel();
+  public void setLabel(SimpleStringProperty label);
 }
