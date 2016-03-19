@@ -63,7 +63,6 @@ public class UI extends Application
   	MotionStatus status = new MotionStatus();
   	MotionTabs tabs = new MotionTabs();
     MotionCueList cues = new MotionCueList();
-    MotionCueList2 cues2 = new MotionCueList2();
   	HBox controls = new HBox();
   	
   	controls.getChildren().add(tabs);
@@ -94,7 +93,7 @@ public class UI extends Application
       data.add(
           new MotionCue()
           {{
-              setId(""+ii);
+              setId(ii);
               setLabel(""+ ii);
               setDescription("Test Cue " + ii);  
           }});
@@ -104,7 +103,7 @@ public class UI extends Application
     TableView<MotionCue> table = Fx.table(MotionCue.class);
     val list = FXCollections.observableArrayList(data);
     table.setItems(list);
-    
+    cues.setItems(list);
     
     
 //    ItemTableView itb = ItemTableView
@@ -126,7 +125,6 @@ public class UI extends Application
       .addAll(
           tools,
           cues,
-          cues2,
           //itb,
           table,
           controls,

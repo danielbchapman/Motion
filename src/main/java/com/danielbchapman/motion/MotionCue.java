@@ -1,5 +1,7 @@
 package com.danielbchapman.motion;
 
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import lombok.ToString;
 
@@ -30,23 +32,24 @@ Id  CueId Label Description Time  Delay Follow
 
 //AUTO GENERATED CODE BEGINS -------------------------------
   //AUTO GENERATED VALUES FOR Id
-  private SimpleStringProperty id = new SimpleStringProperty();
-  public SimpleStringProperty getIdProperty()
+  private SimpleIntegerProperty id = new SimpleIntegerProperty();
+  public SimpleIntegerProperty getIdProperty()
   {
     return id;
   }
 
-  public void setId(String id)
+  public void setId(Integer id)
   {
     this.id.set(id);
   }
 
-  public String getId()
+  public Integer getId()
   {
     return this.id.get();
   }
   //AUTO GENERATED VALUES FOR CueId
   private SimpleStringProperty cueId = new SimpleStringProperty();
+  
   public SimpleStringProperty getCueIdProperty()
   {
     return cueId;
@@ -61,25 +64,24 @@ Id  CueId Label Description Time  Delay Follow
   {
     return this.cueId.get();
   }
+  
   //AUTO GENERATED VALUES FOR Label
-  //public SimpleStringProperty label = new SimpleStringProperty();
-  public String label;
-//  public SimpleStringProperty getLabelProperty()
-//  {
-//    return label;
-//  }
+  public SimpleStringProperty label = new SimpleStringProperty();
+  public SimpleStringProperty getLabelProperty()
+  {
+    return label;
+  }
 
   public void setLabel(String label)
   {
-//    this.label.set(label);
-    this.label = label;
+    this.label.set(label);
   }
 
   public String getLabel()
   {
-//    return this.label.get();
-    return label;
+    return this.label.get();
   }
+  
   //AUTO GENERATED VALUES FOR Description
   private SimpleStringProperty description = new SimpleStringProperty();
   public SimpleStringProperty getDescriptionProperty()
@@ -97,18 +99,18 @@ Id  CueId Label Description Time  Delay Follow
     return this.description.get();
   }
   //AUTO GENERATED VALUES FOR Time
-  private SimpleStringProperty time = new SimpleStringProperty();
-  public SimpleStringProperty getTimeProperty()
+  private SimpleFloatProperty time = new SimpleFloatProperty();
+  public SimpleFloatProperty getTimeProperty()
   {
     return time;
   }
 
-  public void setTime(String time)
+  public void setTime(Float time)
   {
     this.time.set(time);
   }
 
-  public String getTime()
+  public Float getTime()
   {
     return this.time.get();
   }
