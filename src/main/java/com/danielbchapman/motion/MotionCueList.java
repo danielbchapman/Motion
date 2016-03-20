@@ -87,6 +87,13 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
         print,
         remove
         );
+    
+    //Add selection listeners
+    getSelectionModel().selectedItemProperty().addListener(
+      (x)->
+      {
+        System.out.println("SELECT>>" + x);
+      });
     //No sorting
     setSortPolicy( x -> { return false; });
   }

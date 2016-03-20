@@ -2,6 +2,7 @@ package com.danielbchapman.motion;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -12,6 +13,7 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 @ToString
@@ -23,7 +25,8 @@ public class MotionCue
     LOGIC,
     CONTENT,
     TRANSFORM,
-    SHOW_CONTROL
+    SHOW_CONTROL,
+    PLAYBACK,
   }
   
   private static Gson getGson()
@@ -70,6 +73,23 @@ public class MotionCue
       return null;
     
     return store.toMotionCue();
+  }
+  
+  @Getter
+  private HashMap<String, String> dynamicData = new HashMap<>();
+  
+  public void setData(String key, String value)
+  {
+    dynamicData.put(key,  value);
+  }
+  
+  public String getData(String key, String def)
+  {
+    String data = dynamicData.get(key);
+    if(data != null)
+      return data;
+    
+    return def;
   }
   /*
 PREPROCESSOR FILES FOR TSVUtil
@@ -209,4 +229,6 @@ Id  CueId Label Description Time  Delay Follow
   {
     return this.follow.get();
   }
+  
+  
 }
