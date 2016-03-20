@@ -1,13 +1,76 @@
 package com.danielbchapman.motion;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
+@EqualsAndHashCode(callSuper=false)
 public class MotionCue
 {
+  public enum CueType
+  {
+    LOGIC,
+    CONTENT,
+    TRANSFORM,
+    SHOW_CONTROL
+  }
+  
+  private static Gson getGson()
+  {
+    return new GsonBuilder()
+        .setPrettyPrinting()
+        .serializeNulls()
+        .create();
+  }
+  public static String serialize(final List<MotionCue> cues)
+  {
+    Type type = new TypeToken<List<MotionCueStorage>>(){}.getType();
+      
+    List<MotionCueStorage> storage = new ArrayList<>();
+    for(MotionCue q : cues)
+      storage.add(new MotionCueStorage(q));
+    return getGson().toJson(storage, type);
+  }
+  
+  public static ArrayList<MotionCue> deserializeList(String data)
+  {
+    Type type = new TypeToken<List<MotionCueStorage>>(){}.getType();
+    
+    List<MotionCueStorage> cues = getGson().fromJson(data, type);
+    
+    ArrayList<MotionCue> ret = new ArrayList<>();
+    for(MotionCueStorage store : cues)
+      if(store != null)
+        ret.add(store.toMotionCue());
+    
+    return ret;
+  }
+  
+  public static String serialize(MotionCue cue)
+  {
+    String data = getGson().toJson(new MotionCueStorage(cue));
+    return data;
+  }
+  
+  public static MotionCue deserialize(String data)
+  {
+    MotionCueStorage store = getGson().fromJson(data, MotionCueStorage.class);
+    if(store == null)
+      return null;
+    
+    return store.toMotionCue();
+  }
   /*
 PREPROCESSOR FILES FOR TSVUtil
 //AUTO GENERATED VALUES FOR #raw
@@ -115,38 +178,35 @@ Id  CueId Label Description Time  Delay Follow
     return this.time.get();
   }
   //AUTO GENERATED VALUES FOR Delay
-  private SimpleStringProperty delay = new SimpleStringProperty();
-  public SimpleStringProperty getDelayProperty()
+  private SimpleFloatProperty delay = new SimpleFloatProperty();
+  public SimpleFloatProperty getDelayProperty()
   {
     return delay;
   }
 
-  public void setDelay(String delay)
+  public void setDelay(Float delay)
   {
     this.delay.set(delay);
   }
 
-  public String getDelay()
+  public Float getDelay()
   {
     return this.delay.get();
   }
   //AUTO GENERATED VALUES FOR Follow    
-  private SimpleStringProperty follow = new SimpleStringProperty();
-  public SimpleStringProperty getFollowProperty()
+  private SimpleFloatProperty follow = new SimpleFloatProperty();
+  public SimpleFloatProperty getFollowProperty()
   {
     return follow;
   }
 
-  public void setFollow(String follow)
+  public void setFollow(Float follow)
   {
     this.follow.set(follow);
   }
 
-  public String getFollow()
+  public Float getFollow()
   {
     return this.follow.get();
   }
-
-
-
 }

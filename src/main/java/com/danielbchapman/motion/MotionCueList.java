@@ -1,35 +1,26 @@
 package com.danielbchapman.motion;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-
-import javax.swing.table.TableCellEditor;
+import java.util.Collection;
 
 import com.danielbchapman.application.IInternationalized;
-import com.danielbchapman.fx.builders.Fx;
 import com.danielbchapman.international.MessageUtility;
 import com.danielbchapman.international.MessageUtility.Instance;
+import com.danielbchapman.motion.MotionCue.CueType;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.TableView;
-import javafx.util.Callback;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.FloatStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
 public class MotionCueList extends TableView<MotionCue> implements IInternationalized
 {
   Instance msg = MessageUtility.getInstance(MotionCueList.class);
-
-  public static int LAST_CUE = 1;
+  ArrayList<MotionCue> cues;
+  private int last_cue = 1;
+  
   @SuppressWarnings("unchecked")
   public MotionCueList()
   { 
@@ -68,8 +59,6 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
       e.getRowValue().setTime(e.getNewValue());
     });
     
-    
-    
     setEditable(true);
     
     getColumns().addAll(
@@ -82,18 +71,19 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
     setSortPolicy( x -> { return false; });
   }
   
-  public void addMotionCue(IMotionCue cue)
+  public void addMotionCue(CueType type)
   {
-    LAST_CUE++;
-    cue.getId().set(LAST_CUE++);
-//    getItems().add(cue);
+    last_cue++;
+    MotionCue cue = new MotionCue();
+    cue.setId(last_cue);
+    getItems().add(cue);
   }
   
-  public void removeMotionCue(IMotionCue cue)
+  public void removeMotionCue(MotionCue cue)
   {
-//    getItems().removeIf( x-> x.getId() == cue.getId());
+    getItems().remove(cue);
   }
-
+  
   @Override
   public String msg(String key)
   {
@@ -104,6 +94,24 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
   public String msg(String key, Object... params)
   {
     return msg.get(key, params);
+  }
+  
+  public synchronized void loadItems(Collection<MotionCue> cues)
+  {
+    if(cues == null)
+      return;
+    ArrayList<MotionCue> newCues = new ArrayList<>(cues.size());
+    int max = 0;
+    for(MotionCue cue : cues)
+    {
+      newCues.add(cue);
+      if(max < cue.getId())
+        max = cue.getId();
+    }
+    
+    this.cues = newCues;
+    this.last_cue = max;
+    super.setItems(FXCollections.observableArrayList(cues));
   }
 }
 

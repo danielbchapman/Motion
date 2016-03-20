@@ -2,6 +2,8 @@ package com.danielbchapman.motion;
 
 import java.util.ArrayList;
 
+import com.danielbchapman.motion.MotionCue.CueType;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
@@ -9,23 +11,24 @@ import javafx.scene.layout.HBox;
 public class MotionTools extends HBox
 {
   ArrayList<Button> buttons;
-  
+  UI app;
   public MotionTools()
   {
+    app = (UI) UI.getCurrentInstance();
     buttons = new ArrayList<>();
     makeButton(
         new SimpleAction("mediaCue", "mediaCueDetail", 
           (e)->
           {
-            System.out.println("Media Cue Fired");
+            app.getModule(CueModule.class).addCue(CueType.CONTENT);
           }
           ));
     
     makeButton(
-        new SimpleAction("transformCue", "mediaCueDetail", 
+        new SimpleAction("transformCue", "transformCueDetail", 
           (e)->
           {
-            System.out.println("Transform Cue Fired");
+            app.getModule(CueModule.class).addCue(CueType.TRANSFORM);
           }
           ));
     
@@ -33,7 +36,7 @@ public class MotionTools extends HBox
         new SimpleAction("logicCue", "mediaCueDetail", 
           (e)->
           {
-            System.out.println("Logic Cue Fired");
+            app.getModule(CueModule.class).addCue(CueType.LOGIC);
           }
           ));
   }

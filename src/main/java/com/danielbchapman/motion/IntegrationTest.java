@@ -18,6 +18,7 @@ import javax.xml.transform.TransformerException;
 import org.xml.sax.SAXException;
 
 import com.danielbchapman.application.Application;
+import com.danielbchapman.application.Module;
 import com.danielbchapman.groups.Group;
 import com.danielbchapman.groups.Groups;
 import com.danielbchapman.groups.Groups.GroupFormatException;
@@ -211,4 +212,10 @@ public class IntegrationTest extends Application
 		return new Scene(root);
 		
 	}
+
+  @Override
+  protected Class<? extends Module> getDefaultModule()
+  {
+    return null;
+  }
 }

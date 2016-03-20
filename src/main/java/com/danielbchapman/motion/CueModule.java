@@ -10,6 +10,8 @@ import com.danielbchapman.groups.Groups;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.MotionCue.CueType;
 import com.danielbchapman.utility.Utility;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
@@ -62,18 +64,16 @@ public class CueModule extends Module
           }});
 
     }
-    
-    val list = FXCollections.observableArrayList(cues);
 //    TableView<MotionCue> table = Fx.table(MotionCue.class);
 //    table.setItems(list);
     
-    cueList.setItems(list);
+    cueList.loadItems(cues);
     
     Button printIt = new Button("Print Data");
     
     printIt.setOnAction(x -> 
     {
-      list.forEach(System.out::println);
+      cueList.cues.forEach(System.out::println);
     });
     
     workspace.getChildren()
@@ -128,6 +128,7 @@ public class CueModule extends Module
       catch(Throwable t)
       {
         app().showCriticalDialog(msg("error-loading"), t.getMessage());
+        t.printStackTrace();
       }
     }
   }
@@ -137,7 +138,23 @@ public class CueModule extends Module
     File save = app().saveFile("motion");
     if(save != null)
     {
-      Utility.writeFile(save.getAbsolutePath(), MotionCue.serialize(cueList.getItems()));
+      final ArrayList<MotionCue> copy = new ArrayList<MotionCue>();
+      
+      Gson gson = new GsonBuilder()
+          .serializeNulls()
+          .setPrettyPrinting()
+          .create();
+      
+      for(MotionCue q : cueList.cues)
+      {
+        System.out.println(q);
+        System.out.println(gson.toJson(q));
+        copy.add(q);
+      }
+        
+      String data = MotionCue.serialize(copy);
+      System.out.println(data);
+      Utility.writeFile(save.getAbsolutePath(), data);
       app().showInformationDialog(msg("cuelist-saved"), msg("culist-saved-detail"));
     }
   }
