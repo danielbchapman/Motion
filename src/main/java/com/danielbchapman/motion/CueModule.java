@@ -73,7 +73,7 @@ public class CueModule extends Module
     
     printIt.setOnAction(x -> 
     {
-      cueList.cues.forEach(System.out::println);
+      cueList.getItems().forEach(System.out::println);
     });
     
     workspace.getChildren()
@@ -145,7 +145,7 @@ public class CueModule extends Module
           .setPrettyPrinting()
           .create();
       
-      for(MotionCue q : cueList.cues)
+      for(MotionCue q : cueList.getItems())
       {
         System.out.println(q);
         System.out.println(gson.toJson(q));
