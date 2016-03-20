@@ -20,6 +20,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.val;
 
+
+/**
+ * The Cue Module is the central User Interface for editing
+ * cues and firing cues. It uses the underlying data structure to 
+ * monitor the list of cues.
+ *
+ */
+@SuppressWarnings("CUES SHOULD USE A RESOURCE, NOT AN OBSERVED LIST FOR THE SOURCE")
 public class CueModule extends Module
 {
   private Node parent;
