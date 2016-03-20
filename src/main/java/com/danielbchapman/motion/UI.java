@@ -68,7 +68,7 @@ public class UI extends Application
 	public void shutdown()
 	{
 		motion = null;
-		System.out.println("[NOT IMPLEMENTED] shutdown NOT CALLED ");
+		save(); //Save state
 	}
 
 	@Override
@@ -113,6 +113,7 @@ public class UI extends Application
           (x)->
           {
             getModule(CueModule.class).saveCueList();
+            save();
           }).asMenuItem(),
 	      new SeparatorMenuItem(),
 	      createAction("exit", "exitFileDescription",
@@ -125,11 +126,24 @@ public class UI extends Application
 	  
 	  return file;
 	}
+  
+  public void save()
+  {
+    File root = new File("current/");
+    root.mkdirs();
+    
+    //Save the following modules
+    getModule(CueModule.class).saveTo(new File("current/cues.motion"));
+  }
 
   @Override
-  protected Class<? extends Module> getDefaultModule()
+  protected void postStartup()
   {
-    return CueModule.class;
+    //Load Cues
+    loadModule(CueModule.class);
+    File lastCues = new File("current/cues.motion");
+    if(lastCues.exists())
+      getModule(CueModule.class).loadFrom(lastCues);
   }
 }
 

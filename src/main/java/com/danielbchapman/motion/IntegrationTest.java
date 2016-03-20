@@ -213,9 +213,9 @@ public class IntegrationTest extends Application
 		
 	}
 
+
   @Override
-  protected Class<? extends Module> getDefaultModule()
-  {
-    return null;
+  protected void postStartup()
+  {    
   }
 }

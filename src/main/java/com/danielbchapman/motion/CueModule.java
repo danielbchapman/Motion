@@ -116,20 +116,36 @@ public class CueModule extends Module
     File open = app().openFile("motion");
     if(open != null)
     {
-      StringBuffer data = Utility.readFile(open.getAbsolutePath());
-      try
-      {
-        String dataS = data.toString();
-        Log.info(dataS);
-        ArrayList<MotionCue> load = MotionCue.deserializeList(dataS);
-        cueList.setItems(FXCollections.observableArrayList(load));
-        app().showInformationDialog(msg("cues-loaded"), msg("cues-loaded", open.getName()));
-      }
-      catch(Throwable t)
-      {
-        app().showCriticalDialog(msg("error-loading"), t.getMessage());
-        t.printStackTrace();
-      }
+      loadFrom(open);
+    }
+  }
+  public void saveTo(File save)
+  {
+    final ArrayList<MotionCue> copy = new ArrayList<MotionCue>();
+    for(MotionCue q : cueList.getItems())
+      copy.add(q);
+      
+    String data = MotionCue.serialize(copy);
+    System.out.println(data);
+    Utility.writeFile(save.getAbsolutePath(), data);
+    app().showInformationDialog(msg("cuelist-saved"), msg("culist-saved-detail"));
+  }
+  
+  public void loadFrom(File file)
+  {
+    StringBuffer data = Utility.readFile(file.getAbsolutePath());
+    try
+    {
+      String dataS = data.toString();
+      Log.info(dataS);
+      ArrayList<MotionCue> load = MotionCue.deserializeList(dataS);
+      cueList.loadItems(FXCollections.observableArrayList(load));
+      app().showInformationDialog(msg("cues-loaded"), msg("cues-loaded", file.getName()));
+    }
+    catch(Throwable t)
+    {
+      app().showCriticalDialog(msg("error-loading"), t.getMessage());
+      t.printStackTrace();
     }
   }
   
@@ -138,24 +154,7 @@ public class CueModule extends Module
     File save = app().saveFile("motion");
     if(save != null)
     {
-      final ArrayList<MotionCue> copy = new ArrayList<MotionCue>();
-      
-      Gson gson = new GsonBuilder()
-          .serializeNulls()
-          .setPrettyPrinting()
-          .create();
-      
-      for(MotionCue q : cueList.getItems())
-      {
-        System.out.println(q);
-        System.out.println(gson.toJson(q));
-        copy.add(q);
-      }
-        
-      String data = MotionCue.serialize(copy);
-      System.out.println(data);
-      Utility.writeFile(save.getAbsolutePath(), data);
-      app().showInformationDialog(msg("cuelist-saved"), msg("culist-saved-detail"));
+      saveTo(save);
     }
   }
 }
