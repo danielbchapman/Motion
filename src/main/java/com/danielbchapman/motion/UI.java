@@ -175,7 +175,7 @@ public class UI extends Application
     loadModule(CueModule.class);
     File lastCues = new File("current/cues.motion");
     if(lastCues.exists())
-      getModule(CueModule.class).loadFrom(lastCues);
+      getModule(CueModule.class).loadFrom(lastCues, false);
   }
   
 	public void register(MotionEngine motion)

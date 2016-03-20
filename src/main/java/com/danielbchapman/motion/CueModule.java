@@ -124,7 +124,7 @@ public class CueModule extends Module
     File open = app().openFile("motion");
     if(open != null)
     {
-      loadFrom(open);
+      loadFrom(open, true);
     }
   }
   public void saveTo(File save)
@@ -139,7 +139,7 @@ public class CueModule extends Module
     app().showInformationDialog(msg("cuelist-saved"), msg("culist-saved-detail"));
   }
   
-  public void loadFrom(File file)
+  public void loadFrom(File file, boolean showDialog)
   {
     StringBuffer data = Utility.readFile(file.getAbsolutePath());
     try
@@ -148,7 +148,9 @@ public class CueModule extends Module
       Log.info(dataS);
       ArrayList<MotionCue> load = MotionCue.deserializeList(dataS);
       cueList.loadItems(FXCollections.observableArrayList(load));
-      app().showInformationDialog(msg("cues-loaded"), msg("cues-loaded", file.getName()));
+      
+      if(showDialog)
+        app().showInformationDialog(msg("cues-loaded"), msg("cues-loaded", file.getName()));
     }
     catch(Throwable t)
     {
