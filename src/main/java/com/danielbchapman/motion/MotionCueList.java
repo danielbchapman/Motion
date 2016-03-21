@@ -20,6 +20,7 @@ import javafx.util.converter.IntegerStringConverter;
 public class MotionCueList extends TableView<MotionCue> implements IInternationalized
 {
   CueModule parent;
+  MotionCueService service;
   Instance msg = MessageUtility.getInstance(MotionCueList.class);
 //  ArrayList<MotionCue> cues;
   private int last_cue = 1;
@@ -28,6 +29,7 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
   public MotionCueList(CueModule parent)
   { 
     this.parent = parent;
+    service = parent.getApplication().getResource(MotionCueService.class);
     TableColumn<MotionCue, Integer> id = new TableColumn<>(msg("id"));
     TableColumn<MotionCue, String> type = new TableColumn<>(msg("type"));
     TableColumn<MotionCue, String> label = new TableColumn<>(msg("label"));
@@ -47,6 +49,13 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
             (mc)->
             { 
               removeMotionCue(mc);
+            });
+    
+    TableColumn<MotionCue, Procedure<MotionCue>> go = 
+        Fx.columnAction(msg("go"), msg("go-detail"), 
+            cue -> 
+            {
+              service.fireCue(cue);
             });
     
     id.setCellValueFactory(cell -> cell.getValue().getIdProperty().asObject());  
@@ -92,7 +101,8 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
         description,
         time,
         print,
-        remove
+        remove,
+        go
         );
     
     //Add selection listeners
