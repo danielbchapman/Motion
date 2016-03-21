@@ -29,6 +29,7 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
   { 
     this.parent = parent;
     TableColumn<MotionCue, Integer> id = new TableColumn<>(msg("id"));
+    TableColumn<MotionCue, String> type = new TableColumn<>(msg("type"));
     TableColumn<MotionCue, String> label = new TableColumn<>(msg("label"));
     TableColumn<MotionCue, String> description = new TableColumn<>(msg("description"));
     TableColumn<MotionCue, Float> time = new TableColumn<>(msg("time"));
@@ -55,6 +56,9 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
       e.getRowValue().setId(e.getNewValue());
     });
     id.setEditable(false);
+    
+    type.setCellValueFactory(cell -> cell.getValue().getTypeProperty());  
+    type.setEditable(false);
     
     label.setCellValueFactory(cell -> cell.getValue().getLabelProperty());  
     label.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -83,6 +87,7 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
     
     getColumns().addAll(
         id,
+        type,
         label,
         description,
         time,
@@ -105,6 +110,7 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
     last_cue++;
     MotionCue cue = new MotionCue();
     cue.setId(last_cue);
+    cue.setType(type.toString());
     getItems().add(cue);
   }
   

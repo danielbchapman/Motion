@@ -22,11 +22,42 @@ public class MotionCue
 {
   public enum CueType
   {
-    LOGIC,
-    CONTENT,
-    TRANSFORM,
-    SHOW_CONTROL,
-    PLAYBACK,
+    LOGIC("logic"),
+    CONTENT("content"),
+    TRANSFORM("transform"),
+    SHOW_CONTROL("showcontrol"),
+    PLAYBACK("playback");
+    
+    
+    String value;
+    CueType(String x)
+    {
+      this.value = x;
+    }
+    
+    public String toString()
+    {
+      return value;
+    }
+    
+    public static CueType fromString(String from)
+    {
+      switch (from)
+      {
+        case "content":
+          return CONTENT;
+        case "transform":
+          return TRANSFORM;
+        case "showcontrol":
+          return SHOW_CONTROL;
+        case "playback":
+          return PLAYBACK;
+        default:
+          return LOGIC;
+      }
+        
+        
+    }
   }
   
   private static Gson getGson()
@@ -230,5 +261,19 @@ Id  CueId Label Description Time  Delay Follow
     return this.follow.get();
   }
   
-  
+  private SimpleStringProperty type = new SimpleStringProperty();
+  public SimpleStringProperty getTypeProperty()
+  {
+    return type;
+  }
+
+  public void setType(String type)
+  {
+    this.type.set(type);
+  }
+
+  public String getType()
+  {
+    return this.type.get();
+  }
 }

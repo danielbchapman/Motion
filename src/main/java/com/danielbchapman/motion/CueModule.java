@@ -119,7 +119,7 @@ public class CueModule extends Module
 
   public void addCue(CueType type)
   {
-    cueList.addMotionCue(CueType.CONTENT);
+    cueList.addMotionCue(type);
   }
   
   public void openCueList()

@@ -2,6 +2,8 @@ package com.danielbchapman.motion;
 
 import java.util.HashMap;
 
+import com.danielbchapman.motion.MotionCue.CueType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class MotionCueStorage
 {
   private Integer id;
+  private CueType type;
   private String cueId;
   private String description;
   private String label;
@@ -32,7 +35,7 @@ public class MotionCueStorage
     setFollow(cue.getFollow());
     setDelay(cue.getDelay());
     setLabel(cue.getLabel());
-    
+    setType(CueType.fromString(cue.getType()));
     if(cue.getDynamicData() != null)
     {
        cue.getDynamicData()
@@ -50,7 +53,7 @@ public class MotionCueStorage
     ret.setFollow(follow);
     ret.setDelay(delay);
     ret.setLabel(label);
-    
+    ret.setType(type == null ? type.CONTENT.toString() : type.toString());
     if(dynamic != null)
     {
       dynamic.forEach((k, v) -> ret.setData(k, v));

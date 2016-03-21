@@ -39,6 +39,13 @@ public class MotionTools extends HBox
             app.getModule(CueModule.class).addCue(CueType.LOGIC);
           }
           ));
+    makeButton(
+        new SimpleAction("logicCue", "mediaCueDetail", 
+          (e)->
+          {
+            app.getModule(CueModule.class).addCue(CueType.PLAYBACK);
+          }
+          ));
   }
   
   private void makeButton(SimpleAction action)
