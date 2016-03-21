@@ -33,6 +33,9 @@ public class CueModule extends Module
   private Node parent;
   public Group test = Groups.getGroup("TestCues");
   
+  public MotionTools tools;
+  public MotionStatus status;
+  public MotionTabs tabs;
   public MotionCueList cueList;
   
   @Override
@@ -50,10 +53,10 @@ public class CueModule extends Module
     //Main container
     VBox workspace = new VBox();
     
-    MotionTools tools = new MotionTools();
-    MotionStatus status = new MotionStatus();
-    MotionTabs tabs = new MotionTabs();
-    cueList = new MotionCueList();
+    tools = new MotionTools();
+    status = new MotionStatus();
+    tabs = new MotionTabs(this);
+    cueList = new MotionCueList(this);
     HBox controls = new HBox();
     
     controls.getChildren().add(tabs);

@@ -19,13 +19,15 @@ import javafx.util.converter.IntegerStringConverter;
 
 public class MotionCueList extends TableView<MotionCue> implements IInternationalized
 {
+  CueModule parent;
   Instance msg = MessageUtility.getInstance(MotionCueList.class);
 //  ArrayList<MotionCue> cues;
   private int last_cue = 1;
   
   @SuppressWarnings("unchecked")
-  public MotionCueList()
+  public MotionCueList(CueModule parent)
   { 
+    this.parent = parent;
     TableColumn<MotionCue, Integer> id = new TableColumn<>(msg("id"));
     TableColumn<MotionCue, String> label = new TableColumn<>(msg("label"));
     TableColumn<MotionCue, String> description = new TableColumn<>(msg("description"));
@@ -90,9 +92,9 @@ public class MotionCueList extends TableView<MotionCue> implements IInternationa
     
     //Add selection listeners
     getSelectionModel().selectedItemProperty().addListener(
-      (x)->
+      (prop, oldVal, newVal)->
       {
-        System.out.println("SELECT>>" + x);
+        parent.tabs.load(newVal);
       });
     //No sorting
     setSortPolicy( x -> { return false; });
