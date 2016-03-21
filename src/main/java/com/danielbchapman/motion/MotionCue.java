@@ -17,156 +17,212 @@ import lombok.Getter;
 import lombok.ToString;
 
 @ToString
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class MotionCue
 {
+
+  /*
+   * THIS MIGHT BE USELESS NOW PREPROCESSOR FILES FOR TSVUtil //AUTO GENERATED VALUES FOR #raw private
+   * SimpleStringProperty #lower = new SimpleStringProperty(); public SimpleStringProperty get#valueProperty() { return
+   * #lower; } public void set#value(String #lower) { this.#lower.set(#lower); } public String get#value() { return
+   * this.#lower.get(); } //PROPERTY LIST Id CueId Label Description Time Delay Follow
+   */
+
+  // AUTO GENERATED CODE BEGINS -------------------------------
+  // AUTO GENERATED VALUES FOR Id
   public enum CueType
   {
-    LOGIC("logic"),
-    CONTENT("content"),
-    TRANSFORM("transform"),
-    SHOW_CONTROL("showcontrol"),
-    PLAYBACK("playback");
-    
-    
-    String value;
-    CueType(String x)
-    {
-      this.value = x;
-    }
-    
-    public String toString()
-    {
-      return value;
-    }
-    
+    CONTENT("content"), LOGIC("logic"), PLAYBACK("playback"), SHOW_CONTROL("showcontrol"), TRANSFORM("transform");
+
     public static CueType fromString(String from)
     {
       switch (from)
       {
-        case "content":
-          return CONTENT;
-        case "transform":
-          return TRANSFORM;
-        case "showcontrol":
-          return SHOW_CONTROL;
-        case "playback":
-          return PLAYBACK;
-        default:
-          return LOGIC;
+      case "content":
+        return CONTENT;
+      case "transform":
+        return TRANSFORM;
+      case "showcontrol":
+        return SHOW_CONTROL;
+      case "playback":
+        return PLAYBACK;
+      default:
+        return LOGIC;
       }
-        
-        
+
+    }
+
+    String value;
+
+    CueType(String x)
+    {
+      this.value = x;
+    }
+
+    public String toString()
+    {
+      return value;
     }
   }
-  
+
+  public static MotionCue deserialize(String data)
+  {
+    MotionCueStorage store = getGson().fromJson(data, MotionCueStorage.class);
+    if (store == null)
+      return null;
+
+    return store.toMotionCue();
+  }
+
+  public static ArrayList<MotionCue> deserializeList(String data)
+  {
+    Type type = new TypeToken<List<MotionCueStorage>>()
+    {
+    }.getType();
+
+    List<MotionCueStorage> cues = getGson().fromJson(data, type);
+
+    ArrayList<MotionCue> ret = new ArrayList<>();
+    for (MotionCueStorage store : cues)
+      if (store != null)
+        ret.add(store.toMotionCue());
+
+    return ret;
+  }
+
   private static Gson getGson()
   {
-    return new GsonBuilder()
-        .setPrettyPrinting()
-        .serializeNulls()
-        .create();
+    return new GsonBuilder().setPrettyPrinting().serializeNulls().create();
   }
+
   public static String serialize(final List<MotionCue> cues)
   {
-    Type type = new TypeToken<List<MotionCueStorage>>(){}.getType();
-      
+    Type type = new TypeToken<List<MotionCueStorage>>()
+    {
+    }.getType();
+
     List<MotionCueStorage> storage = new ArrayList<>();
-    for(MotionCue q : cues)
+    for (MotionCue q : cues)
       storage.add(new MotionCueStorage(q));
     return getGson().toJson(storage, type);
   }
-  
-  public static ArrayList<MotionCue> deserializeList(String data)
-  {
-    Type type = new TypeToken<List<MotionCueStorage>>(){}.getType();
-    
-    List<MotionCueStorage> cues = getGson().fromJson(data, type);
-    
-    ArrayList<MotionCue> ret = new ArrayList<>();
-    for(MotionCueStorage store : cues)
-      if(store != null)
-        ret.add(store.toMotionCue());
-    
-    return ret;
-  }
-  
+
   public static String serialize(MotionCue cue)
   {
     String data = getGson().toJson(new MotionCueStorage(cue));
     return data;
   }
-  
-  public static MotionCue deserialize(String data)
-  {
-    MotionCueStorage store = getGson().fromJson(data, MotionCueStorage.class);
-    if(store == null)
-      return null;
-    
-    return store.toMotionCue();
-  }
-  
+
+  // AUTO GENERATED VALUES FOR CueId
+  private SimpleStringProperty cueId = new SimpleStringProperty();
+
+  // AUTO GENERATED VALUES FOR Delay
+  private SimpleFloatProperty delay = new SimpleFloatProperty();
+
+  // AUTO GENERATED VALUES FOR Description
+  private SimpleStringProperty description = new SimpleStringProperty();
+
   @Getter
   private HashMap<String, String> dynamicData = new HashMap<>();
-  
-  public void setData(String key, String value)
+  // AUTO GENERATED VALUES FOR Follow
+  private SimpleFloatProperty follow = new SimpleFloatProperty();
+
+  private SimpleIntegerProperty id = new SimpleIntegerProperty();
+
+  // AUTO GENERATED VALUES FOR Label
+  public SimpleStringProperty label = new SimpleStringProperty();
+  // AUTO GENERATED VALUES FOR Time
+  private SimpleFloatProperty time = new SimpleFloatProperty();
+
+  private SimpleStringProperty type = new SimpleStringProperty();
+
+  public String getCueId()
   {
-    dynamicData.put(key,  value);
+    return this.cueId.get();
   }
-  
+
+  public SimpleStringProperty getCueIdProperty()
+  {
+    return cueId;
+  }
+
   public String getData(String key, String def)
   {
     String data = dynamicData.get(key);
-    if(data != null)
+    if (data != null)
       return data;
-    
+
     return def;
   }
-  /*
-PREPROCESSOR FILES FOR TSVUtil
-//AUTO GENERATED VALUES FOR #raw
-private SimpleStringProperty #lower = new SimpleStringProperty();
-public SimpleStringProperty get#valueProperty()
-{
-  return #lower;
-}
 
-public void set#value(String #lower)
-{
-  this.#lower.set(#lower);
-}
-
-public String get#value()
-{
-  return this.#lower.get();
-}
-//PROPERTY LIST 
-Id  CueId Label Description Time  Delay Follow    
-*/
-
-//AUTO GENERATED CODE BEGINS -------------------------------
-  //AUTO GENERATED VALUES FOR Id
-  private SimpleIntegerProperty id = new SimpleIntegerProperty();
-  public SimpleIntegerProperty getIdProperty()
+  public Float getDelay()
   {
-    return id;
+    return this.delay.get();
   }
 
-  public void setId(Integer id)
+  public SimpleFloatProperty getDelayProperty()
   {
-    this.id.set(id);
+    return delay;
+  }
+
+  public String getDescription()
+  {
+    return this.description.get();
+  }
+
+  public SimpleStringProperty getDescriptionProperty()
+  {
+    return description;
+  }
+
+  public Float getFollow()
+  {
+    return this.follow.get();
+  }
+
+  public SimpleFloatProperty getFollowProperty()
+  {
+    return follow;
   }
 
   public Integer getId()
   {
     return this.id.get();
   }
-  //AUTO GENERATED VALUES FOR CueId
-  private SimpleStringProperty cueId = new SimpleStringProperty();
-  
-  public SimpleStringProperty getCueIdProperty()
+
+  public SimpleIntegerProperty getIdProperty()
   {
-    return cueId;
+    return id;
+  }
+
+  public String getLabel()
+  {
+    return this.label.get();
+  }
+
+  public SimpleStringProperty getLabelProperty()
+  {
+    return label;
+  }
+
+  public Float getTime()
+  {
+    return this.time.get();
+  }
+
+  public SimpleFloatProperty getTimeProperty()
+  {
+    return time;
+  }
+
+  public String getType()
+  {
+    return this.type.get();
+  }
+
+  public SimpleStringProperty getTypeProperty()
+  {
+    return type;
   }
 
   public void setCueId(String cueId)
@@ -174,65 +230,9 @@ Id  CueId Label Description Time  Delay Follow
     this.cueId.set(cueId);
   }
 
-  public String getCueId()
+  public void setData(String key, String value)
   {
-    return this.cueId.get();
-  }
-  
-  //AUTO GENERATED VALUES FOR Label
-  public SimpleStringProperty label = new SimpleStringProperty();
-  public SimpleStringProperty getLabelProperty()
-  {
-    return label;
-  }
-
-  public void setLabel(String label)
-  {
-    this.label.set(label);
-  }
-
-  public String getLabel()
-  {
-    return this.label.get();
-  }
-  
-  //AUTO GENERATED VALUES FOR Description
-  private SimpleStringProperty description = new SimpleStringProperty();
-  public SimpleStringProperty getDescriptionProperty()
-  {
-    return description;
-  }
-
-  public void setDescription(String description)
-  {
-    this.description.set(description);
-  }
-
-  public String getDescription()
-  {
-    return this.description.get();
-  }
-  //AUTO GENERATED VALUES FOR Time
-  private SimpleFloatProperty time = new SimpleFloatProperty();
-  public SimpleFloatProperty getTimeProperty()
-  {
-    return time;
-  }
-
-  public void setTime(Float time)
-  {
-    this.time.set(time);
-  }
-
-  public Float getTime()
-  {
-    return this.time.get();
-  }
-  //AUTO GENERATED VALUES FOR Delay
-  private SimpleFloatProperty delay = new SimpleFloatProperty();
-  public SimpleFloatProperty getDelayProperty()
-  {
-    return delay;
+    dynamicData.put(key, value);
   }
 
   public void setDelay(Float delay)
@@ -240,15 +240,9 @@ Id  CueId Label Description Time  Delay Follow
     this.delay.set(delay);
   }
 
-  public Float getDelay()
+  public void setDescription(String description)
   {
-    return this.delay.get();
-  }
-  //AUTO GENERATED VALUES FOR Follow    
-  private SimpleFloatProperty follow = new SimpleFloatProperty();
-  public SimpleFloatProperty getFollowProperty()
-  {
-    return follow;
+    this.description.set(description);
   }
 
   public void setFollow(Float follow)
@@ -256,24 +250,28 @@ Id  CueId Label Description Time  Delay Follow
     this.follow.set(follow);
   }
 
-  public Float getFollow()
+  public void setId(Integer id)
   {
-    return this.follow.get();
+    this.id.set(id);
   }
-  
-  private SimpleStringProperty type = new SimpleStringProperty();
-  public SimpleStringProperty getTypeProperty()
+
+  public void setLabel(String label)
   {
-    return type;
+    this.label.set(label);
+  }
+
+  public void setTime(Float time)
+  {
+    this.time.set(time);
   }
 
   public void setType(String type)
   {
     this.type.set(type);
   }
-
-  public String getType()
+  
+  public CueType getCueType()
   {
-    return this.type.get();
+    return CueType.fromString(getType());  
   }
 }

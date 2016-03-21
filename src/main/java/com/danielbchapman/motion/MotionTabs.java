@@ -1,5 +1,6 @@
 package com.danielbchapman.motion;
 
+import com.danielbchapman.fx.builders.FileField;
 import com.danielbchapman.fx.builders.FloatField;
 import com.danielbchapman.fx.builders.Fx;
 import com.danielbchapman.international.MessageUtility;
@@ -102,12 +103,14 @@ public class MotionTabs extends TabPane
 //    float scaleY = Safe.parseFloat(cue.getData("pb-scaleY", "1"));
 //    float scaleZ = Safe.parseFloat(cue.getData("pb-scaleZ", "1"));
 //    
-    TextField file = Fx.promptText("File Name");
+    FileField motionFile = new FileField(cue.getData("pb-recording", null));
+    FileField brushFile =  new FileField(cue.getData("pb-brush", null));
     FloatField txtPosX = Fx.promptFloat(posX, "X Pos");
     FloatField txtPosY = Fx.promptFloat(posY, "Y Pos");
     FloatField txtPosZ = Fx.promptFloat(posZ, "Z Pos");
     
-    file.onActionProperty().set( x -> active.setData("pb-file", file.getText()) );
+    motionFile.setFileChanged(f -> active.setData("pb-recording", motionFile.getFile().getAbsolutePath()));
+    brushFile.setFileChanged(f -> active.setData("pb-brush", brushFile.getFile().getAbsolutePath()));
     
     txtPosX.onActionProperty().set( x -> active.setData("pb-x", txtPosX.getText()) );
     txtPosY.onActionProperty().set( x -> active.setData("pb-y", txtPosY.getText()) );
@@ -115,8 +118,10 @@ public class MotionTabs extends TabPane
     
     playbackContent.getChildren().clear();
     playbackContent.getChildren().addAll(
-        new Label("Recording"),
-        file,
+        new Label("Motion File"),
+        motionFile,
+        new Label("Brush File"),
+        brushFile,
         new Label("Position X"),
         txtPosX,
         new Label("Position Y"),
