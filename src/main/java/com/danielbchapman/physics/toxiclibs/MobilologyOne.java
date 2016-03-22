@@ -272,16 +272,6 @@ public class MobilologyOne extends Layer
       return new Action(label, delay, fL, fE);
     }
     
-    public PlaybackCue playback(String label, String brushFile, String motionFile)
-    {
-      int w = Actions.engine.width;
-      int h = Actions.engine.height;
-      
-      PlaybackCue pb = new PlaybackCue(label, brushFile, motionFile);
-      pb.loadCue(w, h, 0, 0); //FIXME add an offset here! Or scaling if needed..
-      return pb;
-    }
-    
     public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
     {
       return new Action(label, 0, fL, fE);

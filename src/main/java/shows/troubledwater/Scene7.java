@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import processing.core.PGraphics;
-import toxi.geom.Vec3D;
-import toxi.physics3d.VerletPhysics3D;
-
 import com.danielbchapman.artwork.Paragraph;
 import com.danielbchapman.physics.toxiclibs.Action;
 import com.danielbchapman.physics.toxiclibs.Actions;
@@ -20,10 +16,13 @@ import com.danielbchapman.physics.toxiclibs.FloorSplitGravity;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.LetterEmitter;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.PlaybackCue;
 import com.danielbchapman.physics.toxiclibs.Point;
 import com.danielbchapman.physics.toxiclibs.Transform;
 import com.danielbchapman.physics.toxiclibs.Util;
+
+import processing.core.PGraphics;
+import toxi.geom.Vec3D;
+import toxi.physics3d.VerletPhysics3D;
 
 public class Scene7 extends Layer
 {
@@ -289,16 +288,6 @@ public class Scene7 extends Layer
    public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE, int delay)
    {
      return new Action(label, delay, fL, fE);
-   }
-   
-   public PlaybackCue playback(String label, String brushFile, String motionFile)
-   {
-     int w = Actions.engine.width;
-     int h = Actions.engine.height;
-     
-     PlaybackCue pb = new PlaybackCue(label, brushFile, motionFile);
-     pb.loadCue(w, h, 0, 0); //FIXME add an offset here! Or scaling if needed..
-     return pb;
    }
    
    public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)

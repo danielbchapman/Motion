@@ -1,15 +1,12 @@
 package com.danielbchapman.motion;
 
 import com.danielbchapman.fx.builders.FileField;
-import com.danielbchapman.fx.builders.FloatField;
 import com.danielbchapman.fx.builders.Fx;
 import com.danielbchapman.fx.builders.IntegerField;
 import com.danielbchapman.international.MessageUtility;
 import com.danielbchapman.international.MessageUtility.Instance;
 import com.danielbchapman.physics.toxiclibs.Actions;
-import com.danielbchapman.text.Safe;
 
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;

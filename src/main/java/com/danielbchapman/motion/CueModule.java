@@ -10,15 +10,12 @@ import com.danielbchapman.groups.Groups;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.MotionCue.CueType;
 import com.danielbchapman.utility.Utility;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lombok.val;
 
 
 /**

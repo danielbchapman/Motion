@@ -53,7 +53,7 @@ public class MotionCueStorage
     ret.setFollow(follow);
     ret.setDelay(delay);
     ret.setLabel(label);
-    ret.setType(type == null ? type.CONTENT.toString() : type.toString());
+    ret.setType(type == null ? CueType.CONTENT.toString() : type.toString());
     if(dynamic != null)
     {
       dynamic.forEach((k, v) -> ret.setData(k, v));

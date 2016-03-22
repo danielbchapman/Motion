@@ -1,6 +1,5 @@
 package com.danielbchapman.motion;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import com.danielbchapman.application.Resource;
@@ -10,11 +9,6 @@ import com.danielbchapman.physics.toxiclibs.Action;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.Loader;
-import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
-import com.danielbchapman.physics.toxiclibs.PlaybackCue;
-import com.danielbchapman.text.Safe;
-
-import shows.troubledwater.TWCueStack;
 
 public class MotionCueService extends Resource
 {

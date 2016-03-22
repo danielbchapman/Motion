@@ -5,14 +5,11 @@ import java.io.File;
 import javax.swing.JFrame;
 
 import com.danielbchapman.application.Application;
-import com.danielbchapman.application.Module;
 import com.danielbchapman.international.MessageUtility;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.physics.toxiclibs.Main;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
-import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.SeparatorMenuItem;
