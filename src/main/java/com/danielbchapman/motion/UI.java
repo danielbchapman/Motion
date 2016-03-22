@@ -2,6 +2,8 @@ package com.danielbchapman.motion;
 
 import java.io.File;
 
+import javax.swing.JFrame;
+
 import com.danielbchapman.application.Application;
 import com.danielbchapman.application.Module;
 import com.danielbchapman.international.MessageUtility;
@@ -19,7 +21,10 @@ public class UI extends Application
 {
 	public static void main(String... args)
   {
-    launch(UI.class);
+	  JFrame swing = new JFrame();
+	  UI ui = new UI();
+	  ui.startSwing(swing);
+    //launch(UI.class);
   }
 	
 	protected MenuBar menuBar;
@@ -148,14 +153,6 @@ public class UI extends Application
 	{
 		motion = Main.ENGINE; //static pointer
 	}
-
-	@Override
-	public Scene initializeScene()
-	{
-		//TODO Auto Generated Sub
-		throw new RuntimeException("Not Implemented...");
-		
-	}
   
 	@SuppressWarnings("ADD EXCEPTION LOGGING HERE IN THE FRAMEWORK")
 	@Override
@@ -228,5 +225,11 @@ public class UI extends Application
 		motion = null;
 		saveBackup(); //Save state
 	}
+
+  @Override
+  protected boolean exitOnClose()
+  {
+    return true;
+  }
 }
 

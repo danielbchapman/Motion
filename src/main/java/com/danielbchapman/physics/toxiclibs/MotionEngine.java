@@ -915,7 +915,6 @@ public class MotionEngine extends PApplet
   {
       if (!capture.isEmpty())
       {
-
         Playback p = Recorder.playback(capture, null, this);
         playbacks.clear();
         playbacks.add(p);
@@ -1033,15 +1032,19 @@ public class MotionEngine extends PApplet
   {
   	if(fxInterface == null)
   	{
-	  	System.out.println("INITILIZING JFX INTERFACE");
-	  	Thread jfx = new Thread("Motion JFX")
-	  	{
-	  		public void run()
-	  		{
-	  			Application.launch(UI.class);	
-	  		}
-	  	};
-	  	jfx.run();
+  	  Thread fxThread = new Thread(()->
+  	  {
+  	    final JFrame frame = new JFrame();
+  	    new JFXPanel(); //start toolkit
+  	    javafx.application.Platform.runLater(()->
+  	    {
+  	      System.out.println("Starting FX");
+  	      fxInterface = new UI();
+  	      fxInterface.startSwing(frame);
+  	    });
+  	    
+  	  });
+  	  fxThread.start();
   	}
   	else
   	{
