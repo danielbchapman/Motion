@@ -1,13 +1,20 @@
 package com.danielbchapman.motion;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.danielbchapman.application.Resource;
 import com.danielbchapman.application.ScopeType;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.physics.toxiclibs.Action;
+import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Cue;
+import com.danielbchapman.physics.toxiclibs.Loader;
+import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 import com.danielbchapman.physics.toxiclibs.PlaybackCue;
+import com.danielbchapman.text.Safe;
+
+import shows.troubledwater.TWCueStack;
 
 public class MotionCueService extends Resource
 {
@@ -21,7 +28,7 @@ public class MotionCueService extends Resource
    * 
    */
   @SuppressWarnings({"REFACTOR TO USE: com.danielbchapman.physics.toxiclibs.Actions.loadRecordingAsAction(int, int, int, int, File, MotionInteractiveBehavior)"})
-  public Cue convertCue(MotionCue cue)
+  public Cue convertCue(final MotionCue cue)
   {
     String label = cue.getCueId() + " | " + cue.getType() + " | " + cue.getLabel();
     ArrayList<Action> actions = new ArrayList<Action>();
@@ -35,12 +42,15 @@ public class MotionCueService extends Resource
       case PLAYBACK:
         String recording = cue.getData("pb-recording", null);
         String brush = cue.getData("pb-brush", null);
-        if(recording != null && brush != null)
-        {
-          PlaybackCue pb = new PlaybackCue(label, brush, recording);
-          return pb;
-        }
-        break;
+        
+        int w, h, x, y; 
+        w = cue.asInt("pb-width", Actions.WIDTH);
+        h = cue.asInt("height", Actions.HEIGHT);
+        x = cue.asInt("pb-x", 0);
+        y = cue.asInt("pb-y", 0);
+        
+        Cue results = Loader.load(x, y, w, h, cue.getLabel(), recording, brush);
+        return results;
       case SHOW_CONTROL:
         break;
       case TRANSFORM:

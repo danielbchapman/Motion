@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.danielbchapman.text.Safe;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -65,6 +66,53 @@ public class MotionCue
     }
   }
 
+  public Integer asInt(String key)
+  {
+    return asInt(key, null);
+  }
+  
+  public Integer asInt(String key, Integer def)
+  {
+    if(dynamicData == null)
+      return def;
+    
+    Integer i = Safe.parseInteger(dynamicData.get(key));
+    
+    if(i == null)
+      return def;
+    
+    return i;
+  }
+  
+  public String asString(String key, String def)
+  {
+    if(dynamicData == null)
+      return def;
+    
+    String s = dynamicData.get(key);
+    if(s == null)
+      return def;
+    return s;
+  }
+  
+  public String asString(String key)
+  {
+    return asString(key, null);
+  }
+  
+  public Float asFloat(String key, Float def)
+  {
+    if(dynamicData == null)
+      return def;
+    
+    return Safe.parseFloat(key, def);
+  }
+  
+  public Float asFloat(String key)
+  {
+    return asFloat(key, null);
+  }
+  
   public static MotionCue deserialize(String data)
   {
     MotionCueStorage store = getGson().fromJson(data, MotionCueStorage.class);
@@ -232,6 +280,7 @@ public class MotionCue
 
   public void setData(String key, String value)
   {
+    System.out.println("SETTING " + key + " -> " + value);
     dynamicData.put(key, value);
   }
 

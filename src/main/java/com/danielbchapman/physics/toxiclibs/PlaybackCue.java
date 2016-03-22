@@ -11,26 +11,23 @@ import com.danielbchapman.utility.Utility;
 @Data
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @SuppressWarnings("PlaybackCue and Cue structure makes no sense, probably this is a bad heirarchy.")
-public class PlaybackCue extends Cue
+public class PlaybackCue// extends Cue
 {
   String brushFile;
   String motionFile;
   String label;
-  @SuppressWarnings("Why is this variable here?")
-  Cue cue;
+//  @SuppressWarnings("Why is this variable here?")
+//  Cue cue;
   MotionInteractiveBehavior brush;
-  ArrayList<RecordAction> actions;
+//  ArrayList<RecordAction> actions;
   
-  public Cue loadCue(int w, int h, int offsetX, int offsetY) 
+  public void loadCue(int w, int h, int offsetX, int offsetY) 
   {
-    if(cue != null)
-      return cue;
-    
     brush = MotionInteractiveBehavior.load(FileUtil.readFile(brushFile));
+    Cue local = 
     actions = Recorder.load(motionFile, w, h, offsetX, offsetY);
-    
-    return cue;
   }
+  
   public PlaybackCue(String label, String brushFile, String motionFile)
   {
     super(label, null);

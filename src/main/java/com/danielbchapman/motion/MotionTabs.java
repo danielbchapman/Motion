@@ -3,8 +3,10 @@ package com.danielbchapman.motion;
 import com.danielbchapman.fx.builders.FileField;
 import com.danielbchapman.fx.builders.FloatField;
 import com.danielbchapman.fx.builders.Fx;
+import com.danielbchapman.fx.builders.IntegerField;
 import com.danielbchapman.international.MessageUtility;
 import com.danielbchapman.international.MessageUtility.Instance;
+import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.text.Safe;
 
 import javafx.scene.Node;
@@ -12,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class MotionTabs extends TabPane
@@ -95,19 +98,22 @@ public class MotionTabs extends TabPane
   
   public void loadPlayback(MotionCue cue)
   {
-    float posX = Safe.parseFloat(cue.getData("pb-x", "0"));
-    float posY = Safe.parseFloat(cue.getData("pb-y", "0"));
-    float posZ = Safe.parseFloat(cue.getData("pb-z", "0"));
-//    
-//    float scaleX = Safe.parseFloat(cue.getData("pb-scaleX", "1"));
-//    float scaleY = Safe.parseFloat(cue.getData("pb-scaleY", "1"));
-//    float scaleZ = Safe.parseFloat(cue.getData("pb-scaleZ", "1"));
-//    
+    int posX = cue.asInt("pb-x", 0);
+    int posY = cue.asInt("pb-y", 0);
+    int posZ = cue.asInt("pb-z", 0);
+    
+    int sizeX = cue.asInt("pb-width", Actions.WIDTH);
+    int sizeY = cue.asInt("pb-height", Actions.HEIGHT);
+    
     FileField motionFile = new FileField(cue.getData("pb-recording", null));
     FileField brushFile =  new FileField(cue.getData("pb-brush", null));
-    FloatField txtPosX = Fx.promptFloat(posX, "X Pos");
-    FloatField txtPosY = Fx.promptFloat(posY, "Y Pos");
-    FloatField txtPosZ = Fx.promptFloat(posZ, "Z Pos");
+    
+    IntegerField txtPosX = Fx.promptInt(posX, "X Pos");
+    IntegerField txtPosY = Fx.promptInt(posY, "Y Pos");
+    IntegerField txtPosZ = Fx.promptInt(posZ, "Z Pos");
+    
+    IntegerField txtWidth = Fx.promptInt(sizeX, "Width");
+    IntegerField txtHeight = Fx.promptInt(sizeY, "Height");
     
     motionFile.setFileChanged(f -> active.setData("pb-recording", motionFile.getFile().getAbsolutePath()));
     brushFile.setFileChanged(f -> active.setData("pb-brush", brushFile.getFile().getAbsolutePath()));
@@ -116,18 +122,40 @@ public class MotionTabs extends TabPane
     txtPosY.onActionProperty().set( x -> active.setData("pb-y", txtPosY.getText()) );
     txtPosZ.onActionProperty().set( x -> active.setData("pb-z", txtPosZ.getText()) );
     
+    txtWidth.onActionProperty().set( x -> active.setData("pb-width", txtWidth.getText()) );
+    txtHeight.onActionProperty().set( x -> active.setData("pb-height", txtHeight.getText()) );
+    
     playbackContent.getChildren().clear();
     playbackContent.getChildren().addAll(
-        new Label("Motion File"),
+        
+        Fx.label("Motion File"),
         motionFile,
-        new Label("Brush File"),
+        Fx.label("Brush File"),
         brushFile,
-        new Label("Position X"),
-        txtPosX,
-        new Label("Position Y"),
-        txtPosY,
-        new Label("Position Z"),
-        txtPosZ
+        new HBox(
+            new VBox(
+                Fx.label("Width"),
+                txtWidth
+                ),
+            
+            new VBox(
+                Fx.label("Height"),
+                txtHeight
+                )),
+        new HBox(
+            new VBox(
+                Fx.label("Position X"),
+                txtPosX
+                ),
+            new VBox(
+                Fx.label("Position Y"),
+                txtPosY
+                ),
+            new VBox(
+                Fx.label("Position Z"),
+                txtPosZ
+                )
+            )
         );
   }
 }
