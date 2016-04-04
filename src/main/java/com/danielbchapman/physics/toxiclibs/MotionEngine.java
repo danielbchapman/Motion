@@ -40,6 +40,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.opengl.PGraphics3D;
+import shows.gravitationalwaves.TriangleWavesLayer;
 import shows.shekillsmonsters.BeholderPuppet;
 import shows.shekillsmonsters.HealingSpellLayer;
 import shows.shekillsmonsters.MagicMissleLayer;
@@ -561,6 +562,10 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
+    //Gravitational Waves Project
+    prepare.accept(new TriangleWavesLayer());
+    
+    //Demo Leftovers
 //    prepare.accept(new HeroLayer(this));
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
     prepare.accept(new TitleSheKillsMonsters(this));
