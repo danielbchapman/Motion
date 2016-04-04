@@ -28,6 +28,7 @@ public class TriangleWavesLayer extends Layer
         {
           color = 0xFF00FFFF;
           setRandomTime(500);
+          setTimeStep(50);
         }
         @Override
         public TriangleWave onEmit(long time)
