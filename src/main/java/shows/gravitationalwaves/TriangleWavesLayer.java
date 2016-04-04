@@ -26,7 +26,6 @@ public class TriangleWavesLayer extends Layer
       new TriangleWaveEmitter(new Vec3D(400, 400, 0))
       {
         {
-          color = 0xFF00FFFF;
           setRandomTime(500);
           setTimeStep(50);
         }
@@ -34,6 +33,8 @@ public class TriangleWavesLayer extends Layer
         public TriangleWave onEmit(long time)
         {
           TriangleWave wave = new TriangleWave(0f, 0f, 0f,(float) Math.PI / 3 * 2); //60
+          wave.weight = Math.abs(time % 1000 - 500) / 150f;
+          wave.color = (int) (time % 255);
           return wave;          
         }
     

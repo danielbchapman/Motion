@@ -5,6 +5,8 @@ import com.danielbchapman.physics.toxiclibs.Moveable;
 import com.danielbchapman.physics.toxiclibs.Point;
 import com.danielbchapman.physics.toxiclibs.Transform;
 
+import lombok.Getter;
+import lombok.Setter;
 import toxi.geom.Vec3D;
 
 public class TriangleWave implements Moveable
@@ -17,6 +19,14 @@ public class TriangleWave implements Moveable
   public Vec3D aMag;
   public Vec3D bMag;
   public Vec3D cMag;
+  
+  @Getter
+  @Setter
+  public int color = 0xFFFFFFFF;
+  
+  @Getter
+  @Setter
+  public float weight = 3f;
   
   
   /**
