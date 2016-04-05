@@ -40,6 +40,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.opengl.PGraphics3D;
+import shows.gravitationalwaves.GalaxyLayer;
 import shows.gravitationalwaves.TriangleWavesLayer;
 import shows.shekillsmonsters.BeholderPuppet;
 import shows.shekillsmonsters.HealingSpellLayer;
@@ -564,6 +565,7 @@ public class MotionEngine extends PApplet
     
     //Gravitational Waves Project
     prepare.accept(new TriangleWavesLayer());
+    prepare.accept(new GalaxyLayer());
     
     //Demo Leftovers
 //    prepare.accept(new HeroLayer(this));
