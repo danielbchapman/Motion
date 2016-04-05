@@ -1,16 +1,21 @@
 package shows.gravitationalwaves;
 
+import com.danielbchapman.layers.BleedingLayer;
 import com.danielbchapman.physics.toxiclibs.AbstractEmitter;
 import com.danielbchapman.physics.toxiclibs.Actions;
-import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.Point;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
-public class TriangleWavesLayer extends Layer
+public class TriangleWavesLayer extends BleedingLayer
 {
+  public TriangleWavesLayer()
+  {
+    setFadeAmount(16);
+  }
+
   TriangleWaveEmitter emitter = 
       new TriangleWaveEmitter(new Vec3D(720, 360, 0))
       {
@@ -68,10 +73,8 @@ public class TriangleWavesLayer extends Layer
   }
 
   @Override
-  public void render(PGraphics g)
+  public void reanderAfterBleed(PGraphics g)
   {
-    g.background(0, 64, 0);
-    g.fill(255);
     g.text("TRIANGLE WAVES", 25, 25, 10);
     if(!initialized)
     {
