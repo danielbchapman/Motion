@@ -1,5 +1,6 @@
 package shows.gravitationalwaves;
 
+import com.danielbchapman.physics.toxiclibs.AbstractEmitter;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -37,6 +38,26 @@ public class TriangleWavesLayer extends Layer
           wave.color = (int) (time % 255);
           return wave;          
         }
+      };
+      
+  AbstractEmitter<SplineWave> spline = 
+      new AbstractEmitter<SplineWave>(new Vec3D(600, 600, 0))
+      {
+
+        @Override
+        public SplineWave onEmit(long time)
+        {
+          return new SplineWave(0f, 0f, 0f);
+        }
+
+        @Override
+        public void draw(PGraphics g)
+        {
+          g.strokeWeight(3f);
+          g.stroke(255, 0, 0);
+          for(SplineWave s : children)
+            s.draw(g);
+        }
     
       };
   boolean initialized;
@@ -59,13 +80,16 @@ public class TriangleWavesLayer extends Layer
     }
     emitter.draw(g);
     emitterCenter.draw(g);
+    spline.draw(g);
   }
 
   @Override
   public void update()
   {
-    emitter.update(System.currentTimeMillis());
-    emitterCenter.update(System.currentTimeMillis());
+    long time = System.currentTimeMillis();
+    emitter.update(time);
+    emitterCenter.update(time);
+    spline.update(time);
   }
 
   @Override
