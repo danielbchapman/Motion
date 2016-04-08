@@ -565,7 +565,7 @@ public class MotionEngine extends PApplet
     
     //Gravitational Waves Project
     prepare.accept(new TriangleWavesLayer());
-    prepare.accept(new GalaxyLayer());
+    prepare.accept(new GalaxyLayer(this));
     
     //Demo Leftovers
 //    prepare.accept(new HeroLayer(this));
