@@ -47,7 +47,7 @@ import shows.gravitationalwaves.BleedingPointGrid;
 import shows.gravitationalwaves.GalaxyLayer;
 import shows.gravitationalwaves.RandomParticleLinesLayer;
 import shows.gravitationalwaves.RandomParticlesLayer;
-import shows.gravitationalwaves.RandomParticlesVerticle;
+import shows.gravitationalwaves.RandomParticlesVertical;
 import shows.gravitationalwaves.TriangleWavesLayer;
 import shows.shekillsmonsters.BeholderPuppet;
 import shows.shekillsmonsters.HealingSpellLayer;
@@ -580,7 +580,7 @@ public class MotionEngine extends PApplet
     prepare.accept(new TriangleWavesLayer());
 //    prepare.accept(new GalaxyLayer(this));
     prepare.accept(new RandomParticlesLayer());
-    prepare.accept(new RandomParticlesVerticle());
+    prepare.accept(new RandomParticlesVertical());
     prepare.accept(new RandomParticleLinesLayer());
     prepare.accept(new BleedingGrid(Actions.WIDTH, Actions.HEIGHT, 40));
     prepare.accept(new BleedingGridOffset(Actions.WIDTH, Actions.HEIGHT, 40));

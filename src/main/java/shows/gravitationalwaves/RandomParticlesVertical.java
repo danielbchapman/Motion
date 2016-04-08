@@ -18,13 +18,13 @@ import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 import com.danielbchapman.physics.toxiclibs.Point;
 
-public class RandomParticlesVerticle extends BleedingLayer
+public class RandomParticlesVertical extends BleedingLayer
 {
   ArrayList<Emitter<Point>> emitters = new ArrayList<>();
 
   ArrayList<MotionInteractiveBehavior> behaviors = new ArrayList<>();
 
-  public RandomParticlesVerticle()
+  public RandomParticlesVertical()
   {
     for (int i = 0; i < 4; i++)
     {
@@ -119,6 +119,6 @@ public class RandomParticlesVerticle extends BleedingLayer
   @Override
   public String getName()
   {
-    return "random-particles-verticle-layer";
+    return "random-particles-vertical-layer";
   }
 }
