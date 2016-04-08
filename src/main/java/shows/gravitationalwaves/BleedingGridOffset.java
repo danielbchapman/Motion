@@ -11,36 +11,37 @@ import com.danielbchapman.utility.Utility;
 
 import processing.core.PGraphics;
 
-public class BleedingGrid extends BleedingLayer
+
+/**
+ * A happy little accident.
+ *
+ */
+
+public class BleedingGridOffset extends BleedingLayer
 {
   int columns;
   int rows;
   int spacing;
   
-  public BleedingGrid(float width, float height, float spacing)
+  public BleedingGridOffset(float width, float height, float spacing)
   {
     columns = 1 + (int) ((width / spacing));
     rows = 1 + (int)((height / spacing));
     this.spacing = (int)spacing;
     
-    //add 3 padding
-    columns += 3;
-    rows += 3;
     //overrides init()
     ArrayList<Point> p = GraphicsUtility.createMotionGrid(columns, rows , this.spacing, this.spacing, 0, 1, GraphicsUtility::point);
     super.points = p.toArray(new Point[p.size()]);  
-    System.out.printf("Constructing grid at columns %d rows %d spacing %d", columns, rows, this.spacing );
   }
 
   @Override
   public void reanderAfterBleed(PGraphics g)
   { 
     g.pushMatrix();
-    g.translate(-spacing * 3,  -spacing * 3); //fill outside by + 3 
     g.noFill();
-    g.stroke(255);
+    g.stroke(255, 255, 255, 32);
     g.strokeWeight(3f);
-    GraphicsUtility.drawMotionGridAsLines(g, points, columns);
+    GraphicsUtility.drawMotionGridAsLinesOffset(g, points, rows);
     
     g.popMatrix();
   }
@@ -64,6 +65,6 @@ public class BleedingGrid extends BleedingLayer
   @Override
   public String getName()
   {
-    return "bleeding-grid";
+    return "bleeding-grid-offset";
   }
 }

@@ -40,6 +40,8 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.opengl.PGraphics3D;
+import shows.gravitationalwaves.BleedingGrid;
+import shows.gravitationalwaves.BleedingGridOffset;
 import shows.gravitationalwaves.GalaxyLayer;
 import shows.gravitationalwaves.TriangleWavesLayer;
 import shows.shekillsmonsters.BeholderPuppet;
@@ -367,7 +369,7 @@ public class MotionEngine extends PApplet
     
     if(enableSpout)
     {
-    	if(Platform.isWindows() || Platform.isWindowsCE())
+      if(Platform.isWindows() || Platform.isWindowsCE())
     	{
     		if(spout != null)
       	{
@@ -566,7 +568,8 @@ public class MotionEngine extends PApplet
     //Gravitational Waves Project
     prepare.accept(new TriangleWavesLayer());
     prepare.accept(new GalaxyLayer(this));
-    
+    prepare.accept(new BleedingGrid(Actions.WIDTH, Actions.HEIGHT, 40));
+    prepare.accept(new BleedingGridOffset(Actions.WIDTH, Actions.HEIGHT, 40));
     //Demo Leftovers
 //    prepare.accept(new HeroLayer(this));
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
