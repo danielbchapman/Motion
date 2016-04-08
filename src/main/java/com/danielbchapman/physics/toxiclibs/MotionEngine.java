@@ -25,6 +25,7 @@ import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.brushes.SmallBrush;
 import com.danielbchapman.brushes.TinyBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
+import com.danielbchapman.layers.ClearLayer;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.UI;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
@@ -44,6 +45,7 @@ import shows.gravitationalwaves.BleedingGrid;
 import shows.gravitationalwaves.BleedingGridOffset;
 import shows.gravitationalwaves.BleedingPointGrid;
 import shows.gravitationalwaves.GalaxyLayer;
+import shows.gravitationalwaves.RandomParticleLinesLayer;
 import shows.gravitationalwaves.RandomParticlesLayer;
 import shows.gravitationalwaves.TriangleWavesLayer;
 import shows.shekillsmonsters.BeholderPuppet;
@@ -239,6 +241,11 @@ public class MotionEngine extends PApplet
 					{
 						System.out.println("Play...");
 						playCapture();
+					}
+					else if ("clear".equalsIgnoreCase(command))
+					{
+					  advanceSceneTo("clear");
+					  activeLayerGo(); // force clear call
 					}
 					else
 					{
@@ -570,8 +577,9 @@ public class MotionEngine extends PApplet
     
     //Gravitational Waves Project
     prepare.accept(new TriangleWavesLayer());
-    prepare.accept(new GalaxyLayer(this));
+//    prepare.accept(new GalaxyLayer(this));
     prepare.accept(new RandomParticlesLayer());
+    prepare.accept(new RandomParticleLinesLayer());
     prepare.accept(new BleedingGrid(Actions.WIDTH, Actions.HEIGHT, 40));
     prepare.accept(new BleedingGridOffset(Actions.WIDTH, Actions.HEIGHT, 40));
     prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 10, "point-grid-10"));
@@ -602,6 +610,7 @@ public class MotionEngine extends PApplet
 //    prepare.accept(new FinalLayer());
 //    prepare.accept(new Scene5Grid());
 //    prepare.accept(new OneLeafEnd(this));
+    prepare.accept(new ClearLayer()); //A layer that draws black
     prepare.accept(new RestLayer(this));//Blackout layer...
   }
   

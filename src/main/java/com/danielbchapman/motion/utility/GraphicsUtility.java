@@ -77,7 +77,7 @@ public class GraphicsUtility
   
   public static void drawMotionGridAsLines(PGraphics p, Point[] grid, int rowLength)
   {
-    System.out.println("drawing grid: " + grid + " of length " + grid.length + " rows: " + rowLength);
+    //System.out.println("drawing grid: " + grid + " of length " + grid.length + " rows: " + rowLength);
     int rows = grid.length / rowLength;
     
     //Draw rows

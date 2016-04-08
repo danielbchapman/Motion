@@ -27,10 +27,10 @@ public class RandomParticleLinesLayer extends BleedingLayer
   public RandomParticleLinesLayer()
   {
     behaviors.add(new ExplodeBehaviorInverse(new Vec3D(-1f, 0, 0), -50f));
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 14; i++)
     {
       Emitter<Point> e = 
-          new Emitter<Point>(new Vec3D(i * 100, 400, 0), new Vec3D(-1, 0, 0), 25000, 200, 1f, 200)
+          new Emitter<Point>(new Vec3D(i * 128, 400, 0), new Vec3D(-1, 0, 0), 25000, 200, 1f, 200)
           {
             @Override
             public Point createPoint(float x, float y, float z, float w)
@@ -115,6 +115,6 @@ public class RandomParticleLinesLayer extends BleedingLayer
   @Override
   public String getName()
   {
-    return "random-particles-layer";
+    return "random-particles-lines-layer";
   }
 }

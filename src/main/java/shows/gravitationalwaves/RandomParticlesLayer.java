@@ -119,6 +119,6 @@ public class RandomParticlesLayer extends BleedingLayer
   @Override
   public String getName()
   {
-    return "random-particles-lines-layer";
+    return "random-particles-layer";
   }
 }
