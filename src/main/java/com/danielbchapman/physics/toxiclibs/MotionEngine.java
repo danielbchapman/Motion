@@ -42,6 +42,7 @@ import processing.event.KeyEvent;
 import processing.opengl.PGraphics3D;
 import shows.gravitationalwaves.BleedingGrid;
 import shows.gravitationalwaves.BleedingGridOffset;
+import shows.gravitationalwaves.BleedingPointGrid;
 import shows.gravitationalwaves.GalaxyLayer;
 import shows.gravitationalwaves.TriangleWavesLayer;
 import shows.shekillsmonsters.BeholderPuppet;
@@ -570,6 +571,9 @@ public class MotionEngine extends PApplet
     prepare.accept(new GalaxyLayer(this));
     prepare.accept(new BleedingGrid(Actions.WIDTH, Actions.HEIGHT, 40));
     prepare.accept(new BleedingGridOffset(Actions.WIDTH, Actions.HEIGHT, 40));
+    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 10, "point-grid-10"));
+    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 40, "point-grid-40"));
+    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 80, "point-grid-80"));
     //Demo Leftovers
 //    prepare.accept(new HeroLayer(this));
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
