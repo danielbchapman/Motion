@@ -1,10 +1,13 @@
 package shows.gravitationalwaves;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.danielbchapman.layers.BleedingLayer;
 import com.danielbchapman.motion.utility.GraphicsUtility;
+import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.Point;
 import com.danielbchapman.utility.Utility;
@@ -58,7 +61,21 @@ public class BleedingGrid extends BleedingLayer
 
   @Override
   public void go(MotionEngine engine)
-  { 
+  {     
+    try
+    {
+      Cue q = Cue.create(
+          "load environment", 
+          Actions.loadEnvironment(new File("gravity/bleed-grid-balanced.env"))
+      );
+      clear();
+      q.go(this, engine);
+    }
+    catch (Exception e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
   
   @Override

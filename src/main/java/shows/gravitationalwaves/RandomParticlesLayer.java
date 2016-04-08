@@ -11,6 +11,7 @@ import toxi.physics3d.VerletParticle3D;
 import com.danielbchapman.layers.BleedingLayer;
 import com.danielbchapman.physics.toxiclibs.AbstractEmitter;
 import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.Emitter;
 import com.danielbchapman.physics.toxiclibs.ExplodeBehaviorInverse;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -97,6 +98,22 @@ public class RandomParticlesLayer extends BleedingLayer
   @Override
   public void go(MotionEngine engine)
   {
+    try
+    {
+      Cue q = Cue.create("reset",  
+          Actions.dragToNone,
+          Actions.gravityOff,
+          Actions.homeOff,
+          Actions.homeLinearOff);
+      
+      clear();
+      q.go(this,  engine);
+    }
+    catch (Exception e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   @Override

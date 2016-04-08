@@ -25,8 +25,9 @@ public abstract class BleedingLayer extends Layer
    */
   public void clear()
   {
-    first = false;
+    first = true;
   }
+  
   public abstract void reanderAfterBleed(PGraphics g);
   
   @Override
