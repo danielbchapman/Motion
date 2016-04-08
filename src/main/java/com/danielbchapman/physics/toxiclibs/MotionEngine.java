@@ -44,6 +44,7 @@ import shows.gravitationalwaves.BleedingGrid;
 import shows.gravitationalwaves.BleedingGridOffset;
 import shows.gravitationalwaves.BleedingPointGrid;
 import shows.gravitationalwaves.GalaxyLayer;
+import shows.gravitationalwaves.RandomParticlesLayer;
 import shows.gravitationalwaves.TriangleWavesLayer;
 import shows.shekillsmonsters.BeholderPuppet;
 import shows.shekillsmonsters.HealingSpellLayer;
@@ -262,8 +263,9 @@ public class MotionEngine extends PApplet
     layer.applet = this;
     layer.engine = this;
     layers.add(layer);
-    for (Point p : layer.points)
-      physics.addParticle(p);
+    if(layer.points != null)
+      for (Point p : layer.points)
+        physics.addParticle(p);
     
     activeLayer = layer;
   }
@@ -569,6 +571,7 @@ public class MotionEngine extends PApplet
     //Gravitational Waves Project
     prepare.accept(new TriangleWavesLayer());
     prepare.accept(new GalaxyLayer(this));
+    prepare.accept(new RandomParticlesLayer());
     prepare.accept(new BleedingGrid(Actions.WIDTH, Actions.HEIGHT, 40));
     prepare.accept(new BleedingGridOffset(Actions.WIDTH, Actions.HEIGHT, 40));
     prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 10, "point-grid-10"));

@@ -119,5 +119,25 @@ public class ExplodeBehaviorInverse extends MotionInteractiveBehavior
     
     return copy;
   }
+  
+  public void setMinimum(float force)
+  {
+    vars.minForce = force;
+  }
+  
+  public float getMinimum()
+  {
+    return vars.minForce;
+  }
+  
+  public void setMax(float force)
+  {
+    vars.maxForce = force;
+  }
+  
+  public float getMax()
+  {
+    return vars.maxForce;
+  }
 
 }
