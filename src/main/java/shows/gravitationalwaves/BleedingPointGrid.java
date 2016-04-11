@@ -7,6 +7,7 @@ import processing.core.PGraphics;
 
 import com.danielbchapman.layers.BleedingLayer;
 import com.danielbchapman.motion.utility.GraphicsUtility;
+import com.danielbchapman.physics.toxiclibs.Action;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -64,12 +65,22 @@ public class BleedingPointGrid extends BleedingLayer
   {
     try
     {
-      Cue q = Cue.create(
-          "load environment", 
-          Actions.loadEnvironment(new File("gravity/bleed-grid-balanced.env"))
+    	Cue start = Cue.create("CLEAR", 
+    			new Action("CLEAR", 0, (l)->{ BleedingPointGrid.this.clear();}, null));
+    	
+    	Cue loadEnvironment = Cue.create("load environment", Actions.loadEnvironment(new File("environment/new-gravity.env")));
+    	
+      Cue play = 
+    		Cue.create(
+        	"play recording",
+        	Actions.loadRecordingAsAction(new File("captures/squiggle"), new File("brushes/squiggle-brush"))
       );
-      clear();
-      q.go(this, engine);
+      
+      start.go(this, engine); //1
+      
+      loadEnvironment.go(this,  engine);//2
+      
+      play.go(this, engine);//3
     }
     catch (Exception e)
     {

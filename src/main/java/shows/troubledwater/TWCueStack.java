@@ -72,9 +72,9 @@ public abstract class TWCueStack extends CueStack
     return cue;
   }
   
-  public Cue load(String label, String env, String file, String brushFile, Action ... post)
+  public Cue load(String label, String env, String recording, String brushFile, Action ... post)
   {
-    ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+    ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(recording), new File(brushFile));
     Action loadEnv = Actions.loadEnvironment(new File(env));
     if(post != null)
       for(Action a : post)

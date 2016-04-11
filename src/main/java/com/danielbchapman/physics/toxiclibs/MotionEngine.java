@@ -49,6 +49,7 @@ import shows.gravitationalwaves.RandomParticleLinesLayer;
 import shows.gravitationalwaves.RandomParticlesLayer;
 import shows.gravitationalwaves.RandomParticlesVertical;
 import shows.gravitationalwaves.TriangleWavesLayer;
+import shows.nick.DemoLayer;
 import shows.shekillsmonsters.BeholderPuppet;
 import shows.shekillsmonsters.HealingSpellLayer;
 import shows.shekillsmonsters.MagicMissleLayer;
@@ -575,6 +576,9 @@ public class MotionEngine extends PApplet
 //      for (Point p : layer.points)
 //        physics.addParticle(p);
     };
+    
+    //NICK DEMO
+    prepare.accept(new shows.nick.DemoLayer());
     
     //Gravitational Waves Project
     prepare.accept(new TriangleWavesLayer());

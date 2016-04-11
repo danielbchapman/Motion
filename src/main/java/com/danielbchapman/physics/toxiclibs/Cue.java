@@ -1,6 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -78,6 +79,18 @@ public class Cue
   }
   
   public static Cue create(String name, Action ... actions)
+  {
+    ArrayList<Action> act = new ArrayList<>();
+    
+    if(actions != null)
+      for(Action a : actions)
+        if(a != null)
+          act.add(a);
+    
+    return new Cue(name, act);
+  }
+  
+  public static Cue create(String name, Collection<Action> actions)
   {
     ArrayList<Action> act = new ArrayList<>();
     
