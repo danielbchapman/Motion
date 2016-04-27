@@ -29,6 +29,7 @@ import com.danielbchapman.physics.ui.PropertySlider;
 import com.danielbchapman.physics.ui.SelectItem;
 import com.danielbchapman.physics.ui.Spacer;
 import com.danielbchapman.physics.ui.Vec3DEditor;
+import com.danielbchapman.text.Text;
 import com.danielbchapman.text.Utility;
 import com.danielbchapman.utility.FileUtil;
 import com.danielbchapman.utility.UiUtility;
@@ -369,7 +370,7 @@ public class BrushEditor extends JFrame
      * Add the components that are needed
      */
     content.removeAll();    
-    if(!Utility.isEmptyOrNull(behavior.vars.getPetName()))
+    if(!Text.isEmptyOrNull(behavior.vars.getPetName()))
       title(content, behavior.vars.getPetName(), row++);
     
     title(content, "Class: " + behavior.getName(), row++);
@@ -494,7 +495,7 @@ public class BrushEditor extends JFrame
     save.setTitle("Save Brush?");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
     JTextField name = new JTextField("brush-" + sdf.format(new Date()));
-    JTextField brush = new JTextField(Utility.isEmptyOrNull(current.vars.petName) ? "My " + current.getName() : current.vars.petName);
+    JTextField brush = new JTextField(Text.isEmptyOrNull(current.vars.petName) ? "My " + current.getName() : current.vars.petName);
     JButton cancel = new JButton("Cancel");
     JButton doIt = new JButton("Save");
     
@@ -519,7 +520,7 @@ public class BrushEditor extends JFrame
     cancel.addActionListener((l)->{ save.setVisible(false); save.dispose();});
     doIt.addActionListener((l)->
     {
-      if(!Utility.isEmptyOrNull(brush.getText()))
+      if(!Text.isEmptyOrNull(brush.getText()))
         current.vars.petName = brush.getText();
       if(saveBrush(name.getText()))
       {
