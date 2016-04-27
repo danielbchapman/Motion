@@ -25,6 +25,7 @@ import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.brushes.SmallBrush;
 import com.danielbchapman.brushes.TinyBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
+import com.danielbchapman.layers.ClearLayer;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.UI;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
@@ -40,6 +41,14 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.opengl.PGraphics3D;
+import shows.gravitationalwaves.BleedingGrid;
+import shows.gravitationalwaves.BleedingGridOffset;
+import shows.gravitationalwaves.BleedingPointGrid;
+import shows.gravitationalwaves.GalaxyLayer;
+import shows.gravitationalwaves.RandomParticleLinesLayer;
+import shows.gravitationalwaves.RandomParticlesLayer;
+import shows.gravitationalwaves.RandomParticlesVertical;
+import shows.gravitationalwaves.TriangleWavesLayer;
 import shows.shekillsmonsters.BeholderPuppet;
 import shows.shekillsmonsters.HealingSpellLayer;
 import shows.shekillsmonsters.MagicMissleLayer;
@@ -234,6 +243,11 @@ public class MotionEngine extends PApplet
 						System.out.println("Play...");
 						playCapture();
 					}
+					else if ("clear".equalsIgnoreCase(command))
+					{
+					  advanceSceneTo("clear");
+					  activeLayerGo(); // force clear call
+					}
 					else
 					{
             System.out.println("UNKNOWN COMMAND " + command);
@@ -257,8 +271,9 @@ public class MotionEngine extends PApplet
     layer.applet = this;
     layer.engine = this;
     layers.add(layer);
-    for (Point p : layer.points)
-      physics.addParticle(p);
+    if(layer.points != null)
+      for (Point p : layer.points)
+        physics.addParticle(p);
     
     activeLayer = layer;
   }
@@ -365,7 +380,7 @@ public class MotionEngine extends PApplet
     
     if(enableSpout)
     {
-    	if(Platform.isWindows() || Platform.isWindowsCE())
+      if(Platform.isWindows() || Platform.isWindowsCE())
     	{
     		if(spout != null)
       	{
@@ -561,6 +576,18 @@ public class MotionEngine extends PApplet
 //        physics.addParticle(p);
     };
     
+    //Gravitational Waves Project
+    prepare.accept(new TriangleWavesLayer());
+//    prepare.accept(new GalaxyLayer(this));
+    prepare.accept(new RandomParticlesLayer());
+    prepare.accept(new RandomParticlesVertical());
+    prepare.accept(new RandomParticleLinesLayer());
+    prepare.accept(new BleedingGrid(Actions.WIDTH, Actions.HEIGHT, 40));
+    prepare.accept(new BleedingGridOffset(Actions.WIDTH, Actions.HEIGHT, 40));
+    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 10, "point-grid-10"));
+    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 40, "point-grid-40"));
+    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 80, "point-grid-80"));
+    //Demo Leftovers
 //    prepare.accept(new HeroLayer(this));
     prepare.accept(new RecordingLayer(this)); //Motion Sketches
     prepare.accept(new TitleSheKillsMonsters(this));
@@ -585,6 +612,7 @@ public class MotionEngine extends PApplet
 //    prepare.accept(new FinalLayer());
 //    prepare.accept(new Scene5Grid());
 //    prepare.accept(new OneLeafEnd(this));
+    prepare.accept(new ClearLayer()); //A layer that draws black
     prepare.accept(new RestLayer(this));//Blackout layer...
   }
   

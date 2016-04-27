@@ -76,4 +76,16 @@ public class Cue
   {
     return null;
   }
+  
+  public static Cue create(String name, Action ... actions)
+  {
+    ArrayList<Action> act = new ArrayList<>();
+    
+    if(actions != null)
+      for(Action a : actions)
+        if(a != null)
+          act.add(a);
+    
+    return new Cue(name, act);
+  }
 }
