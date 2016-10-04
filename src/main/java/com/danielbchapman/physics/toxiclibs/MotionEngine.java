@@ -30,6 +30,7 @@ import com.danielbchapman.layers.ClearLayer;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.UI;
 import com.danielbchapman.motion.livedraw.ILiveDrawCommand;
+import com.danielbchapman.motion.livedraw.LiveDrawKeyEvent;
 import com.danielbchapman.motion.livedraw.LiveDrawMouseEvent;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
 import com.danielbchapman.physics.ui.SceneController;
@@ -146,8 +147,8 @@ public class MotionEngine extends PApplet
   public int virtualMouseX = 0;
   public int virtualMouseY = 0;
   public boolean virtualMouseDown = false;
-  private boolean liveDrawEnabled = false;
-  private ArrayList<ILiveDrawCommand> liveDrawQueue = new ArrayList<ILiveDrawCommand>();
+  private boolean remoteDrawEnabled = false;
+  private ArrayList<ILiveDrawCommand> remoteDrawQueue = new ArrayList<ILiveDrawCommand>();
 
   // SHOW CONTROL
   public static int OSC_PORT = 44321;
@@ -284,7 +285,7 @@ public class MotionEngine extends PApplet
 
                           LiveDrawMouseEvent e = new LiveDrawMouseEvent(x, y, down != 0);
                           System.out.println("Adding event: " + e);
-                          liveDrawQueue.add(e);
+                          remoteDrawQueue.add(e);
                         }
                       }
                       catch (Throwable t)
@@ -354,10 +355,28 @@ public class MotionEngine extends PApplet
       stopPlayback = false;
 
     // Do the drag events before the updates and painting.
-    if (!liveDrawEnabled)
+    if (!remoteDrawEnabled)
     {
       virtualMouseX = mouseX;
       virtualMouseY = mouseY;
+    }
+    else 
+    {
+      ArrayList<ILiveDrawCommand> blank = new ArrayList<ILiveDrawCommand>();
+      ArrayList<ILiveDrawCommand> queue = remoteDrawQueue;
+      remoteDrawQueue = blank;
+      
+      for(ILiveDrawCommand command : queue)
+      {
+        if(command instanceof LiveDrawMouseEvent)
+        {
+          LiveDrawMouseEvent e = (LiveDrawMouseEvent)command;
+        }
+        else if (command instanceof LiveDrawKeyEvent)
+        {
+          LiveDrawKeyEvent e = (LiveDrawKeyEvent)command;
+        }
+      }
     }
 
     mouseDraggedFromDraw(virtualMouseX, virtualMouseY);
@@ -964,6 +983,14 @@ public class MotionEngine extends PApplet
       showControls();
     }
 
+    if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F2)
+    {
+      if( remoteDrawEnabled )
+        disableRemoteDraw();
+      else
+        enableRemoteDraw();
+    }
+    
     if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F1)
     {
       System.out.println("F1");
@@ -1126,7 +1153,7 @@ public class MotionEngine extends PApplet
   @Override
   public void mousePressed()
   {
-    if (!liveDrawEnabled)
+    if (!remoteDrawEnabled)
     {
       // override virtual mouse
       virtualMouseDown = true;
@@ -1138,7 +1165,7 @@ public class MotionEngine extends PApplet
 
   public void mouseReleased()
   {
-    if (!liveDrawEnabled)
+    if (!remoteDrawEnabled)
       virtualMouseReleased();
   }
 
@@ -1345,14 +1372,16 @@ public class MotionEngine extends PApplet
     System.out.println("Turning on 20hz Wave");
   }
 
-  public void enableLiveDraw()
+  public void enableRemoteDraw()
   {
-    liveDrawEnabled = true;
-    liveDrawQueue.clear();
+    System.out.println("Enabling Remote Draw");
+    remoteDrawEnabled = true;
+    remoteDrawQueue.clear();
   }
 
-  public void disableLiveDraw()
+  public void disableRemoteDraw()
   {
-    liveDrawEnabled = false;
+    System.out.println("Disabling Remote Draw");
+    remoteDrawEnabled = false;
   }
 }
