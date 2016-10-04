@@ -1,9 +1,13 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -11,6 +15,7 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import javafx.application.Application;
@@ -37,6 +42,7 @@ import com.danielbchapman.physics.ui.SceneController;
 import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
+import com.illposed.osc.OSCPortOut;
 import com.sun.jna.Platform;
 import com.sun.org.apache.bcel.internal.generic.CASTORE;
 
@@ -143,16 +149,23 @@ public class MotionEngine extends PApplet
   // A list of active brushes for this drawing cycle
   private ArrayList<SaveableBrush> paintBrushes = new ArrayList<>();
 
-  // LIVE DRAW
+  //Remote Drawing
   public int virtualMouseX = 0;
   public int virtualMouseY = 0;
   public boolean virtualMouseDown = false;
   private boolean remoteDrawEnabled = false;
   private ArrayList<IRemoteDrawCommand> remoteDrawQueue = new ArrayList<IRemoteDrawCommand>();
 
+  //Live Drawing (sending to Remote)
+  public boolean liveDrawEnabled = false;
+  public String liveDrawUrl;
+  public Integer liveDrawPort;
+  public OSCPortOut oscSender;
+  
   // SHOW CONTROL
   public static int OSC_PORT = 44321;
   public OSCPortIn oscReceiver;
+  
   // Layers
   public Layer activeLayer;
 
@@ -284,7 +297,7 @@ public class MotionEngine extends PApplet
                           int down = (int) args.get(4);
 
                           RemoteDrawMouseEvent e = new RemoteDrawMouseEvent(x, y, down != 0);
-                          System.out.println("Adding event: " + e);
+//                          System.out.println("Adding event: " + e);
                           remoteDrawQueue.add(e);
                         }
                       }
@@ -359,27 +372,49 @@ public class MotionEngine extends PApplet
     {
       virtualMouseX = mouseX;
       virtualMouseY = mouseY;
+      mouseDraggedFromDraw(virtualMouseX, virtualMouseY);
     }
     else 
     {
-      ArrayList<IRemoteDrawCommand> blank = new ArrayList<IRemoteDrawCommand>();
-      ArrayList<IRemoteDrawCommand> queue = remoteDrawQueue;
-      remoteDrawQueue = blank;
-      
-      for(IRemoteDrawCommand command : queue)
+      if(remoteDrawQueue.size() > 0)
       {
-        if(command instanceof RemoteDrawMouseEvent)
+        ArrayList<IRemoteDrawCommand> blank = new ArrayList<IRemoteDrawCommand>();
+        ArrayList<IRemoteDrawCommand> queue = remoteDrawQueue;
+        remoteDrawQueue = blank;
+        
+        if(queue.size() > 0)
         {
-          RemoteDrawMouseEvent e = (RemoteDrawMouseEvent)command;
-        }
-        else if (command instanceof RemoteDrawKeyEvent)
-        {
-          RemoteDrawKeyEvent e = (RemoteDrawKeyEvent)command;
-        }
+          for(IRemoteDrawCommand command : queue)
+          {
+            boolean down = false;
+            if(command instanceof RemoteDrawMouseEvent)
+            {
+              System.out.println("Remote Mouse Event: " + command.toString());
+              RemoteDrawMouseEvent e = (RemoteDrawMouseEvent)command;
+              int[] values = Transform.translate(e.x, e.y, Actions.WIDTH, Actions.HEIGHT);
+              virtualMouseX = values[0];
+              virtualMouseY = values[1];
+              down = e.down;
+            }
+            else if (command instanceof RemoteDrawKeyEvent)
+            {
+              RemoteDrawKeyEvent e = (RemoteDrawKeyEvent)command;
+            }
+            
+            mouseDraggedFromDraw(virtualMouseX, virtualMouseY);
+            
+            if(down != virtualMouseDown)
+            {
+              virtualMouseDown = down;
+              if(down)
+                virtualMousePressed();
+              else
+                virtualMouseReleased();
+            } 
+          }  
+        }  
       }
     }
-
-    mouseDraggedFromDraw(virtualMouseX, virtualMouseY);
 
     try
     {
@@ -393,6 +428,28 @@ public class MotionEngine extends PApplet
 
     if (RECORDER.isRecording())
       RECORDER.capture(mouseEvent);
+    
+    if(liveDrawEnabled)
+    {
+      float[] transform = Transform.translate(virtualMouseX, virtualMouseY, Actions.WIDTH, Actions.HEIGHT);
+      ArrayList<Object> args = new ArrayList<>();
+      args.add("live");
+      args.add("mouse");
+      args.add(transform[0]); 
+      args.add(transform[1]);
+      args.add(virtualMouseDown ? 1 : 0);
+      OSCMessage out = new OSCMessage("/motion", args);
+      try
+      {
+        oscSender.send(out);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+        liveDrawEnabled = false;
+        oscSender = null;
+      }
+    }
 
     SaveableBrush painter = null;
     if (brush instanceof SaveableBrush)
@@ -982,14 +1039,6 @@ public class MotionEngine extends PApplet
     {
       showControls();
     }
-
-    if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F2)
-    {
-      if( remoteDrawEnabled )
-        disableRemoteDraw();
-      else
-        enableRemoteDraw();
-    }
     
     if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F1)
     {
@@ -1020,6 +1069,22 @@ public class MotionEngine extends PApplet
         {
           Log.exception(e);
         }
+    }
+    
+    if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F2)
+    {
+      if( remoteDrawEnabled )
+        disableRemoteDraw();
+      else
+        enableRemoteDraw();
+    }
+    
+    if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F3)
+    {
+      if(!liveDrawEnabled)
+        dialogLiveDraw();
+      else
+        disableLiveDraw();
     }
 
   }
@@ -1086,7 +1151,7 @@ public class MotionEngine extends PApplet
 
   public void virtualMousePressed()
   {
-    // System.out.println("Mouse Down!");
+    System.out.println("Mouse Down!");
     if (Mode.SUCK_FORCE == mode)
     {
       physics.addBehavior(sucker);
@@ -1119,7 +1184,7 @@ public class MotionEngine extends PApplet
 
   public void virtualMouseReleased()
   {
-    // System.out.println("Mouse released!");
+    System.out.println("Mouse released!");
     if (Mode.SUCK_FORCE == mode)
       physics.removeBehavior(sucker);
     else
@@ -1143,13 +1208,6 @@ public class MotionEngine extends PApplet
           }
   }
 
-  public void virtualMouseMove(float x, float y)
-  {
-    int[] values = Transform.translate(x, y, Actions.WIDTH, Actions.HEIGHT);
-    virtualMouseX = values[0];
-    virtualMouseY = values[1];
-  }
-
   @Override
   public void mousePressed()
   {
@@ -1166,7 +1224,10 @@ public class MotionEngine extends PApplet
   public void mouseReleased()
   {
     if (!remoteDrawEnabled)
+    {
+      virtualMouseDown = false;
       virtualMouseReleased();
+    }
   }
 
   public synchronized void initializeFXInterface()
@@ -1383,5 +1444,33 @@ public class MotionEngine extends PApplet
   {
     System.out.println("Disabling Remote Draw");
     remoteDrawEnabled = false;
+  }
+  
+  
+  public void dialogLiveDraw()
+  {
+    OscDialog oscDialog = new OscDialog(this);
+    oscDialog.setVisible(true);
+  }
+  
+  public void enableLiveDraw()
+  {
+    if(liveDrawPort != null && liveDrawUrl != null)
+    {
+      try
+      {
+        oscSender = new OSCPortOut(InetAddress.getByName(liveDrawUrl), liveDrawPort);
+        liveDrawEnabled = true;
+      }
+      catch (SocketException | UnknownHostException e)
+      {
+        e.printStackTrace();
+      }  
+    }
+  }
+  
+  public void disableLiveDraw()
+  {
+    liveDrawEnabled = false;
   }
 }

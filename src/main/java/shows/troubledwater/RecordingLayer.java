@@ -71,6 +71,7 @@ public class RecordingLayer extends Layer
       try{
         if(index > -1)
         {
+
           g.image(images.get(index), 100, 0, 600, 600);
         }
        // PImage image = engine.loadImage("show/OneLeaf.PNG");
@@ -80,6 +81,17 @@ public class RecordingLayer extends Layer
       catch(Throwable t)
       {
         t.printStackTrace();
+        try
+        {
+          System.out.println(g);
+          System.out.println(images);
+          System.out.println(images.get(index));          
+        }
+        catch(Throwable t2)
+        {
+          System.err.println("FAILURE ALLOCATING INDEX");
+          t2.printStackTrace();
+        }
       }
       blank = true;
     }

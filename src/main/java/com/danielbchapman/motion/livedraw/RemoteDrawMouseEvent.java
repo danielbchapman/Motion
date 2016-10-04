@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RemoteDrawMouseEvent implements IRemoteDrawCommand
 {
-  float x;
-  float y;
-  boolean down;
+  public float x;
+  public float y;
+  public boolean down;
 }

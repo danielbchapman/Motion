@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RemoteDrawKeyEvent implements IRemoteDrawCommand
 {
-  char key;
+  public char key;
 }
