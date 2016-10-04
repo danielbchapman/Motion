@@ -300,6 +300,13 @@ public class MotionEngine extends PApplet
 //                          System.out.println("Adding event: " + e);
                           remoteDrawQueue.add(e);
                         }
+                        else if(type.equalsIgnoreCase("key") && args.size() > 3)
+                        {
+                          char key = (char) args.get(2);
+                          int code = (int) args.get(3);
+                          
+                          virtualKeyPressed(key, code);
+                        }
                       }
                       catch (Throwable t)
                       {
@@ -753,12 +760,12 @@ public class MotionEngine extends PApplet
     prepare.accept(new ClearLayer()); // A layer that draws black
     prepare.accept(new RestLayer(this));// Blackout layer...
   }
-
-  @Override
-  public void keyPressed(KeyEvent event)
+  
+  public void virtualKeyPressed(char key, int code)
   {
+    System.out.println("Key Pressed [" + key +"] code:[" + code +"]");
     Predicate<Character> isChar = c -> {
-      if (event.getKey() == c || event.getKey() == Character.toUpperCase(c))
+      if (key == c || key == Character.toUpperCase(c))
       {
         return true;
       }
@@ -771,7 +778,7 @@ public class MotionEngine extends PApplet
       initializeFXInterface();
     }
 
-    if (event.getKey() == 'q' || event.getKey() == 'Q')
+    if (key == 'q' || key == 'Q')
     {
       if (tools == null)
       {
@@ -781,7 +788,7 @@ public class MotionEngine extends PApplet
       tools.setVisible(true);
     }
 
-    if (event.getKey() == 'a' || event.getKey() == 'A')
+    if (key == 'a' || key == 'A')
     {
       if (brushTools == null)
       {
@@ -792,29 +799,29 @@ public class MotionEngine extends PApplet
       brushTools.setVisible(true);
     }
 
-    if (event.getKey() == 'L' || event.getKey() == 'l')
+    if (key == 'L' || key == 'l')
       advanceScene();
 
-    if (event.getKey() == ' ')
+    if (key == ' ')
     {
       if (activeLayer != null)
         activeLayer.go(this);
     }
 
-    if (event.getKey() == 'g')
+    if (key == 'g')
     {
       // Gravity for one second.
       gravityOneSecond.go(layers.get(0), this);
     }
 
-    if (event.getKey() == 's')
+    if (key == 's')
     {
       System.out.println("Splitting words...");
       if (words != null)
         words.randomSplits(physics);
     }
 
-    if (event.getKey() == 'S')
+    if (key == 'S')
     {
       System.out.println("Splitting paragraph...");
       // paragraph.split(physics, rand.nextFloat() % 3f);
@@ -830,67 +837,67 @@ public class MotionEngine extends PApplet
         }
       }
     }
-    if (event.getKey() == '1')
+    if (key == '1')
     {
       mode = Mode.BRUSH_PALLET;
     }
 
-    if (event.getKey() == '2')
+    if (key == '2')
     {
       mode = Mode.SUCK_FORCE;
       sucker.vars.magnitude = 100f;
       sucker.setJitter(1f);
     }
 
-    if (event.getKey() == '3')
+    if (key == '3')
     {
       mode = Mode.SLAP_FORCE;
     }
 
-    if (event.getKey() == '4')
+    if (key == '4')
     {
       mode = Mode.EXPLODE_FORCE;
       explode.vars.force = new Vec3D(0, 0, -1f);
     }
-    if (event.getKey() == '5')
+    if (key == '5')
     {
       mode = Mode.EXPLODE_FORCE;
       explode.vars.force = new Vec3D(0, 0, 1f);
     }
 
-    if (event.getKey() == '7')
+    if (key == '7')
     {
       mode = Mode.BRUSH_PALLET;
       brush = new TinyBrush();
     }
 
-    if (event.getKey() == '8')
+    if (key == '8')
     {
       mode = Mode.BRUSH_PALLET;
       brush = new SmallBrush();
     }
 
     // Animation tests
-    if (event.getKey() == '9')
+    if (key == '9')
     {
       mode = Mode.BRUSH_PALLET;
       brush = new ImageBrushRound();
     }
 
     // Animation tests
-    if (event.getKey() == '0')
+    if (key == '0')
     {
       mode = Mode.BRUSH_PALLET;
       brush = new ImageBrush();
     }
 
-    if (event.getKey() == 'z')
+    if (key == 'z')
     {
       clearPlaybacks();
     }
 
     // Force Basics
-    if (event.getKeyCode() == LEFT)
+    if (key == LEFT)
     {
       float drag = physics.getDrag();
       drag -= 0.01;
@@ -901,7 +908,7 @@ public class MotionEngine extends PApplet
       physics.setDrag(drag);
     }
 
-    if (event.getKeyCode() == RIGHT)
+    if (key == RIGHT)
     {
       float drag = physics.getDrag();
       drag += 0.01;
@@ -912,7 +919,7 @@ public class MotionEngine extends PApplet
       physics.setDrag(drag);
     }
 
-    if (event.getKeyCode() == UP)
+    if (key == UP)
     {
       float x = Actions.home.vars.maxForce;
       x += 0.01;
@@ -923,7 +930,7 @@ public class MotionEngine extends PApplet
       Actions.home.vars.maxForce = x;
     }
 
-    if (event.getKeyCode() == DOWN)
+    if (key == DOWN)
     {
       float x = Actions.home.vars.maxForce;
       x -= 0.01;
@@ -934,7 +941,7 @@ public class MotionEngine extends PApplet
       Actions.home.vars.maxForce = x;
     }
 
-    if (event.getKey() == 'h')
+    if (key == 'h')
     {
       if (isActive(Actions.home))
       {
@@ -948,7 +955,7 @@ public class MotionEngine extends PApplet
       }
     }
 
-    if (event.getKey() == 'j')
+    if (key == 'j')
     {
       if (isActive(Actions.homeLinear))
       {
@@ -961,13 +968,13 @@ public class MotionEngine extends PApplet
         addBehavior(Actions.homeLinear);
       }
     }
-    if (event.getKey() == ']')
+    if (key == ']')
     {
       if (activeLayer != null)
         activeLayer.go(this);
     }
 
-    if (event.getKey() == 'o')
+    if (key == 'o')
     {
       if (!osc.enabled)
       {
@@ -983,7 +990,7 @@ public class MotionEngine extends PApplet
       }
     }
 
-    if (event.getKey() == 'r' || event.getKey() == 'R')
+    if (key == 'r' || key == 'R')
     {
       if (RECORDER.isRecording())
       {
@@ -1017,30 +1024,30 @@ public class MotionEngine extends PApplet
 
     }
 
-    if (event.getKey() == 't')
+    if (key == 't')
     {
       playCapture();
 
     }
 
-    if (event.getKey() == 'b')
+    if (key == 'b')
     {
       System.out.println("lose decoration");
       Main.setUndecorated();
     }
 
-    if (event.getKey() == 'x')
+    if (key == 'x')
     {
       showCoordinates = !showCoordinates;
       highlightMouse = showCoordinates;
     }
 
-    if (event.getKey() == 'c')
+    if (key == 'c')
     {
       showControls();
     }
     
-    if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F1)
+    if (code == java.awt.event.KeyEvent.VK_F1)
     {
       System.out.println("F1");
       if (enableSpout)
@@ -1071,7 +1078,7 @@ public class MotionEngine extends PApplet
         }
     }
     
-    if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F2)
+    if (code == java.awt.event.KeyEvent.VK_F2)
     {
       if( remoteDrawEnabled )
         disableRemoteDraw();
@@ -1079,13 +1086,60 @@ public class MotionEngine extends PApplet
         enableRemoteDraw();
     }
     
-    if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F3)
+    if (code == java.awt.event.KeyEvent.VK_F3)
     {
       if(!liveDrawEnabled)
         dialogLiveDraw();
       else
         disableLiveDraw();
     }
+  }
+  
+  @Override
+  public void keyPressed(KeyEvent event)
+  {
+    if(liveDrawEnabled && oscSender != null)
+    {
+      int[] skipped = new int[]
+          {
+            java.awt.event.KeyEvent.VK_F1,
+            java.awt.event.KeyEvent.VK_F2,
+            java.awt.event.KeyEvent.VK_F3,
+            java.awt.event.KeyEvent.VK_F4,
+          };
+      
+      boolean skipIt = false;
+      for(int code : skipped)
+      {
+        if(event.getKeyCode() == code)
+        {
+          skipIt = true;
+          break;
+        }
+      }
+      if(!skipIt)
+      {
+        ArrayList<Object> args = new ArrayList<>();
+        args.add("live");
+        args.add("key");
+        args.add(event.getKey());
+        args.add(event.getKeyCode());
+        OSCMessage out = new OSCMessage("/motion", args);
+        try
+        {
+          oscSender.send(out);
+        }
+        catch (IOException e)
+        {
+          disableLiveDraw();
+          e.printStackTrace();
+        }
+      }
+    }
+    
+    virtualKeyPressed(event.getKey(), event.getKeyCode());
+    
+    
 
   }
 
@@ -1472,5 +1526,6 @@ public class MotionEngine extends PApplet
   public void disableLiveDraw()
   {
     liveDrawEnabled = false;
+    oscSender = null;
   }
 }
