@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -28,12 +29,15 @@ import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.layers.ClearLayer;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.UI;
+import com.danielbchapman.motion.livedraw.ILiveDrawCommand;
+import com.danielbchapman.motion.livedraw.LiveDrawMouseEvent;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
 import com.danielbchapman.physics.ui.SceneController;
 import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
 import com.sun.jna.Platform;
+import com.sun.org.apache.bcel.internal.generic.CASTORE;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -138,6 +142,13 @@ public class MotionEngine extends PApplet
   //A list of active brushes for this drawing cycle
   private ArrayList<SaveableBrush> paintBrushes = new ArrayList<>();
   
+  //LIVE DRAW
+  public int virtualMouseX = 0;
+  public int virtualMouseY = 0;
+  public boolean virtualMouseDown = false;
+  private boolean liveDrawEnabled = false;
+  private ArrayList<ILiveDrawCommand> liveDrawQueue = new ArrayList<ILiveDrawCommand>();
+  
   //SHOW CONTROL
   public static int OSC_PORT = 44321;
   public OSCPortIn oscReceiver;
@@ -187,12 +198,11 @@ public class MotionEngine extends PApplet
   public void startOSC()
   {
 	  try {
-		oscReceiver= new OSCPortIn(OSC_PORT);
-		 
+		oscReceiver= new OSCPortIn(OSC_PORT); 
 		OSCListener listener = new OSCListener() {
 			public void acceptMessage(java.util.Date time, OSCMessage message) {
 				List<Object> args =message.getArguments();
-				
+				System.out.println("MESSAGE RECEIVED | size: [" + args.size() + "] message:[" + message.getArguments().stream().map(x -> x.toString()).collect(Collectors.joining(" | ")) + "]");
 				if(args == null || args.size() < 1)
 				{
 					System.out.println("Args: " + args);
@@ -248,6 +258,38 @@ public class MotionEngine extends PApplet
 					  advanceSceneTo("clear");
 					  activeLayerGo(); // force clear call
 					}
+					else if ("live".equalsIgnoreCase(command))
+					{
+					  if(args.size() < 2)
+					  {
+					    System.out.println("Invalid command: " + 
+					        args
+					          .stream()
+					          .map(x -> x.toString())
+					          .collect(Collectors.joining(", ")));
+					    return;
+					  }
+					  
+				    try
+					  {
+				      String type = (String) args.get(1);
+              if(type.equalsIgnoreCase("mouse") && args.size() > 4)
+              {
+                float x = (float) args.get(2);
+                float y = (float) args.get(3);
+                int down = (int) args.get(4);
+                
+                LiveDrawMouseEvent e = new LiveDrawMouseEvent(x, y, down != 0);
+                System.out.println("Adding event: " + e);
+                liveDrawQueue.add(e);
+              }
+					  }
+					  catch (Throwable t)
+					  {
+					    System.err.println("INVALID COMMAND");
+					    t.printStackTrace(System.err);
+					  }
+					}
 					else
 					{
             System.out.println("UNKNOWN COMMAND " + command);
@@ -258,6 +300,8 @@ public class MotionEngine extends PApplet
 		};
 		oscReceiver.addListener("/motion", listener);
 		oscReceiver.startListening();
+		System.out.printf("STARTING OSC ON PORT %d%n", OSC_PORT);
+		System.out.println(oscReceiver.toString());
 	} catch (SocketException e) {
 		e.printStackTrace();
 	}
@@ -303,7 +347,14 @@ public class MotionEngine extends PApplet
       stopPlayback = false;
     
     //Do the drag events before the updates and painting.
-    mouseDraggedFromDraw(mouseX, mouseY);
+    if(!liveDrawEnabled)
+    {
+      virtualMouseX = mouseX;
+      virtualMouseY = mouseY;
+    }
+    
+    mouseDraggedFromDraw(virtualMouseX, virtualMouseY);
+    
     try{
       physics.update();
       osc.update();  
@@ -365,14 +416,14 @@ public class MotionEngine extends PApplet
       stroke(4f);
       fill(255,200,200);
       stroke(255,0,0);
-      ellipse(mouseX, mouseY, 50, 50);
+      ellipse(virtualMouseX, virtualMouseY, 50, 50);
       fill(0);
       
       if(showCoordinates)
       {
-        translate(mouseX, mouseY + 100);
+        translate(virtualMouseX, virtualMouseY + 100);
         fill(255);
-        text("[" + mouseX + ", " + mouseY + "]", 0, 0, 0);
+        text("[" + virtualMouseX + ", " + virtualMouseY + "]", 0, 0, 0);
       }
       popMatrix();
        
@@ -995,10 +1046,9 @@ public class MotionEngine extends PApplet
     }
   }
 
-  @Override
-  public void mousePressed()
+  public void virtualMousePressed()
   {
-    System.out.println("Mouse Down!");
+//    System.out.println("Mouse Down!");
     if (Mode.SUCK_FORCE == mode)
     {
       physics.addBehavior(sucker);
@@ -1006,13 +1056,13 @@ public class MotionEngine extends PApplet
     else
       if (Mode.SLAP_FORCE == mode)
       {
-        slap.location = new Vec3D(mouseX, mouseY, 20);// In the plane
+        slap.location = new Vec3D(virtualMouseX, virtualMouseY, 20);// In the plane
         physics.addBehavior(slap);
       }
       else
         if (Mode.EXPLODE_FORCE == mode)
         {
-          explode.vars.position = new Vec3D(mouseX, mouseY, 0);
+          explode.vars.position = new Vec3D(virtualMouseX, virtualMouseY, 0);
           physics.addBehavior(explode);
         }
         else
@@ -1023,15 +1073,15 @@ public class MotionEngine extends PApplet
               SaveableBrush b = (SaveableBrush) brush;
               b.startDraw();
             }
-            brush.vars.position = new Vec3D(mouseX, mouseY, 0);
+            brush.vars.position = new Vec3D(virtualMouseX, virtualMouseY, 0);
             physics.addBehavior(brush);
           }
 
   }
-
-  public void mouseReleased()
+  
+  public void virtualMouseReleased()
   {
-    System.out.println("Mouse released!");
+//    System.out.println("Mouse released!");
     if (Mode.SUCK_FORCE == mode)
       physics.removeBehavior(sucker);
     else
@@ -1053,8 +1103,33 @@ public class MotionEngine extends PApplet
             for(Object o : physics.behaviors)
               System.out.println("\t->" + o);
           }
-            
-  };
+  }
+  
+  public void virtualMouseMove(float x, float y)
+  {
+    int[] values = Transform.translate(x, y, Actions.WIDTH, Actions.HEIGHT);
+    virtualMouseX = values[0];
+    virtualMouseY = values[1];
+  }
+  
+  @Override
+  public void mousePressed()
+  {
+    if(!liveDrawEnabled)
+    {
+      //override virtual mouse
+      virtualMouseDown = true;
+      virtualMouseX = mouseX;
+      virtualMouseY = mouseY;   
+      virtualMousePressed();
+    }
+  }
+
+  public void mouseReleased()
+  {  
+    if(!liveDrawEnabled)
+      virtualMouseReleased();  
+  }
 
   public synchronized void initializeFXInterface()
   {
@@ -1260,6 +1335,17 @@ public class MotionEngine extends PApplet
 	  osc.setEnabled(true);
 	  physics.addBehavior(osc);
 	  System.out.println("Turning on 20hz Wave");  
+  }
+  
+  public void enableLiveDraw()
+  {
+    liveDrawEnabled = true;
+    liveDrawQueue.clear();
+  }
+  
+  public void disableLiveDraw()
+  {
+    liveDrawEnabled = false;
   }
 }
 	
