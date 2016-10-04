@@ -29,9 +29,9 @@ import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.layers.ClearLayer;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.UI;
-import com.danielbchapman.motion.livedraw.ILiveDrawCommand;
-import com.danielbchapman.motion.livedraw.LiveDrawKeyEvent;
-import com.danielbchapman.motion.livedraw.LiveDrawMouseEvent;
+import com.danielbchapman.motion.livedraw.IRemoteDrawCommand;
+import com.danielbchapman.motion.livedraw.RemoteDrawKeyEvent;
+import com.danielbchapman.motion.livedraw.RemoteDrawMouseEvent;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
 import com.danielbchapman.physics.ui.SceneController;
 import com.illposed.osc.OSCListener;
@@ -148,7 +148,7 @@ public class MotionEngine extends PApplet
   public int virtualMouseY = 0;
   public boolean virtualMouseDown = false;
   private boolean remoteDrawEnabled = false;
-  private ArrayList<ILiveDrawCommand> remoteDrawQueue = new ArrayList<ILiveDrawCommand>();
+  private ArrayList<IRemoteDrawCommand> remoteDrawQueue = new ArrayList<IRemoteDrawCommand>();
 
   // SHOW CONTROL
   public static int OSC_PORT = 44321;
@@ -283,7 +283,7 @@ public class MotionEngine extends PApplet
                           float y = (float) args.get(3);
                           int down = (int) args.get(4);
 
-                          LiveDrawMouseEvent e = new LiveDrawMouseEvent(x, y, down != 0);
+                          RemoteDrawMouseEvent e = new RemoteDrawMouseEvent(x, y, down != 0);
                           System.out.println("Adding event: " + e);
                           remoteDrawQueue.add(e);
                         }
@@ -362,19 +362,19 @@ public class MotionEngine extends PApplet
     }
     else 
     {
-      ArrayList<ILiveDrawCommand> blank = new ArrayList<ILiveDrawCommand>();
-      ArrayList<ILiveDrawCommand> queue = remoteDrawQueue;
+      ArrayList<IRemoteDrawCommand> blank = new ArrayList<IRemoteDrawCommand>();
+      ArrayList<IRemoteDrawCommand> queue = remoteDrawQueue;
       remoteDrawQueue = blank;
       
-      for(ILiveDrawCommand command : queue)
+      for(IRemoteDrawCommand command : queue)
       {
-        if(command instanceof LiveDrawMouseEvent)
+        if(command instanceof RemoteDrawMouseEvent)
         {
-          LiveDrawMouseEvent e = (LiveDrawMouseEvent)command;
+          RemoteDrawMouseEvent e = (RemoteDrawMouseEvent)command;
         }
-        else if (command instanceof LiveDrawKeyEvent)
+        else if (command instanceof RemoteDrawKeyEvent)
         {
-          LiveDrawKeyEvent e = (LiveDrawKeyEvent)command;
+          RemoteDrawKeyEvent e = (RemoteDrawKeyEvent)command;
         }
       }
     }

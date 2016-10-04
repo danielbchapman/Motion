@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LiveDrawKeyEvent implements ILiveDrawCommand
+public class RemoteDrawKeyEvent implements IRemoteDrawCommand
 {
   char key;
 }

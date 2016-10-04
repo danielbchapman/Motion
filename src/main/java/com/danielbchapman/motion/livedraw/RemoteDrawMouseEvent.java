@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LiveDrawMouseEvent implements ILiveDrawCommand
+public class RemoteDrawMouseEvent implements IRemoteDrawCommand
 {
   float x;
   float y;
