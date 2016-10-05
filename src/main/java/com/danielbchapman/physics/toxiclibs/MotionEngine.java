@@ -6,8 +6,10 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -50,6 +52,7 @@ import lombok.Getter;
 import lombok.Setter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.opengl.PGraphics3D;
 import shows.gravitationalwaves.BleedingGrid;
@@ -174,7 +177,11 @@ public class MotionEngine extends PApplet
   public MobilologyTwo mobolologyTwo;
   public MobilologyThree mobolologyThree;
 
+  // Screen Shot
+  private boolean takeScreenshot;
+  
   private boolean stopPlayback = false;
+  
   static
   {
     ArrayList<Action> test = new ArrayList<>();
@@ -555,6 +562,13 @@ public class MotionEngine extends PApplet
           }
         }
 
+    }
+    if(takeScreenshot)
+    {
+      takeScreenshot = false;
+      PImage ss = g.get();
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+      ss.save("/screenshots/motion-" + sdf.format(new Date()) + ".tiff");
     }
   }
 
@@ -1093,6 +1107,9 @@ public class MotionEngine extends PApplet
       else
         disableLiveDraw();
     }
+    
+    if (code == java.awt.event.KeyEvent.VK_F4)
+      takeScreenshot();
   }
   
   @Override
@@ -1527,5 +1544,13 @@ public class MotionEngine extends PApplet
   {
     liveDrawEnabled = false;
     oscSender = null;
+  }
+  
+  /**
+   * Instructs motion to capture the next frame as a .tiff  
+   */
+  public void takeScreenshot()
+  {
+    takeScreenshot = true; 
   }
 }
