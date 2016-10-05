@@ -487,16 +487,6 @@ public class MotionEngine extends PApplet
         g.popMatrix();
       }
 
-    // Frame-rate
-    pushMatrix();
-    translate(0, 0, 50);
-    noStroke();
-    fill(0);
-    rect(50, height - 50, 150, 25, 0);
-    fill(255, 0, 0);
-    text("Frame Rate: " + frameRate, 50, height - 50 + 15, 1);
-    popMatrix();
-
     if (layers != null)
       for (Layer l : layers)
         l.update();
@@ -519,6 +509,16 @@ public class MotionEngine extends PApplet
       }
       popMatrix();
 
+      //Frame-rate
+      pushMatrix();
+      translate(0, 0, 250);
+      noStroke();
+      fill(255,0,0);
+      rect(50, height - 50, 150, 25, 0);
+      fill(255, 0, 0);
+      text("Frame Rate: " + frameRate, 50, height - 50 + 15, 1);
+      popMatrix();
+      //System.out.println("Frame is: frameRate);
     }
 
     if (enableSpout)

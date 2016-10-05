@@ -19,7 +19,7 @@ public class Actions
 {
   public static MotionEngine engine;
   public static int WIDTH = 1280;
-  public static int HEIGHT = 720;
+  public static int HEIGHT = 626;
   //Forces
   
   public static Action advanceScene(int delay)
