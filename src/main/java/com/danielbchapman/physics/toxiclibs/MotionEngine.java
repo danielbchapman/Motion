@@ -69,6 +69,7 @@ import shows.shekillsmonsters.MagicMissleLayer;
 import shows.shekillsmonsters.SpinningSquares;
 import shows.shekillsmonsters.TilliusWWE;
 import shows.shekillsmonsters.TitleSheKillsMonsters;
+import shows.tancredi.LetterProjection;
 import shows.troubledwater.Bridge;
 import shows.troubledwater.CourtesanLayer;
 import shows.troubledwater.FinalLayer;
@@ -756,6 +757,9 @@ public class MotionEngine extends PApplet
     prepare.accept(new SpinningSquares(Actions.WIDTH, Actions.HEIGHT));
     prepare.accept(new BeholderPuppet());
     prepare.accept(rainLayer);
+    
+    //Tancredi Animations
+    prepare.accept(new LetterProjection(this));
     // prepare.accept(new Prologue(this));
     // prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
     // prepare.accept(new Bridge(this));
