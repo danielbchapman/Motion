@@ -365,11 +365,11 @@ public class Motion extends PApplet
               currentScene.applyBrush(b, main, point);           
             else 
             {
-              print("[vector]");
+              //print("[vector]");
               if(b.last == null)//Start draw
               {
                 currentScene.applyBrush(b, main, point);
-                println("first");
+                //println("first");
               }
               else
               {
@@ -377,7 +377,7 @@ public class Motion extends PApplet
                 Vec3D scalar = scalarPoint.sub(b.last);
                 float mag = scalar.magnitude();
                 int steps = (int) (mag / b.splitSize);
-                print(" [steps] " + steps);
+                //print(" [steps] " + steps);
                 if(steps <= 1)
                 { 
                   boolean draw = b.applyWhenIdle() || mag >= 1;//pixel-space, so less than 1 is the same point
@@ -396,13 +396,13 @@ public class Motion extends PApplet
                     Vec3D newSub = scalar.getNormalizedTo(subMag);
                     Vec3D newPoint = b.last.add(newSub);
                     MotionMouseEvent copy = point.copy(newPoint);
-                    print(" [@] (" + copy.x + ", " + copy.y + ", " + copy.z + ")");
+                  //  print(" [@] (" + copy.x + ", " + copy.y + ", " + copy.z + ")");
                     currentScene.applyBrush(b,  main, copy);
                   }
                   
                   //Draw at point for the last one
                   currentScene.applyBrush(b, main, point);
-                  println(" [@] (" + point.x + ", " + point.y + ", " + point.z + ")");
+                  //println(" [@] (" + point.x + ", " + point.y + ", " + point.z + ")");
                   b.last = point;
                 }
               }
