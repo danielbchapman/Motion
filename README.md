@@ -1,3 +1,5 @@
+## Note: rework2017 is under way
+
 ##Current Branch: development-fx
 Latest Demo Builds (Windows 32/64):
 https://github.com/danielbchapman/Motion/releases
