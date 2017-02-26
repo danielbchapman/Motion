@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.function.Consumer;
 
+import com.danielbchapman.brushes.SaveableBrush;
+import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
+import com.danielbchapman.physics.toxiclibs.RecordAction;
+import com.danielbchapman.physics.toxiclibs.Recorder;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
@@ -12,6 +17,7 @@ import processing.event.MouseEvent;
 import shows.test.TestBrushScene;
 import shows.test.TestFluidScene;
 import shows.test.TestVerletScene;
+import toxi.geom.Vec3D;
 
 
 /**
@@ -23,6 +29,7 @@ public class Motion extends PApplet
 {
   public static int WIDTH = 400;
   public static int HEIGHT = 400;
+  
   //Graphic Contexts
   private PGraphics main3D;
   private PGraphics main2D;
@@ -37,6 +44,7 @@ public class Motion extends PApplet
   ArrayList<RecordableMouse> mouseEvents = new ArrayList<>();
   ArrayList<KeyCombo> keyCombos = new ArrayList<KeyCombo>();
   MotionBrush currentBrush = new MouseBrush();
+  
   //Data Structures
   private HashMap<KeyCombo, Consumer<Motion>> keyMap = new HashMap<>();
   private Scene currentScene = null;
@@ -45,17 +53,22 @@ public class Motion extends PApplet
   private int sceneIndex = -1;
   
   //Recording
-  private boolean recording = false;
-  private ArrayList<RecordableMouse> recordedEvents = new ArrayList<>();
+  Recorder2017 recorder = new Recorder2017();
+  static ArrayList<RecordAction2017> CAPTURE;
   
+  //Mouse and Keyboard
+  boolean mouseLeft = false;
+  boolean mouseRight = false;
+  boolean mouseCenter = false;
   public Motion()
   {
     //SpaceBar = 32
-    KeyCombo go = new KeyCombo(false, false, false, false, ' ');
-    KeyCombo nextScene = new KeyCombo(false, false, false, false, 'l');
-    KeyCombo debug = new KeyCombo(false, false, false, false, 'd');
-    KeyCombo overlay = new KeyCombo(false, false, false, false, 'f');
-    KeyCombo record = new KeyCombo(false, false, false, false, 'r');
+    KeyCombo go = new KeyCombo(' ');
+    KeyCombo nextScene = new KeyCombo('l');
+    KeyCombo debug = new KeyCombo('d');
+    KeyCombo overlay = new KeyCombo('f');
+    KeyCombo record = new KeyCombo('r');
+    KeyCombo playback = new KeyCombo('p');
     
     keyMap.put(go, (app)->{
       go();
@@ -80,6 +93,11 @@ public class Motion extends PApplet
     keyMap.put(record, (app)->{
       println("recording");
       toggleRecording();
+    });
+    
+    keyMap.put(playback, (app)->{
+      println("playback");
+      runPlayback();
     });
   }
   
@@ -141,7 +159,9 @@ public class Motion extends PApplet
     m.pmouseX = pmouseX;
     m.mouseY = mouseY;
     m.pmouseY = pmouseY;
-    m.mouseDown = mousePressed;
+    m.left = mouseLeft;
+    m.right = mouseRight;
+    m.center = mouseCenter;
     mouseEvents.add(m);
   }
   
@@ -161,15 +181,30 @@ public class Motion extends PApplet
     m.pmouseX = pmouseX;
     m.mouseY = mouseY;
     m.pmouseY = pmouseY;
-    m.mouseDown = mousePressed;
+    m.left = mouseLeft;
+    m.right = mouseRight;
+    m.center = mouseCenter;
     mouseEvents.add(m);
   }
   
   @Override
   public void mouseReleased(MouseEvent e)
   {
+    if(mouseButton == LEFT)
+      mouseLeft = false;
+    else if (mouseButton == RIGHT)
+      mouseRight = false;
+    else if (mouseButton == CENTER)
+      mouseCenter = false;
+ 
+    
     if(currentBrush != null)
-      currentBrush.mouseDown = false;
+    {
+      currentBrush.left = mouseLeft;
+      currentBrush.right = mouseRight;
+      currentBrush.center = mouseCenter;
+    }
+      
     
     RecordableMouse m = new RecordableMouse();
     m.brush = currentBrush;
@@ -177,15 +212,21 @@ public class Motion extends PApplet
     m.pmouseX = pmouseX;
     m.mouseY = mouseY;
     m.pmouseY = pmouseY;
-    m.mouseDown = mousePressed;
+    m.left = mouseLeft;
+    m.center = mouseCenter;
+    m.right = mouseRight;
     mouseEvents.add(m);    
   }
   
   @Override
   public void mousePressed()
-  {
-    if(currentBrush != null)
-      currentBrush.mouseDown = true;
+  {    
+    if(mouseButton == LEFT)
+      mouseLeft = true;
+    else if (mouseButton == RIGHT)
+      mouseRight = true;
+    else if (mouseButton == CENTER)
+      mouseCenter = true;
     
     RecordableMouse m = new RecordableMouse();
     m.brush = currentBrush;
@@ -193,8 +234,17 @@ public class Motion extends PApplet
     m.pmouseX = pmouseX;
     m.mouseY = mouseY;
     m.pmouseY = pmouseY;
-    m.mouseDown = mousePressed;
+    m.left = mouseLeft;
+    m.right = mouseRight;
+    m.center = mouseCenter;
     mouseEvents.add(m);
+    
+    if(currentBrush != null)
+    {
+      currentBrush.left = mouseLeft;
+      currentBrush.right = mouseRight;
+      currentBrush.center = mouseCenter;
+    }
   }
   
   @Override
@@ -240,12 +290,14 @@ public class Motion extends PApplet
         //We should probably deterimine the "mousedown" situation here"
         RecordableMouse r = mouseEvents.get(i);
         //print(" [" + r.mouseX + ", " + r.mouseY + " @ " + r.mouseDown + " ]");
-        if(currentBrush != null && r.mouseDown)
+        if(currentBrush != null && (r.left || r.right || r.center))
         {
           activeBrushes.add(currentBrush.copy());
         }
-        if(recording)
-          recordedEvents.add(r);
+        if(recorder.isRecording())
+        {
+          recorder.capture(r);
+        }
       }
 
       mouseEvents.clear();
@@ -329,7 +381,7 @@ public class Motion extends PApplet
       debug.beginDraw();
       debug.clear();
       
-      if(recording)
+      if(recorder.isRecording())
       {
         debug.pushMatrix();
         debug.fill(255, 0, 0, 255);
@@ -419,10 +471,70 @@ public class Motion extends PApplet
   {
     debugActive = !debugActive;
   }
-  
+
   public void toggleRecording()
   {
-    println(recording ? "STOP RECORDING" : "START RECORDING");
-    recording = !recording;
+    if(recorder.isRecording())
+      CAPTURE = recorder.stop();
+    else
+      recorder.start();
+  }
+  
+  public void runPlayback()
+  {
+    if(CAPTURE == null || CAPTURE.size() < 1)
+    {
+      println("Nothing to play back");
+      return;
+    }
+    
+    Playback2017 pb = recorder.playback(CAPTURE, currentScene, this);
+  }
+  
+  
+  /**
+   * A hook that allows an action to be "Played" on the screen
+   * @param action the action to apply
+   * 
+   */
+  public void robot(RecordableMouse action, MotionBrush brush)
+  {
+    if(action.left)
+    {
+      
+    }
+    else if (action.right)
+    {
+      
+    }
+    else if (action.center)
+    {
+      
+    }
+    // System.out.println("Recorder Running");
+    SaveableBrush paint = null;
+    if (behavior instanceof SaveableBrush)
+      paint = (SaveableBrush) behavior;
+
+    if (action.leftClick)
+    {
+      behavior.vars.position = new Vec3D(action.x, action.y, 0);
+      if (paint != null)
+      {
+        if (!paint.isDrawing())
+          paint.startDraw();
+
+        behavior.setPosition(behavior.vars.position);
+        paintBrushes.add(paint);
+      }
+
+      addBehavior(behavior);
+    }
+    else
+    {
+      if (paint != null)
+        paint.endDraw();
+      removeBehavior(behavior);
+    }
   }
 }

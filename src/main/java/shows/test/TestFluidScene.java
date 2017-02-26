@@ -63,7 +63,7 @@ public class TestFluidScene extends BaseScene
     if(brush != null && brush.isActive())
     {
       System.out.println(brush);
-      mousePressed = brush.mouseDown;
+      mousePressed = brush.left;
       mouseX = brush.mouseX;
       mouseY = brush.mouseY;
       pmouseX = brush.pmouseX;
