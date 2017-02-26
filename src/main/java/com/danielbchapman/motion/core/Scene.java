@@ -1,18 +1,31 @@
 package com.danielbchapman.motion.core;
 
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 import processing.core.PGraphics;
 
-abstract class Scene
+public abstract class Scene
 {
+  boolean initialized = false;
   public abstract void applyBrushBeforeDraw(MotionBrush brush, PGraphics g);
   public abstract void applyBrushAfterDraw(MotionBrush brush, PGraphics g);
   public abstract void afterBrushes(PGraphics g);
+  
   /**
-   * @return true if this is a 2D context, else return false if 3D.
+   * Override this method if you need a 2D context for some reason.
    */
-  public abstract boolean is2D();
+  public boolean is2D()
+  {
+    return false;
+  }
+  
+  public abstract void go();
+  /**
+   * @return true if this scene should maintain its state if navigated away from
+   * and false if it should reset. (You probably want false).  
+   */
+  public abstract boolean isPersistent();
   /**
    * @return The unique name for this layer. It is used by OSC for targeting  
    */
@@ -31,7 +44,7 @@ abstract class Scene
    * need to modify hot-keys on the fly. This puts ultimate control
    * in the scene, you should have a method to advance to the next scene.  
    */
-  public abstract HashMap<KeyCombo, MotionEvent> getKeyMap();
+  public abstract HashMap<KeyCombo, Consumer<Motion>> getKeyMap();
   
   
   /**

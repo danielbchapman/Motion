@@ -22,10 +22,6 @@ public abstract class Layer
    * @param points the objects to draw
    */
   @SuppressWarnings("This is a terrible design and needs to be eliminated immediately. This means constructors can't have variables.")
-  public Layer()
-  {
-    points = init();
-  }
   /**
    * Return the name for this layer (unique) to be controlled by OSC
    * @return by default this returns the class name.

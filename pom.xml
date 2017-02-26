@@ -150,6 +150,14 @@
 			<artifactId>physics</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>diwi</groupId>
+			<artifactId>pixelflow</artifactId>
+			<scope>system</scope>
+			<version>0.21.9</version>
+			<systemPath>${basedir}/lib/PixelFlow.jar</systemPath>
+		</dependency>
 
 		<!-- <dependency> <groupId>gstreamer-java</groupId> <artifactId>core</artifactId> 
 			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/gstreamer-java.jar</systemPath> 
