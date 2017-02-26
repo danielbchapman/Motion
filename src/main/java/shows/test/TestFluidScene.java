@@ -1,5 +1,6 @@
 package shows.test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
@@ -18,12 +19,9 @@ import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;
 public class TestFluidScene extends BaseScene
 {
   DwFluid2D fluid;
-  boolean left;
-  boolean right;
-  boolean center;
-  
-  public float mouseX, mouseY, pmouseX, pmouseY;
   HashMap<KeyCombo, Consumer<Motion>> testKeys = new HashMap<>();
+  
+  ArrayList<MotionMouseEvent> eventsSinceUpdate = new ArrayList<>();
   
   @Override
   public boolean is2D()
@@ -47,28 +45,30 @@ public class TestFluidScene extends BaseScene
      
     fluid.addCallback_FluiData(new DwFluid2D.FluidData(){
       public void update(DwFluid2D fluid){
-        float px = mouseX;
-        float py = motion.height - mouseY;
-        float vx = (mouseX - pmouseX) * 75 + 30;
-        float vy = (mouseY - pmouseY) * -30;
-        
-        if(left)
+        for(MotionMouseEvent e : eventsSinceUpdate)
         {
-          fluid.addDensity(px, py, Util.rand(5, 20), 0, .4f, 1.0f, 1.0f);
-          fluid.addDensity(px, py, Util.rand(5, 20), 1.0f, 1.0f, 1.0f, 1.0f);
-          fluid.addDensity(px, py, Util.rand(5, 20), 1.0f, 0, 0, 0.5f);
-        }
-        
-        if(right)
-        {
-          fluid.addVelocity(px, py, 14, vx, vy);
-        }
-        
-        if(center)
-        {
-          fluid.addTemperature(px, py, 50, -.5f);
-        }
+          float px = e.x;
+          float py = motion.height - e.y;
+          float vx = (e.x - e.pmouseX) * 75 + 30;
+          float vy = (e.y - e.pmouseY) * -30;
           
+          if(e.left)
+          {
+            fluid.addDensity(px, py, Util.rand(5, 20), 0, .4f, 1.0f, 1.0f);
+            fluid.addDensity(px, py, Util.rand(5, 20), 1.0f, 1.0f, 1.0f, 1.0f);
+            fluid.addDensity(px, py, Util.rand(5, 20), 1.0f, 0, 0, 0.5f);
+          }
+          
+          if(e.right)
+          {
+            fluid.addVelocity(px, py, 14, vx, vy);
+          }
+          
+          if(e.center)
+          {
+            fluid.addTemperature(px, py, 50, -.5f);
+          } 
+        }  
       }
    });
   }
@@ -77,9 +77,7 @@ public class TestFluidScene extends BaseScene
   public void update(long time)
   { 
     fluid.update();
-    left = false;
-    center = false;
-    right = false;
+    eventsSinceUpdate.clear();
   }
   
 
@@ -108,24 +106,10 @@ public class TestFluidScene extends BaseScene
   @Override
   public void applyBrush(MotionBrush brush, PGraphics g, MotionMouseEvent point)
   {
-    if(brush != null && brush.isDown())
+    if(brush.isDown())
     {
-      //System.out.println(brush);
-      left = point.left;
-      right = point.right;
-      center = point.center;
-      mouseX = point.x;
-      mouseY = point.y;
-      pmouseX = point.pmouseX;
-      pmouseY = point.pmouseY;
+      eventsSinceUpdate.add(point);
     }
-    else
-    {
-      left = false;
-      right = false;
-      center = false;
-    } 
-    
     brush.applyBrush(g, point);
   }
 }
