@@ -38,6 +38,8 @@ public class Motion extends PApplet
   //Drawing Methods
   ArrayList<Pair<MotionMouseEvent, MotionBrush>> frameEvents = new ArrayList<>();
   ArrayList<MotionMouseEvent> mouseEvents = new ArrayList<>();
+  ArrayList<Pair<MotionMouseEvent, MotionBrush>> playBackEvents = new ArrayList<>();
+  ArrayList<Playback2017> playbacks = new ArrayList<Playback2017>();
   ArrayList<KeyCombo> keyCombos = new ArrayList<KeyCombo>();
   MotionBrush currentBrush = new MouseBrush();
   
@@ -272,9 +274,36 @@ public class Motion extends PApplet
    */
   public void update(long time)
   {
-    currentBrush.update(time);    
-    //FIXME Add Playback Events Here for each playback
-    //Turn recordables into brushes;
+    currentBrush.update(time);
+    
+    ArrayList<Playback2017> remove = new ArrayList<Playback2017>();
+    if(playbacks.size() > 0)
+      for(int i = 0; i < playbacks.size(); i++)
+      {
+        Playback2017 pb = playbacks.get(i);
+        
+        if(pb.isRunning())
+        {
+          pb.poll(this);
+        }
+        else if (pb.isCompleted())
+        {
+          remove.add(pb);
+        } 
+        else 
+        {
+          pb.start(time);
+          pb.poll(this);
+        }
+      }
+    
+    if(remove.size() > 0)
+      for(Playback2017 pb : remove)
+      {
+        playbacks.remove(pb);
+        println("Playback complete for " + pb.getLabel());
+      }
+
     
     //Active UI (Current Brush)
     if(mouseEvents.size() > 0)
@@ -543,54 +572,38 @@ public class Motion extends PApplet
       println("Nothing to play back");
       return;
     }
-    
-    Playback2017 pb = recorder.playback(CAPTURE, currentScene, this);
+    Playback2017 pb = recorder.playback("_live", CAPTURE, this, this.currentBrush.copy());
+    playbacks.add(pb);
+    println("PLAYBACK ADDED");
+    println(pb);
   }
-  
   
   /**
    * A hook that allows an action to be "Played" on the screen
    * @param action the action to apply
    * 
    */
-  public void robot(MotionMouseEvent action, MotionBrush brush)
+  public void robot(RecordAction2017 action, MotionBrush brush)
   {
-    if(action.left)
-    {
-      
+    if(brush == null){
+      System.out.println("Can not playback without a valid brush");
+      return;
     }
-    else if (action.right)
-    {
-      
-    }
-    else if (action.center)
-    {
-      
-    }
-    // System.out.println("Recorder Running");
-    SaveableBrush paint = null;
-    if (behavior instanceof SaveableBrush)
-      paint = (SaveableBrush) behavior;
-
-    if (action.leftClick)
-    {
-      behavior.vars.position = new Vec3D(action.x, action.y, 0);
-      if (paint != null)
-      {
-        if (!paint.isDrawing())
-          paint.startDraw();
-
-        behavior.setPosition(behavior.vars.position);
-        paintBrushes.add(paint);
-      }
-
-      addBehavior(behavior);
-    }
-    else
-    {
-      if (paint != null)
-        paint.endDraw();
-      removeBehavior(behavior);
-    }
+    
+    MotionMouseEvent event = new MotionMouseEvent();
+    event.left = action.leftClick;
+    event.right = action.rightClick;
+    event.center = action.centerClick;
+    
+    event.x = action.x;
+    event.y = action.y;
+    event.z = action.z;
+    
+    event.pmouseX = action.px;
+    event.pmouseY = action.py;
+    event.pmouseZ = action.pz;
+    
+    frameEvents.add(Pair.create(event, brush));
+    
   }
 }

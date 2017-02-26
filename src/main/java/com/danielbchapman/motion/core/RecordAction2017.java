@@ -103,12 +103,15 @@ public class RecordAction2017
     {
       result.label = parts[i++];
       result.stamp = Integer.parseInt(parts[i++]);
+      
       result.x = Transform.size(Float.parseFloat(parts[i++]), w);
       result.y = Transform.size(Float.parseFloat(parts[i++]), h);
       result.z = Transform.size(Float.parseFloat(parts[i++]), w);
+      
       result.px = Transform.size(Float.parseFloat(parts[i++]), w);
       result.py = Transform.size(Float.parseFloat(parts[i++]), h);
-      result.pz = Transform.size(Float.parseFloat(parts[i++]), w)
+      result.pz = Transform.size(Float.parseFloat(parts[i++]), w);
+      
       result.leftClick = Boolean.parseBoolean(parts[i++]);
       result.rightClick = Boolean.parseBoolean(parts[i++]);
       result.centerClick = Boolean.parseBoolean(parts[i++]);

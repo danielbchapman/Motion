@@ -87,10 +87,10 @@ public class Recorder2017
     if (!recording)
       return;
 
-    int x = r.getMouseX();
-    int y = r.getMouseY();
-    int px = r.getPmouseX();
-    int py = r.getPmouseY();
+    int x = (int) r.x;
+    int y = (int) r.y;
+    int px = r.pmouseX;
+    int py = r.pmouseY;
     int time = (int) (System.currentTimeMillis() - start);
 
     boolean left = r.left;
@@ -125,14 +125,12 @@ public class Recorder2017
    * @param actions the actions to prepare
    * @param layer the layer to use (future hook)
    * @param engine the engine to use
-   * @return A constructed CueStack object
+   * @return A constructed Playback2017 object
    * 
    */
-  public static Playback playback(ArrayList<RecordAction> actions, Scene scene, Motion motion)
+  public static Playback2017 playback(String name, ArrayList<RecordAction2017> actions, Motion motion, MotionBrush brush)
   {
-    System.out.println("Creating stack: " + actions.size());
-
-    return new Playback("playback", actions, motion.currentBrush);
+    return new Playback2017(name, motion, brush, actions);
   }
 
   public static class RecordUI extends JFrame
