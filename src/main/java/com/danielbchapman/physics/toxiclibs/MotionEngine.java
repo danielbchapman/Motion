@@ -572,10 +572,14 @@ public class MotionEngine extends PApplet
     }
   }
 
+  public void settings()
+  {
+    size(Actions.WIDTH, Actions.HEIGHT, P3D);// FIXME Needs a resize listener (though not critical)
+  }
   public void setup()
   {
+   
     Actions.engine = this;
-    size(Actions.WIDTH, Actions.HEIGHT, OPENGL);// FIXME Needs a resize listener (though not critical)
     // QLab will limit the rate to 30 FPS it seems
     // Older Intel graphics seem to limit the rate to an odd count. 30 = 20, 60 = 30;
     frameRate(60);

@@ -38,12 +38,6 @@ public class Dance2015 extends PApplet {
 	  counter = DrawUtil.getCounter();
 	  setupA();
 	}
-
-	@Override
-	public boolean sketchFullScreen()
-	{
-	  return false;
-	}
 	
 	public void draw() {
 	  background(0);

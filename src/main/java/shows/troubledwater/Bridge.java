@@ -108,7 +108,7 @@ public class Bridge extends BleedingCanvasLayer
 		{
 		    g.fill(0,0,0, 2);
 		    g.stroke(0,0,0, 2);
-		    g.rect(0, 0, this.engine.getWidth(), this.engine.getHeight());
+		    g.rect(0, 0, this.engine.width, this.engine.height);
 		}
 
 	    super.renderAfterBrushes(g);

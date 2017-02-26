@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.danielbchapman</groupId>
 	<artifactId>motion</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>Motion</name>
 	<description>A responsive environment based loosely on the standard model of physics.</description>
 
@@ -127,7 +127,7 @@
 			<groupId>processing</groupId>
 			<artifactId>core</artifactId>
 			<scope>system</scope>
-			<version>2.1.1</version>
+			<version>3.3.0</version>
 			<systemPath>${basedir}/lib/core.jar</systemPath>
 		</dependency>
 		

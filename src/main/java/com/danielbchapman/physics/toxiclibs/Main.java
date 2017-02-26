@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import processing.core.PApplet;
+
 public class Main
 {
 	public static JFrame MAIN_CONTAINER;
@@ -58,21 +60,21 @@ public class Main
 
 	public static void setUndecorated()
 	{
-		GraphicsConfiguration ge = MAIN_CONTAINER.getGraphicsConfiguration();
-		ge.getBounds();
-		System.out.println("BOUNDS ARE -> " + ge.getBounds());
-		ENGINE.stop();
-		MAIN_CONTAINER.remove(ENGINE);
-		MAIN_CONTAINER.setVisible(false);
-		MAIN_CONTAINER.dispose();
-		MAIN_CONTAINER.setUndecorated(true);
-		MAIN_CONTAINER.setVisible(true);
-
-		ENGINE = new MotionEngine();
-		MAIN_CONTAINER.add(ENGINE, BorderLayout.CENTER);
-		ENGINE.init();
-		Rectangle monitor = MAIN_CONTAINER.getGraphicsConfiguration().getBounds();
-		MAIN_CONTAINER.setLocation(monitor.x, 0);
+//		GraphicsConfiguration ge = MAIN_CONTAINER.getGraphicsConfiguration();
+//		ge.getBounds();
+//		System.out.println("BOUNDS ARE -> " + ge.getBounds());
+//		ENGINE.stop();
+//		MAIN_CONTAINER.remove(ENGINE);
+//		MAIN_CONTAINER.setVisible(false);
+//		MAIN_CONTAINER.dispose();
+//		MAIN_CONTAINER.setUndecorated(true);
+//		MAIN_CONTAINER.setVisible(true);
+//
+//		ENGINE = new MotionEngine();
+//		MAIN_CONTAINER.add(ENGINE, BorderLayout.CENTER);
+//		ENGINE.init();
+//		Rectangle monitor = MAIN_CONTAINER.getGraphicsConfiguration().getBounds();
+//		MAIN_CONTAINER.setLocation(monitor.x, 0);
 		//    Point screen = MAIN_CONTAINER.getLocationOnScreen();
 		//    Point real = MAIN_CONTAINER.getLocation();
 		//    Toolkit.getDefaultToolkit().get
@@ -81,26 +83,27 @@ public class Main
 
 	public static void main(String ... args)
 	{
-		MAIN_CONTAINER = new JFrame();
-		//Style JFrames
-		try
-		{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
-		{
-			//Not critical
-			e.printStackTrace();
-		}
-		MAIN_CONTAINER.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		MAIN_CONTAINER.setSize(Actions.WIDTH, Actions.HEIGHT);
-		MAIN_CONTAINER.setLayout(new BorderLayout());
 
-		ENGINE = new MotionEngine();
-		MAIN_CONTAINER.add(ENGINE, BorderLayout.CENTER);
-		ENGINE.init();
-		MAIN_CONTAINER.setVisible(true);
-		//
+//		MAIN_CONTAINER = new JFrame();
+//		//Style JFrames
+//		try
+//		{
+//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		}
+//		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
+//		{
+//			//Not critical
+//			e.printStackTrace();
+//		}
+//		MAIN_CONTAINER.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		MAIN_CONTAINER.setSize(Actions.WIDTH, Actions.HEIGHT);
+//		MAIN_CONTAINER.setLayout(new BorderLayout());
+//
+//		ENGINE = new MotionEngine();
+//		MAIN_CONTAINER.add(ENGINE, BorderLayout.CENTER);
+//		ENGINE.init();
+//		MAIN_CONTAINER.setVisible(true);
+//		//
 		//    SwingUtilities.invokeLater(
 		//    		new Runnable()
 		//    		{
@@ -114,5 +117,7 @@ public class Main
 		//    		);
 		//MAIN_CONTAINER.setSize(1280, 721);//FORCE REFRESH
 		//PApplet.main(MotionEngine.class.getName());
+		ENGINE = new MotionEngine();
+    PApplet.runSketch(new String[]{"MAIN"}, ENGINE);
 	}
 }
