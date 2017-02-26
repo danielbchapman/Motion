@@ -100,7 +100,7 @@ public class Recorder2017
     //We're assuming zero for Z right now
     RecordAction2017 tmp = new RecordAction2017("Captured", time, x, y, 0, px, py, 0, left, right, center);
     actions.add(tmp);
-    System.out.println("Adding action " + tmp);
+    //System.out.println("Adding action " + tmp);
   }
 
   public ArrayList<RecordAction2017> stop()
