@@ -9,12 +9,12 @@ import toxi.geom.Vec3D;
  * events to the scene without applying any other 
  * changes.
  */
-public class MouseBrush extends MotionBrush
+public class VectorMouseBrush extends MotionBrush
 {
   @Override
   public MotionBrush copy()
   {
-    MouseBrush copy = new MouseBrush();
+    VectorMouseBrush copy = new VectorMouseBrush();
     MotionBrush.copyTo(this, copy);
     return copy;
   }
@@ -28,5 +28,17 @@ public class MouseBrush extends MotionBrush
   @Override
   public void applyBrush(PGraphics g, MotionMouseEvent point)
   {
-  } 
+  }
+  
+  @Override
+  public boolean isVectorBrush()
+  {
+    return true;
+  }
+  
+  @Override
+  public boolean applyWhenIdle()
+  {
+    return true;
+  }
 }

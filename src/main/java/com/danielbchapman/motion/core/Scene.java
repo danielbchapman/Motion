@@ -4,12 +4,20 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import processing.core.PGraphics;
+import toxi.geom.Vec3D;
 
 public abstract class Scene
 {
-  boolean initialized = false;
-  public abstract void applyBrushBeforeDraw(MotionBrush brush, PGraphics g);
-  public abstract void applyBrushAfterDraw(MotionBrush brush, PGraphics g);
+  boolean initialized = false;  
+  /**
+   * Determines whether this scene should apply brushes before 
+   * or after the draw method. Scenes that rely on physics may 
+   * wish to apply this information before the visuals. 
+   * 
+   * This defaults to true. Only one choice is available per scene.
+   */
+  public abstract boolean applyBrushesAfterDraw();
+  public abstract void applyBrush(MotionBrush brush, PGraphics g, MotionMouseEvent point);
   public abstract void afterBrushes(PGraphics g);
   
   /**
@@ -52,7 +60,6 @@ public abstract class Scene
    * if needed by physics engines.
    */
   public abstract void update(long time);
-  
   
   /**
    * The draw method with the context that needs to be targeted passed. 

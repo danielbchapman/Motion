@@ -20,16 +20,6 @@ public final class RestScene extends Scene
   }
 
   @Override
-  public void applyBrushBeforeDraw(MotionBrush brush, PGraphics g)
-  {
-  }
-
-  @Override
-  public void applyBrushAfterDraw(MotionBrush brush, PGraphics g)
-  { 
-  }
-
-  @Override
   public void afterBrushes(PGraphics g)
   { 
   }
@@ -68,8 +58,17 @@ public final class RestScene extends Scene
   @Override
   public boolean isPersistent()
   {
-    //TODO Auto Generated Sub
-    throw new RuntimeException("Not Implemented...");
-    
+    return false; 
+  }
+
+  @Override
+  public boolean applyBrushesAfterDraw()
+  { 
+    return true;
+  }
+
+  @Override
+  public void applyBrush(MotionBrush brush, PGraphics g, MotionMouseEvent point)
+  {
   }
 }

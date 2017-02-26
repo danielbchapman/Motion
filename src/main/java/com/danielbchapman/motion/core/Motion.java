@@ -2,22 +2,18 @@ package com.danielbchapman.motion.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
-import com.danielbchapman.brushes.SaveableBrush;
-import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
-import com.danielbchapman.physics.toxiclibs.RecordAction;
-import com.danielbchapman.physics.toxiclibs.Recorder;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-import shows.test.TestBrushScene;
-import shows.test.TestFluidScene;
-import shows.test.TestVerletScene;
+import shows.test.*;
 import toxi.geom.Vec3D;
+
+import com.danielbchapman.brushes.SaveableBrush;
+import com.danielbchapman.code.Pair;
 
 
 /**
@@ -40,8 +36,8 @@ public class Motion extends PApplet
   private PGraphics debug;
   
   //Drawing Methods
-  ArrayList<MotionBrush> activeBrushes = new ArrayList<>();
-  ArrayList<RecordableMouse> mouseEvents = new ArrayList<>();
+  ArrayList<Pair<MotionMouseEvent, MotionBrush>> frameEvents = new ArrayList<>();
+  ArrayList<MotionMouseEvent> mouseEvents = new ArrayList<>();
   ArrayList<KeyCombo> keyCombos = new ArrayList<KeyCombo>();
   MotionBrush currentBrush = new MouseBrush();
   
@@ -99,6 +95,26 @@ public class Motion extends PApplet
       println("playback");
       runPlayback();
     });
+    
+    keyMap.put(new KeyCombo('1'), (app)->{
+      println("Mouse Brush");
+      setCurrentBrush(new MouseBrush());
+    });
+    
+    keyMap.put(new KeyCombo('2'), (app)->{
+      println("Vector Mouse Brush");
+      setCurrentBrush(new VectorMouseBrush());
+    });
+    
+    keyMap.put(new KeyCombo('3'), (app)->{
+      println("Ellipse Brush");
+      setCurrentBrush(new TestEllipseBrush(false));
+    });
+    
+    keyMap.put(new KeyCombo('4'), (app)->{
+      println("Ellipse Brush (Vector)");
+      setCurrentBrush(new TestEllipseBrush(true));
+    });
   }
   
   @Override
@@ -145,19 +161,11 @@ public class Motion extends PApplet
   public void mouseDragged(MouseEvent event)
   {
     super.mouseDragged(event);
-    if(currentBrush != null)
-    {
-      currentBrush.mouseX = mouseX;
-      currentBrush.pmouseX = pmouseX;
-      currentBrush.mouseY = mouseY;
-      currentBrush.pmouseY = pmouseY;
-    }
     
-    RecordableMouse m = new RecordableMouse();
-    m.brush = currentBrush;
-    m.mouseX = mouseX;
+    MotionMouseEvent m = new MotionMouseEvent();
+    m.x = mouseX;
     m.pmouseX = pmouseX;
-    m.mouseY = mouseY;
+    m.y = mouseY;
     m.pmouseY = pmouseY;
     m.left = mouseLeft;
     m.right = mouseRight;
@@ -166,20 +174,11 @@ public class Motion extends PApplet
   }
   
   public void mouseMoved(MouseEvent event)
-  {
-    if(currentBrush != null)
-    {
-      currentBrush.mouseX = mouseX;
-      currentBrush.pmouseX = pmouseX;
-      currentBrush.mouseY = mouseY;
-      currentBrush.pmouseY = pmouseY;      
-    }
-    
-    RecordableMouse m = new RecordableMouse();
-    m.brush = currentBrush;
-    m.mouseX = mouseX;
+  {    
+    MotionMouseEvent m = new MotionMouseEvent();
+    m.x = mouseX;
     m.pmouseX = pmouseX;
-    m.mouseY = mouseY;
+    m.y = mouseY;
     m.pmouseY = pmouseY;
     m.left = mouseLeft;
     m.right = mouseRight;
@@ -196,21 +195,11 @@ public class Motion extends PApplet
       mouseRight = false;
     else if (mouseButton == CENTER)
       mouseCenter = false;
- 
     
-    if(currentBrush != null)
-    {
-      currentBrush.left = mouseLeft;
-      currentBrush.right = mouseRight;
-      currentBrush.center = mouseCenter;
-    }
-      
-    
-    RecordableMouse m = new RecordableMouse();
-    m.brush = currentBrush;
-    m.mouseX = mouseX;
+    MotionMouseEvent m = new MotionMouseEvent();
+    m.x = mouseX;
     m.pmouseX = pmouseX;
-    m.mouseY = mouseY;
+    m.y = mouseY;
     m.pmouseY = pmouseY;
     m.left = mouseLeft;
     m.center = mouseCenter;
@@ -228,23 +217,15 @@ public class Motion extends PApplet
     else if (mouseButton == CENTER)
       mouseCenter = true;
     
-    RecordableMouse m = new RecordableMouse();
-    m.brush = currentBrush;
-    m.mouseX = mouseX;
+    MotionMouseEvent m = new MotionMouseEvent();
+    m.x = mouseX;
     m.pmouseX = pmouseX;
-    m.mouseY = mouseY;
+    m.y = mouseY;
     m.pmouseY = pmouseY;
     m.left = mouseLeft;
     m.right = mouseRight;
     m.center = mouseCenter;
     mouseEvents.add(m);
-    
-    if(currentBrush != null)
-    {
-      currentBrush.left = mouseLeft;
-      currentBrush.right = mouseRight;
-      currentBrush.center = mouseCenter;
-    }
   }
   
   @Override
@@ -278,26 +259,34 @@ public class Motion extends PApplet
     prep.accept(new TestVerletScene());
   }
   
+  /**
+   * Updates the brushes in the scene and any other
+   * variables that need to be refreshed before drawing begins
+   * in the next frame.
+   * 
+   * This event consolidates the various mouse and key events
+   * into logical actions for this frame.
+   * 
+   * @param time the current time  
+   * 
+   */
   public void update(long time)
   {
+    currentBrush.update(time);    
+    //FIXME Add Playback Events Here for each playback
     //Turn recordables into brushes;
     
+    //Active UI (Current Brush)
     if(mouseEvents.size() > 0)
     {
       //print("MouseEvents");
       for(int i = 0; i < mouseEvents.size(); i++)
       { 
-        //We should probably deterimine the "mousedown" situation here"
-        RecordableMouse r = mouseEvents.get(i);
-        //print(" [" + r.mouseX + ", " + r.mouseY + " @ " + r.mouseDown + " ]");
-        if(currentBrush != null && (r.left || r.right || r.center))
-        {
-          activeBrushes.add(currentBrush.copy());
-        }
+        MotionMouseEvent e = mouseEvents.get(i);
+        frameEvents.add(Pair.create(e, currentBrush));
+        
         if(recorder.isRecording())
-        {
-          recorder.capture(r);
-        }
+          recorder.capture(e);
       }
 
       mouseEvents.clear();
@@ -312,41 +301,102 @@ public class Motion extends PApplet
     update(time);
     
     core.beginDraw();
-    core.background(0);
+    core.background(0,0,0);
     
     if(currentScene != null)
     {
       currentScene.update(time);
+      
       PGraphics main = currentScene.is2D() ? main2D : main3D;
+      main.beginDraw();
       if(!currentScene.is2D())
         main.pushMatrix();
       
-      for(MotionBrush b : activeBrushes)
-        if(b.isActive())
-          currentScene.applyBrushBeforeDraw(b, main);  
-      if(currentBrush != null)
-        if(currentBrush.isActive())
-          currentScene.applyBrushBeforeDraw(currentBrush, main);
-      
+      if(!currentScene.applyBrushesAfterDraw())
+      {
+        //FIXME Draw logic here.
+      }
+
       currentScene.draw(main);
       
-      for(MotionBrush b : activeBrushes)
-        if(b.isActive())
-          currentScene.applyBrushAfterDraw(b, main);
-      
-      if(currentBrush != null && currentBrush.isActive())
-        if(currentBrush.isActive())
-          currentScene.applyBrushAfterDraw(currentBrush, main);      
+      if(currentScene.applyBrushesAfterDraw())
+      {
+        for(Pair<MotionMouseEvent, MotionBrush> pair : frameEvents)
+        {
+          MotionMouseEvent point = pair.getOne();
+          MotionBrush b = pair.getTwo();
+          
+          boolean shouldBeActive = b.checkActive(point);
+          if(shouldBeActive)
+          {
+            if(!b.isDown())
+              b.setDown(true, point);
+            
+            if(!b.isVectorBrush())
+              currentScene.applyBrush(b, main, point);           
+            else 
+            {
+              print("[vector]");
+              if(b.last == null)//Start draw
+              {
+                currentScene.applyBrush(b, main, point);
+                println("first");
+              }
+              else
+              {
+                Vec3D scalarPoint = new Vec3D(point);
+                Vec3D scalar = scalarPoint.sub(b.last);
+                float mag = scalar.magnitude();
+                int steps = (int) (mag / b.splitSize);
+                print(" [steps] " + steps);
+                if(steps <= 1)
+                { 
+                  boolean draw = b.applyWhenIdle() || mag >= 1;//pixel-space, so less than 1 is the same point
+                  
+                  if(draw)
+                  {
+                    currentScene.applyBrush(b, main, point);
+                    b.last = point;
+                  }
+                }
+                else //Multiple points
+                {
+                  for(int i = 0; i < steps - 1; i++)
+                  {
+                    float subMag = ((float)i) * b.splitSize;
+                    Vec3D newSub = scalar.getNormalizedTo(subMag);
+                    Vec3D newPoint = b.last.add(newSub);
+                    MotionMouseEvent copy = point.copy(newPoint);
+                    print(" [@] (" + copy.x + ", " + copy.y + ", " + copy.z + ")");
+                    currentScene.applyBrush(b,  main, copy);
+                  }
+                  
+                  //Draw at point for the last one
+                  currentScene.applyBrush(b, main, point);
+                  println(" [@] (" + point.x + ", " + point.y + ", " + point.z + ")");
+                  b.last = point;
+                }
+              }
+            }
+          }
+          else
+          {
+            if(b.isDown())
+              b.setDown(false);
+          }
+        }        
+      }
       
       currentScene.afterBrushes(main);
       
       if(!currentScene.is2D())
         main.popMatrix();
       
+      main.endDraw();
       core.image(main, 0, 0, width, height);
     }
     
-    activeBrushes.clear();
+    frameEvents.clear();
     
     if(overlayActive)
     {
@@ -456,6 +506,12 @@ public class Motion extends PApplet
     }
   }
   
+  public void setCurrentBrush(MotionBrush brush)
+  {
+    if(brush != null)
+      this.currentBrush = brush;
+  }
+  
   public void go()
   {
     if(currentScene != null)
@@ -497,7 +553,7 @@ public class Motion extends PApplet
    * @param action the action to apply
    * 
    */
-  public void robot(RecordableMouse action, MotionBrush brush)
+  public void robot(MotionMouseEvent action, MotionBrush brush)
   {
     if(action.left)
     {

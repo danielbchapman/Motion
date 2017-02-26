@@ -82,7 +82,7 @@ public class Recorder2017
   boolean recording = false;
   long start = -1L;
 
-  public void capture(RecordableMouse r)
+  public void capture(MotionMouseEvent r)
   {
     if (!recording)
       return;
