@@ -54,9 +54,9 @@ public class TestFluidScene extends BaseScene
           
           if(e.left)
           {
-            fluid.addDensity(px, py, Util.rand(5, 20), 0, .4f, 1.0f, 1.0f);
-            fluid.addDensity(px, py, Util.rand(5, 20), 1.0f, 1.0f, 1.0f, 1.0f);
-            fluid.addDensity(px, py, Util.rand(5, 20), 1.0f, 0, 0, 0.5f);
+            fluid.addDensity(px, py, 20, 0, .4f, 1.0f, 1.0f);
+            fluid.addDensity(px, py, 8, 1.0f, 1.0f, 1.0f, 1.0f);
+            fluid.addDensity(px, py, 5, 1.0f, 0, 0, 0.5f);
           }
           
           if(e.right)
