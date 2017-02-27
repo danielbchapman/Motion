@@ -2,6 +2,7 @@ package com.danielbchapman.motion.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -14,6 +15,8 @@ import toxi.geom.Vec3D;
 
 import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.code.Pair;
+import com.danielbchapman.physics.toxiclibs.Util;
+import com.danielbchapman.text.Safe;
 
 
 /**
@@ -25,6 +28,97 @@ public class Motion extends PApplet
 {
   public static int WIDTH = 400;
   public static int HEIGHT = 400;
+  
+  public static Map<String, String> KEY_MAP_DEFAULTS;
+  public static Map<String, Map<String, String>> PROPERTIES;
+  
+  static
+  {
+    PROPERTIES = new HashMap<>();
+    KEY_MAP_DEFAULTS = new HashMap<String, String>();
+    KEY_MAP_DEFAULTS.put("go", "spacebar");
+    KEY_MAP_DEFAULTS.put("record", "r");
+    KEY_MAP_DEFAULTS.put("play", "p");
+    KEY_MAP_DEFAULTS.put("debug", "d");
+    KEY_MAP_DEFAULTS.put("overlay", "f");
+    KEY_MAP_DEFAULTS.put("next_scene", "l");
+    KEY_MAP_DEFAULTS.put("brush_1", "1");
+    KEY_MAP_DEFAULTS.put("brush_2", "2");
+    KEY_MAP_DEFAULTS.put("brush_3", "3");
+    KEY_MAP_DEFAULTS.put("brush_4", "4");
+    KEY_MAP_DEFAULTS.put("brush_5", "5");
+    KEY_MAP_DEFAULTS.put("brush_6", "6");
+    KEY_MAP_DEFAULTS.put("brush_7", "7");
+    KEY_MAP_DEFAULTS.put("brush_8", "8");
+    KEY_MAP_DEFAULTS.put("brush_9", "9");
+    KEY_MAP_DEFAULTS.put("brush_10", "0");
+    
+    PROPERTIES.put("key_map", KEY_MAP_DEFAULTS);
+  }
+  public static void loadProperties()
+  {
+    HashMap<String, Map<String, String>> settings = new HashMap<>();
+    settings.put("key map", KEY_MAP_DEFAULTS);
+    Util.readProps("motion.ini", new HashMap<String, Map<String, String>>());
+  }
+ 
+  
+  /**
+   * @param section
+   * @param key
+   * @param defaultValue
+   * @return the setting value from the PROPERTIES file else return the default value
+   * and set it in the properties file.  
+   */
+  public static String getString(String section, String key, String defaultValue)
+  {
+    Map<String, String> outer = PROPERTIES.get(section);
+    if(outer == null){
+      outer = new HashMap<String, String>();
+      outer.put(key,  defaultValue);
+      PROPERTIES.put(section, outer);
+      return defaultValue;
+    } 
+    else 
+    {
+      String val = outer.get(key);
+      if(val == null)
+      {
+        outer.put(key, defaultValue);
+        return defaultValue;
+      }
+      else
+        return val;
+    }
+  }
+  
+  /**
+   * @param section
+   * @param key
+   * @param defaultValue
+   * @return the setting value from the PROPERTIES file else return the default value
+   * and set it in the properties file.  
+   *
+   */
+  //FIXME Java Doc Needed
+  public static float getFloat(String section, String key, float defaultValue)
+  {
+    String val = getString(section, key, Float.toString(defaultValue));
+    return Safe.parseFloat(val, 0f);
+  }
+  
+  /**
+   * @param section
+   * @param key
+   * @param defaultValue
+   * @return the setting value from the PROPERTIES file else return the default value
+   * and set it in the properties file.  
+   */  
+  public static int getInt(String section, String key, int defaultValue)
+  {
+    String val = getString(section, key, Float.toString(defaultValue));
+    return Safe.parseInteger(val);
+  }
   
   //Graphic Contexts
   private PGraphics main3D;
@@ -44,7 +138,7 @@ public class Motion extends PApplet
   MotionBrush currentBrush = new MouseBrush();
   
   //Data Structures
-  private HashMap<KeyCombo, Consumer<Motion>> keyMap = new HashMap<>();
+  private HashMap<KeyCombo, BiConsumer<Motion, Scene>> keyMap = new HashMap<>();
   private Scene currentScene = null;
   
   private ArrayList<Scene> scenes = new ArrayList<>();
@@ -58,6 +152,7 @@ public class Motion extends PApplet
   boolean mouseLeft = false;
   boolean mouseRight = false;
   boolean mouseCenter = false;
+  
   public Motion()
   {
     //SpaceBar = 32
@@ -68,55 +163,100 @@ public class Motion extends PApplet
     KeyCombo record = new KeyCombo('r');
     KeyCombo playback = new KeyCombo('p');
     
-    keyMap.put(go, (app)->{
+    mapKey("go", "spacebar", (app, scene)->{
       go();
       println("go");
     });
     
-    keyMap.put(nextScene, (app)->{ 
+    mapKey("next_scene", "l", (app, scene)->{ 
       advanceScene();
       println("advance scene");
     });
     
-    keyMap.put(debug, (app)->{
+    mapKey("debug", "d", (app, scene)->{
       toggleDebug();
       println("debug");
     });
     
-    keyMap.put(overlay, (app)->{
+    mapKey("overlay", "f", (app, scene)->{
       toggleOverlay();
       println("overlay");
     });
     
-    keyMap.put(record, (app)->{
+    mapKey("record", "r", (app, scene)->{
       println("recording");
       toggleRecording();
     });
     
-    keyMap.put(playback, (app)->{
+    mapKey("playback", "p", (app, scene)->{
       println("playback");
       runPlayback();
     });
     
-    keyMap.put(new KeyCombo('1'), (app)->{
+    mapKey("brush_1", "1", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new MouseBrush());
+    });
+
+    mapKey("brush_1", "1", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new MouseBrush());
+    });
+    mapKey("brush_2", "2", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new VectorMouseBrush());
+    });
+    mapKey("brush_3", "3", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new TestEllipseBrush(false));
+    });
+    mapKey("brush_4", "4", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new TestEllipseBrush(true));
+    });
+    mapKey("brush_5", "5", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new MouseBrush());
+    });
+    mapKey("brush_6", "6", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new MouseBrush());
+    });
+    mapKey("brush_7", "7", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new MouseBrush());
+    });
+    mapKey("brush_8", "8", (app, scene)->{
       println("Mouse Brush");
       setCurrentBrush(new MouseBrush());
     });
     
-    keyMap.put(new KeyCombo('2'), (app)->{
-      println("Vector Mouse Brush");
-      setCurrentBrush(new VectorMouseBrush());
+    mapKey("brush_9", "9", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new MouseBrush());
     });
     
-    keyMap.put(new KeyCombo('3'), (app)->{
-      println("Ellipse Brush");
-      setCurrentBrush(new TestEllipseBrush(false));
+    mapKey("brush_10", "0", (app, scene)->{
+      println("Mouse Brush");
+      setCurrentBrush(new MouseBrush());
     });
+  }
+  
+  public void mapKey(String command, String keyDefault, BiConsumer<Motion, Scene> action)
+  {
+    String keyCommand = Motion.getString("key_map", command, keyDefault);
+    //FIXME Split this out to the commands like alt+ctrl+ etc...
+    //FIXME add special notes here...
+    Character key = null;
+    if(keyCommand.equals("spacebar")){
+      key = ' ';
+    } else 
+    {
+      key = keyCommand.charAt(0); //first char  
+    }
     
-    keyMap.put(new KeyCombo('4'), (app)->{
-      println("Ellipse Brush (Vector)");
-      setCurrentBrush(new TestEllipseBrush(true));
-    });
+    KeyCombo keyCombo = new KeyCombo(key);
+    keyMap.put(keyCombo, action);
   }
   
   @Override
@@ -143,21 +283,20 @@ public class Motion extends PApplet
         }
       }
     }
-    Consumer<Motion> action = keyMap.get(down);
+    
+    BiConsumer<Motion, Scene> action = keyMap.get(down);
     println(down);
     println("Action------");
     if(action != null)
     {
       println(action);
-      action.accept(this);
+      action.accept(this, currentScene);
     }
     else
     {
       println("\tNo action..");
       keyCombos.add(down);
     }
-
-    
   }
   
   public void mouseDragged(MouseEvent event)
@@ -605,5 +744,22 @@ public class Motion extends PApplet
     
     frameEvents.add(Pair.create(event, brush));
     
+  }
+  
+  @Override
+  public void dispose()
+  {
+    System.out.println("Exiting motion...");
+    try
+    {
+      Util.writeProps("motion.ini", Motion.PROPERTIES);  
+    }
+    catch(Throwable t)
+    {
+      System.err.println("Error saving motion.ini");
+      t.printStackTrace();
+    }
+    
+    super.dispose();
   }
 }
