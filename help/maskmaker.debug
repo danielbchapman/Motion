@@ -1,0 +1,13 @@
+The MaskMaker layer overrides defaults
+[GO] selects the mouse and eliminates any brushes 
+you have selected
+
+[A] adds the current shape to the list
+[I] takes a screenshot of the main context (the mask)
+[R] resets the context to a black plus the shapes 
+    (eliminates touch-ups)
+[T] loads the last screenshot from the screenshots folder
+    into the context.
+[Y] resets the shapes (clears all)
+[BACKSPACE/DEL] Remove the last vertex pushed into the stack.
+    Undo is not implemented.

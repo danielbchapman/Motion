@@ -28,7 +28,7 @@ public abstract class Scene
     return false;
   }
   
-  public abstract void go();
+  public abstract void go(Motion motion);
   /**
    * @return true if this scene should maintain its state if navigated away from
    * and false if it should reset. (You probably want false).  
@@ -72,6 +72,26 @@ public abstract class Scene
    */
   public abstract void draw(PGraphics g);
   
+  /**
+   * Draw to the debug layer if you need to.
+   * @param g the graphics context to draw on
+   * 
+   */
+  public void debug(PGraphics g){};
+  
+  /**
+   * Draw to the overlay layer if needed (help, data etc...)
+   * @param clear The clear layer is cleared before each frame call (useful 
+   * for text or data).  
+   */
+  public void overlay(PGraphics clear){};
+  
+  /**
+   * Draw to a persistant overlay context
+   * @param overlayPaths The persistent layer does not clear itself and is 
+   * useful for capturing events over time.
+   */
+  public void overlayPaths(PGraphics overlayPaths){};
   /**
    * A cleanup method for shutting down any system specific
    * resources. It is only called on reset.  

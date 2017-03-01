@@ -92,7 +92,7 @@ public class TestFluidScene extends BaseScene
   }
 
   @Override
-  public void go()
+  public void go(Motion motion)
   {    
   }
   

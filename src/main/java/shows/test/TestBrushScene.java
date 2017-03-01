@@ -20,7 +20,7 @@ public class TestBrushScene extends BaseScene
   }
 
   @Override
-  public void go()
+  public void go(Motion motion)
   {
     first = true;
   }

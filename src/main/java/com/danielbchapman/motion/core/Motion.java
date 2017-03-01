@@ -2,7 +2,9 @@ package com.danielbchapman.motion.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -11,6 +13,7 @@ import java.util.logging.Level;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import shows.test.*;
@@ -19,6 +22,7 @@ import toxi.geom.Vec3D;
 import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.code.Pair;
 import com.danielbchapman.logging.Log;
+import com.danielbchapman.motion.tools.MaskMakerScene;
 import com.danielbchapman.physics.toxiclibs.IGraphicShare;
 import com.danielbchapman.physics.toxiclibs.Util;
 import com.danielbchapman.text.Safe;
@@ -53,6 +57,7 @@ public class Motion extends PApplet
     KEY_MAP_DEFAULTS.put("debug", "d");
     KEY_MAP_DEFAULTS.put("overlay", "f");
     KEY_MAP_DEFAULTS.put("clearOverlay", "c");
+    KEY_MAP_DEFAULTS.put("screenshot", "i");
     KEY_MAP_DEFAULTS.put("next_scene", "l");
     KEY_MAP_DEFAULTS.put("brush_1", "1");
     KEY_MAP_DEFAULTS.put("brush_2", "2");
@@ -172,9 +177,23 @@ public class Motion extends PApplet
   static ArrayList<RecordAction2017> CAPTURE;
   
   //Mouse and Keyboard
-  boolean mouseLeft = false;
-  boolean mouseRight = false;
-  boolean mouseCenter = false;
+  private boolean mouseLeft = false;
+  private boolean mouseRight = false;
+  private boolean mouseCenter = false;
+  
+  //Actions
+  private String screenShotName = null;
+  private boolean takeScreenShot = false;
+  
+  //Syphon and Spout
+  private Object spout;
+  private boolean enableSpout;
+  IGraphicShare syphonOrSpout;
+  private Method shareInitialize;
+  private Method shareCleanup;
+  private Method shareDraw;
+  private Class<?> spoutClass;
+  private Method spoutSend;
   
   public Motion()
   {
@@ -267,6 +286,11 @@ public class Motion extends PApplet
     mapKey("clearOverlay", "c", (app, scene)->{
       println("Clear Overlay");
       clearOverlay();
+    });
+    
+    mapKey("screenshot", "i", (app, scene)->{
+      println("ScreenShot");
+      takeScreenShot(null);
     });
   }
   
@@ -436,6 +460,7 @@ public class Motion extends PApplet
     prep.accept(new TestBrushScene());
     prep.accept(new TestFluidScene());
     prep.accept(new TestVerletScene());
+    prep.accept(new MaskMakerScene());
   }
   
   /**
@@ -599,6 +624,22 @@ public class Motion extends PApplet
         main.popMatrix();
       
       main.endDraw();
+      if(takeScreenShot)
+      {
+        String prefix = null;
+        if(screenShotName == null)
+          prefix = "/screenshots/motion-";
+        else
+          prefix = "/screenshots/" + screenShotName;
+        
+        takeScreenShot = false;
+        screenShotName = null;
+
+        PImage ss = main.get();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        ss.save(prefix + sdf.format(new Date()) + ".tiff");
+      }
+      
       core.image(main, 0, 0, width, height);
     }
     
@@ -686,6 +727,10 @@ public class Motion extends PApplet
       //Draw overlay
       overlay.beginDraw();
       overlay.clear();
+      
+      if(currentScene != null)
+        currentScene.overlay(overlay);
+      
       int red = mousePressed ? 255 : 0;
       
       overlay.pushMatrix();
@@ -715,6 +760,8 @@ public class Motion extends PApplet
     {
       debug.beginDraw();
       debug.clear();
+      if(currentScene != null)
+        currentScene.debug(debug);
       
       if(recorder.isRecording())
       {
@@ -840,7 +887,7 @@ public class Motion extends PApplet
   public void go()
   {
     if(currentScene != null)
-      currentScene.go();
+      currentScene.go(this);
   }
   
   public void toggleOverlay()
@@ -862,6 +909,11 @@ public class Motion extends PApplet
       recorder.start();
   }
   
+  public void takeScreenShot(String name)
+  {
+    screenShotName = name;
+    takeScreenShot = true;
+  }
   public void runPlayback()
   {
     if(CAPTURE == null || CAPTURE.size() < 1)
@@ -928,16 +980,7 @@ public class Motion extends PApplet
   {
     clearPaths = true;
   }
-  
-  
-  private Object spout;
-  private boolean enableSpout;
-  IGraphicShare syphonOrSpout;
-  private Method shareInitialize;
-  private Method shareCleanup;
-  private Method shareDraw;
-  private Class<?> spoutClass;
-  private Method spoutSend;
+
   
   public void enableSpoutBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException, ClassNotFoundException, InstantiationException
   {

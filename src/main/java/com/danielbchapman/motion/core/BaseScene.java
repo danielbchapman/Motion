@@ -56,9 +56,8 @@ public class BaseScene extends Scene
   }
 
   @Override
-  public void go()
+  public void go(Motion motion)
   {
-    
   }
 
   @Override
@@ -72,4 +71,5 @@ public class BaseScene extends Scene
   {
     brush.applyBrush(g, point);
   }
+
 }
