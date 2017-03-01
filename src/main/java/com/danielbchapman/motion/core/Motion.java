@@ -41,6 +41,7 @@ public class Motion extends PApplet
     KEY_MAP_DEFAULTS.put("play", "p");
     KEY_MAP_DEFAULTS.put("debug", "d");
     KEY_MAP_DEFAULTS.put("overlay", "f");
+    KEY_MAP_DEFAULTS.put("clearOverlay", "c");
     KEY_MAP_DEFAULTS.put("next_scene", "l");
     KEY_MAP_DEFAULTS.put("brush_1", "1");
     KEY_MAP_DEFAULTS.put("brush_2", "2");
@@ -123,9 +124,16 @@ public class Motion extends PApplet
   //Graphic Contexts
   private PGraphics main3D;
   private PGraphics main2D;
+  
+  /**
+   * The context displayed in the GUI
+   */
   private PGraphics core;
   private boolean overlayActive = true;
   private PGraphics overlay;
+  private PGraphics overlayPaths;
+  private Vec3D overlayLastPoint = null;
+  private boolean clearPaths = false;
   private boolean debugActive = true;
   private PGraphics debug;
   
@@ -239,6 +247,11 @@ public class Motion extends PApplet
     mapKey("brush_10", "0", (app, scene)->{
       println("Mouse Brush");
       setCurrentBrush(new MouseBrush());
+    });
+    
+    mapKey("clearOverlay", "c", (app, scene)->{
+      println("Clear Overlay");
+      clearOverlay();
     });
   }
   
@@ -379,6 +392,7 @@ public class Motion extends PApplet
   public void setup()
   {
     overlay = createGraphics(width, height, P3D);
+    overlayPaths = createGraphics(width, height, P3D);
     debug = createGraphics(width, height, P3D);
     core = createGraphics(width, height, P3D);
     main3D = createGraphics(width, height, P3D);
@@ -564,10 +578,84 @@ public class Motion extends PApplet
       core.image(main, 0, 0, width, height);
     }
     
-    frameEvents.clear();
     
     if(overlayActive)
     {
+      //Draw paths
+      overlayPaths.beginDraw();
+      if(clearPaths)
+      {
+        overlayPaths.clear();
+        clearPaths = false;
+        overlayLastPoint = null;
+      }
+      overlayPaths.strokeWeight(3);
+      
+      int size = frameEvents.size();
+      MotionMouseEvent e = null;
+      for(Pair<MotionMouseEvent, MotionBrush> frame : frameEvents)
+      {
+        MotionMouseEvent current = frame.getOne();
+        if(!current.anyDown())
+          continue;
+        
+        overlayPaths.stroke(current.debugColor);
+        overlayPaths.fill(current.debugColor);
+        if(overlayLastPoint != null)
+        {
+          overlayPaths.line(
+              current.x, 
+              current.y, 
+              current.z, 
+              overlayLastPoint.x,  
+              overlayLastPoint.y,  
+              overlayLastPoint.z );
+        }
+        else
+        {
+          overlayPaths.point(current.x, current.y, current.z); 
+        }
+        
+        overlayLastPoint = new Vec3D(current);
+      }
+      
+      if(size == 1)
+      {
+
+        MotionMouseEvent one = frameEvents.get(0).getOne();
+        if(one.left || one.right || one.center)
+        {
+
+        }
+      } 
+      else if (size > 1)
+      {
+        MotionMouseEvent current;
+        MotionMouseEvent next;
+        for(int i = 1; i < size; i++)
+        {
+          current = frameEvents.get(i-1).getOne();
+          next = frameEvents.get(i-1).getOne();
+          
+          if(current.anyDown() && next.anyDown())
+          {
+            overlayPaths.line(current.x,  current.y, current.z, next.x, next.y,  next.z);
+          }
+          else if(current.anyDown())
+          {
+            overlayPaths.point(current.x,  current.y, current.z);
+          }
+          else if (next.anyDown())
+          {
+            overlayPaths.point(next.x,  next.y, next.z);
+          }
+        }
+      }
+      
+      overlayPaths.endDraw();
+      core.image(overlayPaths, 0, 0, width, height);
+      
+      //Draw overlay
       overlay.beginDraw();
       overlay.clear();
       int red = mousePressed ? 255 : 0;
@@ -592,6 +680,7 @@ public class Motion extends PApplet
 
       overlay.endDraw();
       core.image(overlay, 0, 0, width, height);
+      
     }
     
     if(debugActive)
@@ -634,7 +723,10 @@ public class Motion extends PApplet
     g.pushMatrix();
     g.translate(0, 0, -200); //Offset remove later
     g.image(core, 0, 0, width, height);
-    g.popMatrix(); 
+    g.popMatrix();
+    
+    //Clear data
+    frameEvents.clear();
   }
   
   public void advanceScene()
@@ -688,6 +780,7 @@ public class Motion extends PApplet
   
   public void toggleOverlay()
   {
+    clearOverlay();
     overlayActive = !overlayActive;
   }
   
@@ -761,5 +854,13 @@ public class Motion extends PApplet
     }
     
     super.dispose();
+  }
+  
+  /**
+   * Clears the paths on the overlay.  
+   */
+  public void clearOverlay()
+  {
+    clearPaths = true;
   }
 }

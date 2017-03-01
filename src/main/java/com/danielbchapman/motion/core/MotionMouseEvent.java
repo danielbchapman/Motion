@@ -21,6 +21,11 @@ public class MotionMouseEvent extends Vec3D
   public int pmouseY;
   public int pmouseZ = 0;
   
+  /**
+   * Set the color for this mouse event if needed by debugger.
+   */
+  public int debugColor = 0xFFFF00FF;
+  
   public MotionMouseEvent copy()
   {
     return copy(this);
@@ -37,5 +42,13 @@ public class MotionMouseEvent extends Vec3D
     copy.pmouseZ = pmouseZ;
     
     return copy;
+  }
+  
+  /**
+   * @return true if any button is down.
+   */
+  public boolean anyDown()
+  {
+    return left || right || center;
   }
 }
