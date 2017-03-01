@@ -1,10 +1,13 @@
 package com.danielbchapman.motion.core;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -15,8 +18,11 @@ import toxi.geom.Vec3D;
 
 import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.code.Pair;
+import com.danielbchapman.logging.Log;
+import com.danielbchapman.physics.toxiclibs.IGraphicShare;
 import com.danielbchapman.physics.toxiclibs.Util;
 import com.danielbchapman.text.Safe;
+import com.sun.jna.Platform;
 
 
 /**
@@ -29,13 +35,18 @@ public class Motion extends PApplet
   public static int WIDTH = 400;
   public static int HEIGHT = 400;
   
+  public static String KEY_MAP = "KEY_MAP";
+  public static String GRAPHICS = "GRAPHICS";
   public static Map<String, String> KEY_MAP_DEFAULTS;
+  public static Map<String, String> GRAPHICS_DEFAULTS;
+  public static Map<String, String> MOTION_DEFAULTS;
   public static Map<String, Map<String, String>> PROPERTIES;
   
   static
   {
     PROPERTIES = new HashMap<>();
-    KEY_MAP_DEFAULTS = new HashMap<String, String>();
+    
+    KEY_MAP_DEFAULTS = new HashMap<>();
     KEY_MAP_DEFAULTS.put("go", "spacebar");
     KEY_MAP_DEFAULTS.put("record", "r");
     KEY_MAP_DEFAULTS.put("play", "p");
@@ -54,7 +65,11 @@ public class Motion extends PApplet
     KEY_MAP_DEFAULTS.put("brush_9", "9");
     KEY_MAP_DEFAULTS.put("brush_10", "0");
     
-    PROPERTIES.put("key_map", KEY_MAP_DEFAULTS);
+    GRAPHICS_DEFAULTS = new HashMap<>();
+    GRAPHICS_DEFAULTS.put("syphon", "Motion");
+    
+    PROPERTIES.put(KEY_MAP, KEY_MAP_DEFAULTS);
+    PROPERTIES.put(GRAPHICS, KEY_MAP_DEFAULTS);
   }
   public static void loadProperties()
   {
@@ -257,7 +272,7 @@ public class Motion extends PApplet
   
   public void mapKey(String command, String keyDefault, BiConsumer<Motion, Scene> action)
   {
-    String keyCommand = Motion.getString("key_map", command, keyDefault);
+    String keyCommand = Motion.getString(KEY_MAP, command, keyDefault);
     //FIXME Split this out to the commands like alt+ctrl+ etc...
     //FIXME add special notes here...
     Character key = null;
@@ -399,6 +414,15 @@ public class Motion extends PApplet
     main2D = createGraphics(width, height, P2D);
     
     postSetup();
+    
+    try
+    {
+      enableSpoutBroadcast(core);
+    }
+    catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | IllegalAccessException | ClassNotFoundException | InstantiationException e)
+    {
+      e.printStackTrace();
+    }
   }
   
   //Add layers etc...
@@ -597,7 +621,11 @@ public class Motion extends PApplet
       {
         MotionMouseEvent current = frame.getOne();
         if(!current.anyDown())
+        {
+          overlayLastPoint = null;
           continue;
+        }
+          
         
         overlayPaths.stroke(current.debugColor);
         overlayPaths.fill(current.debugColor);
@@ -720,6 +748,43 @@ public class Motion extends PApplet
     }
     
     core.endDraw();
+    
+    if (enableSpout)
+    {
+      if (Platform.isWindows() || Platform.isWindowsCE())
+      {
+        if (spout != null)
+        {
+          try
+          {
+            //println("invoking spout");
+            spoutSend.invoke(spout);
+          }
+          catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+          {
+
+            try
+            {
+              disableSpoutBroadcast();
+            }
+            catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1)
+            {
+              e1.printStackTrace();
+            }
+            e.printStackTrace();
+          }
+        }
+      }
+      else
+        if (Platform.isMac())
+        {
+          if (syphonOrSpout != null)
+          {
+            syphonOrSpout.send(core);
+          }
+        }
+
+    }    
     g.pushMatrix();
     g.translate(0, 0, -200); //Offset remove later
     g.image(core, 0, 0, width, height);
@@ -862,5 +927,107 @@ public class Motion extends PApplet
   public void clearOverlay()
   {
     clearPaths = true;
+  }
+  
+  
+  private Object spout;
+  private boolean enableSpout;
+  IGraphicShare syphonOrSpout;
+  private Method shareInitialize;
+  private Method shareCleanup;
+  private Method shareDraw;
+  private Class<?> spoutClass;
+  private Method spoutSend;
+  
+  public void enableSpoutBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException, ClassNotFoundException, InstantiationException
+  {
+    try
+    {
+      if (Platform.isMac() && syphonOrSpout == null && !enableSpout)
+      {
+        // We do this to avoid native library initialization
+        Class<?> syphonClass = Class.forName("com.danielbchapman.physics.toxiclibs.SyphonGraphicsShare");
+        shareInitialize = syphonClass.getMethod("initialize", PApplet.class);
+        shareCleanup = syphonClass.getMethod("cleanup");
+        shareDraw = syphonClass.getMethod("send", PGraphics.class);
+
+        syphonOrSpout = (IGraphicShare) syphonClass.newInstance();
+        shareInitialize.invoke(syphonOrSpout, this);
+        enableSpout = true;
+        return;
+      }
+
+      if (Platform.isWindows() || Platform.isWindowsCE())
+        enableSpout = true;
+    }
+    catch (Throwable t)
+    {
+      t.printStackTrace();
+      enableSpout = false;
+      return;
+    }
+
+    if (spout == null && enableSpout)
+    {
+      try
+      {
+        Class<?> spoutProvider = Class.forName("SpoutProvider");
+        Method method = spoutProvider.getMethod("getInstance", PGraphics.class);
+
+        spout = method.invoke(null, gl);
+
+      }
+      catch (ClassNotFoundException | IllegalAccessException e)
+      {
+        Log.LOG.log(Level.SEVERE, "Unable to initialize Spout\r\n", e);
+        enableSpout = false;
+      }
+
+      if (spout != null)
+      {
+        if (spoutClass == null)
+        {
+          try
+          {
+            spoutClass = Class.forName("SpoutImplementation");
+            spoutSend = spoutClass.getMethod("sendTexture");// spoutClass.getMethod("sendTexture2", PGraphics3D.class);
+            Method init = spoutClass.getMethod("initSender", String.class, int.class, int.class);
+            init.invoke(spout, "Motion", this.displayWidth, this.displayHeight);
+          }
+          catch (ClassNotFoundException e)
+          {
+            e.printStackTrace();
+          }
+        }
+
+      }
+    }
+  }
+
+  public void disableSpoutBroadcast() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+  {
+    if (Platform.isMac())
+    {
+      if (syphonOrSpout != null)
+      {
+        shareCleanup.invoke(syphonOrSpout);
+        shareCleanup = null;
+        shareDraw = null;
+        shareInitialize = null;
+        syphonOrSpout = null;
+      }
+
+      enableSpout = false;
+      return;
+    }
+    enableSpout = false;
+
+    Object spoutRef = spout;
+    spout = null; // Clear the reference.
+    if (spoutRef != null)
+    {
+      Method close = spoutClass.getMethod("closeSender");
+      close.invoke(spoutRef);
+    }
   }
 }
