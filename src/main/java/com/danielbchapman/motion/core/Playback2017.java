@@ -15,7 +15,7 @@ public class Playback2017
   @Getter
   private boolean completed;
   private RecordAction2017[] actions;
-  
+  private int debugColor = 0xFFFFFF00;
   private int last = -1;
   private int size = -1;
   private MotionBrush brush;
@@ -29,7 +29,10 @@ public class Playback2017
     
     this.actions = new RecordAction2017[actions.size()];
     for(int i = 0; i < actions.size(); i++)
+    {
       this.actions[i] = actions.get(i);
+    }
+      
     
     this.label = label;
   }
@@ -58,7 +61,7 @@ public class Playback2017
       if(actions[last].stamp > max)
         return; // try again next loop
       
-      motion.robot(actions[last], brush);
+      motion.robot(actions[last], brush, debugColor);
     }
     
     //Fire a final event to "release" the mousedown
@@ -67,7 +70,7 @@ public class Playback2017
     copy.rightClick = false;
     copy.centerClick = false;
     
-    motion.robot(copy, brush);
+    motion.robot(copy, brush, debugColor);
     running = false;
     completed = true;
     last = -1;

@@ -46,6 +46,19 @@ public class Motion extends PApplet
   public static Map<String, String> MOTION_DEFAULTS;
   public static Map<String, Map<String, String>> PROPERTIES;
   
+  public static int[] PLAYBACK_COLORS = {
+    0xFFFFFF00,
+    0xFFFF00FF,
+    0xFF00FFFF,
+    0xFFFF0000,
+    0xFF00FF00,
+    0xFF0000FF
+  };
+  
+  public static int PLAYBACK_COLOR_INDEX = -1;
+  private static int PLAYBACK_SYSTEM = 0;
+  private static int PLAYBACK_SYSTEM_RESET = 1024;
+  
   static
   {
     PROPERTIES = new HashMap<>();
@@ -152,13 +165,13 @@ public class Motion extends PApplet
   private boolean overlayActive = true;
   private PGraphics overlay;
   private PGraphics overlayPaths;
-  private Vec3D overlayLastPoint = null;
+  private HashMap<Integer, Vec3D> overlayLastPoint = new HashMap<>();
   private boolean clearPaths = false;
   private boolean debugActive = true;
   private PGraphics debug;
   
   //Drawing Methods
-  ArrayList<Pair<MotionMouseEvent, MotionBrush>> frameEvents = new ArrayList<>();
+  ArrayList<EventPair> frameEvents = new ArrayList<>();
   ArrayList<MotionMouseEvent> mouseEvents = new ArrayList<>();
   ArrayList<Pair<MotionMouseEvent, MotionBrush>> playBackEvents = new ArrayList<>();
   ArrayList<Playback2017> playbacks = new ArrayList<Playback2017>();
@@ -477,7 +490,7 @@ public class Motion extends PApplet
   public void update(long time)
   {
     currentBrush.update(time);
-    
+    currentBrush.setSystem(-1);
     ArrayList<Playback2017> remove = new ArrayList<Playback2017>();
     if(playbacks.size() > 0)
       for(int i = 0; i < playbacks.size(); i++)
@@ -514,7 +527,7 @@ public class Motion extends PApplet
       for(int i = 0; i < mouseEvents.size(); i++)
       { 
         MotionMouseEvent e = mouseEvents.get(i);
-        frameEvents.add(Pair.create(e, currentBrush));
+        frameEvents.add(new EventPair(e, currentBrush));
         
         if(recorder.isRecording())
           recorder.capture(e);
@@ -552,10 +565,10 @@ public class Motion extends PApplet
       
       if(currentScene.applyBrushesAfterDraw())
       {
-        for(Pair<MotionMouseEvent, MotionBrush> pair : frameEvents)
+        for(EventPair pair : frameEvents)
         {
-          MotionMouseEvent point = pair.getOne();
-          MotionBrush b = pair.getTwo();
+          MotionMouseEvent point = pair.event;
+          MotionBrush b = pair.brush;
           
           boolean shouldBeActive = b.checkActive(point);
           if(shouldBeActive)
@@ -652,74 +665,75 @@ public class Motion extends PApplet
       {
         overlayPaths.clear();
         clearPaths = false;
-        overlayLastPoint = null;
+        overlayLastPoint.clear();
       }
       overlayPaths.strokeWeight(3);
       
       int size = frameEvents.size();
-      MotionMouseEvent e = null;
-      for(Pair<MotionMouseEvent, MotionBrush> frame : frameEvents)
+      
+      for(EventPair current : frameEvents)
       {
-        MotionMouseEvent current = frame.getOne();
-        if(!current.anyDown())
+        if(!current.event.anyDown())
         {
-          overlayLastPoint = null;
+          //Clear this index from the system
+          overlayLastPoint.remove(current.brush.getSystem());
           continue;
         }
-          
+        Vec3D lastSystemPoint = overlayLastPoint.get(current.brush.getSystem());        
         
-        overlayPaths.stroke(current.debugColor);
-        overlayPaths.fill(current.debugColor);
-        if(overlayLastPoint != null)
+        overlayPaths.stroke(current.event.debugColor);
+        overlayPaths.fill(current.event.debugColor);
+        
+        if(lastSystemPoint != null)
         {
           overlayPaths.line(
-              current.x, 
-              current.y, 
-              current.z, 
-              overlayLastPoint.x,  
-              overlayLastPoint.y,  
-              overlayLastPoint.z );
+              current.event.x, 
+              current.event.y, 
+              current.event.z, 
+              lastSystemPoint.x,  
+              lastSystemPoint.y,  
+              lastSystemPoint.z );
         }
         else
         {
-          overlayPaths.point(current.x, current.y, current.z); 
+          overlayPaths.point(current.event.x, current.event.y, current.event.z); 
         }
         
-        overlayLastPoint = new Vec3D(current);
+        overlayLastPoint.put(current.getBrush().getSystem(), new Vec3D(current.event));
       }
       
-      if(size == 1)
-      {
-
-        MotionMouseEvent one = frameEvents.get(0).getOne();
-        if(one.left || one.right || one.center)
-        {
-
-        }
-      } 
-      else if (size > 1)
-      {
-        MotionMouseEvent current;
-        MotionMouseEvent next;
-        for(int i = 1; i < size; i++)
-        {
-          current = frameEvents.get(i-1).getOne();
-          next = frameEvents.get(i-1).getOne();
-          
-          if(current.anyDown() && next.anyDown())
-          {
-            overlayPaths.line(current.x,  current.y, current.z, next.x, next.y,  next.z);
-          }
-          else if(current.anyDown())
-          {
-            overlayPaths.point(current.x,  current.y, current.z);
-          }
-          else if (next.anyDown())
-          {
-            overlayPaths.point(next.x,  next.y, next.z);
-          }
-        }
-      }
+//      if(size == 1)
+//      {
+//        //FIXME...what's going on here?
+//        MotionMouseEvent one = frameEvents.get(0).getEvent();
+//        if(one.left || one.right || one.center)
+//        {
+//
+//        }
+//      } 
+//      else if (size > 1)
+//      {
+//        MotionMouseEvent current;
+//        MotionMouseEvent next;
+//        for(int i = 1; i < size; i++)
+//        {
+//          current = frameEvents.get(i-1).getOne();
+//          next = frameEvents.get(i-1).getOne();
+//          
+//          if(current.anyDown() && next.anyDown())
+//          {
+//            overlayPaths.line(current.x,  current.y, current.z, next.x, next.y,  next.z);
+//          }
+//          else if(current.anyDown())
+//          {
+//            overlayPaths.point(current.x,  current.y, current.z);
+//          }
+//          else if (next.anyDown())
+//          {
+//            overlayPaths.point(next.x,  next.y, next.z);
+//          }
+//        }
+//      }
       
       overlayPaths.endDraw();
       core.image(overlayPaths, 0, 0, width, height);
@@ -921,7 +935,11 @@ public class Motion extends PApplet
       println("Nothing to play back");
       return;
     }
-    Playback2017 pb = recorder.playback("_live", CAPTURE, this, this.currentBrush.clone());
+    int color = PLAYBACK_COLORS[++PLAYBACK_COLOR_INDEX % PLAYBACK_COLORS.length];
+    MotionBrush brush = this.currentBrush.clone();
+    brush.setSystem(++PLAYBACK_SYSTEM % PLAYBACK_SYSTEM_RESET); 
+    Playback2017 pb = Recorder2017.playback("_live", CAPTURE, this, brush);
+    pb.setDebugColor(color);
     playbacks.add(pb);
     println("PLAYBACK ADDED");
     println(pb);
@@ -932,7 +950,7 @@ public class Motion extends PApplet
    * @param action the action to apply
    * 
    */
-  public void robot(RecordAction2017 action, MotionBrush brush)
+  public void robot(RecordAction2017 action, MotionBrush brush, int color)
   {
     if(brush == null){
       System.out.println("Can not playback without a valid brush");
@@ -952,7 +970,8 @@ public class Motion extends PApplet
     event.pmouseY = action.py;
     event.pmouseZ = action.pz;
     
-    frameEvents.add(Pair.create(event, brush));
+    event.debugColor = color;
+    frameEvents.add(new EventPair(event, brush));
     
   }
   

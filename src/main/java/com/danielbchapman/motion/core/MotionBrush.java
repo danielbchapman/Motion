@@ -25,6 +25,7 @@ public abstract class MotionBrush implements ICloneable<MotionBrush>
 {
   //Vector Methods
   private boolean down;
+  private int system = -1;
   public int framesDrawn = 0;
   /**
    * The distance to force a redraw on this point 
@@ -81,10 +82,11 @@ public abstract class MotionBrush implements ICloneable<MotionBrush>
   {
     MotionBrush copy = deepCopy();
     copy.down = down;
-    copy.last = last.copy();
+    copy.last = last == null ? null : last.copy();
     copy.framesDrawn = framesDrawn;
     copy.splitSize = splitSize;
     copy.startTime = startTime;
+    copy.system = system;
     return copy;
   }
 }
