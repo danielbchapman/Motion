@@ -2,8 +2,6 @@ package com.danielbchapman.physics.toxiclibs;
 
 import java.util.Random;
 
-import com.danielbchapman.brushes.SaveableBrush;
-
 import processing.core.PGraphics;
 
 public class GridLayer extends Layer

@@ -1,16 +1,10 @@
 package shows.shekillsmonsters;
 
-import java.io.File;
-
-import com.danielbchapman.physics.toxiclibs.Action;
-import com.danielbchapman.physics.toxiclibs.Actions;
-import com.danielbchapman.physics.toxiclibs.Cue;
-import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
-import com.danielbchapman.physics.toxiclibs.SpriteLayer;
-
 import processing.core.PApplet;
 import shows.troubledwater.TWCueStack;
+
+import com.danielbchapman.physics.toxiclibs.MotionEngine;
+import com.danielbchapman.physics.toxiclibs.SpriteLayer;
 
 public class HealingSpellLayer extends SpriteLayer
 {
@@ -34,7 +28,6 @@ public class HealingSpellLayer extends SpriteLayer
 	    
 	    stack = new TWCueStack(this)
 		{
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void load() {

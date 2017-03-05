@@ -1,7 +1,5 @@
 package com.danielbchapman.brushes;
 
-import java.util.Map;
-
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;

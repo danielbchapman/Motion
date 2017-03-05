@@ -2,9 +2,7 @@ package shows.troubledwater;
 
 import processing.core.PGraphics;
 
-import com.danielbchapman.brushes.SmallBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
-import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
 public class HeroLayer extends BleedingCanvasLayer

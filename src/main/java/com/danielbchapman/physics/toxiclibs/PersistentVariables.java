@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import lombok.Data;
 import toxi.geom.Vec3D;
 
-import com.danielbchapman.text.Utility;
+import com.danielbchapman.text.Text;
 
 
 /**
@@ -325,7 +325,7 @@ public class PersistentVariables implements Cloneable
     add.accept(v.timeStep);
     add.accept(v.enabled);
     add.accept(v.running);
-    add.accept(Utility.isEmptyOrNull(v.petName) ? null : v.petName);
+    add.accept(Text.isEmptyOrNull(v.petName) ? null : v.petName);
     
     b.append("END_VALUES");
        

@@ -1,15 +1,11 @@
 package com.danielbchapman.physics.toxiclibs;
 
-import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.danielbchapman.groups.Item;
 
-public class CueStack implements Serializable
+public class CueStack
 {
-  private static final long serialVersionUID = 1L;
 
   public ArrayList<Cue> cues = new ArrayList<>();
   

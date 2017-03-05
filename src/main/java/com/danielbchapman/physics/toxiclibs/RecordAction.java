@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import lombok.Data;
 
-import com.danielbchapman.text.Utility;
+import com.danielbchapman.text.Text;
 
 @Data
 public class RecordAction
@@ -75,7 +75,7 @@ public class RecordAction
 
   public static RecordAction fromFloatFormat(String s, int w, int h)
   {
-    if(Utility.isEmptyOrNull(s))
+    if(Text.isEmptyOrNull(s))
       return null;
     
     RecordAction result = new RecordAction();

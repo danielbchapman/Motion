@@ -1,6 +1,7 @@
 
 
 import processing.core.PImage;
+import processing.opengl.PGraphics3D;
 
 public interface ISpoutAPI
 {
@@ -15,7 +16,14 @@ public interface ISpoutAPI
   // Write the sketch drawing surface texture to
   // an opengl/directx shared texture
   public abstract void sendTexture();
-
+  
+  
+  /**
+   * Send the contents of THIS openGL instance to the rendered
+   * @param pgl The instance to use
+   * 
+   */
+  public void sendTexture2(PGraphics3D pgl);
   public abstract void closeSender();
 
   //

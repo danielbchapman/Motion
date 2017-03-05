@@ -11,7 +11,6 @@ import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
 import com.danielbchapman.artwork.Paragraph;
-import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.utility.FileUtil;
 
 public class MobilologyOne extends Layer
@@ -59,7 +58,6 @@ public class MobilologyOne extends Layer
   
   public class SectionOneCueStack extends CueStack
   {
-    private static final long serialVersionUID = 1L;
     ArrayList<Paragraph> tweets = new ArrayList<>();
     ArrayList<Paragraph> active = new ArrayList<>();
 
@@ -272,16 +270,6 @@ public class MobilologyOne extends Layer
     public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE, int delay)
     {
       return new Action(label, delay, fL, fE);
-    }
-    
-    public PlaybackCue playback(String label, String brushFile, String motionFile)
-    {
-      int w = Actions.engine.width;
-      int h = Actions.engine.height;
-      
-      PlaybackCue pb = new PlaybackCue(label, brushFile, motionFile);
-      pb.loadCue(w, h, 0, 0); //FIXME add an offset here! Or scaling if needed..
-      return pb;
     }
     
     public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)

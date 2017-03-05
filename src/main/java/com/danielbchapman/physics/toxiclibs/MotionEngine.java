@@ -1,12 +1,30 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import javafx.application.Application;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 
 import com.danielbchapman.artwork.Word;
 import com.danielbchapman.brushes.ImageBrush;
@@ -15,25 +33,43 @@ import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.brushes.SmallBrush;
 import com.danielbchapman.brushes.TinyBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
+import com.danielbchapman.layers.ClearLayer;
 import com.danielbchapman.logging.Log;
+import com.danielbchapman.motion.UI;
+import com.danielbchapman.motion.livedraw.IRemoteDrawCommand;
+import com.danielbchapman.motion.livedraw.RemoteDrawKeyEvent;
+import com.danielbchapman.motion.livedraw.RemoteDrawMouseEvent;
 import com.danielbchapman.physics.toxiclibs.Recorder.RecordUI;
 import com.danielbchapman.physics.ui.SceneController;
 import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
+import com.illposed.osc.OSCPortOut;
 import com.sun.jna.Platform;
+import com.sun.org.apache.bcel.internal.generic.CASTORE;
 
 import lombok.Getter;
 import lombok.Setter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.event.KeyEvent;
+import processing.opengl.PGraphics3D;
+import shows.gravitationalwaves.BleedingGrid;
+import shows.gravitationalwaves.BleedingGridOffset;
+import shows.gravitationalwaves.BleedingPointGrid;
+import shows.gravitationalwaves.GalaxyLayer;
+import shows.gravitationalwaves.RandomParticleLinesLayer;
+import shows.gravitationalwaves.RandomParticlesLayer;
+import shows.gravitationalwaves.RandomParticlesVertical;
+import shows.gravitationalwaves.TriangleWavesLayer;
 import shows.shekillsmonsters.BeholderPuppet;
 import shows.shekillsmonsters.HealingSpellLayer;
 import shows.shekillsmonsters.MagicMissleLayer;
 import shows.shekillsmonsters.SpinningSquares;
 import shows.shekillsmonsters.TilliusWWE;
 import shows.shekillsmonsters.TitleSheKillsMonsters;
+import shows.tancredi.LetterProjection;
 import shows.troubledwater.Bridge;
 import shows.troubledwater.CourtesanLayer;
 import shows.troubledwater.FinalLayer;
@@ -52,15 +88,21 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 @SuppressWarnings("unused")
 public class MotionEngine extends PApplet
 {
+  private static final long serialVersionUID = 1L;
+  // Behavior Checks--map these behaviors
+  public static boolean showCoordinates = false;
+  public static final String VERSION = "0.0.1-ALPHA";
+
   public enum Mode
   {
     SUCK_FORCE, SLAP_FORCE, EXPLODE_FORCE, BRUSH_PALLET
   }
 
-  private static final long serialVersionUID = 1L;
+  // Java FX Interface
+  @Getter
+  @Setter
+  private UI fxInterface;
 
-  // Behavior Checks--map these behaviors
-  public static boolean showCoordinates = false;
   ArrayList<ParticleBehavior3D> activeBehaviors = new ArrayList<>();
   EnvironmentTools tools;
   BrushEditor brushTools;
@@ -74,7 +116,7 @@ public class MotionEngine extends PApplet
   private Method shareInitialize;
   private Method shareCleanup;
   private Method shareDraw;
-  
+
   private Class<?> spoutClass;
   private Method spoutSend;
   private final static Recorder RECORDER = new Recorder();
@@ -108,21 +150,39 @@ public class MotionEngine extends PApplet
   private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 1000f);
   private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
   private static FrequencyOscillationBehavior osc = new FrequencyOscillationBehavior();
-  //A list of active brushes for this drawing cycle
+  // A list of active brushes for this drawing cycle
   private ArrayList<SaveableBrush> paintBrushes = new ArrayList<>();
+
+  //Remote Drawing
+  public int virtualMouseX = 0;
+  public int virtualMouseY = 0;
+  public boolean virtualMouseDown = false;
+  private boolean remoteDrawEnabled = false;
+  private ArrayList<IRemoteDrawCommand> remoteDrawQueue = new ArrayList<IRemoteDrawCommand>();
+
+  //Live Drawing (sending to Remote)
+  public boolean liveDrawEnabled = false;
+  public String liveDrawUrl;
+  public Integer liveDrawPort;
+  public OSCPortOut oscSender;
   
-  //SHOW CONTROL
+  // SHOW CONTROL
   public static int OSC_PORT = 44321;
   public OSCPortIn oscReceiver;
-  //Layers
-  public Layer activeLayer;
   
+  // Layers
+  public Layer activeLayer;
+
   // Mobilology
   public MobilologyOne mobolologyOne;
   public MobilologyTwo mobolologyTwo;
   public MobilologyThree mobolologyThree;
+
+  // Screen Shot
+  private boolean takeScreenshot;
   
   private boolean stopPlayback = false;
+  
   static
   {
     ArrayList<Action> test = new ArrayList<>();
@@ -159,77 +219,128 @@ public class MotionEngine extends PApplet
    */
   public void startOSC()
   {
-	  try {
-		oscReceiver= new OSCPortIn(OSC_PORT);
-		 
-		OSCListener listener = new OSCListener() {
-			public void acceptMessage(java.util.Date time, OSCMessage message) {
-				List<Object> args =message.getArguments();
-				
-				if(args == null || args.size() < 1)
-				{
-					System.out.println("Args: " + args);
-					if(args != null)
-						for(int i = 0; i < args.size(); i++)
-							System.out.println(i + " -> " + args.get(i));
-				}
-				else
-				{
-					String command = (String) args.get(0);
-					if("go".equalsIgnoreCase(command))
-					{
-						System.out.println("FIRING GO");
-						try
-						{
-							Integer cue = (Integer)args.get(1);
-							if(activeLayer != null)
-							 activeLayer.go(MotionEngine.this);		
-						}
-						catch (Throwable t)
-						{
-							t.printStackTrace();
-							System.out.println("Unable to fire cue!");
-						}
-					}
-					else if("advance".equalsIgnoreCase(command))
-					{
-					  if(args.size() < 2)
-					  {
-					    advanceScene();
-					  }
-					  else
-					  {
-					    try
-					    {
-					      String name = (String) args.get(1);
-					      advanceSceneTo(name);
-					    }
-					    catch(Throwable t)
-					    {
-					      System.out.println("Unable to process scene name: " + args.get(1));
-					    }
-					  }
-						return;
-					}
-					else if ("play".equalsIgnoreCase(command))
-					{
-						System.out.println("Play...");
-						playCapture();
-					}
-					else
-					{
-            System.out.println("UNKNOWN COMMAND " + command);
-            return;
-					}
-				}
-			}
-		};
-		oscReceiver.addListener("/motion", listener);
-		oscReceiver.startListening();
-	} catch (SocketException e) {
-		e.printStackTrace();
-	}
+    try
+    {
+      oscReceiver = new OSCPortIn(OSC_PORT);
+      OSCListener listener = new OSCListener()
+      {
+        public void acceptMessage(java.util.Date time, OSCMessage message)
+        {
+          List<Object> args = message.getArguments();
+          System.out.println("MESSAGE RECEIVED | size: [" + args.size() + "] message:[" + message.getArguments().stream().map(x -> x.toString()).collect(Collectors.joining(" | ")) + "]");
+          if (args == null || args.size() < 1)
+          {
+            System.out.println("Args: " + args);
+            if (args != null)
+              for (int i = 0; i < args.size(); i++)
+                System.out.println(i + " -> " + args.get(i));
+          }
+          else
+          {
+            String command = (String) args.get(0);
+            if ("go".equalsIgnoreCase(command))
+            {
+              System.out.println("FIRING GO");
+              try
+              {
+                Integer cue = (Integer) args.get(1);
+                if (activeLayer != null)
+                  activeLayer.go(MotionEngine.this);
+              }
+              catch (Throwable t)
+              {
+                t.printStackTrace();
+                System.out.println("Unable to fire cue!");
+              }
+            }
+            else
+              if ("advance".equalsIgnoreCase(command))
+              {
+                if (args.size() < 2)
+                {
+                  advanceScene();
+                }
+                else
+                {
+                  try
+                  {
+                    String name = (String) args.get(1);
+                    advanceSceneTo(name);
+                  }
+                  catch (Throwable t)
+                  {
+                    System.out.println("Unable to process scene name: " + args.get(1));
+                  }
+                }
+                return;
+              }
+              else
+                if ("play".equalsIgnoreCase(command))
+                {
+                  System.out.println("Play...");
+                  playCapture();
+                }
+                else
+                  if ("clear".equalsIgnoreCase(command))
+                  {
+                    advanceSceneTo("clear");
+                    activeLayerGo(); // force clear call
+                  }
+                  else
+                    if ("live".equalsIgnoreCase(command))
+                    {
+                      if (args.size() < 2)
+                      {
+                        System.out.println("Invalid command: " + args.stream().map(x -> x.toString()).collect(Collectors.joining(", ")));
+                        return;
+                      }
+
+                      try
+                      {
+                        String type = (String) args.get(1);
+                        if (type.equalsIgnoreCase("mouse") && args.size() > 4)
+                        {
+                          float x = (float) args.get(2);
+                          float y = (float) args.get(3);
+                          int down = (int) args.get(4);
+
+                          RemoteDrawMouseEvent e = new RemoteDrawMouseEvent(x, y, down != 0);
+//                          System.out.println("Adding event: " + e);
+                          remoteDrawQueue.add(e);
+                        }
+                        else if(type.equalsIgnoreCase("key") && args.size() > 3)
+                        {
+                          char key = (char) args.get(2);
+                          int code = (int) args.get(3);
+                          
+                          virtualKeyPressed(key, code);
+                        }
+                      }
+                      catch (Throwable t)
+                      {
+                        System.err.println("INVALID COMMAND");
+                        t.printStackTrace(System.err);
+                      }
+                    }
+                    else
+                    {
+                      System.out.println("UNKNOWN COMMAND " + command);
+                      return;
+                    }
+          }
+        }
+      };
+      oscReceiver.addListener("/motion", listener);
+      oscReceiver.startListening();
+      System.out.printf("STARTING OSC ON PORT %d%n", OSC_PORT);
+      System.out.println(oscReceiver.toString());
+    }
+    catch (SocketException e)
+    {
+      e.printStackTrace();
+    }
   }
+
   // public Force gravity;
   // public Force wind;
   // public Force
@@ -239,9 +350,10 @@ public class MotionEngine extends PApplet
     layer.applet = this;
     layer.engine = this;
     layers.add(layer);
-    for (Point p : layer.points)
-      physics.addParticle(p);
-    
+    if (layer.points != null)
+      for (Point p : layer.points)
+        physics.addParticle(p);
+
     activeLayer = layer;
   }
 
@@ -256,184 +368,274 @@ public class MotionEngine extends PApplet
 
     // Model updates
     // physics.setTimeStep(frameRate / 60f);
-	  physics.setTimeStep(60f/(float)frameRate);
-    if(stopPlayback)
+    physics.setTimeStep(60f / (float) frameRate);
+    if (stopPlayback)
     {
-        clearPlaybacksPrivate();
+      clearPlaybacksPrivate();
     }
     else
-      for (Playback p : playbacks){
-          p.poll(this);      
-    
-    }
-    if(stopPlayback)
+      for (Playback p : playbacks)
+      {
+        p.poll(this);
+
+      }
+    if (stopPlayback)
       stopPlayback = false;
-    
-    //Do the drag events before the updates and painting.
-    mouseDraggedFromDraw(mouseX, mouseY);
-    try{
+
+    // Do the drag events before the updates and painting.
+    if (!remoteDrawEnabled)
+    {
+      virtualMouseX = mouseX;
+      virtualMouseY = mouseY;
+      mouseDraggedFromDraw(virtualMouseX, virtualMouseY);
+    }
+    else 
+    {
+      if(remoteDrawQueue.size() > 0)
+      {
+        ArrayList<IRemoteDrawCommand> blank = new ArrayList<IRemoteDrawCommand>();
+        ArrayList<IRemoteDrawCommand> queue = remoteDrawQueue;
+        remoteDrawQueue = blank;
+        
+        if(queue.size() > 0)
+        {
+          for(IRemoteDrawCommand command : queue)
+          {
+            boolean down = false;
+            if(command instanceof RemoteDrawMouseEvent)
+            {
+              System.out.println("Remote Mouse Event: " + command.toString());
+              RemoteDrawMouseEvent e = (RemoteDrawMouseEvent)command;
+              int[] values = Transform.translate(e.x, e.y, Actions.WIDTH, Actions.HEIGHT);
+              virtualMouseX = values[0];
+              virtualMouseY = values[1];
+              down = e.down;
+            }
+            else if (command instanceof RemoteDrawKeyEvent)
+            {
+              RemoteDrawKeyEvent e = (RemoteDrawKeyEvent)command;
+            }
+            
+            mouseDraggedFromDraw(virtualMouseX, virtualMouseY);
+            
+            if(down != virtualMouseDown)
+            {
+              virtualMouseDown = down;
+              if(down)
+                virtualMousePressed();
+              else
+                virtualMouseReleased();
+            } 
+          }  
+        }  
+      }
+    }
+
+    try
+    {
       physics.update();
-      osc.update();  
-    } catch (Throwable t){
+      osc.update();
+    }
+    catch (Throwable t)
+    {
       t.printStackTrace();
     }
-    
 
     if (RECORDER.isRecording())
       RECORDER.capture(mouseEvent);
+    
+    if(liveDrawEnabled)
+    {
+      float[] transform = Transform.translate(virtualMouseX, virtualMouseY, Actions.WIDTH, Actions.HEIGHT);
+      ArrayList<Object> args = new ArrayList<>();
+      args.add("live");
+      args.add("mouse");
+      args.add(transform[0]); 
+      args.add(transform[1]);
+      args.add(virtualMouseDown ? 1 : 0);
+      OSCMessage out = new OSCMessage("/motion", args);
+      try
+      {
+        oscSender.send(out);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+        liveDrawEnabled = false;
+        oscSender = null;
+      }
+    }
 
     SaveableBrush painter = null;
-    if(brush instanceof SaveableBrush)
+    if (brush instanceof SaveableBrush)
     {
       painter = (SaveableBrush) brush;
     }
-      
+
     if (layers != null)
       for (Layer l : layers)
       {
         // Apply forces...
         g.pushMatrix();
-        
-          /*rotate 90*/
-//          translate(0, height);
-//          rotateZ(-PConstants.HALF_PI);
+
+        /* rotate 90 */
+        // translate(0, height);
+        // rotateZ(-PConstants.HALF_PI);
         l.render(g);
-        
-        //Render all robot brushes 
-        for(SaveableBrush b : paintBrushes)
+
+        // Render all robot brushes
+        for (SaveableBrush b : paintBrushes)
           l.renderBrush(b, g, frameCount);
-        
-        //Render this brush inside the layer matrix
-        if(painter != null && painter.isDrawing())
+
+        // Render this brush inside the layer matrix
+        if (painter != null && painter.isDrawing())
           l.renderBrush(painter, g, frameCount);
-        
+
         l.renderAfterBrushes(g);
         g.popMatrix();
       }
 
-    // Frame-rate
-    pushMatrix();
-    translate(0, 0, 50);
-    noStroke();
-    fill(0);
-    rect(50, height - 50, 150, 25, 0);
-    fill(255, 0, 0);
-    text("Frame Rate: " + frameRate, 50, height - 50 + 15, 1);
-    popMatrix();
-    
     if (layers != null)
       for (Layer l : layers)
         l.update();
-    
-    if(highlightMouse)
+
+    if (highlightMouse)
     {
       pushMatrix();
       ellipseMode(CENTER);
       stroke(4f);
-      fill(255,200,200);
-      stroke(255,0,0);
-      ellipse(mouseX, mouseY, 50, 50);
+      fill(255, 200, 200);
+      stroke(255, 0, 0);
+      ellipse(virtualMouseX, virtualMouseY, 50, 50);
       fill(0);
-      
-      if(showCoordinates)
+
+      if (showCoordinates)
       {
-        translate(mouseX, mouseY + 100);
+        translate(virtualMouseX, virtualMouseY + 100);
         fill(255);
-        text("[" + mouseX + ", " + mouseY + "]", 0, 0, 0);
+        text("[" + virtualMouseX + ", " + virtualMouseY + "]", 0, 0, 0);
       }
       popMatrix();
-       
+
+      //Frame-rate
+      pushMatrix();
+      translate(0, 0, 250);
+      noStroke();
+      fill(255,0,0);
+      rect(50, height - 50, 150, 25, 0);
+      fill(255, 0, 0);
+      text("Frame Rate: " + frameRate, 50, height - 50 + 15, 1);
+      popMatrix();
+      //System.out.println("Frame is: frameRate);
     }
-    
-    if(enableSpout)
+
+    if (enableSpout)
     {
-    	if(Platform.isWindows() || Platform.isWindowsCE())
-    	{
-    		if(spout != null)
-      	{
-      	  try
+      if (Platform.isWindows() || Platform.isWindowsCE())
+      {
+        if (spout != null)
+        {
+          try
           {
             spoutSend.invoke(spout);
           }
           catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
           {
-            // TODO Auto-generated catch block
+
+            try
+            {
+              disableSpoutBroadcast();
+            }
+            catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1)
+            {
+              e1.printStackTrace();
+            }
             e.printStackTrace();
-          }	
-      	}
-    	}
-    	else if (Platform.isMac())
-    	{
-    		if(syphonOrSpout != null)
-    		{
-    			syphonOrSpout.send(g);
-    		}
-    	}
-    	
+          }
+        }
+      }
+      else
+        if (Platform.isMac())
+        {
+          if (syphonOrSpout != null)
+          {
+            syphonOrSpout.send(g);
+          }
+        }
+
+    }
+    if(takeScreenshot)
+    {
+      takeScreenshot = false;
+      PImage ss = g.get();
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+      ss.save("/screenshots/motion-" + sdf.format(new Date()) + ".tiff");
     }
   }
 
   public void setup()
   {
     Actions.engine = this;
-    size(Actions.WIDTH, Actions.HEIGHT, OPENGL);//FIXME Needs a resize listener (though not critical)
-    //QLab will limit the rate to 30 FPS it seems
-    //Older Intel graphics seem to limit the rate to an odd count. 30 = 20, 60 = 30;
+    size(Actions.WIDTH, Actions.HEIGHT, OPENGL);// FIXME Needs a resize listener (though not critical)
+    // QLab will limit the rate to 30 FPS it seems
+    // Older Intel graphics seem to limit the rate to an odd count. 30 = 20, 60 = 30;
     frameRate(60);
     // physics.addBehavior(world);
     physics.setDrag(0.5f);
     postSetup();
     startOSC();
-    try {
-		enableSpoutBroadcast(this.g);
-	} catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
-			| IllegalAccessException | ClassNotFoundException | InstantiationException e) {
-		e.printStackTrace();
-	}
+    try
+    {
+      enableSpoutBroadcast(this.g);
+    }
+    catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | IllegalAccessException | ClassNotFoundException | InstantiationException e)
+    {
+      e.printStackTrace();
+    }
 
     // Add constraints
 
   }
-  
+
   public synchronized void clearPlaybacks()
   {
     stopPlayback = true;
   }
-  
+
   private synchronized void clearPlaybacksPrivate()
   {
-    for(int i = 0; i < playbacks.size(); i++)
+    for (int i = 0; i < playbacks.size(); i++)
     {
       Playback p = playbacks.get(i);
       removeBehavior(p.getBrush());
     }
     playbacks.clear();
   }
-  
+
   public synchronized void clearPhysics()
   {
     physics.clear();
     activeBehaviors.clear();
   }
-  
+
   public synchronized void advanceSceneTo(String name)
   {
     layers.clear();
-    playbacks.clear(); //STOP PLAYBACKS
-    
+    playbacks.clear(); // STOP PLAYBACKS
+
     clearPhysics();
-    
+
     int index = -1;
-    
-    for(int i = 0; i < scenes.size(); i++)
+
+    for (int i = 0; i < scenes.size(); i++)
     {
       Layer s = scenes.get(i);
-      if(s != null)
+      if (s != null)
       {
         String layerName = s.getName();
-        if(layerName != null)
+        if (layerName != null)
         {
-          if(layerName.equalsIgnoreCase(name))
+          if (layerName.equalsIgnoreCase(name))
           {
             index = i;
             break;
@@ -441,102 +643,113 @@ public class MotionEngine extends PApplet
         }
       }
     }
-    
-    if(index > -1)
+
+    if (index > -1)
     {
       sceneIndex = index;
 
       System.out.println("Advancing to scene: " + sceneIndex);
-      
+
       Layer tmp = scenes.get(sceneIndex);
-      if(tmp == null)
+      if (tmp == null)
       {
         throw new RuntimeException("Layer was not found, simulation may crash");
       }
-      layers.clear();//Remove all
+      layers.clear();// Remove all
       add(tmp);
     }
     else
       System.out.println("Unable to load scene '" + name + "' was not found.");
   }
-  
+
   public synchronized void advanceScene()
   {
     layers.clear();
-    playbacks.clear(); //STOP PLAYBACKS
-    
+    playbacks.clear(); // STOP PLAYBACKS
+
     clearPhysics();
-    
-    if(sceneIndex == -1 || sceneIndex+1 >= scenes.size())
+
+    if (sceneIndex == -1 || sceneIndex + 1 >= scenes.size())
       sceneIndex = 0;
     else
       sceneIndex++;
-    
+
     Layer tmp = scenes.get(sceneIndex);
-    if(tmp == null)
+    if (tmp == null)
     {
       throw new RuntimeException("Layer was not found, simulation may crash");
     }
     System.out.println("Advancing to scene [" + sceneIndex + "] " + tmp.getName());
-    layers.clear();//Remove all
+    layers.clear();// Remove all
     add(tmp);
   }
-  
+
   public void activeLayerGo()
   {
-    if(activeLayer != null)
+    if (activeLayer != null)
       activeLayer.go(this);
   }
 
   public void postSetup()
   {
-//    grid = new GridLayer();
-//    add(grid);
-//
-//    particles = new ParticleLayer();
-//    add(particles);
-//
-//    gridFly = new GridLayerFlying();
-//    add(gridFly);
-//
-//    words = new WordLayer();
-//    add(words);
-//
-//    paragraph = new ParagraphsLayer();
-//    add(paragraph);
-//
-//    one = new SceneOneLayer();
-//    add(one);
+    // grid = new GridLayer();
+    // add(grid);
+    //
+    // particles = new ParticleLayer();
+    // add(particles);
+    //
+    // gridFly = new GridLayerFlying();
+    // add(gridFly);
+    //
+    // words = new WordLayer();
+    // add(words);
+    //
+    // paragraph = new ParagraphsLayer();
+    // add(paragraph);
+    //
+    // one = new SceneOneLayer();
+    // add(one);
 
-//    add(new EmitterLayer());
+    // add(new EmitterLayer());
     /*
      * Mobilology Dance Piece
      */
-//    mobolologyOne = new MobilologyOne();
-//    add(mobolologyOne);
-//    activeLayer = mobolologyOne;
-    
-//    mobolologyTwo = new MobilologyTwo();
-//    add(mobolologyTwo);
-//    activeLayer = mobolologyTwo;
-    
-//    mobolologyThree = new MobilologyThree();
-//    add(mobolologyThree);
-//    activeLayer = mobolologyThree;
-    
+    // mobolologyOne = new MobilologyOne();
+    // add(mobolologyOne);
+    // activeLayer = mobolologyOne;
+
+    // mobolologyTwo = new MobilologyTwo();
+    // add(mobolologyTwo);
+    // activeLayer = mobolologyTwo;
+
+    // mobolologyThree = new MobilologyThree();
+    // add(mobolologyThree);
+    // activeLayer = mobolologyThree;
+
     RainLayer rainLayer = new RainLayer(this);
     CourtesanLayer courteseanLayer = new CourtesanLayer(this);
-    Consumer<Layer> prepare = (layer)->
-    {
+    Consumer<Layer> prepare = (layer) -> {
       layer.applet = this;
       layer.engine = this;
       scenes.add(layer);
-//      for (Point p : layer.points)
-//        physics.addParticle(p);
+      // for (Point p : layer.points)
+      // physics.addParticle(p);
     };
-    
-//    prepare.accept(new HeroLayer(this));
-    prepare.accept(new RecordingLayer(this)); //Motion Sketches
+
+    // Gravitational Waves Project
+    prepare.accept(new TriangleWavesLayer());
+    // prepare.accept(new GalaxyLayer(this));
+    prepare.accept(new RandomParticlesLayer());
+    prepare.accept(new RandomParticlesVertical());
+    prepare.accept(new RandomParticleLinesLayer());
+    prepare.accept(new BleedingGrid(Actions.WIDTH, Actions.HEIGHT, 40));
+    prepare.accept(new BleedingGridOffset(Actions.WIDTH, Actions.HEIGHT, 40));
+    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 10, "point-grid-10"));
+    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 40, "point-grid-40"));
+    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 80, "point-grid-80"));
+    // Demo Leftovers
+    // prepare.accept(new HeroLayer(this));
+    prepare.accept(new RecordingLayer(this)); // Motion Sketches
     prepare.accept(new TitleSheKillsMonsters(this));
     prepare.accept(new MagicMissleLayer(this));
     prepare.accept(new HealingSpellLayer(this));
@@ -544,29 +757,46 @@ public class MotionEngine extends PApplet
     prepare.accept(new SpinningSquares(Actions.WIDTH, Actions.HEIGHT));
     prepare.accept(new BeholderPuppet());
     prepare.accept(rainLayer);
-//    prepare.accept(new Prologue(this));
-//    prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
-//    prepare.accept(new Bridge(this));
-//    prepare.accept(new Scene7());
-//    prepare.accept(new HeroLayer(this));
-//    prepare.accept(rainLayer);
-//    prepare.accept(courteseanLayer);
-    //prepare.accept(new SpriteLayer(this));
-    //prepare.accept(new KinectTracker(this));
-    //prepare.accept(mobolologyOne);
-    //prepare.accept(mobolologyTwo);
-    //prepare.accept(mobolologyThree);
-//    prepare.accept(new FinalLayer());
-//    prepare.accept(new Scene5Grid());
-//    prepare.accept(new OneLeafEnd(this));
-    prepare.accept(new RestLayer(this));//Blackout layer...
+    
+    //Tancredi Animations
+    prepare.accept(new LetterProjection(this));
+    // prepare.accept(new Prologue(this));
+    // prepare.accept(new BleedingCanvasLayer(this)); //Her Painting
+    // prepare.accept(new Bridge(this));
+    // prepare.accept(new Scene7());
+    // prepare.accept(new HeroLayer(this));
+    // prepare.accept(rainLayer);
+    // prepare.accept(courteseanLayer);
+    // prepare.accept(new SpriteLayer(this));
+    // prepare.accept(new KinectTracker(this));
+    // prepare.accept(mobolologyOne);
+    // prepare.accept(mobolologyTwo);
+    // prepare.accept(mobolologyThree);
+    // prepare.accept(new FinalLayer());
+    // prepare.accept(new Scene5Grid());
+    // prepare.accept(new OneLeafEnd(this));
+    prepare.accept(new ClearLayer()); // A layer that draws black
+    prepare.accept(new RestLayer(this));// Blackout layer...
   }
   
-
-  @Override
-  public void keyPressed(KeyEvent event)
+  public void virtualKeyPressed(char key, int code)
   {
-    if (event.getKey() == 'q' || event.getKey() == 'Q')
+    System.out.println("Key Pressed [" + key +"] code:[" + code +"]");
+    Predicate<Character> isChar = c -> {
+      if (key == c || key == Character.toUpperCase(c))
+      {
+        return true;
+      }
+
+      return false;
+    };
+
+    if (isChar.test('w'))
+    {
+      initializeFXInterface();
+    }
+
+    if (key == 'q' || key == 'Q')
     {
       if (tools == null)
       {
@@ -576,7 +806,7 @@ public class MotionEngine extends PApplet
       tools.setVisible(true);
     }
 
-    if (event.getKey() == 'a' || event.getKey() == 'A')
+    if (key == 'a' || key == 'A')
     {
       if (brushTools == null)
       {
@@ -587,29 +817,29 @@ public class MotionEngine extends PApplet
       brushTools.setVisible(true);
     }
 
-    if(event.getKey() == 'L' || event.getKey() == 'l')
+    if (key == 'L' || key == 'l')
       advanceScene();
-    
-    if (event.getKey() == ' ')
+
+    if (key == ' ')
     {
-      if(activeLayer != null)
+      if (activeLayer != null)
         activeLayer.go(this);
     }
 
-    if (event.getKey() == 'g')
+    if (key == 'g')
     {
       // Gravity for one second.
       gravityOneSecond.go(layers.get(0), this);
     }
 
-    if (event.getKey() == 's')
+    if (key == 's')
     {
       System.out.println("Splitting words...");
-      if(words != null)
-    	  words.randomSplits(physics);
+      if (words != null)
+        words.randomSplits(physics);
     }
 
-    if (event.getKey() == 'S')
+    if (key == 'S')
     {
       System.out.println("Splitting paragraph...");
       // paragraph.split(physics, rand.nextFloat() % 3f);
@@ -625,67 +855,67 @@ public class MotionEngine extends PApplet
         }
       }
     }
-    if (event.getKey() == '1')
+    if (key == '1')
     {
       mode = Mode.BRUSH_PALLET;
     }
 
-    if (event.getKey() == '2')
+    if (key == '2')
     {
       mode = Mode.SUCK_FORCE;
       sucker.vars.magnitude = 100f;
       sucker.setJitter(1f);
     }
 
-    if (event.getKey() == '3')
+    if (key == '3')
     {
       mode = Mode.SLAP_FORCE;
     }
 
-    if (event.getKey() == '4')
+    if (key == '4')
     {
       mode = Mode.EXPLODE_FORCE;
       explode.vars.force = new Vec3D(0, 0, -1f);
     }
-    if (event.getKey() == '5')
+    if (key == '5')
     {
       mode = Mode.EXPLODE_FORCE;
       explode.vars.force = new Vec3D(0, 0, 1f);
     }
 
-    if (event.getKey() == '7')
+    if (key == '7')
     {
       mode = Mode.BRUSH_PALLET;
       brush = new TinyBrush();
     }
 
-    if (event.getKey() == '8')
+    if (key == '8')
     {
       mode = Mode.BRUSH_PALLET;
       brush = new SmallBrush();
     }
 
- // Animation tests
-    if (event.getKey() == '9')
+    // Animation tests
+    if (key == '9')
     {
       mode = Mode.BRUSH_PALLET;
       brush = new ImageBrushRound();
     }
-    
+
     // Animation tests
-    if (event.getKey() == '0')
+    if (key == '0')
     {
       mode = Mode.BRUSH_PALLET;
       brush = new ImageBrush();
     }
 
-    if (event.getKey() == 'z')
+    if (key == 'z')
     {
       clearPlaybacks();
     }
 
     // Force Basics
-    if (event.getKeyCode() == LEFT)
+    if (key == LEFT)
     {
       float drag = physics.getDrag();
       drag -= 0.01;
@@ -696,7 +926,7 @@ public class MotionEngine extends PApplet
       physics.setDrag(drag);
     }
 
-    if (event.getKeyCode() == RIGHT)
+    if (key == RIGHT)
     {
       float drag = physics.getDrag();
       drag += 0.01;
@@ -707,7 +937,7 @@ public class MotionEngine extends PApplet
       physics.setDrag(drag);
     }
 
-    if (event.getKeyCode() == UP)
+    if (key == UP)
     {
       float x = Actions.home.vars.maxForce;
       x += 0.01;
@@ -718,7 +948,7 @@ public class MotionEngine extends PApplet
       Actions.home.vars.maxForce = x;
     }
 
-    if (event.getKeyCode() == DOWN)
+    if (key == DOWN)
     {
       float x = Actions.home.vars.maxForce;
       x -= 0.01;
@@ -729,7 +959,7 @@ public class MotionEngine extends PApplet
       Actions.home.vars.maxForce = x;
     }
 
-    if (event.getKey() == 'h')
+    if (key == 'h')
     {
       if (isActive(Actions.home))
       {
@@ -743,7 +973,7 @@ public class MotionEngine extends PApplet
       }
     }
 
-    if (event.getKey() == 'j')
+    if (key == 'j')
     {
       if (isActive(Actions.homeLinear))
       {
@@ -756,13 +986,13 @@ public class MotionEngine extends PApplet
         addBehavior(Actions.homeLinear);
       }
     }
-    if (event.getKey() == ']')
+    if (key == ']')
     {
-      if(activeLayer != null)
+      if (activeLayer != null)
         activeLayer.go(this);
     }
 
-    if (event.getKey() == 'o')
+    if (key == 'o')
     {
       if (!osc.enabled)
       {
@@ -778,7 +1008,7 @@ public class MotionEngine extends PApplet
       }
     }
 
-    if (event.getKey() == 'r' || event.getKey() == 'R')
+    if (key == 'r' || key == 'R')
     {
       if (RECORDER.isRecording())
       {
@@ -812,33 +1042,33 @@ public class MotionEngine extends PApplet
 
     }
 
-    if (event.getKey() == 't')
+    if (key == 't')
     {
-    	playCapture();
+      playCapture();
 
     }
-    
-    if(event.getKey() == 'b')
+
+    if (key == 'b')
     {
       System.out.println("lose decoration");
       Main.setUndecorated();
     }
-    
-    if(event.getKey() == 'x')
+
+    if (key == 'x')
     {
       showCoordinates = !showCoordinates;
       highlightMouse = showCoordinates;
     }
-    
-    if(event.getKey() == 'c')
+
+    if (key == 'c')
     {
       showControls();
     }
     
-    if (event.getKeyCode() == java.awt.event.KeyEvent.VK_F1)
+    if (code == java.awt.event.KeyEvent.VK_F1)
     {
       System.out.println("F1");
-      if(enableSpout)
+      if (enableSpout)
         try
         {
           disableSpoutBroadcast();
@@ -865,22 +1095,89 @@ public class MotionEngine extends PApplet
           Log.exception(e);
         }
     }
+    
+    if (code == java.awt.event.KeyEvent.VK_F2)
+    {
+      if( remoteDrawEnabled )
+        disableRemoteDraw();
+      else
+        enableRemoteDraw();
+    }
+    
+    if (code == java.awt.event.KeyEvent.VK_F3)
+    {
+      if(!liveDrawEnabled)
+        dialogLiveDraw();
+      else
+        disableLiveDraw();
+    }
+    
+    if (code == java.awt.event.KeyEvent.VK_F4)
+      takeScreenshot();
+  }
+  
+  @Override
+  public void keyPressed(KeyEvent event)
+  {
+    if(liveDrawEnabled && oscSender != null)
+    {
+      int[] skipped = new int[]
+          {
+            java.awt.event.KeyEvent.VK_F1,
+            java.awt.event.KeyEvent.VK_F2,
+            java.awt.event.KeyEvent.VK_F3,
+            java.awt.event.KeyEvent.VK_F4,
+          };
+      
+      boolean skipIt = false;
+      for(int code : skipped)
+      {
+        if(event.getKeyCode() == code)
+        {
+          skipIt = true;
+          break;
+        }
+      }
+      if(!skipIt)
+      {
+        ArrayList<Object> args = new ArrayList<>();
+        args.add("live");
+        args.add("key");
+        args.add(event.getKey());
+        args.add(event.getKeyCode());
+        OSCMessage out = new OSCMessage("/motion", args);
+        try
+        {
+          oscSender.send(out);
+        }
+        catch (IOException e)
+        {
+          disableLiveDraw();
+          e.printStackTrace();
+        }
+      }
+    }
+    
+    virtualKeyPressed(event.getKey(), event.getKeyCode());
+    
+    
 
   }
-/**
- * Play back the last captured recording.
- */
+
+  /**
+   * Play back the last captured recording.
+   */
   public void playCapture()
   {
-      if (!capture.isEmpty())
-      {
-
-        Playback p = Recorder.playback(capture, null, this);
-        playbacks.clear();
-        playbacks.add(p);
-        p.start();
-      }
+    if (!capture.isEmpty())
+    {
+      Playback p = Recorder.playback(capture, null, this);
+      playbacks.clear();
+      playbacks.add(p);
+      p.start();
+    }
   }
+
   public void mouseDraggedFromDraw(int x, int y)
   {
     if (Mode.SUCK_FORCE == mode)
@@ -900,35 +1197,34 @@ public class MotionEngine extends PApplet
    */
   public void robot(RecordAction action, MotionInteractiveBehavior behavior)
   {
-//    System.out.println("Recorder Running");
+    // System.out.println("Recorder Running");
     SaveableBrush paint = null;
-    if(behavior instanceof SaveableBrush)
+    if (behavior instanceof SaveableBrush)
       paint = (SaveableBrush) behavior;
-    
+
     if (action.leftClick)
     {
       behavior.vars.position = new Vec3D(action.x, action.y, 0);
-      if(paint != null)
+      if (paint != null)
       {
-        if(!paint.isDrawing())
-          paint.startDraw();  
-        
+        if (!paint.isDrawing())
+          paint.startDraw();
+
         behavior.setPosition(behavior.vars.position);
         paintBrushes.add(paint);
       }
-        
+
       addBehavior(behavior);
     }
     else
     {
-      if(paint != null)
+      if (paint != null)
         paint.endDraw();
       removeBehavior(behavior);
     }
   }
 
-  @Override
-  public void mousePressed()
+  public void virtualMousePressed()
   {
     System.out.println("Mouse Down!");
     if (Mode.SUCK_FORCE == mode)
@@ -938,30 +1234,30 @@ public class MotionEngine extends PApplet
     else
       if (Mode.SLAP_FORCE == mode)
       {
-        slap.location = new Vec3D(mouseX, mouseY, 20);// In the plane
+        slap.location = new Vec3D(virtualMouseX, virtualMouseY, 20);// In the plane
         physics.addBehavior(slap);
       }
       else
         if (Mode.EXPLODE_FORCE == mode)
         {
-          explode.vars.position = new Vec3D(mouseX, mouseY, 0);
+          explode.vars.position = new Vec3D(virtualMouseX, virtualMouseY, 0);
           physics.addBehavior(explode);
         }
         else
           if (Mode.BRUSH_PALLET == mode)
           {
-            if(brush instanceof SaveableBrush)
+            if (brush instanceof SaveableBrush)
             {
               SaveableBrush b = (SaveableBrush) brush;
               b.startDraw();
             }
-            brush.vars.position = new Vec3D(mouseX, mouseY, 0);
+            brush.vars.position = new Vec3D(virtualMouseX, virtualMouseY, 0);
             physics.addBehavior(brush);
           }
 
   }
 
-  public void mouseReleased()
+  public void virtualMouseReleased()
   {
     System.out.println("Mouse released!");
     if (Mode.SUCK_FORCE == mode)
@@ -975,18 +1271,62 @@ public class MotionEngine extends PApplet
         else
           if (Mode.BRUSH_PALLET == mode)
           {
-            if(brush instanceof SaveableBrush)
+            if (brush instanceof SaveableBrush)
             {
               SaveableBrush b = (SaveableBrush) brush;
               b.endDraw();
             }
             physics.removeBehavior(brush);
-            
-            for(Object o : physics.behaviors)
+
+            for (Object o : physics.behaviors)
               System.out.println("\t->" + o);
           }
-            
-  };
+  }
+
+  @Override
+  public void mousePressed()
+  {
+    if (!remoteDrawEnabled)
+    {
+      // override virtual mouse
+      virtualMouseDown = true;
+      virtualMouseX = mouseX;
+      virtualMouseY = mouseY;
+      virtualMousePressed();
+    }
+  }
+
+  public void mouseReleased()
+  {
+    if (!remoteDrawEnabled)
+    {
+      virtualMouseDown = false;
+      virtualMouseReleased();
+    }
+  }
+
+  public synchronized void initializeFXInterface()
+  {
+    if (fxInterface == null)
+    {
+      Thread fxThread = new Thread(() -> {
+        final JFrame frame = new JFrame();
+        new JFXPanel(); // start toolkit
+          javafx.application.Platform.runLater(() -> {
+            System.out.println("Starting FX");
+            fxInterface = new UI();
+            fxInterface.startSwing(frame);
+          });
+
+        });
+      fxThread.start();
+    }
+    else
+    {
+      fxInterface.reset();
+    }
+
+  }
 
   // FIXME this needs to be HashMaps This probably isn't an issue for less than 10-20 forces
   public boolean isActive(ParticleBehavior3D behavior)
@@ -998,13 +1338,13 @@ public class MotionEngine extends PApplet
   {
     if (activeBehaviors.contains(behavior))
       return false;
-//    System.out.println("Adding Behavior: " + behavior);
+    // System.out.println("Adding Behavior: " + behavior);
     physics.addBehavior(behavior);
     if (behavior instanceof SaveableParticleBehavior3D)
     {
-//      System.out.println("Marking behavior as running: " + behavior);
+      // System.out.println("Marking behavior as running: " + behavior);
       ((SaveableParticleBehavior3D<?>) behavior).setRunning(true);
-//      System.out.println(((SaveableParticleBehavior3D<?>) behavior).vars.running);
+      // System.out.println(((SaveableParticleBehavior3D<?>) behavior).vars.running);
     }
 
     activeBehaviors.add(behavior);
@@ -1014,8 +1354,8 @@ public class MotionEngine extends PApplet
   public void removeBehavior(ParticleBehavior3D behavior)
   {
     physics.removeBehavior(behavior);
-//    if (activeBehaviors.remove(behavior))
-//      System.out.println("Removing Behavior: " + behavior);
+    // if (activeBehaviors.remove(behavior))
+    // System.out.println("Removing Behavior: " + behavior);
 
     if (behavior instanceof SaveableParticleBehavior3D)
     {
@@ -1029,7 +1369,7 @@ public class MotionEngine extends PApplet
   {
     return physics;
   }
-  
+
   public void startPlayback(Playback p)
   {
     p.start();
@@ -1038,10 +1378,10 @@ public class MotionEngine extends PApplet
 
   public void osc(boolean enable)
   {
-    if(enable)
+    if (enable)
     {
       System.out.println("Turning on 20hz Wave");
-      physics.addBehavior(osc);  
+      physics.addBehavior(osc);
     }
     else
     {
@@ -1049,50 +1389,50 @@ public class MotionEngine extends PApplet
       osc.setEnabled(enable);
     }
   }
-  
+
   public void showControls()
   {
     SceneController controller = new SceneController(this);
     controller.setVisible(true);
   }
-  
+
   public void enableSpoutBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException, ClassNotFoundException, InstantiationException
-  {  
-	 try
-	 {
-		if(Platform.isMac() && syphonOrSpout == null && !enableSpout)
-		{
-			//We do this to avoid native library initialization 
-			Class<?> syphonClass = Class.forName("com.danielbchapman.physics.toxiclibs.SyphonGraphicsShare");
-			shareInitialize = syphonClass.getMethod("initialize", PApplet.class);
-			shareCleanup = syphonClass.getMethod("cleanup");
-			shareDraw = syphonClass.getMethod("send", PGraphics.class);
-			
-			syphonOrSpout = (IGraphicShare) syphonClass.newInstance();
-			shareInitialize.invoke(syphonOrSpout, this);
-			enableSpout = true;
-			return;
-		}
-		
-	    if(Platform.isWindows() || Platform.isWindowsCE())
-	      enableSpout = true;
-	 }
-	 catch (Throwable t)
-	 {
-		 t.printStackTrace();
-		 enableSpout = false;
-		 return;
-	 }
-	
-    if(spout == null && enableSpout)
+  {
+    try
+    {
+      if (Platform.isMac() && syphonOrSpout == null && !enableSpout)
+      {
+        // We do this to avoid native library initialization
+        Class<?> syphonClass = Class.forName("com.danielbchapman.physics.toxiclibs.SyphonGraphicsShare");
+        shareInitialize = syphonClass.getMethod("initialize", PApplet.class);
+        shareCleanup = syphonClass.getMethod("cleanup");
+        shareDraw = syphonClass.getMethod("send", PGraphics.class);
+
+        syphonOrSpout = (IGraphicShare) syphonClass.newInstance();
+        shareInitialize.invoke(syphonOrSpout, this);
+        enableSpout = true;
+        return;
+      }
+
+      if (Platform.isWindows() || Platform.isWindowsCE())
+        enableSpout = true;
+    }
+    catch (Throwable t)
+    {
+      t.printStackTrace();
+      enableSpout = false;
+      return;
+    }
+
+    if (spout == null && enableSpout)
     {
       try
       {
         Class<?> spoutProvider = Class.forName("SpoutProvider");
         Method method = spoutProvider.getMethod("getInstance", PGraphics.class);
-        
-        spout = method.invoke(null, g);
-        
+
+        spout = method.invoke(null, gl);
+
       }
       catch (ClassNotFoundException | IllegalAccessException e)
       {
@@ -1100,14 +1440,14 @@ public class MotionEngine extends PApplet
         enableSpout = false;
       }
 
-      if(spout != null)
+      if (spout != null)
       {
-        if(spoutClass == null)
+        if (spoutClass == null)
         {
           try
           {
             spoutClass = Class.forName("SpoutImplementation");
-            spoutSend = spoutClass.getMethod("sendTexture");
+            spoutSend = spoutClass.getMethod("sendTexture");// spoutClass.getMethod("sendTexture2", PGraphics3D.class);
             Method init = spoutClass.getMethod("initSender", String.class, int.class, int.class);
             init.invoke(spout, "Motion", this.displayWidth, this.displayHeight);
           }
@@ -1120,49 +1460,101 @@ public class MotionEngine extends PApplet
       }
     }
   }
-  
+
   public void disableSpoutBroadcast() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
   {
-	  if(Platform.isMac())
-	  {
-		  if(syphonOrSpout != null)
-		  {
-			  shareCleanup.invoke(syphonOrSpout);
-			  shareCleanup = null;
-			  shareDraw = null;
-			  shareInitialize = null;
-			  syphonOrSpout = null;
-		  }
+    if (Platform.isMac())
+    {
+      if (syphonOrSpout != null)
+      {
+        shareCleanup.invoke(syphonOrSpout);
+        shareCleanup = null;
+        shareDraw = null;
+        shareInitialize = null;
+        syphonOrSpout = null;
+      }
 
-		  enableSpout = false;
-		  return;
-	  }
+      enableSpout = false;
+      return;
+    }
     enableSpout = false;
-    if(spout != null)
+
+    Object spoutRef = spout;
+    spout = null; // Clear the reference.
+    if (spoutRef != null)
     {
       Method close = spoutClass.getMethod("closeSender");
-      close.invoke(spout);
+      close.invoke(spoutRef);
     }
   }
-  
+
   public void setBrush(MotionInteractiveBehavior b)
   {
     mode = Mode.BRUSH_PALLET;
     brush = b;
   }
-  
+
   public void stopOscillation()
   {
-	osc.setEnabled(false);
-	physics.removeBehavior(osc);
+    osc.setEnabled(false);
+    physics.removeBehavior(osc);
     System.out.println("Turning off 20hz Wave");
   }
-  
+
   public void startOscillation()
   {
-	  osc.setEnabled(true);
-	  physics.addBehavior(osc);
-	  System.out.println("Turning on 20hz Wave");  
+    osc.setEnabled(true);
+    physics.addBehavior(osc);
+    System.out.println("Turning on 20hz Wave");
+  }
+
+  public void enableRemoteDraw()
+  {
+    System.out.println("Enabling Remote Draw");
+    remoteDrawEnabled = true;
+    remoteDrawQueue.clear();
+  }
+
+  public void disableRemoteDraw()
+  {
+    System.out.println("Disabling Remote Draw");
+    remoteDrawEnabled = false;
+  }
+  
+  
+  public void dialogLiveDraw()
+  {
+    OscDialog oscDialog = new OscDialog(this);
+    oscDialog.setVisible(true);
+  }
+  
+  public void enableLiveDraw()
+  {
+    if(liveDrawPort != null && liveDrawUrl != null)
+    {
+      try
+      {
+        oscSender = new OSCPortOut(InetAddress.getByName(liveDrawUrl), liveDrawPort);
+        liveDrawEnabled = true;
+      }
+      catch (SocketException | UnknownHostException e)
+      {
+        e.printStackTrace();
+      }  
+    }
+  }
+  
+  public void disableLiveDraw()
+  {
+    liveDrawEnabled = false;
+    oscSender = null;
+  }
+  
+  /**
+   * Instructs motion to capture the next frame as a .tiff  
+   */
+  public void takeScreenshot()
+  {
+    takeScreenshot = true; 
   }
 }
-	

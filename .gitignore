@@ -14,3 +14,13 @@ Processing/motion/lib
 /.settings/
 /environment/
 .settings
+settings.properties
+/test-classes/
+/surefire-reports/
+/maven-archiver/
+/maven-status/
+/classes/
+lib2
+/i1n8/
+current/
+screenshots/

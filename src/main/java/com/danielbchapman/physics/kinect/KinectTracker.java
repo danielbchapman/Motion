@@ -6,7 +6,6 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PShape;
 import processing.opengl.PGraphicsOpenGL;
-import SimpleOpenNI.SimpleOpenNI;
 
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -17,7 +16,7 @@ import com.danielbchapman.physics.toxiclibs.PointWrapper;
 public class KinectTracker extends Layer
 {
   private MotionEngine engine;
-  SimpleOpenNI  context; 
+  //SimpleOpenNI  context; 
   Point[] points;
   PShape dragon;
   PShape mainEye;

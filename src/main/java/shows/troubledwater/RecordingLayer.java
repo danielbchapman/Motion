@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
-import com.danielbchapman.brushes.EllipseBrush;
-import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -73,6 +71,7 @@ public class RecordingLayer extends Layer
       try{
         if(index > -1)
         {
+
           g.image(images.get(index), 100, 0, 600, 600);
         }
        // PImage image = engine.loadImage("show/OneLeaf.PNG");
@@ -82,6 +81,17 @@ public class RecordingLayer extends Layer
       catch(Throwable t)
       {
         t.printStackTrace();
+        try
+        {
+          System.out.println(g);
+          System.out.println(images);
+          System.out.println(images.get(index));          
+        }
+        catch(Throwable t2)
+        {
+          System.err.println("FAILURE ALLOCATING INDEX");
+          t2.printStackTrace();
+        }
       }
       blank = true;
     }

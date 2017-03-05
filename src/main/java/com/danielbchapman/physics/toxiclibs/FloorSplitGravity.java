@@ -1,10 +1,12 @@
 package com.danielbchapman.physics.toxiclibs;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
 
 @Data
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class FloorSplitGravity extends SaveableParticleBehavior3D<FloorSplitGravity>
 {
   float breakLine = ((float)Actions.HEIGHT) / 3.05f;

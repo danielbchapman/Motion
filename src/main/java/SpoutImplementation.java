@@ -1,9 +1,11 @@
 
 
-import com.danielbchapman.logging.Log;
-
 import processing.core.PImage;
-import processing.opengl.*;
+import processing.opengl.PGraphics3D;
+import processing.opengl.PGraphicsOpenGL;
+import processing.opengl.Texture;
+
+import com.danielbchapman.logging.Log;
 
 /**
  * Conversion of the SPOUT code | Daniel B. Chapman 
@@ -87,6 +89,24 @@ public class SpoutImplementation implements ISpoutAPI
     JSpout.WriteTexture(tex.glWidth, tex.glHeight, tex.glName, tex.glTarget, true); // invert
     pgl.endPGL();
   }
+  
+  @Override
+  public void sendTexture2(PGraphics3D graphics)
+  {
+    graphics.beginPGL();
+    // Load the current contents of the renderer's
+    // drawing surface into its texture.
+    graphics.loadTexture();
+    // getTexture returns the texture associated with the
+    // renderer's. drawing surface, making sure is updated
+    // to reflect the current contents off the screen
+    // (or offscreen drawing surface).
+    Texture tex = graphics.getTexture();
+    // Processing Y axis is inverted with respect to OpenGL
+    // so we need to invert the texture
+    JSpout.WriteTexture(tex.glWidth, tex.glHeight, tex.glName, tex.glTarget, true); // invert
+    graphics.endPGL();
+  }
 
   /* (non-Javadoc)
    * @see jspout.ISpoutAPI#closeSender()
@@ -169,9 +189,6 @@ public class SpoutImplementation implements ISpoutAPI
   @Override
   public PImage receiveTexture(PImage img)
   {
-
-    boolean bRet = true;
-
     // Quit if no server running
     if (memorymode < 0)
       return img;

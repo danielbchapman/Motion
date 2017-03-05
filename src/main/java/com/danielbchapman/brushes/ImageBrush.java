@@ -1,19 +1,12 @@
 package com.danielbchapman.brushes;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
-
-import com.danielbchapman.physics.toxiclibs.Actions;
-import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
-import com.danielbchapman.physics.toxiclibs.PersistentVariables;
-
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import toxi.geom.Vec3D;
+
+import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 
 
 //FIXME DOCUMENT THIS IN WHAT FIELDS ARE USED and make this editable

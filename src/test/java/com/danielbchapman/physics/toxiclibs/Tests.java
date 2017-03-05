@@ -9,7 +9,6 @@ import org.junit.runners.Suite;
    TestBundle.class,
    TestForceVariables.class,
    TestLambdaLoader.class,
-   TestPlaybackCue.class,
    TestToxicLibs.class,
    TestTransform.class
 })

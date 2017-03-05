@@ -9,7 +9,6 @@ import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
 import com.danielbchapman.artwork.Paragraph;
-import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.utility.FileUtil;
 
 public class SceneOneLayer extends Layer
@@ -50,7 +49,6 @@ public class SceneOneLayer extends Layer
   
   public class SectionOneCueStack extends CueStack
   {
-    private static final long serialVersionUID = 1L;
     ArrayList<Paragraph> tweets = new ArrayList<>();
     ArrayList<Paragraph> active = new ArrayList<>();
 

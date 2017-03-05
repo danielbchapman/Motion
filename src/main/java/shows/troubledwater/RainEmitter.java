@@ -7,7 +7,6 @@ import toxi.geom.Vec3D;
 
 import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.physics.toxiclibs.Emitter;
-import com.danielbchapman.physics.toxiclibs.Layer;
 
 public class RainEmitter extends Emitter<BrushPoint>
 {

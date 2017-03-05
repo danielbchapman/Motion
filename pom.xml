@@ -7,21 +7,183 @@
 	<name>Motion</name>
 	<description>A responsive environment based loosely on the standard model of physics.</description>
 
-	<!-- Windows 32 bit for the natives please adjust as needed -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<profiles>
+		<!-- Windows 32 (default)  -->
+		<profile>
+			<id>Win32</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>jogl-all</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope>
+					<version>2.1.1</version>
+					<systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
+				</dependency>
+				<dependency>
+					<groupId>gluegen-rt</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope>
+					<version>2.1.1</version>
+					<systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
+				</dependency>
+			</dependencies>
+			
+			<properties>
+				<motion.manifest>WIN32.MF</motion.manifest>
+				<motion.platform>WIN32</motion.platform>
+			</properties>
+		</profile>
+		<!-- Windows 64 -->
+		<profile>
+			<id>Win64</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+					<arch>amd64</arch>
+				</os>
+			</activation>
+			
+			<properties>
+				<motion.manifest>WIN64.MF</motion.manifest>
+				<motion.platform>WIN64</motion.platform>
+			</properties>
+			
+			<dependencies>
+				<dependency>
+					<groupId>jogl-all</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope>
+					<version>2.1.1</version>
+					<systemPath>${basedir}/lib/jogl-all-natives-windows-amd64.jar</systemPath>
+				</dependency>
+				<dependency>
+					<groupId>gluegen-rt</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope>
+					<version>2.1.1</version>
+					<systemPath>${basedir}/lib/gluegen-rt-natives-windows-amd64.jar</systemPath>
+				</dependency>			
+			</dependencies>
+		</profile>
+		<!-- MAC x64 -->
+		<profile>
+			<id>mac</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<motion.manifest>MAC.MF</motion.manifest>
+				<motion.platform>OSX</motion.platform>
+			</properties>
+			<dependencies> 
+				<dependency> 
+					<groupId>gluegen-rt</groupId> 
+					<artifactId>natives</artifactId> 
+					<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/gluegen-rt-natives-macosx-universal.jar</systemPath> 
+				</dependency>
+				<dependency> 
+					<groupId>jogl-all</groupId>
+					<artifactId>natives</artifactId>
+					<scope>system</scope> 
+					<version>2.1.1</version> 
+					<systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath> 
+				</dependency>
+				<!-- Syphon, this isn't a hard dependency, but the application is probably useless without it -->
+				<dependency> 
+					<groupId>Syphon</groupId> 
+					<artifactId>natives</artifactId> 
+					<scope>system</scope> 
+					<version>1.0.0</version> 
+					<systemPath>${basedir}/lib/Syphon.jar</systemPath> 
+				</dependency> 
+				<dependency> 
+					<groupId>jsyphon</groupId> 
+					<artifactId>natives</artifactId> 
+					<scope>system</scope> 
+					<version>1.0.0</version> 
+					<systemPath>${basedir}/lib/jsyphon.jar</systemPath> 
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 	<dependencies>
-		<!-- Toxiclibs Fork via Maven https://bitbucket.org/danielbchapman/toxiclibs -->
+		<!-- Dependencies via Daniel B. Chapman (GPL) http://www.github.com/danielbchapman -->
+
+
+		<!-- Processing Dependencies -->
+		<dependency>
+			<groupId>processing</groupId>
+			<artifactId>core</artifactId>
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/core.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>gluegen-rt</groupId>
+			<artifactId>core</artifactId>
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/gluegen-rt.jar</systemPath>
+		</dependency>
+
+		<!-- Toxilibs Dependencies -->
 		<dependency>
 			<groupId>org.toxiclibs</groupId>
 			<artifactId>core</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.toxiclibs</groupId>
 			<artifactId>physics</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-		<!-- Dependencies via Daniel B. Chapman (GPL) http://www.github.com/danielbchapman-->
+
+		<!-- <dependency> <groupId>gstreamer-java</groupId> <artifactId>core</artifactId> 
+			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/gstreamer-java.jar</systemPath> 
+			</dependency> -->
+		<dependency>
+			<groupId>jna</groupId>
+			<artifactId>core</artifactId>
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/jna.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>jogl-all</groupId>
+			<artifactId>core</artifactId>
+			<scope>system</scope>
+			<version>2.1.1</version>
+			<systemPath>${basedir}/lib/jogl-all.jar</systemPath>
+		</dependency>
+
+		<!-- OSC Library -->
+		<dependency>
+			<groupId>com.illposed.osc</groupId>
+			<artifactId>javaosc-core</artifactId>
+			<version>0.3</version>
+		</dependency>
+		<!-- <dependency> <groupId>processing</groupId> <artifactId>video</artifactId> 
+			<scope>system</scope> <version>2.1.1</version> <systemPath>${basedir}/lib/video.jar</systemPath> 
+			</dependency> 
+			
+			<dependency> <groupId>SimpleOni</groupId> <artifactId>oni</artifactId> 
+			<scope>system</scope> <version>1.0</version> <systemPath>${basedir}/lib/SimpleOpenNI.jar</systemPath> 
+			</dependency> 
+		-->
 		<dependency>
 			<groupId>com.danielbchapman.data</groupId>
 			<artifactId>groups</artifactId>
@@ -30,136 +192,78 @@
 		<dependency>
 			<groupId>com.danielbchapman</groupId>
 			<artifactId>utilities</artifactId>
-			<version>1.0.0</version>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.danielbchapman</groupId>
+			<artifactId>fxapplication</artifactId>
+			<version>0.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.2</version>
 		</dependency>
-		
-		<!-- Processing Dependencies -->
 		<dependency>
-			<groupId>processing</groupId>
-			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/core.jar</systemPath>
-	    </dependency>
-	    <dependency>
-			<groupId>gluegen-rt</groupId>
-			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/gluegen-rt.jar</systemPath>
-	    </dependency>
-	    
-	    <!-- 
-	    <dependency>
-			<groupId>gstreamer-java</groupId>
-			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/gstreamer-java.jar</systemPath>
-	    </dependency>
-	    -->
-	    <dependency>
-			<groupId>jna</groupId>
-			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/jna.jar</systemPath>
-	    </dependency>
- 		
-	    <dependency>
-			<groupId>jogl-all</groupId>
-			<artifactId>core</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/jogl-all.jar</systemPath>
-	    </dependency>
-	    
-	    <!-- OSC Library -->
-	    <dependency>
-	    	<groupId>com.illposed.osc</groupId>
-	    	<artifactId>javaosc-core</artifactId>
-	    	<version>0.3</version>
-	    </dependency>
-	    <!-- 
-		<dependency>
-			<groupId>processing</groupId>
-			<artifactId>video</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/video.jar</systemPath>
-	    </dependency>
-   		<dependency>
-			<groupId>SimpleOni</groupId>
-			<artifactId>oni</artifactId>
-	        <scope>system</scope>
-	        <version>1.0</version>
-	        <systemPath>${basedir}/lib/SimpleOpenNI.jar</systemPath>
-	    </dependency>
-	    -->		
-		<!-- WIN 32  
-	    <dependency>
-			<groupId>jogl-all</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
-	    </dependency>
-	    <dependency>
-			<groupId>gluegen-rt</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
-	    </dependency>
-		-->
-		<!-- MAC OSX 64 
-		<dependency>
-			<groupId>gluegen-rt</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/gluegen-rt-natives-macosx-universal.jar</systemPath>
-	    </dependency>
-   	    <dependency>
-			<groupId>jogl-all</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>2.1.1</version>
-	        <systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath>
-	    </dependency>
-	     -->
-	    <!--
-	    <dependency>
-			<groupId>Syphon</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>1.0.0</version>
-	        <systemPath>${basedir}/lib/Syphon.jar</systemPath>
-	    </dependency>
-	    <dependency>
-			<groupId>jsyphon</groupId>
-			<artifactId>natives</artifactId>
-	        <scope>system</scope>
-	        <version>1.0.0</version>
-	        <systemPath>${basedir}/lib/jsyphon.jar</systemPath>
-	    </dependency>
-	     -->
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.6.2</version>
+		</dependency>
+
 	</dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-jar-plugin</artifactId>
+			  <configuration>
+			    <archive>
+			    	<manifestFile>maven/manifests/${motion.manifest}</manifestFile>
+			    	 <!-- 
+					<manifest>
+						<addClasspath>true</addClasspath>
+						<mainClass>com.danielbchapman.physics.toxiclibs.Main</mainClass>
+						<classpathPrefix>lib/</classpathPrefix>
+					</manifest>
+					<manifestEntries>
+						<Class-Path>.</Class-Path>
+					</manifestEntries>
+					 -->
+			    </archive>
+			  </configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>assembly:package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<!-- The filename of the assembled distribution file defualt ${project.build.finalName} -->
+							<finalName>${project.build.finalName}-${motion.platform}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<!-- A list of descriptor files path to generate from -->
+							<descriptors>
+								<descriptor>assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

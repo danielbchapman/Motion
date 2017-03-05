@@ -113,12 +113,12 @@ public class Shapes
   public static PShape texturedSphere(PGraphics g, float r, PImage t, int sDetail)
   {
 
-    float rotationX = 0;
-    float rotationY = 0;
-    float velocityX = 0;
-    float velocityY = 0;
-    float globeRadius = 400;
-    float pushBack = 0;
+//    float rotationX = 0;
+//    float rotationY = 0;
+//    float velocityX = 0;
+//    float velocityY = 0;
+//    float globeRadius = 400;
+//    float pushBack = 0;
 
     float[] sphereX, sphereY, sphereZ;
     float[] cx = new float[sDetail];
