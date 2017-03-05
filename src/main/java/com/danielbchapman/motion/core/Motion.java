@@ -921,7 +921,7 @@ public class Motion extends PApplet
       println("Nothing to play back");
       return;
     }
-    Playback2017 pb = recorder.playback("_live", CAPTURE, this, this.currentBrush.copy());
+    Playback2017 pb = recorder.playback("_live", CAPTURE, this, this.currentBrush.clone());
     playbacks.add(pb);
     println("PLAYBACK ADDED");
     println(pb);

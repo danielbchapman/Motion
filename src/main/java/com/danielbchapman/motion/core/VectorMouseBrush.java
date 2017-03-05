@@ -12,15 +12,6 @@ import toxi.geom.Vec3D;
 public class VectorMouseBrush extends MotionBrush
 {
   @Override
-  public MotionBrush copy()
-  {
-    VectorMouseBrush copy = new VectorMouseBrush();
-    MotionBrush.copyTo(this, copy);
-    return copy;
-  }
-
-
-  @Override
   public void update(long time)
   { 
   }
@@ -40,5 +31,11 @@ public class VectorMouseBrush extends MotionBrush
   public boolean applyWhenIdle()
   {
     return true;
+  }
+
+  @Override
+  public MotionBrush deepCopy()
+  {
+    return new VectorMouseBrush();
   }
 }

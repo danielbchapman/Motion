@@ -35,16 +35,17 @@ public class TestEllipseBrush extends MotionBrush
   public void update(long time)
   { 
   }
-
-  @Override
-  public MotionBrush copy()
-  {
-    return this;
-  }
   
   @Override
   public boolean isVectorBrush()
   {
     return vectorBrush;
+  }
+
+  @Override
+  public MotionBrush deepCopy()
+  {
+    TestEllipseBrush tmp = new TestEllipseBrush(vectorBrush);
+    return tmp;
   }
 }

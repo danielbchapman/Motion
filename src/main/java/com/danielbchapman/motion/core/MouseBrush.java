@@ -11,14 +11,6 @@ import toxi.geom.Vec3D;
  */
 public class MouseBrush extends MotionBrush
 {
-  @Override
-  public MotionBrush copy()
-  {
-    MouseBrush copy = new MouseBrush();
-    MotionBrush.copyTo(this, copy);
-    return copy;
-  }
-
 
   @Override
   public void update(long time)
@@ -28,5 +20,11 @@ public class MouseBrush extends MotionBrush
   @Override
   public void applyBrush(PGraphics g, MotionMouseEvent point)
   {
+  }
+
+  @Override
+  public MotionBrush deepCopy()
+  {
+    return new MouseBrush();
   } 
 }

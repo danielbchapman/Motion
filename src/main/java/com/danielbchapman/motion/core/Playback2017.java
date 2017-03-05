@@ -25,7 +25,7 @@ public class Playback2017
     if(brush == null)
       brush = motion.currentBrush;
     
-    this.brush = brush.copy();
+    this.brush = brush.clone();
     
     this.actions = new RecordAction2017[actions.size()];
     for(int i = 0; i < actions.size(); i++)

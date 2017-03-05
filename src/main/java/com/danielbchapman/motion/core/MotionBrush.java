@@ -21,7 +21,7 @@ import processing.core.PGraphics;
  * </p>
  */
 @Data
-public abstract class MotionBrush
+public abstract class MotionBrush implements ICloneable<MotionBrush>
 {
   //Vector Methods
   private boolean down;
@@ -42,11 +42,6 @@ public abstract class MotionBrush
   {
     return false;
   }
-   
-  public void drawTo(MotionMouseEvent point)
-  {
-    
-  }
   
   public abstract void applyBrush(PGraphics g, MotionMouseEvent point);
   
@@ -55,15 +50,6 @@ public abstract class MotionBrush
    * it be needed.
    */
   public abstract void update(long time);
-  
-  public static void copyTo(MotionBrush a, MotionBrush b)
-  {
-    b.down = a.down;
-    b.framesDrawn = a.framesDrawn;
-    b.splitSize = a.splitSize;
-    b.last = a.last;
-    b.startTime = a.startTime;
-  }
  
   public boolean checkActive(MotionMouseEvent m)
   {
@@ -88,5 +74,17 @@ public abstract class MotionBrush
     this.startTime = System.currentTimeMillis();
   }
   
-  public abstract MotionBrush copy();
+  public abstract MotionBrush deepCopy();
+  
+  @Override
+  public MotionBrush clone()
+  {
+    MotionBrush copy = deepCopy();
+    copy.down = down;
+    copy.last = last.copy();
+    copy.framesDrawn = framesDrawn;
+    copy.splitSize = splitSize;
+    copy.startTime = startTime;
+    return copy;
+  }
 }
