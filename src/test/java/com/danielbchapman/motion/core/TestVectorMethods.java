@@ -1,9 +1,12 @@
 package com.danielbchapman.motion.core;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 
+import test.Log;
 import toxi.geom.Vec3D;
 
 public class TestVectorMethods
@@ -75,11 +78,11 @@ public class TestVectorMethods
         b.setDown(false);
     }
     
-    System.out.println("Start at (" + last.x + ", " + last.y + ")");
-    System.out.println("Click at (" + point.x + ", " + point.y + ")");
+    Log.debug("Start at (" + last.x + ", " + last.y + ")");
+    Log.debug("Click at (" + point.x + ", " + point.y + ")");
     for(Vec3D v : points)
     {
-      System.out.println("\t-(" + v.x + ", " + v.y + ")" );
+      Log.debug("\t-(" + v.x + ", " + v.y + ")" );
     }
   }
 }

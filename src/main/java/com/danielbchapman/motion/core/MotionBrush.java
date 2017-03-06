@@ -1,5 +1,7 @@
 package com.danielbchapman.motion.core;
 
+import com.google.gson.Gson;
+
 import lombok.Data;
 import processing.core.PGraphics;
 
@@ -21,7 +23,7 @@ import processing.core.PGraphics;
  * </p>
  */
 @Data
-public abstract class MotionBrush implements ICloneable<MotionBrush>
+public abstract class MotionBrush implements ICloneable<MotionBrush>, ISaveable<MotionBrush>
 {
   //Vector Methods
   private boolean down;
@@ -89,4 +91,21 @@ public abstract class MotionBrush implements ICloneable<MotionBrush>
     copy.system = system;
     return copy;
   }
+//  
+//  /* (non-Javadoc)
+//   * @see com.danielbchapman.motion.core.ISaveable#save()
+//   */
+//  public String save()
+//  {
+//    Gson out = new Gson();
+//    String json = out.toJson(this, getClass());
+//    return json;
+//  }
+//  
+//  public MotionBrush load(String data)
+//  {
+//    Gson in = new Gson();
+//    MotionBrush brush = in.fromJson(data, getClass());
+//    return brush;
+//  }
 }
