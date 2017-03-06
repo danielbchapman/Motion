@@ -16,10 +16,12 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-import shows.test.*;
+import shows.test.TestBrushScene;
+import shows.test.TestEllipseBrush;
+import shows.test.TestFluidScene;
+import shows.test.TestVerletScene;
 import toxi.geom.Vec3D;
 
-import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.code.Pair;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.tools.MaskMakerScene;
