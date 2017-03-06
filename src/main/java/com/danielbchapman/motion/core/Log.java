@@ -14,17 +14,23 @@ public class Log
     if(logging == null)
       logging = "debug";
  
-    if("info".equalsIgnoreCase(logging)){
+    if("debug".equalsIgnoreCase(logging))
       Configurator.setLevel(System.getProperty("log4j.logger"), Level.INFO);
-    } else if("warn".equalsIgnoreCase(logging)){
+    
+    else if("info".equalsIgnoreCase(logging))
+      Configurator.setLevel(System.getProperty("log4j.logger"), Level.INFO);
+    
+    else if("warn".equalsIgnoreCase(logging))
       Configurator.setLevel(System.getProperty("log4j.logger"), Level.WARN);
-    } else if("error".equalsIgnoreCase(logging)){
+    
+    else if("error".equalsIgnoreCase(logging))
       Configurator.setLevel(System.getProperty("log4j.logger"), Level.ERROR);
-    } else if("severe".equalsIgnoreCase(logging)){
+    
+    else if("severe".equalsIgnoreCase(logging))
       Configurator.setLevel(System.getProperty("log4j.logger"), Level.ERROR);
-    } else {
+    
+    else
       Configurator.setLevel(System.getProperty("log4j.logger"), Level.DEBUG); 
-    }
   }
   public static void debug(Object obj)
   {
