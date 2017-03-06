@@ -23,7 +23,6 @@ import shows.test.TestVerletScene;
 import toxi.geom.Vec3D;
 
 import com.danielbchapman.code.Pair;
-import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.tools.MaskMakerScene;
 import com.danielbchapman.physics.toxiclibs.IGraphicShare;
 import com.danielbchapman.physics.toxiclibs.Util;
@@ -222,89 +221,89 @@ public class Motion extends PApplet
     
     mapKey("go", "spacebar", (app, scene)->{
       go();
-      println("go");
+      Log.info("go");
     });
     
     mapKey("next_scene", "l", (app, scene)->{ 
       advanceScene();
-      println("advance scene");
+      Log.info("advance scene");
     });
     
     mapKey("debug", "d", (app, scene)->{
       toggleDebug();
-      println("debug");
+      Log.info("debug");
     });
     
     mapKey("overlay", "f", (app, scene)->{
       toggleOverlay();
-      println("overlay");
+      Log.info("overlay");
     });
     
     mapKey("record", "r", (app, scene)->{
-      println("recording");
+      Log.info("recording");
       toggleRecording();
     });
     
     mapKey("playback", "p", (app, scene)->{
-      println("playback");
+      Log.info("playback");
       runPlayback();
     });
     
     mapKey("brush_1", "1", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new MouseBrush());
     });
 
     mapKey("brush_1", "1", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new MouseBrush());
     });
     mapKey("brush_2", "2", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new VectorMouseBrush());
     });
     mapKey("brush_3", "3", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new TestEllipseBrush(false));
     });
     mapKey("brush_4", "4", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new TestEllipseBrush(true));
     });
     mapKey("brush_5", "5", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new MouseBrush());
     });
     mapKey("brush_6", "6", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new MouseBrush());
     });
     mapKey("brush_7", "7", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new MouseBrush());
     });
     mapKey("brush_8", "8", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new MouseBrush());
     });
     
     mapKey("brush_9", "9", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new MouseBrush());
     });
     
     mapKey("brush_10", "0", (app, scene)->{
-      println("Mouse Brush");
+      Log.info("Mouse Brush");
       setCurrentBrush(new MouseBrush());
     });
     
     mapKey("clearOverlay", "c", (app, scene)->{
-      println("Clear Overlay");
+      Log.info("Clear Overlay");
       clearOverlay();
     });
     
     mapKey("screenshot", "i", (app, scene)->{
-      println("ScreenShot");
+      Log.info("ScreenShot");
       takeScreenShot(null);
     });
   }
@@ -329,7 +328,7 @@ public class Motion extends PApplet
   @Override
   public void keyPressed(KeyEvent event)
   {
-    println(event);
+    Log.debug(event);
     KeyCombo down = new KeyCombo();
     down.character = event.getKey();
     down.alt = event.isAltDown();
@@ -345,23 +344,23 @@ public class Motion extends PApplet
         if(action != null)
         {
           action.accept(this);
-          println("\tConsume by scene");
+          Log.info("\tConsume by scene");
           return;
         }
       }
     }
     
     BiConsumer<Motion, Scene> action = keyMap.get(down);
-    println(down);
-    println("Action------");
+    Log.debug(down);
+    Log.debug("Action------");
     if(action != null)
     {
-      println(action);
+      Log.debug(action);
       action.accept(this, currentScene);
     }
     else
     {
-      println("\tNo action..");
+      Log.debug("\tNo action..");
       keyCombos.add(down);
     }
   }
@@ -469,7 +468,7 @@ public class Motion extends PApplet
   {
     Consumer<Scene> prep = (scene)-> {
       scenes.add(scene);
-      println(scene.getName());
+      Log.info(scene.getName());
     };
     
     prep.accept(new TestBrushScene());
@@ -518,14 +517,13 @@ public class Motion extends PApplet
       for(Playback2017 pb : remove)
       {
         playbacks.remove(pb);
-        println("Playback complete for " + pb.getLabel());
+        Log.info("Playback complete for " + pb.getLabel());
       }
 
     
     //Active UI (Current Brush)
     if(mouseEvents.size() > 0)
     {
-      //print("MouseEvents");
       for(int i = 0; i < mouseEvents.size(); i++)
       { 
         MotionMouseEvent e = mouseEvents.get(i);
@@ -536,7 +534,6 @@ public class Motion extends PApplet
       }
 
       mouseEvents.clear();
-      //println("");
     }
   }
   
@@ -582,11 +579,9 @@ public class Motion extends PApplet
               currentScene.applyBrush(b, main, point);           
             else 
             {
-              //print("[vector]");
               if(b.last == null)//Start draw
               {
                 currentScene.applyBrush(b, main, point);
-                //println("first");
               }
               else
               {
@@ -594,7 +589,6 @@ public class Motion extends PApplet
                 Vec3D scalar = scalarPoint.sub(b.last);
                 float mag = scalar.magnitude();
                 int steps = (int) (mag / b.splitSize);
-                //print(" [steps] " + steps);
                 if(steps <= 1)
                 { 
                   boolean draw = b.applyWhenIdle() || mag >= 1;//pixel-space, so less than 1 is the same point
@@ -613,13 +607,11 @@ public class Motion extends PApplet
                     Vec3D newSub = scalar.getNormalizedTo(subMag);
                     Vec3D newPoint = b.last.add(newSub);
                     MotionMouseEvent copy = point.copy(newPoint);
-                  //  print(" [@] (" + copy.x + ", " + copy.y + ", " + copy.z + ")");
                     currentScene.applyBrush(b,  main, copy);
                   }
                   
                   //Draw at point for the last one
                   currentScene.applyBrush(b, main, point);
-                  //println(" [@] (" + point.x + ", " + point.y + ", " + point.z + ")");
                   b.last = point;
                 }
               }
@@ -820,7 +812,7 @@ public class Motion extends PApplet
         {
           try
           {
-            //println("invoking spout");
+            Log.debug("invoking spout");
             spoutSend.invoke(spout);
           }
           catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
@@ -934,7 +926,7 @@ public class Motion extends PApplet
   {
     if(CAPTURE == null || CAPTURE.size() < 1)
     {
-      println("Nothing to play back");
+      Log.warn("Nothing to play back");
       return;
     }
     int color = PLAYBACK_COLORS[++PLAYBACK_COLOR_INDEX % PLAYBACK_COLORS.length];
@@ -943,8 +935,8 @@ public class Motion extends PApplet
     Playback2017 pb = Recorder2017.playback("_live", CAPTURE, this, brush);
     pb.setDebugColor(color);
     playbacks.add(pb);
-    println("PLAYBACK ADDED");
-    println(pb);
+    Log.info("PLAYBACK ADDED");
+    Log.info(pb);
   }
   
   /**
@@ -955,7 +947,7 @@ public class Motion extends PApplet
   public void robot(RecordAction2017 action, MotionBrush brush, int color)
   {
     if(brush == null){
-      System.out.println("Can not playback without a valid brush");
+      Log.warn("Can not playback without a valid brush");
       return;
     }
     
@@ -980,14 +972,14 @@ public class Motion extends PApplet
   @Override
   public void dispose()
   {
-    System.out.println("Exiting motion...");
+    Log.info("Exiting motion...");
     try
     {
       Util.writeProps("motion.ini", Motion.PROPERTIES);  
     }
     catch(Throwable t)
     {
-      System.err.println("Error saving motion.ini");
+      Log.severe("Error saving motion.ini");
       t.printStackTrace();
     }
     
@@ -1043,7 +1035,7 @@ public class Motion extends PApplet
       }
       catch (ClassNotFoundException | IllegalAccessException e)
       {
-        Log.LOG.log(Level.SEVERE, "Unable to initialize Spout\r\n", e);
+        Log.severe("Unable to initialize Spout\r\n", e);
         enableSpout = false;
       }
 

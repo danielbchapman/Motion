@@ -42,7 +42,7 @@ public class Log
     log.info(obj);    
   }
   
-  public static void warning(Object obj)
+  public static void warn(Object obj)
   {
     log.warn(obj);
   }
@@ -50,5 +50,11 @@ public class Log
   public static void severe(Object obj)
   {
     log.error(obj); 
+  }
+  
+  public static void severe(Object obj, Throwable t)
+  {
+    log.error(obj);
+    log.catching(t); 
   }
 }
