@@ -171,6 +171,11 @@ public class Motion extends PApplet
   private boolean debugActive = true;
   private PGraphics debug;
   
+  //Editor Preview
+  private PGraphics editor;
+  private boolean editing = false;
+  private Cue editCue;
+  
   //Drawing Methods
   ArrayList<EventPair> frameEvents = new ArrayList<>();
   ArrayList<MotionMouseEvent> mouseEvents = new ArrayList<>();
@@ -450,7 +455,8 @@ public class Motion extends PApplet
     core = createGraphics(width, height, P3D);
     main3D = createGraphics(width, height, P3D);
     main2D = createGraphics(width, height, P2D);
-    
+    editor = createGraphics(width, height, P3D);
+
     postSetup();
     
     try

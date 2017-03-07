@@ -2,6 +2,12 @@ package com.danielbchapman.motion.core;
 
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -31,11 +37,39 @@ public class CueStack implements ISaveable<CueStack>
 //    return out;
 //  }
 //
-//  @Override
-//  public CueStack load(String data)
-//  {
-//    Gson in = new Gson();
+  @SuppressWarnings("rawtypes")
+  @Override
+  public CueStack load(String data)
+  {
+    Gson gson = new Gson();
+    JsonElement element = gson.fromJson(data, JsonElement.class);
+    JsonObject root = element.getAsJsonObject();
+    String label = root.get("label").getAsString();
+    JsonArray cues = root.get("cues").getAsJsonArray();
+    
+    CueStack ret = new CueStack();
+    ret.label = label;
+    
+    for(JsonElement el : cues)
+    {
+      JsonObject obj = el.getAsJsonObject();
+      String className = obj.get("typeName").getAsString();
+      try
+      {
+        Class<?> cueClass = Class.forName(className);
+        Cue cue = (Cue) gson.fromJson(el, cueClass);
+        if(cue != null)
+          ret.add(cue);
+      }
+      catch (ClassNotFoundException e)
+      {
+        Log.severe("Unable to locate cue class", e);
+      }
+    }
+    
+    return ret;
+//    in.toJson
 //    CueStack stack = in.fromJson(data, getClass());
 //    return stack;
-//  }
+  }
 }

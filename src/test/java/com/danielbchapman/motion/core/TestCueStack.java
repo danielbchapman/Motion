@@ -17,17 +17,21 @@ public class TestCueStack
   @Test
   public void testSerializatoin()
   {
-    Cue a = new Cue();
+    PathCue a = new PathCue();
     
     a.setId("1");
-    a.setFile("Some File");
+    a.setPathFile("Path File");
+    a.setEnvironmentFile("Environment File");
+    a.setBrushFile("Brush File");
+    a.setPathFile("Brush File");
     a.setLabel("Label here");
     a.getPosition().x = 12;
     a.getScale().y = 12;
     a.getAnchor().z = 12;    
+    a.setTimeScale(1.5f);
     Log.debug(a.toString());
     String aa = a.save();
-    Cue b = a.load(aa);
+    PathCue b = a.load(aa);
     Log.debug(aa);
     Log.debug(b);
     Assert.assertEquals("Cue a == Cue b", a, b);
@@ -39,7 +43,12 @@ public class TestCueStack
     CueStack stack = new CueStack("Test-Stack");
     for(int i = 0; i < 50; i++)
     {
-      Cue q = new Cue();
+      Cue q = null;
+      if(i % 2 == 0)
+        q = new PathCue();
+      else
+        q = new ContentCue();
+      
       q.getAnchor().x = i;
       q.getAnchor().y = i + 1;
       q.getAnchor().z = i + 2;
@@ -47,7 +56,7 @@ public class TestCueStack
       q.getPosition().x = i;
       
       q.getScale().z = i * 2;
-      q.setFile( " Some File Name " + i);
+      q.setPathFile("Some File Name " + i);
       q.setId(Integer.toString(i));
       q.setLabel("Cue " + i);
       stack.add(q);
@@ -58,6 +67,7 @@ public class TestCueStack
     Log.debug(out);
     Assert.assertEquals("Stack are equal? ", in, stack);
   }
+  
   @Test
   public void testBasics()
   {
@@ -77,6 +87,7 @@ public class TestCueStack
     String outer;
     SubClass inner;
   }
+  
   @Data
   public class SubClass 
   {

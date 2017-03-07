@@ -24,7 +24,6 @@ public interface ISaveable<T>
   default public T load(String data)
   {
     Object obj = new Gson().fromJson(data, getClass());
-    
     return (T) obj;
   }
 }

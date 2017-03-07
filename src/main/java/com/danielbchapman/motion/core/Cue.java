@@ -9,33 +9,46 @@ import lombok.Setter;
 
 import com.google.gson.Gson;
 
+
+/**
+ * All child classes need to store variables in the Cue class or they
+ * must override the save/load defaults in @see {ISaveable} as GSON will
+ * not know how to load them. 
+ * 
+ * The type is stored as the class on construction.
+ */
 @Data
-@NoArgsConstructor
-public class Cue implements ISaveable<Cue>
+public abstract class Cue<T> implements ISaveable<T>
 {
+  private String typeName;
   private String id;
   private String label;
-  private String file;
+  
+  //Paths and files that are commonly needed
+  private String pathFile;
+  private String brushFile;
+  private String environmentFile;
   
   private Vec4D position = new Vec4D();
   private Vec4D scale = new Vec4D();
   private Vec3D anchor = new Vec3D();
   
-  //private Geometry scale;
-  //private Geometry anchor;
+  //Transients (do not serialize)
+  public transient boolean editing;
+  public transient boolean loaded = false;
+  public transient boolean inError = false;
+  public transient boolean running = false;  
+  public transient long startTime;
+  public transient long length;
   
-//  @Override
-//  public String save()
-//  {
-//    Gson gson = new Gson();
-//    String ret = gson.toJson(this, Cue.class);
-//    return ret;
-//  }
-//
-//  @Override
-//  public Cue load(String data)
-//  {
-//    Cue cue = new Gson().fromJson(data, Cue.class);
-//    return cue;
-//  }
+  public Cue()
+  {
+    this.typeName = getClass().getName();
+  }
+  
+  public abstract void load();
+  public abstract void start();
+  public abstract void stop();
+  public abstract void pause();
+  public abstract void update(long time);
 }
