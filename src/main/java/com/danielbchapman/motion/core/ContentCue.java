@@ -1,5 +1,7 @@
 package com.danielbchapman.motion.core;
 
+import processing.core.PGraphics;
+
 public class ContentCue extends Cue<ContentCue>
 {
   private boolean TESTER = true;
@@ -22,6 +24,14 @@ public class ContentCue extends Cue<ContentCue>
 
   @Override
   public void update(Motion motion, long time)
+  {
+    //TODO Auto Generated Sub
+    throw new RuntimeException("Not Implemented...");
+    
+  }
+
+  @Override
+  public void preview(PGraphics g, Motion motion, long time)
   {
     //TODO Auto Generated Sub
     throw new RuntimeException("Not Implemented...");

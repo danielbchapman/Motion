@@ -74,6 +74,7 @@ public class Motion extends PApplet
     KEY_MAP_DEFAULTS.put("screenshot", "i");
     KEY_MAP_DEFAULTS.put("next_scene", "l");
     KEY_MAP_DEFAULTS.put("open_tools", "t");
+    KEY_MAP_DEFAULTS.put("edit", "e");
     KEY_MAP_DEFAULTS.put("brush_1", "1");
     KEY_MAP_DEFAULTS.put("brush_2", "2");
     KEY_MAP_DEFAULTS.put("brush_3", "3");
@@ -176,6 +177,7 @@ public class Motion extends PApplet
   private PGraphics editor;
   private boolean editing = false;
   private Cue editCue;
+  private MotionMouseEvent editLastPoint;
   
   //Drawing Methods
   ArrayList<EventPair> frameEvents = new ArrayList<>();
@@ -256,6 +258,12 @@ public class Motion extends PApplet
     mapKey("open_tools", "t", (app, scene)->{
       Log.info("show all tools");
       openRecorderUi();
+    });
+
+    
+    mapKey("edit", "e", (app, scene)->{
+      Log.info("toggle edit");
+      toggleEdit();
     });
     
     mapKey("playback", "p", (app, scene)->{
@@ -537,7 +545,7 @@ public class Motion extends PApplet
 
     
     //Active UI (Current Brush)
-    if(mouseEvents.size() > 0)
+    if(mouseEvents.size() > 0 && !editing)
     {
       for(int i = 0; i < mouseEvents.size(); i++)
       { 
@@ -548,6 +556,86 @@ public class Motion extends PApplet
           recorder.capture(e);
       }
 
+      mouseEvents.clear();
+    }
+    
+    /* We only support one click at a time priority left, then right, 
+     * then center 
+     */
+    if(editing)
+    {
+      if(editCue != null)
+      {
+        for(MotionMouseEvent current : mouseEvents)
+        {
+          if(!current.anyDown())
+          {
+            editLastPoint = null;
+            continue;
+          }
+          
+          //Left Click
+          if(current.left && !current.center && !current.right)
+          {
+            //if not a left click we're done with that action
+            if(editLastPoint == null || !editLastPoint.left) 
+              editLastPoint = null;
+            
+            if(editLastPoint != null)
+            {
+              float deltaX = current.x - editLastPoint.x;
+              float deltaY = current.y - editLastPoint.y;
+              if(editCue != null)
+              {
+                editCue.handleEditLeft(deltaX, deltaY);
+              }
+            }
+            
+            editLastPoint = current;
+          }
+          
+          //Right Click
+          if(current.right && !current.center && !current.left)
+          {
+            //if not a left click we're done with that action
+            if(editLastPoint == null || !editLastPoint.right) 
+              editLastPoint = null;
+            
+            if(editLastPoint != null)
+            {
+              float deltaX = current.x - editLastPoint.x;
+              float deltaY = current.y - editLastPoint.y;
+              if(editCue != null)
+              {
+                editCue.handleEditRight(deltaX, deltaY);
+              }
+            }
+            
+            editLastPoint = current;
+          }
+          
+          //Center Click (not all devices)
+          if(current.center && !current.right && !current.left)
+          {
+            //if not a left click we're done with that action
+            if(editLastPoint == null || !editLastPoint.center) 
+              editLastPoint = null;
+            
+            if(editLastPoint != null)
+            {
+              float deltaX = current.x - editLastPoint.x;
+              float deltaY = current.y - editLastPoint.y;
+              if(editCue != null)
+              {
+                editCue.handleEditCenter(deltaX, deltaY);
+              }
+            }
+            
+            editLastPoint = current;
+          }          
+        }
+      }
+      
       mouseEvents.clear();
     }
   }
@@ -711,39 +799,6 @@ public class Motion extends PApplet
         overlayLastPoint.put(current.getBrush().getSystem(), new Vec3D(current.event));
       }
       
-//      if(size == 1)
-//      {
-//        //FIXME...what's going on here?
-//        MotionMouseEvent one = frameEvents.get(0).getEvent();
-//        if(one.left || one.right || one.center)
-//        {
-//
-//        }
-//      } 
-//      else if (size > 1)
-//      {
-//        MotionMouseEvent current;
-//        MotionMouseEvent next;
-//        for(int i = 1; i < size; i++)
-//        {
-//          current = frameEvents.get(i-1).getOne();
-//          next = frameEvents.get(i-1).getOne();
-//          
-//          if(current.anyDown() && next.anyDown())
-//          {
-//            overlayPaths.line(current.x,  current.y, current.z, next.x, next.y,  next.z);
-//          }
-//          else if(current.anyDown())
-//          {
-//            overlayPaths.point(current.x,  current.y, current.z);
-//          }
-//          else if (next.anyDown())
-//          {
-//            overlayPaths.point(next.x,  next.y, next.z);
-//          }
-//        }
-//      }
-      
       overlayPaths.endDraw();
       core.image(overlayPaths, 0, 0, width, height);
       
@@ -815,6 +870,16 @@ public class Motion extends PApplet
 
       debug.endDraw();
       core.image(debug, 0, 0, width, height);
+    }
+    
+    if(editing)
+    {
+      editor.beginDraw();
+      
+      editCue.preview(editor, this, time);
+      
+      editor.endDraw();
+      core.image(editor, 0, 0, width, height);
     }
     
     core.endDraw();
@@ -936,6 +1001,21 @@ public class Motion extends PApplet
     }
     else
       recorder.start();
+  }
+  
+  public void toggleEdit()
+  {
+    if(editing)
+    {
+      editing = false;
+      editCue = null;
+    }
+    else
+    {
+      editing = true;
+      editCue = new PathCue();
+      editCue.setPathFile("captures/curly-both-mouse");
+    }
   }
   
   public void openRecorderUi()

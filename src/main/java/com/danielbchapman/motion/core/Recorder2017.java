@@ -50,6 +50,11 @@ public class Recorder2017
     FileUtil.writeFile(CAPTURE_FOLDER + "/" + name, b.toString().getBytes());
   }
 
+  public static ArrayList<RecordAction2017> load(String file, float w, float h, float offsetX, float offsetY)
+  {
+    return load(file, (int)w, (int) h, (int) offsetX, (int) offsetY); 
+  }
+  
   public static ArrayList<RecordAction2017> load(String file, int w, int h, int offsetX, int offsetY)
   {
     ArrayList<RecordAction2017> results = new ArrayList<>();

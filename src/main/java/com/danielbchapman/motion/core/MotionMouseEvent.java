@@ -14,6 +14,7 @@ public class MotionMouseEvent extends Vec3D
   {
     super(vec);
   }
+  public transient boolean editing;
   public boolean left;
   public boolean right;
   public boolean center;
