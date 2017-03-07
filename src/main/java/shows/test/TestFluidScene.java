@@ -12,6 +12,8 @@ import com.danielbchapman.motion.core.KeyCombo;
 import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
+import com.danielbchapman.motion.utility.GraphicsUtility;
+import com.danielbchapman.physics.toxiclibs.Point;
 import com.danielbchapman.physics.toxiclibs.Util;
 import com.thomasdiewald.pixelflow.java.DwPixelFlow;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;
@@ -80,11 +82,25 @@ public class TestFluidScene extends BaseScene
     eventsSinceUpdate.clear();
   }
   
-
+  ArrayList<Point> p = GraphicsUtility.createMotionGrid(40, 30, 20, 20, 0, 1, (float[] floats)->{
+    return new Point(floats[0], floats[1], floats[2], 1f);
+  });
+  Point[] points;
   public void draw(PGraphics g) 
   {    
+    if(points == null)
+    {
+      points = new Point[p.size()];
+      for(int i = 0; i < points.length; i++)
+        points[i] = p.get(i);      
+    }
+    
     g.beginDraw();
-    g.background(0);//black
+    g.background(0,0,0, 32);
+    g.stroke(255, 255, 255);
+    g.strokeWeight(3);
+    GraphicsUtility.drawMotionGridAsLines(g, points, 40);
+    //g.background(0);//black
     g.endDraw();
     
     fluid.renderFluidTextures((PGraphics2D) g, 0);
