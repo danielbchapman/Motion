@@ -53,6 +53,8 @@ public class PathCue extends Cue<PathCue>
   private transient float previewH = -1;
   private transient float previewX = -1;
   private transient float previewY = -1;
+  private transient float previewSx = -1;
+  private transient float previewSy = -1;
   private transient ArrayList<RecordAction2017> previewActions;
   
   /* (non-Javadoc)
@@ -78,6 +80,8 @@ public class PathCue extends Cue<PathCue>
       previewH = size.y;
       previewX = position.x;
       previewY = position.y;
+      previewSx = scale.x;
+      previewSy = scale.y;
     }
     
     if(previewW != size.x)
@@ -104,9 +108,21 @@ public class PathCue extends Cue<PathCue>
       previewY = position.y;
     }
     
+    if(previewSx != scale.x)
+    {
+      previewActions = null;
+      previewSx = scale.x;      
+    }
+    
+    if(previewSy != scale.y)
+    {
+      previewActions = null;
+      previewSy = scale.y;      
+    }
+    
     if(previewActions == null)
     {
-      previewActions = Recorder2017.load(pathFile, size.x, size.y, position.x, position.y);
+      previewActions = Recorder2017.load(pathFile, size.x * scale.x, size.y * scale.y, position.x, position.y);
     }
     
     if(previewActions.size() < 1)

@@ -31,7 +31,7 @@ public abstract class Cue<T> implements ISaveable<T>
   public String environmentFile;
   
   public Vec4D position = new Vec4D();
-  public Vec4D scale = new Vec4D();
+  public Vec4D scale = new Vec4D(1f, 1f, 1f, 1f);
   public Vec3D anchor = new Vec3D();
   public Vec3D size = new Vec3D();
   
@@ -81,8 +81,8 @@ public abstract class Cue<T> implements ISaveable<T>
     float percent = abs / sizeY;
     
     if(percent >= 1 && !shrink){
-      size.x = size.x * 1f + percent;
-      size.y = size.y * 1f + percent;    
+      scale.x = scale.x + percent;
+      scale.y = size.y + percent;    
     }
     else if (percent > 1 && shrink)
     {
@@ -97,15 +97,20 @@ public abstract class Cue<T> implements ISaveable<T>
       float scalar = 1f;
       if(shrink)
       {
-        scalar = 1f - percent;
+        scalar = -percent;
       }
       else
       {//expand
-        scalar = 1f + percent;
+        scalar = percent;
       }
       
-      size.x = size.x * scalar;
-      size.y = size.y * scalar;
+      scale.x = scale.x + scalar;
+      scale.y = scale.y + scalar;
+      
+      if(scale.x < 0)
+        scale.x = 0;
+      if(scale.y < 0)
+        scale.y = 0;
       Log.severe("[handleEditRight] SCALAR( + " + scalar + ")");
     }
   }
