@@ -73,6 +73,7 @@ public class Motion extends PApplet
     KEY_MAP_DEFAULTS.put("clearOverlay", "c");
     KEY_MAP_DEFAULTS.put("screenshot", "i");
     KEY_MAP_DEFAULTS.put("next_scene", "l");
+    KEY_MAP_DEFAULTS.put("open_tools", "t");
     KEY_MAP_DEFAULTS.put("brush_1", "1");
     KEY_MAP_DEFAULTS.put("brush_2", "2");
     KEY_MAP_DEFAULTS.put("brush_3", "3");
@@ -204,6 +205,9 @@ public class Motion extends PApplet
   private String screenShotName = null;
   private boolean takeScreenShot = false;
   
+  //Tools and Windows
+  private Recorder2017.RecordUI recorderUi;
+  
   //Syphon and Spout
   private Object spout;
   private boolean enableSpout;
@@ -247,6 +251,11 @@ public class Motion extends PApplet
     mapKey("record", "r", (app, scene)->{
       Log.info("recording");
       toggleRecording();
+    });
+    
+    mapKey("open_tools", "t", (app, scene)->{
+      Log.info("show all tools");
+      openRecorderUi();
     });
     
     mapKey("playback", "p", (app, scene)->{
@@ -918,11 +927,26 @@ public class Motion extends PApplet
   public void toggleRecording()
   {
     if(recorder.isRecording())
+    {
       CAPTURE = recorder.stop();
+      new Thread(()->{
+        if(recorderUi == null)
+          recorderUi = new Recorder2017.RecordUI();
+
+        recorderUi.populate("capture", CAPTURE);
+      }).start();    }
     else
       recorder.start();
   }
   
+  public void openRecorderUi()
+  {
+    if(recorderUi == null)
+    {
+      recorderUi = new Recorder2017.RecordUI();
+      recorderUi.populate(null, null);
+    }
+  }
   public void takeScreenShot(String name)
   {
     screenShotName = name;

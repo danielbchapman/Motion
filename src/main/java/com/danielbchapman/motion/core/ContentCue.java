@@ -3,8 +3,9 @@ package com.danielbchapman.motion.core;
 public class ContentCue extends Cue<ContentCue>
 {
   private boolean TESTER = true;
+
   @Override
-  public void load()
+  public void load(Motion motion)
   {
     //TODO Auto Generated Sub
     throw new RuntimeException("Not Implemented...");
@@ -12,7 +13,7 @@ public class ContentCue extends Cue<ContentCue>
   }
 
   @Override
-  public void start()
+  public void start(Motion motion, long time)
   {
     //TODO Auto Generated Sub
     throw new RuntimeException("Not Implemented...");
@@ -20,27 +21,12 @@ public class ContentCue extends Cue<ContentCue>
   }
 
   @Override
-  public void stop()
+  public void update(Motion motion, long time)
   {
     //TODO Auto Generated Sub
     throw new RuntimeException("Not Implemented...");
     
   }
-
-  @Override
-  public void pause()
-  {
-    //TODO Auto Generated Sub
-    throw new RuntimeException("Not Implemented...");
-    
-  }
-
-  @Override
-  public void update(long time)
-  {
-    //TODO Auto Generated Sub
-    throw new RuntimeException("Not Implemented...");
-    
-  }
+ 
 
 }

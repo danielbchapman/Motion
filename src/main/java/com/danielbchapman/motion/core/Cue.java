@@ -1,5 +1,6 @@
 package com.danielbchapman.motion.core;
 
+import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.geom.Vec4D;
 import lombok.Data;
@@ -20,18 +21,18 @@ import com.google.gson.Gson;
 @Data
 public abstract class Cue<T> implements ISaveable<T>
 {
-  private String typeName;
-  private String id;
-  private String label;
+  public String typeName;
+  public String id;
+  public String label;
   
   //Paths and files that are commonly needed
-  private String pathFile;
-  private String brushFile;
-  private String environmentFile;
+  public String pathFile;
+  public String brushFile;
+  public String environmentFile;
   
-  private Vec4D position = new Vec4D();
-  private Vec4D scale = new Vec4D();
-  private Vec3D anchor = new Vec3D();
+  public Vec4D position = new Vec4D();
+  public Vec4D scale = new Vec4D();
+  public Vec3D anchor = new Vec3D();
   
   //Transients (do not serialize)
   public transient boolean editing;
@@ -46,9 +47,7 @@ public abstract class Cue<T> implements ISaveable<T>
     this.typeName = getClass().getName();
   }
   
-  public abstract void load();
-  public abstract void start();
-  public abstract void stop();
-  public abstract void pause();
-  public abstract void update(long time);
+  public abstract void load(Motion motion);
+  public abstract void start(Motion motion, long time);
+  public abstract void update(Motion motion, long time);
 }

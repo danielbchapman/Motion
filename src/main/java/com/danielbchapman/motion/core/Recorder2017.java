@@ -21,11 +21,6 @@ import lombok.Getter;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
 
-import com.danielbchapman.physics.toxiclibs.Actions;
-import com.danielbchapman.physics.toxiclibs.Layer;
-import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Playback;
-import com.danielbchapman.physics.toxiclibs.RecordAction;
 import com.danielbchapman.utility.FileUtil;
 import com.danielbchapman.utility.UiUtility;
 
@@ -34,7 +29,7 @@ public class Recorder2017
 {
   public static void main(String ... args)
   {
-    RecordUI r =  new RecordUI(800, 600);
+    RecordUI r =  new RecordUI();
     r.setVisible(true);
     r.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
@@ -145,7 +140,7 @@ public class Recorder2017
     JButton save;
     
     JPanel content;
-    public RecordUI(int w, int h)
+    public RecordUI()
     {
       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
       setLayout(new GridBagLayout());
@@ -155,7 +150,7 @@ public class Recorder2017
       
       open.addActionListener((x)->
       {
-        open(Actions.engine.width, Actions.engine.height, 0, 0);
+        open(Motion.WIDTH, Motion.HEIGHT, 0, 0);
       });
       
       close.addActionListener((e)->
@@ -168,7 +163,7 @@ public class Recorder2017
       {
         ArrayList<RecordAction2017> actions = Motion.CAPTURE;
         if(actions != null && !actions.isEmpty())
-          save(actions, Actions.engine.width, Actions.engine.height);
+          save(actions, Motion.WIDTH, Motion.HEIGHT);
         else
           warn("Unable to Save", "Unable to save empty list" );
       });

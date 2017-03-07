@@ -1,5 +1,8 @@
 package com.danielbchapman.motion.core;
 
+import java.util.ArrayList;
+
+import processing.core.PGraphics;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,35 +18,33 @@ public class PathCue extends Cue<PathCue>
 
   
   @Override
-  public void start()
+  public void start(Motion motion, long time)
   {
     if(!loaded)
-      load();
+      load(motion);
 
     if(playback == null)
     {
       inError = true;
       return;
     }
+    
+    startTime = time;
+    playback.start(time);
   }
 
-  @Override
-  public void stop()
-  { 
-  }
 
   @Override
-  public void pause()
-  { 
-  }
-
-  @Override
-  public void load()
+  public void load(Motion motion)
   {
+    ArrayList<RecordAction2017> actions = Recorder2017.load(pathFile, motion.width, motion.height, 0, 0);
+    MotionBrush brush = motion.currentBrush.clone();
+    playback = new Playback2017(pathFile, motion, brush, actions);
   }
 
+
   @Override
-  public void update(long time)
-  {
+  public void update(Motion motion, long time)
+  { 
   }
 }
