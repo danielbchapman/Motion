@@ -929,12 +929,11 @@ public class Motion extends PApplet
     if(recorder.isRecording())
     {
       CAPTURE = recorder.stop();
-      new Thread(()->{
-        if(recorderUi == null)
-          recorderUi = new Recorder2017.RecordUI();
+      if(recorderUi == null)
+        recorderUi = new Recorder2017.RecordUI();
 
-        recorderUi.populate("capture", CAPTURE);
-      }).start();    }
+      recorderUi.populate("capture", CAPTURE);
+    }
     else
       recorder.start();
   }
