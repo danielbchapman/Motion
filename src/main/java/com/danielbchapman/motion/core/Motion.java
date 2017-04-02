@@ -16,6 +16,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
+import processing.opengl.PJOGL;
 import shows.test.TestBrushScene;
 import shows.test.TestEllipseBrush;
 import shows.test.TestFluidScene;
@@ -461,11 +462,14 @@ public class Motion extends PApplet
   public void settings() 
   {
     size(WIDTH, HEIGHT, P3D);
+    PJOGL.profile = 2;
+    //PJOGL.profile=1; //Required for Syphon to work (ouch)
   } 
   
   @Override
   public void setup()
   {
+    println("OPENGL PROFILE" + PJOGL.profile); 
     overlay = createGraphics(width, height, P3D);
     overlayPaths = createGraphics(width, height, P3D);
     debug = createGraphics(width, height, P3D);
