@@ -87,6 +87,7 @@ public class Motion extends PApplet
     KEY_MAP_DEFAULTS.put("open_tools", "t");
     KEY_MAP_DEFAULTS.put("open_environment", "q");
     KEY_MAP_DEFAULTS.put("open_brush", "a");
+    KEY_MAP_DEFAULTS.put("toggle_show_mode", "m");
     KEY_MAP_DEFAULTS.put("edit", "e");
     KEY_MAP_DEFAULTS.put("brush_1", "1");
     KEY_MAP_DEFAULTS.put("brush_2", "2");
@@ -208,6 +209,7 @@ public class Motion extends PApplet
   
   private ArrayList<Scene> scenes = new ArrayList<>();
   private int sceneIndex = -1;
+  private boolean drawBlack = false;
   
   //Recording
   Recorder2017 recorder = new Recorder2017();
@@ -221,7 +223,7 @@ public class Motion extends PApplet
   //Actions
   private String screenShotName = null;
   private boolean takeScreenShot = false;
-  
+ 
   //Tools and Windows
   private Recorder2017.RecordUI recorderUi;
   private BrushEditor2017 brushUi;
@@ -239,18 +241,17 @@ public class Motion extends PApplet
   
   public Motion()
   {
-    //SpaceBar = 32
-    KeyCombo go = new KeyCombo(' ');
-    KeyCombo nextScene = new KeyCombo('l');
-    KeyCombo debug = new KeyCombo('d');
-    KeyCombo overlay = new KeyCombo('f');
-    KeyCombo record = new KeyCombo('r');
-    KeyCombo playback = new KeyCombo('p');
+    //SpaceBar = 32;
     
     mapKey("go", "spacebar", (app, scene)->{
+      Log.info("go " + currentScene);
       go();
-      Log.info("go");
     });
+    
+//    mapKey("go", "g", (app, scene)->{
+//      Log.info("[g] go " + currentScene);
+//      go();
+//    });
     
     mapKey("next_scene", "l", (app, scene)->{ 
       advanceScene();
@@ -285,6 +286,11 @@ public class Motion extends PApplet
     mapKey("open_brush", "a", (app, scene)->{
       Log.info("open brush editor");
       openBrushUi();
+    });
+    
+    mapKey("toggle_show_mode", "m", (app, scene)->{
+      Log.info("toggling show mode (alpha) " + !drawBlack);
+      drawBlack = !drawBlack;
     });
 
     mapKey("edit", "e", (app, scene)->{
@@ -406,7 +412,7 @@ public class Motion extends PApplet
     }
     
     BiConsumer<Motion, Scene> action = keyMap.get(down);
-    Log.debug(down);
+    Log.debug("DOWN ->" + down);
     Log.debug("Action------");
     if(action != null)
     {
@@ -691,7 +697,12 @@ public class Motion extends PApplet
     update(time);
     
     core.beginDraw();
-    core.background(0,0,0);
+    if(drawBlack){
+      core.background(0,0,0); //Alpha Black
+    } else {
+      core.background(0,0,0, 0); //Alpha Black      
+    }
+
     
     if(currentScene != null)
     {
