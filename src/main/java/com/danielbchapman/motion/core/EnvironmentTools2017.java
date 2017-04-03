@@ -335,7 +335,7 @@ public class EnvironmentTools2017 extends JFrame
       buffer.append("\n");
     };
     //Prepare
-    write.accept(FileArgs.DRAG, Actions.engine.getPhysics().getDrag()+"");
+    write.accept(FileArgs.DRAG, scene.getPhysics().getDrag()+"");
     write.accept(FileArgs.GRAVITY, Actions.gravity.save());
     write.accept(FileArgs.HOME, Actions.home.save());
     write.accept(FileArgs.HOME_LINEAR, Actions.homeLinear.save());
@@ -366,7 +366,7 @@ public class EnvironmentTools2017 extends JFrame
   }
   public boolean loadVariables(String fileName)
   {
-    if(loadVariablesNoUi(fileName)){
+    if(loadVariablesNoUi(fileName, scene)){
       read();
       return true;
     }
@@ -374,7 +374,7 @@ public class EnvironmentTools2017 extends JFrame
       return false;
   }
   
-  public static boolean loadVariablesNoUi(String fileName)
+  public static boolean loadVariablesNoUi(String fileName, PhysicsScene scene)
   {
     ArrayList<String> lines = FileUtil.readLines(fileName);
     
@@ -387,12 +387,12 @@ public class EnvironmentTools2017 extends JFrame
       if(x.vars.running)
       {
         System.out.println("Loading -> " + x + " and setting to running");
-        Actions.engine.addBehavior(x);
+        scene.addBehavior(x);
       }
       else
       {
         System.out.println("Loading -> " + x + " and setting to not running");
-        Actions.engine.removeBehavior(x);
+        scene.removeBehavior(x);
       }
         
     };
@@ -402,7 +402,7 @@ public class EnvironmentTools2017 extends JFrame
       switch(i)
       {
         case 1:
-          Actions.engine.getPhysics().setDrag(Float.valueOf(lines.get(i)));
+          scene.getPhysics().setDrag(Float.valueOf(lines.get(i)));
           break;
         case 3:
           loadIt.accept(Actions.gravity, lines.get(i));
