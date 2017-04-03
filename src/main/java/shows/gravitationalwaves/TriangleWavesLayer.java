@@ -1,7 +1,7 @@
 package shows.gravitationalwaves;
 
 import com.danielbchapman.layers.BleedingLayer;
-import com.danielbchapman.physics.toxiclibs.AbstractEmitter;
+import com.danielbchapman.physics.toxiclibs.OLDAbstractEmitter;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -46,8 +46,8 @@ public class TriangleWavesLayer extends BleedingLayer
         }
       };
       
-  AbstractEmitter<SplineWave> spline = 
-      new AbstractEmitter<SplineWave>(new Vec3D(600, 600, 0))
+  OLDAbstractEmitter<SplineWave> spline = 
+      new OLDAbstractEmitter<SplineWave>(new Vec3D(600, 600, 0))
       {
 
         @Override

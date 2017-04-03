@@ -1,5 +1,7 @@
 package com.danielbchapman.motion.core;
 
+import java.util.Map;
+
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
@@ -26,5 +28,6 @@ public class MouseBrush extends MotionBrush
   public MotionBrush deepCopy()
   {
     return new MouseBrush();
-  } 
+  }
+
 }

@@ -1,4 +1,4 @@
-package com.danielbchapman.physics.toxiclibs;
+package com.danielbchapman.motion.core;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.danielbchapman.motion.core.Motion;
+import com.danielbchapman.physics.toxiclibs.PersistentVariables;
 import com.danielbchapman.physics.toxiclibs.PersistentVariables.Fields;
 import com.danielbchapman.physics.ui.CheckBoxProperty;
 import com.danielbchapman.physics.ui.PojoComboBox;
@@ -35,23 +35,27 @@ import com.danielbchapman.text.Utility;
 import com.danielbchapman.utility.FileUtil;
 import com.danielbchapman.utility.UiUtility;
 
-public class BrushEditor extends JFrame
+import shows.test.TestExplodeBrush;
+import shows.test.TestFalloffAttractorBrush;
+import shows.test.TestInverseExplodeBrush;
+
+public class BrushEditor2017 extends JFrame
 {
   public static final String BRUSH_FOLDER = "brushes";
-  MotionInteractiveBehavior current;
+  MotionBrush current;
   Motion motion;
   private int row = 0;
   private static final long serialVersionUID = 1L;
   
   public static void main(String ... args)
   {
-    BrushEditor be = new BrushEditor(null);
+    BrushEditor2017 be = new BrushEditor2017(null);
     be.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     be.setVisible(true);
   }
   
   ArrayList<JButton> brushDefaults = new ArrayList<JButton>();
-  PojoComboBox<Class<? extends MotionInteractiveBehavior>> brushClass;
+  PojoComboBox<Class<? extends MotionBrush>> brushClass;
   JButton reload;
   JButton save;
   JButton load;
@@ -62,22 +66,22 @@ public class BrushEditor extends JFrame
   //Fields
   private PersistentVariables variables;
 
-  CheckBoxProperty<BrushEditor> enabled;
+  CheckBoxProperty<BrushEditor2017> enabled;
   
-  Vec3DEditor<BrushEditor> position;
-  Vec3DEditor<BrushEditor> force;
-  Vec3DEditor<BrushEditor> backup;
-  Vec3DEditor<BrushEditor> scaledForce;
+  Vec3DEditor<BrushEditor2017> position;
+  Vec3DEditor<BrushEditor2017> force;
+  Vec3DEditor<BrushEditor2017> backup;
+  Vec3DEditor<BrushEditor2017> scaledForce;
   
-  PropertySlider<BrushEditor> magnitude;
-  PropertySlider<BrushEditor> radius;
-  PropertySlider<BrushEditor> userA;
-  PropertySlider<BrushEditor> userB;
-  PropertySlider<BrushEditor> userC;
-  PropertySlider<BrushEditor> maxForce;
-  PropertySlider<BrushEditor> minForce;
+  PropertySlider<BrushEditor2017> magnitude;
+  PropertySlider<BrushEditor2017> radius;
+  PropertySlider<BrushEditor2017> userA;
+  PropertySlider<BrushEditor2017> userB;
+  PropertySlider<BrushEditor2017> userC;
+  PropertySlider<BrushEditor2017> maxForce;
+  PropertySlider<BrushEditor2017> minForce;
 
-  public BrushEditor(Motion motion)
+  public BrushEditor2017(Motion motion)
   {
     this.motion = motion;
     setLayout(new GridBagLayout());
@@ -97,30 +101,30 @@ public class BrushEditor extends JFrame
     
     brushClass = new PojoComboBox<>();
     reload = new JButton("Reload");
-    BiConsumer<String, Class<? extends MotionInteractiveBehavior>> addItem = (name, clazz)->
+    BiConsumer<String, Class<? extends MotionBrush>> addItem = (name, clazz)->
     {
       brushClass.addItem(
-          new SelectItem<Class<? extends MotionInteractiveBehavior>>(name, clazz));
+          new SelectItem<Class<? extends MotionBrush>>(name, clazz));
     };
     
-    addItem.accept("Explode Brush", ExplodeBehavior.class);
-    addItem.accept("Inverse Explode Brush", ExplodeBehaviorInverse.class);
-    addItem.accept("Falloff Attractor", FalloffAttractionBehavior.class);
-    addItem.accept("Inverse Falloff Attractor", FalloffAttractionBehaviorInverse.class);
-    addItem.accept("Lambda Brush", LambdaBrush.class);
+    addItem.accept("Explode Brush", TestExplodeBrush.class);
+    addItem.accept("Inverse Explode Brush", TestInverseExplodeBrush.class);
+    addItem.accept("Falloff Attractor", TestFalloffAttractorBrush.class);
+    //addItem.accept("Inverse Falloff Attractor", FalloffAttractionBehaviorInverse.class);
+    //addItem.accept("Lambda Brush", LambdaBrush.class);
     
     Consumer<Void> loadFromCombo = (Void)->
     {
       System.out.println("Combo Box: " + brushClass.getSelectedValue());
       if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this, "Load brush? " + brushClass.getSelectedName()))
           {
-            Class<? extends MotionInteractiveBehavior> clazz = brushClass.getSelectedValue();
-            MotionInteractiveBehavior beh;
+            Class<? extends MotionBrush> clazz = brushClass.getSelectedValue();
+            MotionBrush beh;
             try
             {
               beh = clazz.newInstance();
               populate(beh);
-              MotionEngine.brush = beh;
+              motion.setCurrentBrush(beh);
             }
             catch (Exception e)
             {
@@ -150,24 +154,28 @@ public class BrushEditor extends JFrame
     add(close, UiUtility.getFillHorizontal(3, 99));
     
     add(new Spacer(10,10), UiUtility.getFillBoth(2, 250));
-    
-    current = new ExplodeBehavior();
-    populate(current);
-    
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    MotionBrush brush = motion.currentBrush;
+    if(brush == null)
+    {
+      brush = new TestExplodeBrush();
+      motion.setCurrentBrush(brush);
+    }
+      
+    populate(brush);
+    setVisible(true);
   }
 
-  public void populate(MotionInteractiveBehavior behavior)
+  public void populate(MotionBrush brush)
   {
-    if(behavior == null)
+    if(brush == null)
     {
       warn("Unable to Load", "The variables for this brush are null");
       return;
     }
-    this.current = behavior;
-    this.variables = behavior.vars;
+    this.current = brush;
+    this.variables = brush.vars;
     
-    Map<String, String> names = behavior.getFieldNames();
+    Map<String, String> names = brush.getFieldNames();
     Function<String, String> checkName = (x)->
     {
       String result = names.get(x);
@@ -177,7 +185,7 @@ public class BrushEditor extends JFrame
     /*
      * Create the components and bind them to the reference
      */
-    enabled = new CheckBoxProperty<BrushEditor>(
+    enabled = new CheckBoxProperty<BrushEditor2017>(
         checkName.apply(Fields.ENABLED), 
         this, 
         (o)->{
@@ -351,14 +359,14 @@ public class BrushEditor extends JFrame
       return result != null;
     };
     
-    BiConsumer<String, Vec3DEditor<BrushEditor>> addVec = (x, y)->
+    BiConsumer<String, Vec3DEditor<BrushEditor2017>> addVec = (x, y)->
     {
       if(checkItem.apply(x)){
         row = y.addByGridBag(content, row++);
       }
     };
     
-    BiConsumer<String, PropertySlider<BrushEditor>> addProp = (x, y)->
+    BiConsumer<String, PropertySlider<BrushEditor2017>> addProp = (x, y)->
     {
       if(checkItem.apply(x)){
         place(content, y, row++);
@@ -368,10 +376,10 @@ public class BrushEditor extends JFrame
      * Add the components that are needed
      */
     content.removeAll();    
-    if(!Text.isEmptyOrNull(behavior.vars.getPetName()))
-      title(content, behavior.vars.getPetName(), row++);
+    if(!Text.isEmptyOrNull(brush.vars.getPetName()))
+      title(content, brush.vars.getPetName(), row++);
     
-    title(content, "Class: " + behavior.getName(), row++);
+    title(content, "Class: " + brush.getName(), row++);
     
     if(checkItem.apply(Fields.ENABLED)){
        content.add(enabled, UiUtility.getFillHorizontal(0, row++).anchor(GridBagConstraints.EAST));
@@ -452,14 +460,14 @@ public class BrushEditor extends JFrame
         String data = lines.get(1).trim();
         
         
-        Class<? extends MotionInteractiveBehavior> clazz = (Class<? extends MotionInteractiveBehavior>) getClass().getClassLoader().loadClass(clazzName);
-        MotionInteractiveBehavior loaded = clazz.newInstance();
+        Class<? extends MotionBrush> clazz = (Class<? extends MotionBrush>) getClass().getClassLoader().loadClass(clazzName);
+        MotionBrush loaded = clazz.newInstance();
         
         PersistentVariables vars = PersistentVariables.fromLine(data);
         loaded.vars = vars;
         
         populate(loaded);
-        MotionEngine.brush = loaded;
+        motion.setCurrentBrush(loaded);
         return true;
       }
       catch (Throwable t)

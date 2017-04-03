@@ -11,7 +11,7 @@ import com.danielbchapman.physics.toxiclibs.Action;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.CueStack;
-import com.danielbchapman.physics.toxiclibs.Emitter;
+import com.danielbchapman.physics.toxiclibs.OLDEmitter;
 import com.danielbchapman.physics.toxiclibs.FloorSplitGravity;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.LetterEmitter;
@@ -39,7 +39,7 @@ public class Scene7 extends Layer
  int lastIndex = 0;
  SectionOneCueStack stack;
  FloorSplitGravity gravity = new FloorSplitGravity(new Vec3D(0, 0.1f, 0));
- ArrayList<Emitter<?>> emitters = new ArrayList<>();
+ ArrayList<OLDEmitter<?>> emitters = new ArrayList<>();
  public void go(MotionEngine engine)
  {
    stack.go(engine, this);
@@ -70,7 +70,7 @@ public class Scene7 extends Layer
      p.draw(g, p.parent);
    }
      
-   for(Emitter<?> e : emitters)
+   for(OLDEmitter<?> e : emitters)
      e.draw(g);
  }
  
@@ -415,7 +415,7 @@ public class Scene7 extends Layer
  public void update()
  {
    long time = System.currentTimeMillis();
-   for(Emitter<?> e : emitters)
+   for(OLDEmitter<?> e : emitters)
      e.update(time);
  }
  

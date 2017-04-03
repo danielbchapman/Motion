@@ -9,7 +9,7 @@ import lombok.Setter;
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
-public abstract class AbstractEmitter<T extends Moveable>
+public abstract class OLDAbstractEmitter<T extends Moveable>
 {
   protected ArrayList<T> children = new ArrayList<T>();
   protected long lastTime = -1L;
@@ -35,7 +35,7 @@ public abstract class AbstractEmitter<T extends Moveable>
   
   private boolean running = true; 
   
-  public AbstractEmitter(Vec3D position)
+  public OLDAbstractEmitter(Vec3D position)
   {
     this.position = position.copy();
   }

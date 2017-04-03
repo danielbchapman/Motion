@@ -21,7 +21,7 @@ public class MobilologyOne extends Layer
   int lastIndex = 0;
   SectionOneCueStack stack;
   FloorSplitGravity gravity = new FloorSplitGravity(new Vec3D(0, 0.1f, 0));
-  ArrayList<Emitter<?>> emitters = new ArrayList<>();
+  ArrayList<OLDEmitter<?>> emitters = new ArrayList<>();
   public void go(MotionEngine engine)
   {
     stack.go(engine, this);
@@ -52,7 +52,7 @@ public class MobilologyOne extends Layer
       p.draw(g, p.parent);
     }
       
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
       e.draw(g);
   }
   
@@ -398,7 +398,7 @@ public class MobilologyOne extends Layer
   public void update()
   {
     long time = System.currentTimeMillis();
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
       e.update(time);
   }
   

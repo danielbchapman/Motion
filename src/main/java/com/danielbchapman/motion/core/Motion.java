@@ -9,7 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.logging.Level;
+
+import com.danielbchapman.code.Pair;
+import com.danielbchapman.motion.tools.MaskMakerScene;
+import com.danielbchapman.physics.toxiclibs.EnvironmentTools;
+import com.danielbchapman.physics.toxiclibs.IGraphicShare;
+import com.danielbchapman.physics.toxiclibs.Util;
+import com.danielbchapman.text.Safe;
+import com.sun.jna.Platform;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -17,18 +24,20 @@ import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PJOGL;
+import shows.oz.BirchLeaves;
+import shows.oz.LeafWind;
+import shows.oz.Melting;
+import shows.oz.PoppyField;
+import shows.oz.PoppyFieldSnow;
+import shows.oz.Tornado;
 import shows.test.TestBrushScene;
 import shows.test.TestEllipseBrush;
+import shows.test.TestExplodeBrush;
+import shows.test.TestFalloffAttractorBrush;
 import shows.test.TestFluidScene;
+import shows.test.TestInverseExplodeBrush;
 import shows.test.TestVerletScene;
 import toxi.geom.Vec3D;
-
-import com.danielbchapman.code.Pair;
-import com.danielbchapman.motion.tools.MaskMakerScene;
-import com.danielbchapman.physics.toxiclibs.IGraphicShare;
-import com.danielbchapman.physics.toxiclibs.Util;
-import com.danielbchapman.text.Safe;
-import com.sun.jna.Platform;
 
 
 /**
@@ -75,6 +84,8 @@ public class Motion extends PApplet
     KEY_MAP_DEFAULTS.put("screenshot", "i");
     KEY_MAP_DEFAULTS.put("next_scene", "l");
     KEY_MAP_DEFAULTS.put("open_tools", "t");
+    KEY_MAP_DEFAULTS.put("open_environment", "q");
+    KEY_MAP_DEFAULTS.put("open_brush", "a");
     KEY_MAP_DEFAULTS.put("edit", "e");
     KEY_MAP_DEFAULTS.put("brush_1", "1");
     KEY_MAP_DEFAULTS.put("brush_2", "2");
@@ -210,6 +221,8 @@ public class Motion extends PApplet
   
   //Tools and Windows
   private Recorder2017.RecordUI recorderUi;
+  private BrushEditor2017 brushUi;
+  private EnvironmentTools2017 environmentUi;
   
   //Syphon and Spout
   private Object spout;
@@ -260,8 +273,17 @@ public class Motion extends PApplet
       Log.info("show all tools");
       openRecorderUi();
     });
-
     
+    mapKey("open_environment", "q", (app, scene)->{
+      Log.info("open environment editor");
+      openEnvironmentUi();
+    });
+    
+    mapKey("open_brush", "a", (app, scene)->{
+      Log.info("open brush editor");
+      openBrushUi();
+    });
+
     mapKey("edit", "e", (app, scene)->{
       Log.info("toggle edit");
       toggleEdit();
@@ -271,15 +293,10 @@ public class Motion extends PApplet
       Log.info("playback");
       runPlayback();
     });
-    
-    mapKey("brush_1", "1", (app, scene)->{
-      Log.info("Mouse Brush");
-      setCurrentBrush(new MouseBrush());
-    });
 
     mapKey("brush_1", "1", (app, scene)->{
-      Log.info("Mouse Brush");
-      setCurrentBrush(new MouseBrush());
+      Log.info("Editable Brush");
+      setCurrentBrush(currentBrush == null ? new MouseBrush() : currentBrush);
     });
     mapKey("brush_2", "2", (app, scene)->{
       Log.info("Mouse Brush");
@@ -293,17 +310,29 @@ public class Motion extends PApplet
       Log.info("Mouse Brush");
       setCurrentBrush(new TestEllipseBrush(true));
     });
+    /*
+     *   
+  public static MotionInteractiveBehavior brush = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
+  private static FalloffAttractionBehavior sucker = new FalloffAttractionBehavior(new Vec3D(1f, 1f, 1f), 5f, 100f, 1f);
+  private static Slap slap = new Slap(new Vec3D(), new Vec3D(0, 0, -1f), 1000f);
+  private static ExplodeBehavior explode = new ExplodeBehavior(new Vec3D(0, 0, 1f), 100f);
+     */
     mapKey("brush_5", "5", (app, scene)->{
-      Log.info("Mouse Brush");
-      setCurrentBrush(new MouseBrush());
+      Log.info("Explode Brush");
+      TestExplodeBrush explode = new TestExplodeBrush(new Vec3D(0, 0, 1f), 100f);  
+      setCurrentBrush(explode);
     });
     mapKey("brush_6", "6", (app, scene)->{
-      Log.info("Mouse Brush");
-      setCurrentBrush(new MouseBrush());
+      Log.info("Attractor Brush");
+      TestFalloffAttractorBrush brush = new TestFalloffAttractorBrush(new Vec3D(1f, 1f, 1f), 10f, 100f, 1f);
+      brush.vars.magnitude = 100f;
+      setCurrentBrush(brush);
     });
     mapKey("brush_7", "7", (app, scene)->{
-      Log.info("Mouse Brush");
-      setCurrentBrush(new MouseBrush());
+      Log.info("Inverse Explode Brush");
+      TestInverseExplodeBrush inverse = new TestInverseExplodeBrush(new Vec3D(0, 0, 1f), 100f);
+      inverse.vars.force = new Vec3D(0f, 0f, -1f);
+      setCurrentBrush(inverse);
     });
     mapKey("brush_8", "8", (app, scene)->{
       Log.info("Mouse Brush");
@@ -497,6 +526,14 @@ public class Motion extends PApplet
       scenes.add(scene);
       Log.info(scene.getName());
     };
+    
+    //Add Wizard of Oz
+    prep.accept(new LeafWind());
+    prep.accept(new Melting());
+    prep.accept(new PoppyField());
+    prep.accept(new PoppyFieldSnow());
+    prep.accept(new Tornado());
+    prep.accept(new BirchLeaves());
     
     prep.accept(new TestBrushScene());
     prep.accept(new TestFluidScene());
@@ -1028,6 +1065,26 @@ public class Motion extends PApplet
     {
       recorderUi = new Recorder2017.RecordUI();
       recorderUi.populate(null, null);
+    }
+  }
+  
+  public void openEnvironmentUi()
+  {
+    
+  }
+  
+  public void openBrushUi()
+  {
+    if(brushUi == null)
+    {
+     brushUi = new BrushEditor2017(this); 
+    }
+    else 
+    {
+      if(!brushUi.isVisible()){
+        brushUi.dispose();
+        brushUi = new BrushEditor2017(this);
+      }
     }
   }
   public void takeScreenShot(String name)

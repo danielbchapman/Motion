@@ -11,7 +11,7 @@ public class EmitterLayer extends Layer
   int gridY;
   int spacing;
   String data = "This is the end of days";
-  ArrayList<Emitter<?>> emitters = new ArrayList<>();
+  ArrayList<OLDEmitter<?>> emitters = new ArrayList<>();
   public EmitterLayer()
   {
     int count = 25;
@@ -46,7 +46,7 @@ public class EmitterLayer extends Layer
     g.strokeWeight(2f);
     g.stroke(255);
     g.fill(255, 255, 255);
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
       e.draw(g);
   }
 
@@ -58,7 +58,7 @@ public class EmitterLayer extends Layer
   @Override
   public void update()
   {
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
       e.update(System.currentTimeMillis());
   }
 }

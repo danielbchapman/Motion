@@ -1,7 +1,7 @@
 package shows.gravitationalwaves;
 
 import com.danielbchapman.layers.BleedingLayer;
-import com.danielbchapman.physics.toxiclibs.AbstractEmitter;
+import com.danielbchapman.physics.toxiclibs.OLDAbstractEmitter;
 import com.danielbchapman.physics.toxiclibs.ExplodeBehavior;
 import com.danielbchapman.physics.toxiclibs.ExplodeBehaviorInverse;
 import com.danielbchapman.physics.toxiclibs.LetterEmitter;
@@ -25,8 +25,8 @@ public class GalaxyLayer extends BleedingLayer
   MotionInteractiveBehavior attractorA;
   MotionInteractiveBehavior attractorB;
   
-  AbstractEmitter<SplineWave> spline = 
-      new AbstractEmitter<SplineWave>(new Vec3D(600, 600, 0))
+  OLDAbstractEmitter<SplineWave> spline = 
+      new OLDAbstractEmitter<SplineWave>(new Vec3D(600, 600, 0))
       {
 
         @Override

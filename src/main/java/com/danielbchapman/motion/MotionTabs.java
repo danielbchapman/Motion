@@ -112,8 +112,8 @@ public class MotionTabs extends TabPane
     IntegerField txtWidth = Fx.promptInt(sizeX, "Width");
     IntegerField txtHeight = Fx.promptInt(sizeY, "Height");
     
-    motionFile.setFileChanged(f -> active.setData("pb-recording", motionFile.getFile().getAbsolutePath()));
-    brushFile.setFileChanged(f -> active.setData("pb-brush", brushFile.getFile().getAbsolutePath()));
+//    motionFile.setFileChanged(f -> active.setData("pb-recording", motionFile.getFile().getAbsolutePath()));
+//    brushFile.setFileChanged(f -> active.setData("pb-brush", brushFile.getFile().getAbsolutePath()));
     
     txtPosX.onActionProperty().set( x -> active.setData("pb-x", txtPosX.getText()) );
     txtPosY.onActionProperty().set( x -> active.setData("pb-y", txtPosY.getText()) );
