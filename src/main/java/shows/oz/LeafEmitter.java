@@ -31,6 +31,7 @@ public class LeafEmitter extends AbstractEmitter<Leaf>
       g.stroke(255,0,0);
       g.fill(255,0,0);
       g.translate(p.x, p.y, p.z);
+      Point.rotation(g, p);
       g.ellipse(0, 0, 5, 5);
       g.popMatrix();
     }

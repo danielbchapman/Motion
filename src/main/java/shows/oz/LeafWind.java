@@ -7,8 +7,12 @@ import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.core.PhysicsScene;
+import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.AngularGravityBehavior3D;
+import com.danielbchapman.physics.toxiclibs.Point;
 
 import processing.core.PGraphics;
+import shows.test.SimpleWindBehavior;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 import toxi.physics3d.behaviors.GravityBehavior3D;
@@ -23,12 +27,14 @@ public class LeafWind extends PhysicsScene
   {
     physics = new VerletPhysics3D();
     physics.setDrag(0.02f);
+    physics.addBehavior(new SimpleWindBehavior(new Vec3D(0.05f, 0, 0)));
+    physics.addBehavior(Actions.gravity);
     //physics.addBehavior(new GravityBehavior3D(new Vec3D(0, .1f, 0)));
     for(int i = 0; i < 10; i++)
     {
       Vec3D wind = new Vec3D(-1, 0, 0);
       Vec3D pos = new Vec3D(50 * i, 50, 0);
-      LeafEmitter e = new LeafEmitter(physics, pos, wind, 20000, 100, 0f, 100);  
+      LeafEmitter e = new LeafEmitter(physics, pos, wind, 20000, 100, 2f, 100);  
       e.physics = this.physics;
       leaves.add(e);      
     }
@@ -50,11 +56,13 @@ public class LeafWind extends PhysicsScene
   @Override
   public void draw(PGraphics g)
   { 
-    g.background(0,0,0,0);
-    g.line(0, 0, 500, 500);
+    g.clear();
+    g.fill(0,0,0,0);
+    
     leaves.forEach(e -> {
       e.draw(g);
     });
+
   }
   
   @Override
