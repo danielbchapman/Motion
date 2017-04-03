@@ -39,7 +39,7 @@ public class BrushEditor extends JFrame
 {
   public static final String BRUSH_FOLDER = "brushes";
   MotionInteractiveBehavior current;
-  Motion motion;
+  MotionEngine motion;
   private int row = 0;
   private static final long serialVersionUID = 1L;
   
@@ -77,9 +77,9 @@ public class BrushEditor extends JFrame
   PropertySlider<BrushEditor> maxForce;
   PropertySlider<BrushEditor> minForce;
 
-  public BrushEditor(Motion motion)
+  public BrushEditor(MotionEngine motionEngine)
   {
-    this.motion = motion;
+    this.motion = motionEngine;
     setLayout(new GridBagLayout());
     setPreferredSize(new Dimension(400, 650));
     setSize(new Dimension(400, 650));

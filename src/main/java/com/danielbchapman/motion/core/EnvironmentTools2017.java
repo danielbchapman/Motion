@@ -20,13 +20,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.danielbchapman.physics.ui.BehaviorSlider;
+import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.AngularGravityBehavior3D;
+import com.danielbchapman.physics.toxiclibs.HomeBehavior3D;
+import com.danielbchapman.physics.toxiclibs.HomeBehaviorLinear3D;
+import com.danielbchapman.physics.toxiclibs.MotionEngine;
+import com.danielbchapman.physics.toxiclibs.SaveableParticleBehavior3D;
 import com.danielbchapman.physics.ui.PropertySlider;
 import com.danielbchapman.physics.ui.Spacer;
 import com.danielbchapman.physics.ui.TitleField;
 import com.danielbchapman.physics.ui.Vec3DEditor;
 import com.danielbchapman.utility.FileUtil;
 import com.danielbchapman.utility.UiUtility;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class EnvironmentTools2017 extends JFrame
 {
@@ -47,14 +55,19 @@ public class EnvironmentTools2017 extends JFrame
   }
   
   public final static String ENVIRONMENT_FOLDER = "environment";
-  public MotionEngine engine;
+  @Getter
+  @Setter
+  public Motion motion;
+  @Getter
+  @Setter
+  public PhysicsScene scene;
   
-  BehaviorSlider<HomeBehavior3D> homeForce;
-  BehaviorSlider<HomeBehavior3D> homeMax;
-  BehaviorSlider<HomeBehaviorLinear3D> homeLinear;
-  BehaviorSlider<HomeBehaviorLinear3D> homeLinearMax;
-  BehaviorSlider<AngularGravityBehavior3D> gravity;
-  PropertySlider<MotionEngine> dragSlider;
+  BehaviorSlider2017<HomeBehavior3D> homeForce;
+  BehaviorSlider2017<HomeBehavior3D> homeMax;
+  BehaviorSlider2017<HomeBehaviorLinear3D> homeLinear;
+  BehaviorSlider2017<HomeBehaviorLinear3D> homeLinearMax;
+  BehaviorSlider2017<AngularGravityBehavior3D> gravity;
+  PropertySlider<PhysicsScene> dragSlider;
   Vec3DEditor<AngularGravityBehavior3D> gravityVector;
   
   JButton read;
@@ -71,9 +84,22 @@ public class EnvironmentTools2017 extends JFrame
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
   
-  public EnvironmentTools2017(MotionEngine engine)
+  public EnvironmentTools2017(Motion motion)
   {
-    this.engine = engine;
+    this.motion = motion;
+    Scene scene = motion.getCurrentScene();
+    if(scene != null && (scene instanceof PhysicsScene))
+    {
+      this.scene = (PhysicsScene) scene;
+      System.out.println("SCENE IS VALID");
+    }
+    else
+    {
+      warn("This scene is not a PhysicsScene", "No editor available."); 
+      this.dispose();
+      return;
+    }
+     
     read = new JButton("Read Scene");
     hide = new JButton("Hide");
     save = new JButton("Save");
@@ -83,8 +109,9 @@ public class EnvironmentTools2017 extends JFrame
     save.addActionListener((x)->{ attemptSave();});
     open.addActionListener((x)->{ loadGlobal();});;
     
+    System.out.println("SETTING FORCES");
     //Home
-    homeForce = new BehaviorSlider<HomeBehavior3D>(
+    homeForce = new BehaviorSlider2017<HomeBehavior3D>(
         this, "Home Euclidian Force", 
         0, 
         10000,
@@ -96,7 +123,8 @@ public class EnvironmentTools2017 extends JFrame
         );
     
     //Home
-    homeMax = new BehaviorSlider<>(
+
+    homeMax = new BehaviorSlider2017<>(
         this, "Home Euclidian Max", 
         0, 
         10000,
@@ -108,7 +136,7 @@ public class EnvironmentTools2017 extends JFrame
         (b, s)->{s.set(b.vars.maxForce);}
         );
     
-    homeLinear = new BehaviorSlider<>(
+    homeLinear = new BehaviorSlider2017<>(
         this, "Home Linear Easing", 
         0, 
         10000,
@@ -119,7 +147,7 @@ public class EnvironmentTools2017 extends JFrame
         true
         );
     
-    homeLinearMax = new BehaviorSlider<>(
+    homeLinearMax = new BehaviorSlider2017<>(
         this, "Home Linear Max", 
         0, 
         10000,
@@ -129,7 +157,7 @@ public class EnvironmentTools2017 extends JFrame
         (b, s)->{s.set(b.vars.maxForce);}
         );
     
-    gravity = new BehaviorSlider<AngularGravityBehavior3D>(
+    gravity = new BehaviorSlider2017<AngularGravityBehavior3D>(
         this, "Angular Gravity", 
         0, 
         10000,
@@ -153,23 +181,23 @@ public class EnvironmentTools2017 extends JFrame
         (o)->{return o.getForce().copy();}
         );
     
-    dragSlider = new PropertySlider<MotionEngine>(
+    dragSlider = new PropertySlider<PhysicsScene>(
         "Drag", 
         0, 
         10000,
         10000f,
-        Actions.engine, 
-        (e, f)->{
-          e.getPhysics().setDrag(f);
+        this.scene, 
+        (s, f)->{;
+          s.getPhysics().setDrag(f);
         },
         (s)->
         {
           return s.getPhysics().getDrag();
         }
-        );  
+    );  
     
     setPreferredSize(new Dimension(400, 650));
-    setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     int i = 0;
     setLayout(new GridBagLayout());
     place(new TitleField("FORCES"), i++);
@@ -201,23 +229,26 @@ public class EnvironmentTools2017 extends JFrame
     add(group, ggbc);
     add(new JPanel(), UiUtility.getFillBoth(0, ++i));//Push up
     
+    System.out.println("READ");
     read();
-    pack();
+    System.out.println("PACK");
+    //pack();
     
-    addFocusListener(new FocusListener(){
-
-      @Override
-      public void focusGained(FocusEvent e)
-      {
-        read();
-      }
-
-      @Override
-      public void focusLost(FocusEvent e)
-      {
-      }
-    }
-    );
+    System.out.println("Focus Listeners");
+//    addFocusListener(new FocusListener(){
+//
+//      @Override
+//      public void focusGained(FocusEvent e)
+//      {
+//        read();
+//      }
+//
+//      @Override
+//      public void focusLost(FocusEvent e)
+//      {
+//      }
+//    }
+//    );
   }
   
   /**
@@ -225,7 +256,7 @@ public class EnvironmentTools2017 extends JFrame
    */
   public void read()
   {
-    if(engine == null)
+    if(motion == null)
       return;
     
     pullData();
@@ -390,5 +421,15 @@ public class EnvironmentTools2017 extends JFrame
     }
     
     return true;
+  }
+  
+  /**
+   * @param title
+   * @param message  
+   * 
+   */
+  private void warn(String title, String message)
+  {
+    JOptionPane.showMessageDialog(this, message, title, JOptionPane.WARNING_MESSAGE);
   }
 }

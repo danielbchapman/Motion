@@ -12,12 +12,13 @@ import java.util.function.Consumer;
 
 import com.danielbchapman.code.Pair;
 import com.danielbchapman.motion.tools.MaskMakerScene;
-import com.danielbchapman.physics.toxiclibs.EnvironmentTools;
 import com.danielbchapman.physics.toxiclibs.IGraphicShare;
 import com.danielbchapman.physics.toxiclibs.Util;
 import com.danielbchapman.text.Safe;
 import com.sun.jna.Platform;
 
+import lombok.Getter;
+import lombok.Setter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -201,6 +202,8 @@ public class Motion extends PApplet
   
   //Data Structures
   private HashMap<KeyCombo, BiConsumer<Motion, Scene>> keyMap = new HashMap<>();
+  @Getter
+  @Setter
   private Scene currentScene = null;
   
   private ArrayList<Scene> scenes = new ArrayList<>();
@@ -1070,7 +1073,31 @@ public class Motion extends PApplet
   
   public void openEnvironmentUi()
   {
-    
+    if(environmentUi == null)
+    {
+      new Thread(()->{
+        environmentUi = new EnvironmentTools2017(this);
+        println("UI->" + environmentUi);
+        try
+        {
+          Thread.sleep(500);
+        }
+        catch (InterruptedException e)
+        {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+        environmentUi.pack();
+        environmentUi.setVisible(true);
+        println("UI=>" + environmentUi);          
+      }).start();
+    }
+    else if(!environmentUi.isVisible())
+    {
+      environmentUi.dispose();
+      environmentUi = null;
+      openEnvironmentUi();
+    }
   }
   
   public void openBrushUi()
