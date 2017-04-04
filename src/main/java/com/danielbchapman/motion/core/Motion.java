@@ -36,6 +36,9 @@ import shows.oz.Melting;
 import shows.oz.PoppyField;
 import shows.oz.PoppyFieldSnow;
 import shows.oz.Tornado;
+import shows.oz.WitchSmokeBlack;
+import shows.oz.WitchSmokeGreen;
+import shows.oz.WitchSmokeRed;
 import shows.test.TestBrushScene;
 import shows.test.TestEllipseBrush;
 import shows.test.TestExplodeBrush;
@@ -557,11 +560,15 @@ public class Motion extends PApplet
 
     // Add Wizard of Oz
     prep.accept(new LeafWind());
+    prep.accept(new WitchSmokeGreen());
+    prep.accept(new WitchSmokeRed());
+    prep.accept(new WitchSmokeBlack());
     prep.accept(new Melting());
     prep.accept(new PoppyField());
     prep.accept(new PoppyFieldSnow());
     prep.accept(new Tornado());
     prep.accept(new BirchLeaves());
+
 
     prep.accept(new TestBrushScene());
     prep.accept(new TestFluidScene());
