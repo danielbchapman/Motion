@@ -11,6 +11,7 @@ import com.danielbchapman.physics.toxiclibs.Actions;
 
 import processing.core.PGraphics;
 import processing.core.PShape;
+import shows.test.PlaybackCue;
 import shows.test.SimpleWindBehavior;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
@@ -28,10 +29,11 @@ public class AppleOutWind extends PhysicsScene
   ArrayList<LeafEmitterGreen> rightLeaves = new ArrayList<>();
 
   SimpleWindBehavior wind = new SimpleWindBehavior(new Vec3D(-0.05f, 0, 0));
-  
+  PlaybackCue flutter;
   @Override
   public void initialize(Motion motion)
   {
+    flutter = new PlaybackCue("captures/snag-wind-going-left", "brushes/minimal-wind-affect", "Flutter the Wind", motion.width, motion.height, 0, 0);
     int life = 10000;
     physics = new VerletPhysics3D();
     physics.setDrag(0.02f);
@@ -108,11 +110,14 @@ public class AppleOutWind extends PhysicsScene
   
   int cycle = 0;
   
+
   @Override
   public void go(Motion motion)
   {
-    Log.debug("Leaf Wind Go " + cycle);
-    cycle++;
+    if(flutter != null)
+    {
+      motion.runPlayback(flutter.name, flutter.actions, flutter.brush);
+    }
   }
   @Override
   public void applyBrush(MotionBrush brush, PGraphics g, MotionMouseEvent point)

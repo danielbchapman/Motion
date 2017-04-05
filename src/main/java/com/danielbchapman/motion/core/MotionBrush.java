@@ -4,7 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 import com.danielbchapman.physics.toxiclibs.PersistentVariables;
+import com.danielbchapman.utility.FileUtil;
 
 import lombok.Data;
 import lombok.Getter;
@@ -50,6 +52,40 @@ public abstract class MotionBrush implements ICloneable<MotionBrush>, ISaveable<
     FIELD_NAMES = Collections.unmodifiableMap(m);
   }
   
+  @SuppressWarnings("unchecked")
+  public static <T extends MotionBrush> MotionBrush loadFromFile(String file)
+  {
+    String data = FileUtil.readFile(file);
+    if(data == null)
+    {
+      System.out.println("Unabel to load behavior with null data: ");
+      return null;
+    }
+    Class<T> clazz = null;
+    String[] lines = data.split("\n");
+    
+    if(lines.length < 2)
+      throw new RuntimeException("Unable to load this data, there is not enough information");
+    
+    String className = lines[0].trim();
+    PersistentVariables vars = PersistentVariables.fromLine(lines[1]);
+//    HashMap<String, String> names = new HashMap<String, String>();
+    
+    try
+    {
+      clazz = (Class<T>) MotionBrush.class.getClassLoader().loadClass(className);
+      T instance = clazz.newInstance();
+      instance.vars = vars;
+      System.out.println("Returing instance! " + instance);
+      return instance;
+    }
+    catch (InstantiationException | IllegalAccessException | ClassNotFoundException e)
+    {
+      e.printStackTrace();
+      return null;
+    }
+
+  }
   @Getter
   @Setter
   public PersistentVariables vars = new PersistentVariables();

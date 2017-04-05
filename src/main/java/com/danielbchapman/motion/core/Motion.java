@@ -1262,6 +1262,17 @@ public class Motion extends PApplet
     Log.info(pb);
   }
 
+  public void runPlayback(String name, ArrayList<RecordAction2017> actions, MotionBrush brush)
+  {
+    brush = brush.clone();
+    int color = PLAYBACK_COLORS[++PLAYBACK_COLOR_INDEX % PLAYBACK_COLORS.length];
+    brush.setSystem(++PLAYBACK_SYSTEM % PLAYBACK_SYSTEM_RESET);
+    Playback2017 pb = Recorder2017.playback(name, actions, this, brush);
+    pb.setDebugColor(color);
+    playbacks.add(pb);
+    Log.info("RUNNING PLAYBACK PLAYBACK ADDED [" + name + "]");
+    Log.info(pb);
+  }
   /**
    * A hook that allows an action to be "Played" on the screen
    * @param action the action to apply
