@@ -30,6 +30,7 @@ import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PJOGL;
+import shows.oz.AppleOutWind;
 import shows.oz.BirchLeaves;
 import shows.oz.LeafWind;
 import shows.oz.Melting;
@@ -208,6 +209,8 @@ public class Motion extends PApplet
   @Getter
   @Setter
   private Scene currentScene = null;
+  
+  private Scene nextScene = null;
 
   private ArrayList<Scene> scenes = new ArrayList<>();
   private int sceneIndex = -1;
@@ -560,6 +563,7 @@ public class Motion extends PApplet
 
     // Add Wizard of Oz
     prep.accept(new LeafWind());
+    prep.accept(new AppleOutWind());
     prep.accept(new WitchSmokeGreen());
     prep.accept(new WitchSmokeRed());
     prep.accept(new WitchSmokeBlack());
@@ -1024,6 +1028,11 @@ public class Motion extends PApplet
       clearBackgrounds = false;
   }
 
+  private void prepScene(Scene next)
+  {
+    this.nextScene = next;
+  }
+  
   public void advanceScene()
   {
     sceneIndex++;
