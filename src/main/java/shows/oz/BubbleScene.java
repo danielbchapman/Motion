@@ -46,7 +46,7 @@ public class BubbleScene extends PhysicsScene
     for(int i = -2; i < Motion.WIDTH / 50; i++)
     {
       Vec3D wind = new Vec3D(0, 0, 0);
-      Vec3D pos = new Vec3D(spacing * i, 100, 0);
+      Vec3D pos = new Vec3D(spacing * i, -100, 0);
       BubbleEmitter e = new BubbleEmitter(motion, physics, pos, wind, lifeSpan, rate, 2f, 100);  
       e.physics = this.physics;
       topLeaves.add(e);      
@@ -56,7 +56,7 @@ public class BubbleScene extends PhysicsScene
     for(int i = 0; i < heightCells; i++)
     {
       Vec3D wind = new Vec3D(-1, 0, 0);
-      Vec3D pos = new Vec3D(100, i * spacing, 0);
+      Vec3D pos = new Vec3D(-100, i * spacing, 0);
       BubbleEmitter e = new BubbleEmitter(motion, physics, pos, wind, lifeSpan, rate, 2f, 100);  
       e.physics = this.physics;
       leftLeaves.add(e);
@@ -66,7 +66,7 @@ public class BubbleScene extends PhysicsScene
     for(int i = 0; i < heightCells; i++)
     {
       Vec3D wind = new Vec3D(-1, 0, 0);
-      Vec3D pos = new Vec3D(Motion.WIDTH - 100, i * spacing, 0);
+      Vec3D pos = new Vec3D(Motion.WIDTH + 100, i * spacing, 0);
       BubbleEmitter e = new BubbleEmitter(motion, physics, pos, wind, lifeSpan, rate, 2f, 100);  
       e.physics = this.physics;
       rightLeaves.add(e);

@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.apache.logging.log4j.core.jackson.Log4jStackTraceElementDeserializer;
-
 import com.danielbchapman.code.Pair;
 import com.danielbchapman.motion.tools.MaskMakerScene;
 import com.danielbchapman.physics.toxiclibs.IGraphicShare;
@@ -38,9 +36,12 @@ import shows.oz.Melting;
 import shows.oz.PoppyField;
 import shows.oz.PoppyFieldSnow;
 import shows.oz.Tornado;
+import shows.oz.WitchEmeraldFlyby;
+import shows.oz.WitchMelting;
 import shows.oz.WitchSmokeBlack;
 import shows.oz.WitchSmokeGreen;
 import shows.oz.WitchSmokeRed;
+import shows.oz.WitchSpellCenter;
 import shows.test.TestBrushScene;
 import shows.test.TestEllipseBrush;
 import shows.test.TestExplodeBrush;
@@ -182,13 +183,14 @@ public class Motion extends PApplet
    * The context displayed in the GUI
    */
   private PGraphics core;
-  private boolean overlayActive = true;
+  private boolean overlayActive = false;
+  private boolean debugActive = false;
   private PGraphics overlay;
   private PGraphics overlayPaths;
   private HashMap<Integer, Vec3D> overlayLastPoint = new HashMap<>();
   private boolean clearPaths = false;
   private boolean clearBackgrounds = false;
-  private boolean debugActive = true;
+
   private PGraphics debug;
 
   // Editor Preview
@@ -563,6 +565,9 @@ public class Motion extends PApplet
     };
 
     // Add Wizard of Oz
+    prep.accept(new WitchSpellCenter());
+    prep.accept(new WitchMelting());
+    prep.accept(new WitchEmeraldFlyby());
     prep.accept(new LeafWind());
     prep.accept(new AppleOutWind());
     prep.accept(new BubbleScene());
@@ -574,6 +579,7 @@ public class Motion extends PApplet
     prep.accept(new PoppyFieldSnow());
     prep.accept(new Tornado());
     prep.accept(new BirchLeaves());
+    
 
 
     prep.accept(new TestBrushScene());
@@ -1058,7 +1064,7 @@ public class Motion extends PApplet
 
   public void advanceSceneTo(String name)
   {
-    Log.debug("[advanceSceneTo] " + name);
+    Log.info("[advanceSceneTo] " + name);
     if (name.equalsIgnoreCase("rest"))
     {
       rest();
@@ -1124,7 +1130,7 @@ public class Motion extends PApplet
     {
       currentScene.shutdown();
       currentScene.initialized = false;
-      currentScene = null;
+      currentScene = new RestScene();
     }
   }
 

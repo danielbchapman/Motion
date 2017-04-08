@@ -21,6 +21,7 @@ public class LeafWind extends PhysicsScene
   boolean left = true;
   boolean right = false;
   boolean top = true;
+  float zBase = 400;
   ArrayList<LeafEmitter> topLeaves = new ArrayList<>();
   ArrayList<LeafEmitter> leftLeaves = new ArrayList<>();
   ArrayList<LeafEmitter> rightLeaves = new ArrayList<>();
@@ -43,7 +44,7 @@ public class LeafWind extends PhysicsScene
     for(int i = -2; i < Motion.WIDTH / 50; i++)
     {
       Vec3D wind = new Vec3D(0, 0, 0);
-      Vec3D pos = new Vec3D(spacing * i, 100, 0);
+      Vec3D pos = new Vec3D(spacing * i, -100, zBase);
       LeafEmitter e = new LeafEmitter(motion, physics, pos, wind, 5000, 100, 2f, 100);  
       e.physics = this.physics;
       topLeaves.add(e);      
@@ -53,7 +54,7 @@ public class LeafWind extends PhysicsScene
     for(int i = 0; i < heightCells; i++)
     {
       Vec3D wind = new Vec3D(-1, 0, 0);
-      Vec3D pos = new Vec3D(100, i * spacing, 0);
+      Vec3D pos = new Vec3D(-100, i * spacing, zBase);
       LeafEmitter e = new LeafEmitter(motion, physics, pos, wind, 20000, 100, 2f, 100);  
       e.physics = this.physics;
       leftLeaves.add(e);
@@ -63,7 +64,7 @@ public class LeafWind extends PhysicsScene
     for(int i = 0; i < heightCells; i++)
     {
       Vec3D wind = new Vec3D(-1, 0, 0);
-      Vec3D pos = new Vec3D(Motion.WIDTH - 100, i * spacing, 0);
+      Vec3D pos = new Vec3D(Motion.WIDTH + 100, i * spacing, zBase);
       LeafEmitter e = new LeafEmitter(motion, physics, pos, wind, 20000, 100, 2f, 100);  
       e.physics = this.physics;
       rightLeaves.add(e);
