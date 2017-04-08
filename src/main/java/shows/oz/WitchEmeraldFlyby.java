@@ -36,10 +36,7 @@ public class WitchEmeraldFlyby extends BaseScene
   public void initialize(Motion motion)
   { 
     events = Recorder2017.load("captures/WickedWitchEmerald", motion.WIDTH, motion.HEIGHT, 0, 0);
-    testKeys.put(new KeyCombo(' '), (m)->{
-      motion.println("This calls the outer motion on go and is this->" + WitchEmeraldFlyby.this);
-    } );
-    
+   
     DwPixelFlow context = new DwPixelFlow(motion);
     fluid = new DwFluid2D(context, motion.width, motion.height, 1);
     fluid.param.dissipation_velocity = .7f;

@@ -118,4 +118,20 @@ public class PoppyField extends PhysicsScene
 //      System.out.println("applying brush");
 //    }
   }
+  
+  @Override
+  public void go(Motion motion)
+  {
+    System.out.println("Snow Start");
+    long time = System.currentTimeMillis();
+    topSprites.forEach(p -> {
+      p.startSnow(time);
+    });
+    leftSprites.forEach(p -> {
+      p.startSnow(time);
+    });
+    rightSprites.forEach(p -> {
+      p.startSnow(time);
+    });
+  }
 }

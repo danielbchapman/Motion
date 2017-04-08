@@ -34,9 +34,6 @@ public class WitchSmokeGreen extends BaseScene
   @Override
   public void initialize(Motion motion)
   { 
-    testKeys.put(new KeyCombo(' '), (m)->{
-      motion.println("This calls the outer motion on go and is this->" + WitchSmokeGreen.this);
-    } );
     
     DwPixelFlow context = new DwPixelFlow(motion);
     fluid = new DwFluid2D(context, motion.width, motion.height, 1);

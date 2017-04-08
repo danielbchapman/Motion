@@ -12,6 +12,7 @@ public class Poppy extends Point
   int image = -1;
   int base = 12;
   int rand = 32;
+  public boolean isSnow = false;
   
   public Poppy()
   {

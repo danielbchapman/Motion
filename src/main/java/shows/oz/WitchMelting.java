@@ -36,9 +36,6 @@ public class WitchMelting extends BaseScene
   public void initialize(Motion motion)
   { 
     events = Recorder2017.load("captures/witch-melt-layers", motion.WIDTH, motion.HEIGHT, 0, 0);
-    testKeys.put(new KeyCombo(' '), (m)->{
-      motion.println("This calls the outer motion on go and is this->" + WitchMelting.this);
-    } );
     
     DwPixelFlow context = new DwPixelFlow(motion);
     fluid = new DwFluid2D(context, motion.width, motion.height, 1);
