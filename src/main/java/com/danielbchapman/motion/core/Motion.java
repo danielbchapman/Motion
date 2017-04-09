@@ -31,7 +31,9 @@ import processing.opengl.PJOGL;
 import shows.oz.AppleOutWind;
 import shows.oz.BirchLeaves;
 import shows.oz.BubbleScene;
+import shows.oz.EmeraldEndWind;
 import shows.oz.LeafWind;
+import shows.oz.LionLeaves;
 import shows.oz.Melting;
 import shows.oz.PoppyField;
 import shows.oz.PoppyFieldSnow;
@@ -39,6 +41,7 @@ import shows.oz.Tornado;
 import shows.oz.WitchEmeraldFlyby;
 import shows.oz.WitchMelting;
 import shows.oz.WitchSmokeBlack;
+import shows.oz.WitchSmokeForrest;
 import shows.oz.WitchSmokeGreen;
 import shows.oz.WitchSmokeRed;
 import shows.oz.WitchSpellCenter;
@@ -566,10 +569,13 @@ public class Motion extends PApplet
 
     // Add Wizard of Oz
     prep.accept(new WitchSpellCenter());
+    prep.accept(new LionLeaves());
+    prep.accept(new WitchSmokeForrest());
     prep.accept(new WitchMelting());
     prep.accept(new WitchEmeraldFlyby());
     prep.accept(new LeafWind());
     prep.accept(new AppleOutWind());
+    prep.accept(new EmeraldEndWind());
     prep.accept(new BubbleScene());
     prep.accept(new WitchSmokeGreen());
     prep.accept(new WitchSmokeRed());

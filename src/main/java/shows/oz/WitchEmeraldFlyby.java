@@ -31,11 +31,13 @@ public class WitchEmeraldFlyby extends BaseScene
     return true;
   }
   
-  ArrayList<RecordAction2017> events;
+  ArrayList<RecordAction2017> first;
+  ArrayList<RecordAction2017> second;
   @Override
   public void initialize(Motion motion)
   { 
-    events = Recorder2017.load("captures/WickedWitchEmerald", motion.WIDTH, motion.HEIGHT, 0, 0);
+    first = Recorder2017.load("captures/WickedWitchEmerald", motion.WIDTH, motion.HEIGHT, 0, 0);
+    second = Recorder2017.load("captures/flyby2", motion.WIDTH, motion.HEIGHT, 0, 0);
    
     DwPixelFlow context = new DwPixelFlow(motion);
     fluid = new DwFluid2D(context, motion.width, motion.height, 1);
@@ -95,10 +97,19 @@ public class WitchEmeraldFlyby extends BaseScene
     
   }
 
+  int count = 0;
   @Override
   public void go(Motion motion)
   {
-    motion.runPlayback("witch-flyby", events, new MouseBrush());
+    if(count < 2){
+      motion.runPlayback("witch-flyby", first, new MouseBrush());
+      count++;
+    } else if (count < 4){
+      motion.runPlayback("witch-flyby-2", second, new MouseBrush());
+    } else {
+      motion.runPlayback("witch-flyby", first, new MouseBrush());
+      count= -1;
+    }
   }
   
 
