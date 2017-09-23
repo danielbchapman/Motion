@@ -211,14 +211,21 @@ public class Motion extends PApplet
   private Recorder2017.RecordUI recorderUi;
   
   //Syphon and Spout
+  private PGraphics pgrTextureClient;
+  private Object spoutReceiver;
+  private boolean enableTextureServer;
+  private boolean enableTextureClient;
   private Object spout;
-  private boolean enableSpout;
-  IGraphicShare syphonOrSpout;
+  private Object spoutClient;
+  private IGraphicShare syphonServer;
+  private IGraphicShare syphonClient;
   private Method shareInitialize;
   private Method shareCleanup;
   private Method shareDraw;
   private Class<?> spoutClass;
-  private Method spoutSend;
+  private Method spoutSendTexture;
+  private Method spoutReceiveTexture;
+  
   
   public Motion()
   {
@@ -478,7 +485,7 @@ public class Motion extends PApplet
     
     try
     {
-      enableSpoutBroadcast(core);
+      enableTextureBroadcast(core);
     }
     catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | IllegalAccessException | ClassNotFoundException | InstantiationException e)
     {
@@ -639,7 +646,12 @@ public class Motion extends PApplet
       mouseEvents.clear();
     }
   }
-  
+  public void readTextureShare(PGraphics pg) {
+    if (Platform.isWindows() || Platform.isWindowsCE() && enableTextureClient) 
+    {
+      //spoutReceiveTexture
+    }
+  }
   @Override
   public void draw()
   {
@@ -884,7 +896,7 @@ public class Motion extends PApplet
     
     core.endDraw();
     
-    if (enableSpout)
+    if (enableTextureServer)
     {
       if (Platform.isWindows() || Platform.isWindowsCE())
       {
@@ -893,7 +905,7 @@ public class Motion extends PApplet
           try
           {
             Log.debug("invoking spout");
-            spoutSend.invoke(spout);
+            spoutSendTexture.invoke(spout);
           }
           catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
           {
@@ -913,9 +925,9 @@ public class Motion extends PApplet
       else
         if (Platform.isMac())
         {
-          if (syphonOrSpout != null)
+          if (syphonServer != null)
           {
-            syphonOrSpout.send(core);
+            syphonServer.send(core);
           }
         }
 
@@ -1103,12 +1115,69 @@ public class Motion extends PApplet
     clearPaths = true;
   }
 
+  /**
+   * Enable a receiver for Motion. If windows
+   * <JavaDoc>
+   * @param name the Name of this sender, Spout will default to first if not found.
+   * @param gl The PGraphics to use for this texture  
+   * @throws ClassNotFoundException 
+   * @throws SecurityException 
+   * @throws NoSuchMethodException 
+   * @throws InvocationTargetException 
+   * @throws IllegalArgumentException 
+   * @throws IllegalAccessException 
+   * 
+   */
+  public void enableSpoutOrSyphonReceiver(String name, PGraphics gl) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException 
+  {
+    try 
+    {
+      if (Platform.isMac() && syphonClient == null && !enableTextureClient) {
+        //MAC CODE TO READ SYPHON
+      } else if (Platform.isWindows() || Platform.isWindowsCE() && !enableTextureClient) {
+        pgrTextureClient = createGraphics(width, height); //Use whatever geometry you want here
+        
+        //WINDOWS CODE TO 
+        Class<?> spoutProvider = Class.forName("SpoutProvider");
+        Method method = spoutProvider.getMethod("getInstance", PGraphics.class);
+
+        spoutClient = method.invoke(null, gl);  
+        
+        //Enabled
+        enableTextureClient = true;
+      }  
+    }
+    catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException t) 
+    {
+      throw t;
+    }
+  }
   
-  public void enableSpoutBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException, ClassNotFoundException, InstantiationException
+  private void setupSpoutClassAndMethods() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException 
+  {
+    if (spoutClass == null)
+    {
+      try
+      {
+        spoutClass = Class.forName("SpoutImplementation");
+        spoutSendTexture = spoutClass.getMethod("sendTexture");// spoutClass.getMethod("sendTexture2", PGraphics3D.class);
+        spoutReceiveTexture = spoutClass.getMethod("receiveTexture", PImage.class);// spoutClass.getMethod("sendTexture2", PGraphics3D.class);
+      }
+      catch (ClassNotFoundException e)
+      {
+        e.printStackTrace();
+      }
+    } 
+    else 
+    {
+      System.out.println("Spout is already initialized...");
+    }
+  }
+  public void enableTextureBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException, ClassNotFoundException, InstantiationException
   {
     try
     {
-      if (Platform.isMac() && syphonOrSpout == null && !enableSpout)
+      if (Platform.isMac() && syphonServer == null && !enableTextureServer)
       {
         // We do this to avoid native library initialization
         Class<?> syphonClass = Class.forName("com.danielbchapman.physics.toxiclibs.SyphonGraphicsShare");
@@ -1116,23 +1185,34 @@ public class Motion extends PApplet
         shareCleanup = syphonClass.getMethod("cleanup");
         shareDraw = syphonClass.getMethod("send", PGraphics.class);
 
-        syphonOrSpout = (IGraphicShare) syphonClass.newInstance();
-        shareInitialize.invoke(syphonOrSpout, this);
-        enableSpout = true;
+        syphonServer = (IGraphicShare) syphonClass.newInstance();
+        shareInitialize.invoke(syphonServer, this);
+        enableTextureServer = true;
         return;
       }
 
       if (Platform.isWindows() || Platform.isWindowsCE())
-        enableSpout = true;
+        System.out.println("Spout ouput here...");
+        enableTextureServer = true;
+        setupSpoutClassAndMethods();
+        
+        if (spout != null)
+        {
+          if (spoutClass == null)
+          {
+            Method init = spoutClass.getMethod("initSender", String.class, int.class, int.class);
+            init.invoke(spout, "Motion", this.displayWidth, this.displayHeight);              
+          }
+        }
     }
     catch (Throwable t)
     {
       t.printStackTrace();
-      enableSpout = false;
+      enableTextureServer = false;
       return;
     }
 
-    if (spout == null && enableSpout)
+    if (spout == null && enableTextureServer)
     {
       try
       {
@@ -1140,31 +1220,18 @@ public class Motion extends PApplet
         Method method = spoutProvider.getMethod("getInstance", PGraphics.class);
 
         spout = method.invoke(null, gl);
-
+        
+        spoutSendTexture = spoutClass.getMethod("sendTexture");// spoutClass.getMethod("sendTexture2", PGraphics3D.class);
+        Method init = spoutClass.getMethod("initSender", String.class, int.class, int.class);
+        init.invoke(spout, "Motion", this.displayWidth, this.displayHeight);        
+        Log.severe("Initializing Spout " + spout);
       }
       catch (ClassNotFoundException | IllegalAccessException e)
       {
+        e.printStackTrace();
+        Log.severe(e.toString());
         Log.severe("Unable to initialize Spout\r\n", e);
-        enableSpout = false;
-      }
-
-      if (spout != null)
-      {
-        if (spoutClass == null)
-        {
-          try
-          {
-            spoutClass = Class.forName("SpoutImplementation");
-            spoutSend = spoutClass.getMethod("sendTexture");// spoutClass.getMethod("sendTexture2", PGraphics3D.class);
-            Method init = spoutClass.getMethod("initSender", String.class, int.class, int.class);
-            init.invoke(spout, "Motion", this.displayWidth, this.displayHeight);
-          }
-          catch (ClassNotFoundException e)
-          {
-            e.printStackTrace();
-          }
-        }
-
+        enableTextureServer = false;
       }
     }
   }
@@ -1173,19 +1240,19 @@ public class Motion extends PApplet
   {
     if (Platform.isMac())
     {
-      if (syphonOrSpout != null)
+      if (syphonServer != null)
       {
-        shareCleanup.invoke(syphonOrSpout);
+        shareCleanup.invoke(syphonServer);
         shareCleanup = null;
         shareDraw = null;
         shareInitialize = null;
-        syphonOrSpout = null;
+        syphonServer = null;
       }
 
-      enableSpout = false;
+      enableTextureServer = false;
       return;
     }
-    enableSpout = false;
+    enableTextureServer = false;
 
     Object spoutRef = spout;
     spout = null; // Clear the reference.
