@@ -548,7 +548,7 @@ public class Motion extends PApplet
 
     try
     {
-      enableSpoutBroadcast(core);
+      enableTextureBroadcast(core);
     }
     catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | IllegalAccessException | ClassNotFoundException | InstantiationException e)
     {
