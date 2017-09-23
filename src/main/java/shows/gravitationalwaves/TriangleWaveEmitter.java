@@ -1,11 +1,11 @@
 package shows.gravitationalwaves;
 
-import com.danielbchapman.physics.toxiclibs.AbstractEmitter;
+import com.danielbchapman.physics.toxiclibs.OLDAbstractEmitter;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
-public abstract class TriangleWaveEmitter extends AbstractEmitter<TriangleWave>
+public abstract class TriangleWaveEmitter extends OLDAbstractEmitter<TriangleWave>
 {
   public TriangleWaveEmitter(Vec3D position)
   {

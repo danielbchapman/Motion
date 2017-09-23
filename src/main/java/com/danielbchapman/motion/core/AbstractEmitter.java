@@ -1,8 +1,11 @@
-package com.danielbchapman.physics.toxiclibs;
+package com.danielbchapman.motion.core;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+
+import com.danielbchapman.physics.toxiclibs.PersistentVariables;
+import com.danielbchapman.physics.toxiclibs.Point;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,16 +13,17 @@ import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
-public abstract class Emitter<T extends Point>
+public abstract class AbstractEmitter<T extends Point>
 {
   protected PersistentVariables vars = new PersistentVariables();
   protected ArrayList<T> children = new ArrayList<>();
   protected Random rand = new Random();
   protected long lastTime = -1L;
   protected long nextDelta = -1L;
+  
   @Getter
   @Setter
-  public VerletPhysics3D physics = Actions.engine.getPhysics();
+  public VerletPhysics3D physics;
   
   /**
    * @param position
@@ -29,8 +33,9 @@ public abstract class Emitter<T extends Point>
    * @param randomVector
    * @param randomTime
    */
-  public Emitter(Vec3D position, Vec3D heading, int lifeSpan, int rate, float randomVector, int randomTime)
+  public AbstractEmitter(VerletPhysics3D physics, Vec3D position, Vec3D heading, int lifeSpan, int rate, float randomVector, int randomTime)
   {
+    this.physics = physics;
     vars.position = position;
     vars.force = heading;
     vars.userA = lifeSpan;
@@ -88,7 +93,7 @@ public abstract class Emitter<T extends Point>
       if(px != null)
         if(px.life < time - px.created)
         {
-          Actions.engine.getPhysics().removeParticle(px);
+          physics.removeParticle(px);
           it.remove();
         }
     }

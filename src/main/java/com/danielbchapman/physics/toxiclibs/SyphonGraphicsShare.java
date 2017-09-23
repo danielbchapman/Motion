@@ -22,9 +22,7 @@ public class SyphonGraphicsShare implements IGraphicShare
 	public synchronized void initialize(PApplet app)
 	{
 		Class<?> syphonServerClass = null;
-		//SyphonServer x = new SyphonServer(app, "Motion");
-		// I hate cross platform code!
-		// server = new SyphonServer(app, "Motion Syphon Server");
+
 		try
 		{
 			syphonServerClass = Class.forName("codeanticode.syphon.SyphonServer");

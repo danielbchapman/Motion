@@ -18,7 +18,7 @@ public class MobilologyThree extends Layer
   int gridY;
   int spacing;
   
-  ArrayList<Emitter<?>> emitters = new ArrayList<>();
+  ArrayList<OLDEmitter<?>> emitters = new ArrayList<>();
   ArrayList<Word> words = new ArrayList<>();
   ArrayList<String> data = new ArrayList<>();
   ArrayList<Word> toAdd = new ArrayList<>();
@@ -265,7 +265,7 @@ public class MobilologyThree extends Layer
     }
       
     g.textSize(size);
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
       e.draw(g);
     
     g.popMatrix();
@@ -297,7 +297,7 @@ public class MobilologyThree extends Layer
       }
           
     }
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
       e.update(System.currentTimeMillis());
     
     for(Word w : toAdd)

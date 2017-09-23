@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.physics.toxiclibs.PersistentVariables.Fields;
 import com.danielbchapman.physics.ui.CheckBoxProperty;
 import com.danielbchapman.physics.ui.PojoComboBox;
@@ -38,13 +39,13 @@ public class BrushEditor extends JFrame
 {
   public static final String BRUSH_FOLDER = "brushes";
   MotionInteractiveBehavior current;
-  MotionEngine engine;
+  MotionEngine motion;
   private int row = 0;
   private static final long serialVersionUID = 1L;
   
   public static void main(String ... args)
   {
-    BrushEditor be = new BrushEditor();
+    BrushEditor be = new BrushEditor(null);
     be.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     be.setVisible(true);
   }
@@ -76,8 +77,9 @@ public class BrushEditor extends JFrame
   PropertySlider<BrushEditor> maxForce;
   PropertySlider<BrushEditor> minForce;
 
-  public BrushEditor()
+  public BrushEditor(MotionEngine motionEngine)
   {
+    this.motion = motionEngine;
     setLayout(new GridBagLayout());
     setPreferredSize(new Dimension(400, 650));
     setSize(new Dimension(400, 650));
@@ -151,12 +153,8 @@ public class BrushEditor extends JFrame
     
     current = new ExplodeBehavior();
     populate(current);
-  }
-  
-  public BrushEditor(MotionEngine engine)
-  { 
-    this();
-    this.engine = engine;
+    
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
   }
 
   public void populate(MotionInteractiveBehavior behavior)

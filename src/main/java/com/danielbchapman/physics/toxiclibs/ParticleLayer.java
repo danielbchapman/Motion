@@ -11,7 +11,7 @@ public class ParticleLayer extends Layer
   int gridY;
   int spacing;
   String data = "This is the end of days";
-  ArrayList<Emitter<?>> emitters = new ArrayList<>();
+  ArrayList<OLDEmitter<?>> emitters = new ArrayList<>();
   public ParticleLayer()
   {
     for(int i = 0; i < 10; i++)
@@ -81,7 +81,7 @@ public class ParticleLayer extends Layer
     
     g.popMatrix();
     
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
       e.draw(g);
   }
 
@@ -93,7 +93,7 @@ public class ParticleLayer extends Layer
   @Override
   public void update()
   {
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
       e.update(System.currentTimeMillis());
   }
 }

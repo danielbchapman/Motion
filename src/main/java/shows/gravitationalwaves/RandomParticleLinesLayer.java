@@ -8,10 +8,10 @@ import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
 
 import com.danielbchapman.layers.BleedingLayer;
-import com.danielbchapman.physics.toxiclibs.AbstractEmitter;
+import com.danielbchapman.physics.toxiclibs.OLDAbstractEmitter;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Cue;
-import com.danielbchapman.physics.toxiclibs.Emitter;
+import com.danielbchapman.physics.toxiclibs.OLDEmitter;
 import com.danielbchapman.physics.toxiclibs.ExplodeBehaviorInverse;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
@@ -19,7 +19,7 @@ import com.danielbchapman.physics.toxiclibs.Point;
 
 public class RandomParticleLinesLayer extends BleedingLayer
 {
-  ArrayList<Emitter<Point>> emitters = new ArrayList<>();
+  ArrayList<OLDEmitter<Point>> emitters = new ArrayList<>();
   
   ArrayList<MotionInteractiveBehavior> behaviors = new ArrayList<>();
   
@@ -29,8 +29,8 @@ public class RandomParticleLinesLayer extends BleedingLayer
     behaviors.add(new ExplodeBehaviorInverse(new Vec3D(-1f, 0, 0), -50f));
     for(int i = 0; i < 14; i++)
     {
-      Emitter<Point> e = 
-          new Emitter<Point>(new Vec3D(i * 128, 400, 0), new Vec3D(-1, 0, 0), 25000, 200, 1f, 200)
+      OLDEmitter<Point> e = 
+          new OLDEmitter<Point>(new Vec3D(i * 128, 400, 0), new Vec3D(-1, 0, 0), 25000, 200, 1f, 200)
           {
             @Override
             public Point createPoint(float x, float y, float z, float w)
@@ -67,7 +67,7 @@ public class RandomParticleLinesLayer extends BleedingLayer
     g.stroke(255, 255, 255, 32);
     g.strokeWeight(3f);
     g.fill(255);
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
     {
       e.draw(g);
     }
@@ -84,7 +84,7 @@ public class RandomParticleLinesLayer extends BleedingLayer
   public void update()
   {
     long time = System.currentTimeMillis();
-    for(Emitter<?> e : emitters)
+    for(OLDEmitter<?> e : emitters)
       e.update(time);
     
     for(MotionInteractiveBehavior b : behaviors)

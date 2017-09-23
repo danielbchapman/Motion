@@ -9,6 +9,17 @@ public class PropertySlider<Source> extends FloatSlider
   private BiConsumer<Source, Float> onChange;
   private Function<Source, Float> get;
   private Source source;
+  
+  
+  /**
+   * @param label
+   * @param min
+   * @param max
+   * @param divisor
+   * @param source
+   * @param onChange
+   * @param get
+   */
   public PropertySlider(String label, int min, int max, float divisor, Source source, BiConsumer<Source, Float> onChange, Function<Source, Float> get)
   {
     this(label, min, max, divisor, source, onChange, get, false);

@@ -8,8 +8,8 @@ public class Main
 {
   public static void main(String ... args)
   {
-    Motion.WIDTH = 800;
-    Motion.HEIGHT = 600;
+    Motion.WIDTH = 1280;
+    Motion.HEIGHT = 768;
     try
     {
       Motion.PROPERTIES = Util.readProps("motion.ini", Motion.PROPERTIES);

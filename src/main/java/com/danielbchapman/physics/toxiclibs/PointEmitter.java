@@ -3,7 +3,7 @@ package com.danielbchapman.physics.toxiclibs;
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
-public class PointEmitter extends Emitter<Point>
+public class PointEmitter extends OLDEmitter<Point>
 {
   /**
    * @param position

@@ -5,7 +5,7 @@ import toxi.geom.Vec3D;
 
 import com.danielbchapman.artwork.Word;
 
-public class LetterEmitter extends Emitter<PointWrapper<Word>>
+public class LetterEmitter extends OLDEmitter<PointWrapper<Word>>
 {
 
   String[] text;

@@ -1,8 +1,16 @@
 package com.danielbchapman.motion.core;
 
-import com.google.gson.Gson;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
+import com.danielbchapman.physics.toxiclibs.PersistentVariables;
+import com.danielbchapman.utility.FileUtil;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import processing.core.PGraphics;
 
 
@@ -25,6 +33,63 @@ import processing.core.PGraphics;
 @Data
 public abstract class MotionBrush implements ICloneable<MotionBrush>, ISaveable<MotionBrush>
 {
+  static final Map<String, String> FIELD_NAMES;
+  static {
+    HashMap<String, String> m = new HashMap<>();
+    m.put(PersistentVariables.Fields.MAGNITUDE, "Magniture");
+    m.put(PersistentVariables.Fields.MAX_FORCE, "Max Force");
+    m.put(PersistentVariables.Fields.MIN_FORCE, "Min Force");
+    m.put(PersistentVariables.Fields.POS_X, "Position");
+    m.put(PersistentVariables.Fields.POS_Y, "Position");
+    m.put(PersistentVariables.Fields.POS_Z, "Position");
+    m.put(PersistentVariables.Fields.FOR_X, "Force");
+    m.put(PersistentVariables.Fields.FOR_Y, "Force");
+    m.put(PersistentVariables.Fields.FOR_Z, "Force");
+    m.put(PersistentVariables.Fields.USER_A, "UserA");
+    m.put(PersistentVariables.Fields.USER_B, "UserB");
+    m.put(PersistentVariables.Fields.USER_C, "UserC");
+    
+    FIELD_NAMES = Collections.unmodifiableMap(m);
+  }
+  
+  @SuppressWarnings("unchecked")
+  public static <T extends MotionBrush> MotionBrush loadFromFile(String file)
+  {
+    String data = FileUtil.readFile(file);
+    if(data == null)
+    {
+      System.out.println("Unabel to load behavior with null data: ");
+      return null;
+    }
+    Class<T> clazz = null;
+    String[] lines = data.split("\n");
+    
+    if(lines.length < 2)
+      throw new RuntimeException("Unable to load this data, there is not enough information");
+    
+    String className = lines[0].trim();
+    PersistentVariables vars = PersistentVariables.fromLine(lines[1]);
+//    HashMap<String, String> names = new HashMap<String, String>();
+    
+    try
+    {
+      clazz = (Class<T>) MotionBrush.class.getClassLoader().loadClass(className);
+      T instance = clazz.newInstance();
+      instance.vars = vars;
+      System.out.println("Returing instance! " + instance);
+      return instance;
+    }
+    catch (InstantiationException | IllegalAccessException | ClassNotFoundException e)
+    {
+      e.printStackTrace();
+      return null;
+    }
+
+  }
+  @Getter
+  @Setter
+  public PersistentVariables vars = new PersistentVariables();
+  
   //Vector Methods
   private boolean down;
   private int system = -1;
@@ -91,6 +156,32 @@ public abstract class MotionBrush implements ICloneable<MotionBrush>, ISaveable<
     copy.system = system;
     return copy;
   }
+  
+  /**
+   * <p>
+   * Returns a listing of all the field names in the order
+   * they are presented in ForceVariables.Fields so that
+   * </p>
+   * 
+   * <p>Returning null for a field indicates it should be hidden from the UI</p> 
+   * <p>Returning null for the map indicates everything should be displayed</p>
+   * @return a Map giving usable names.
+   * 
+   */
+  public Map<String, String> getFieldNames()
+  {
+    return FIELD_NAMES;
+  }
+  
+  /**
+   * @return the name for this class, null for the class name 
+   */
+  public String getName()
+  {
+    return this.getClass().getName();
+  }
+  
+  
 //  
 //  /* (non-Javadoc)
 //   * @see com.danielbchapman.motion.core.ISaveable#save()
