@@ -6,6 +6,7 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.opengl.PGraphics2D;
 
+import com.danielbchapman.code.Pair;
 import com.danielbchapman.motion.core.BaseScene;
 import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
@@ -38,7 +39,7 @@ public class LiquidTextureScene extends BaseScene
   float vScale = 15;
   
   //Event Handling (Motion)
-  ArrayList<MotionMouseEvent> eventsSinceUpdate = new ArrayList<>();
+  ArrayList<Pair<MotionMouseEvent, MotionBrush>> eventsSinceUpdate = new ArrayList<>();
   
   @Override
   public void initialize(Motion motion)
@@ -137,8 +138,11 @@ public class LiquidTextureScene extends BaseScene
     // this is called during the fluid-simulation update step.
     public void update(DwFluid2D fluid) {
     
-      for(MotionMouseEvent mouse : eventsSinceUpdate) 
+      for(Pair<MotionMouseEvent, MotionBrush> event : eventsSinceUpdate) 
       {
+        MotionBrush brush = event.two;
+        MotionMouseEvent mouse = event.one;
+        
         System.out.println(mouse);
         float radius = 15;
         float px = mouse.x;
@@ -199,7 +203,7 @@ public class LiquidTextureScene extends BaseScene
   {
     if(brush.isDown())
     {
-      eventsSinceUpdate.add(point);
+      eventsSinceUpdate.add(new Pair<>(point, brush));
     }
     brush.applyBrush(g, point);
   }  
