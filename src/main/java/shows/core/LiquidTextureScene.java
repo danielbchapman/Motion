@@ -34,7 +34,7 @@ public class LiquidTextureScene extends BaseScene
   
   //Variables
   int gridScale = 1;
-  float vScale = 1;
+  float vScale = 15;
   
   //Event Handling (Motion)
   ArrayList<MotionMouseEvent> eventsSinceUpdate = new ArrayList<>();
@@ -86,6 +86,15 @@ public class LiquidTextureScene extends BaseScene
     eventsSinceUpdate.clear();
   }
 
+  @Override
+  public void debug(PGraphics g)
+  {
+    float y = 50;
+    g.text(String.format("dissipation_density:     %2f", fluid.param.dissipation_density), 50, y += 20);
+    g.text(String.format("dissipation_velocity:    %2f", fluid.param.dissipation_velocity), 50, y += 20);
+    g.text(String.format("dissipation_temperature: %2f", fluid.param.dissipation_temperature), 50, y += 20);
+    g.text(String.format("vScale:                  %2f", vScale), 110, y += 20);
+  }
   int count = 0;
   @Override
   public void draw(PGraphics g)
