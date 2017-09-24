@@ -1,3 +1,9 @@
+.....................................................................
+NOTE: Motion only uses the "core" library from processing Other inputs
+can be used but they are show specific. This enables it to be used 
+commercially if needed.
+.....................................................................
+
 All libraries are provided via the Processing 2 downloads. 
 Source code for processing can be found here:
 https://github.com/processing/processing
