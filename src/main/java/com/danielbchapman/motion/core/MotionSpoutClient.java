@@ -2,10 +2,8 @@ package com.danielbchapman.motion.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
 
-import com.danielbchapman.code.Pair;
-
+import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.opengl.PGraphicsOpenGL;
@@ -19,9 +17,9 @@ public class MotionSpoutClient extends MotionGraphicsClient
   Method closeReceiver;
   Method receiveTexture;
 
-  public MotionSpoutClient(PGraphics g, String appName, String serverName)
+  public MotionSpoutClient(PApplet app, PGraphics g, String appName, String serverName)
   {
-    super(g, appName, serverName);
+    super(app, g, appName, serverName);
     SPOUT = new PImage(g.width, g.height);
   }
 

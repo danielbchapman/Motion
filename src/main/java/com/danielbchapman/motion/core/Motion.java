@@ -1244,6 +1244,8 @@ public class Motion extends PApplet
         environmentUi.dispose();
         environmentUi = null;
         openEnvironmentUi();
+      } else {
+        environmentUi.setVisible(true);
       }
   }
 
@@ -1380,11 +1382,6 @@ public class Motion extends PApplet
   }
   
   public void initializeSyphon() 
-  {
-    
-  }
-  
-  public void enableTextureReceiver(String appName, String name) 
   {
     
   }

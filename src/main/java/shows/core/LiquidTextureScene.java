@@ -11,6 +11,7 @@ import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionGraphicsClient;
 import com.danielbchapman.motion.core.MotionMouseEvent;
+import com.sun.jna.Platform;
 import com.thomasdiewald.pixelflow.java.DwPixelFlow;
 import com.thomasdiewald.pixelflow.java.dwgl.DwGLSLProgram;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;
@@ -46,10 +47,11 @@ public class LiquidTextureScene extends BaseScene
     
     client = MotionGraphicsClient
         .CreateClient(
+            motion,
             //Explicitly link to an OpenGL context
             motion.createGraphics(motion.width, motion.height, PConstants.P3D), 
-            "motion", 
-            "Spout DX11 Sender");
+            Platform.isWindows() ? "motion" : "QLab", 
+            Platform.isWindows() ? "Spout DX11 Sender" : "TestSurface");
     
     fluidBuffer = (PGraphics2D) motion.createGraphics(motion.width, motion.height, PConstants.P2D);
     fluidBuffer.smooth(4);
@@ -93,7 +95,7 @@ public class LiquidTextureScene extends BaseScene
     g.text(String.format("dissipation_density:     %2f", fluid.param.dissipation_density), 50, y += 20);
     g.text(String.format("dissipation_velocity:    %2f", fluid.param.dissipation_velocity), 50, y += 20);
     g.text(String.format("dissipation_temperature: %2f", fluid.param.dissipation_temperature), 50, y += 20);
-    g.text(String.format("vScale:                  %2f", vScale), 110, y += 20);
+    g.text(String.format("vScale:                  %2f", vScale), 50, y += 20);
   }
   int count = 0;
   @Override

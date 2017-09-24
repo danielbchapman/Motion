@@ -16,6 +16,7 @@ public class TestGraphicsShare extends BaseScene
   {
     client = MotionGraphicsClient
         .CreateClient(
+            motion,
             //Explicitly link to an OpenGL context
             motion.createGraphics(motion.width, motion.height, PConstants.P3D), 
             "motion", 
