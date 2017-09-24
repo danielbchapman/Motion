@@ -29,6 +29,7 @@ import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PJOGL;
+import shows.core.LiquidTextureScene;
 import shows.oz.AppleOutWind;
 import shows.oz.BirchLeaves;
 import shows.oz.BubbleScene;
@@ -573,6 +574,7 @@ public class Motion extends PApplet
     
     //Development Scenes
     prep.accept(new TestGraphicsShare());
+    prep.accept(new LiquidTextureScene());
     
     
     // Add Wizard of Oz
