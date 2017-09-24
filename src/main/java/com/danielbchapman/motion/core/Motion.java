@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 import com.danielbchapman.code.Pair;
 import com.danielbchapman.motion.tools.MaskMakerScene;
 import com.danielbchapman.physics.toxiclibs.IGraphicShare;
+import com.danielbchapman.physics.toxiclibs.IGraphicsShareClient;
 import com.danielbchapman.physics.toxiclibs.Util;
 import com.danielbchapman.text.Safe;
 import com.danielbchapman.text.Text;
@@ -50,6 +51,7 @@ import shows.test.TestEllipseBrush;
 import shows.test.TestExplodeBrush;
 import shows.test.TestFalloffAttractorBrush;
 import shows.test.TestFluidScene;
+import shows.test.TestGraphicsShare;
 import shows.test.TestInverseExplodeBrush;
 import shows.test.TestVerletScene;
 import toxi.geom.Vec3D;
@@ -241,9 +243,11 @@ public class Motion extends PApplet
   private EnvironmentTools2017 environmentUi;
 
   // Syphon and Spout
-  private Object spout;
+  private Object spoutServer;
+  private Object spoutClient;
   private boolean enableSpout;
-  IGraphicShare syphonOrSpout;
+  IGraphicShare syphonServer;
+  IGraphicsShareClient syphonClient;
   private Method shareInitialize;
   private Method shareCleanup;
   private Method shareDraw;
@@ -566,7 +570,11 @@ public class Motion extends PApplet
       scenes.add(scene);
       Log.info(scene.getName());
     };
-
+    
+    //Development Scenes
+    prep.accept(new TestGraphicsShare());
+    
+    
     // Add Wizard of Oz
     prep.accept(new WitchSpellCenter());
     prep.accept(new LionLeaves());
@@ -587,7 +595,7 @@ public class Motion extends PApplet
     prep.accept(new BirchLeaves());
     
 
-
+    //Test Scenes
     prep.accept(new TestBrushScene());
     prep.accept(new TestFluidScene());
     prep.accept(new TestVerletScene());
@@ -999,12 +1007,12 @@ public class Motion extends PApplet
     {
       if (Platform.isWindows() || Platform.isWindowsCE())
       {
-        if (spout != null)
+        if (spoutServer != null)
         {
           try
           {
             Log.debug("invoking spout");
-            spoutSend.invoke(spout);
+            spoutSend.invoke(spoutServer);
           }
           catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
           {
@@ -1024,9 +1032,9 @@ public class Motion extends PApplet
       else
         if (Platform.isMac())
         {
-          if (syphonOrSpout != null)
+          if (syphonServer != null)
           {
-            syphonOrSpout.send(core);
+            syphonServer.send(core);
           }
         }
 
@@ -1278,6 +1286,21 @@ public class Motion extends PApplet
 
   public void runPlayback(String name, ArrayList<RecordAction2017> actions, MotionBrush brush)
   {
+    if (actions == null || brush == null)
+    {
+      String scene = this.currentScene == null ? "NULL" : currentScene.getName();
+      if (actions == null)
+      {
+        Log.severe("[" +scene + "] PLAYBACK FAILED ACTIONS ARE NULL");  
+      }
+      if (brush == null)
+      {
+        Log.severe("[" +scene + "] PLAYBACK FAILED BRUSH IS NULL");
+      }
+      
+      return;
+    }
+    
     brush = brush.clone();
     int color = PLAYBACK_COLORS[++PLAYBACK_COLOR_INDEX % PLAYBACK_COLORS.length];
     brush.setSystem(++PLAYBACK_SYSTEM % PLAYBACK_SYSTEM_RESET);
@@ -1349,12 +1372,26 @@ public class Motion extends PApplet
     clearPaths = true;
     clearBackgrounds = true;
   }
-
-  public void enableSpoutBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException, ClassNotFoundException, InstantiationException
+  public void initializeSpout() 
+  {
+    
+  }
+  
+  public void initializeSyphon() 
+  {
+    
+  }
+  
+  public void enableTextureReceiver(String appName, String name) 
+  {
+    
+  }
+  
+  public void enableTextureBroadcast(PGraphics gl) throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IllegalAccessException, ClassNotFoundException, InstantiationException
   {
     try
     {
-      if (Platform.isMac() && syphonOrSpout == null && !enableSpout)
+      if (Platform.isMac() && syphonServer == null && !enableSpout)
       {
         // We do this to avoid native library initialization
         Class<?> syphonClass = Class.forName("com.danielbchapman.physics.toxiclibs.SyphonGraphicsShare");
@@ -1362,8 +1399,8 @@ public class Motion extends PApplet
         shareCleanup = syphonClass.getMethod("cleanup");
         shareDraw = syphonClass.getMethod("send", PGraphics.class);
 
-        syphonOrSpout = (IGraphicShare) syphonClass.newInstance();
-        shareInitialize.invoke(syphonOrSpout, this);
+        syphonServer = (IGraphicShare) syphonClass.newInstance();
+        shareInitialize.invoke(syphonServer, this);
         enableSpout = true;
         return;
       }
@@ -1378,14 +1415,14 @@ public class Motion extends PApplet
       return;
     }
 
-    if (spout == null && enableSpout)
+    if (spoutServer == null && enableSpout)
     {
       try
       {
         Class<?> spoutProvider = Class.forName("SpoutProvider");
         Method method = spoutProvider.getMethod("getInstance", PGraphics.class);
 
-        spout = method.invoke(null, gl);
+        spoutServer = method.invoke(null, gl);
 
       }
       catch (ClassNotFoundException | IllegalAccessException e)
@@ -1394,7 +1431,7 @@ public class Motion extends PApplet
         enableSpout = false;
       }
 
-      if (spout != null)
+      if (spoutServer != null)
       {
         if (spoutClass == null)
         {
@@ -1403,7 +1440,7 @@ public class Motion extends PApplet
             spoutClass = Class.forName("SpoutImplementation");
             spoutSend = spoutClass.getMethod("sendTexture");// spoutClass.getMethod("sendTexture2", PGraphics3D.class);
             Method init = spoutClass.getMethod("initSender", String.class, int.class, int.class);
-            init.invoke(spout, "Motion", this.displayWidth, this.displayHeight);
+            init.invoke(spoutServer, "Motion", this.displayWidth, this.displayHeight);
           }
           catch (ClassNotFoundException e)
           {
@@ -1419,13 +1456,13 @@ public class Motion extends PApplet
   {
     if (Platform.isMac())
     {
-      if (syphonOrSpout != null)
+      if (syphonServer != null)
       {
-        shareCleanup.invoke(syphonOrSpout);
+        shareCleanup.invoke(syphonServer);
         shareCleanup = null;
         shareDraw = null;
         shareInitialize = null;
-        syphonOrSpout = null;
+        syphonServer = null;
       }
 
       enableSpout = false;
@@ -1433,8 +1470,8 @@ public class Motion extends PApplet
     }
     enableSpout = false;
 
-    Object spoutRef = spout;
-    spout = null; // Clear the reference.
+    Object spoutRef = spoutServer;
+    spoutServer = null; // Clear the reference.
     if (spoutRef != null)
     {
       Method close = spoutClass.getMethod("closeSender");
