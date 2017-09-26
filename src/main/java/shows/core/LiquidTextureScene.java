@@ -45,14 +45,17 @@ public class LiquidTextureScene extends BaseScene
   public void initialize(Motion motion)
   {
     this.motion = motion;
+    boolean isWindows = Platform.isWindows() || Platform.isWindowsCE();
     
+    String appName = isWindows ? "motion" : "QLab";
+    String serverName = isWindows ? "Spout DX11 Sender" : "TestSurface";
     client = MotionGraphicsClient
         .CreateClient(
             motion,
             //Explicitly link to an OpenGL context
             motion.createGraphics(motion.width, motion.height, PConstants.P3D), 
-            Platform.isWindows() ? "motion" : "QLab", 
-            Platform.isWindows() ? "Spout DX11 Sender" : "TestSurface");
+            appName, 
+            serverName);
     
     fluidBuffer = (PGraphics2D) motion.createGraphics(motion.width, motion.height, PConstants.P2D);
     fluidBuffer.smooth(4);

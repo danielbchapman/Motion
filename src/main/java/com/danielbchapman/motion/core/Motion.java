@@ -534,7 +534,7 @@ public class Motion extends PApplet
   {
     size(WIDTH, HEIGHT, P3D);
     PJOGL.profile = 2;
-    // PJOGL.profile=1; //Required for Syphon to work (ouch)
+    //PJOGL.profile=1; //Required for Syphon to work (ouch)
   }
 
   @Override
@@ -548,7 +548,7 @@ public class Motion extends PApplet
     main3D = createGraphics(width, height, P3D);
     main2D = createGraphics(width, height, P2D);
     editor = createGraphics(width, height, P3D);
-
+    
     postSetup();
 
     try

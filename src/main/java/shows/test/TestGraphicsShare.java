@@ -6,6 +6,7 @@ import processing.core.PGraphics;
 import com.danielbchapman.motion.core.BaseScene;
 import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionGraphicsClient;
+import com.sun.jna.Platform;
 
 public class TestGraphicsShare extends BaseScene
 {
@@ -14,13 +15,17 @@ public class TestGraphicsShare extends BaseScene
   @Override
   public void initialize(Motion motion)
   {
+    boolean isWindows = Platform.isWindows() || Platform.isWindowsCE();
+    
+    String appName = isWindows ? "motion" : "QLab";
+    String serverName = isWindows ? "Spout DX11 Sender" : "TestSurface";
     client = MotionGraphicsClient
         .CreateClient(
             motion,
             //Explicitly link to an OpenGL context
             motion.createGraphics(motion.width, motion.height, PConstants.P3D), 
-            "motion", 
-            "Spout DX11 Sender");
+            appName, 
+            serverName);
   }
 
   @Override

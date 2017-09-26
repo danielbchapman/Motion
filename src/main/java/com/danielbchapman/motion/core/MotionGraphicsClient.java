@@ -52,11 +52,11 @@ public abstract class MotionGraphicsClient
     {
       try
       {
-        Class<? extends MotionGraphicsClient> spoutClass = (Class<? extends MotionGraphicsClient>) Class.forName("com.danielbchapman.motion.core.MotionSyphonClient");
-        Constructor<?> initialize = spoutClass.getConstructor(PGraphics.class, String.class, String.class);
-        MotionGraphicsClient spout = (MotionGraphicsClient) initialize.newInstance(g, appName, serverName);
-        spout.connect();
-        return spout;
+        Class<? extends MotionGraphicsClient> syphonClass = (Class<? extends MotionGraphicsClient>) Class.forName("com.danielbchapman.motion.core.MotionSyphonClient");
+        Constructor<?> initialize = syphonClass.getConstructor(PApplet.class, PGraphics.class, String.class, String.class);
+        MotionGraphicsClient syphon = (MotionGraphicsClient) initialize.newInstance(applet, g, appName, serverName);
+        syphon.connect();
+        return syphon;
       }
       catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
       {
