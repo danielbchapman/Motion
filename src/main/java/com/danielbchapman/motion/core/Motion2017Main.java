@@ -4,7 +4,7 @@ import processing.core.PApplet;
 
 import com.danielbchapman.physics.toxiclibs.Util;
 
-public class Main
+public class Motion2017Main
 {
   public static void main(String ... args)
   {
