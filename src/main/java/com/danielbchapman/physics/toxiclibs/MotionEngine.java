@@ -568,7 +568,7 @@ public class MotionEngine extends PApplet
       takeScreenshot = false;
       PImage ss = g.get();
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-      ss.save("/screenshots/motion-" + sdf.format(new Date()) + ".tiff");
+      ss.save("screenshots/motion-" + sdf.format(new Date()) + ".tiff");
     }
   }
 
@@ -1114,6 +1114,10 @@ public class MotionEngine extends PApplet
     
     if (code == java.awt.event.KeyEvent.VK_F4)
       takeScreenshot();
+    
+    if (key == 'm') {
+      takeScreenshot();
+    }
   }
   
   @Override
