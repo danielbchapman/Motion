@@ -306,6 +306,10 @@ public class Motion extends PApplet
       openRecorderUi();
     });
 
+    mapKey("open_scene_properties", "y", (app, scene) -> {
+      Log.info("Scene Properties");
+      openRecorderUi();
+    });
     mapKey("open_environment", "q", (app, scene) -> {
       Log.info("open environment editor");
       openEnvironmentUi();
