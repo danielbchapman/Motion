@@ -53,7 +53,12 @@ public abstract class Scene
    * in the scene, you should have a method to advance to the next scene.  
    */
   public abstract HashMap<KeyCombo, Consumer<Motion>> getKeyMap();
-  
+ 
+  /**
+   * Returns a map of the property types that should be available to edit
+   * in the scene tools editor. If null, then no types are assumed.
+   */
+  public abstract HashMap<String, Class<?>> getPropertyTypes();
   
   /**
    * Update is called before the draw method and is passed a time 

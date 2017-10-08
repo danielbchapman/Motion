@@ -16,7 +16,7 @@ public class SceneProperties
   private static String FLOAT_CLASS = Float.class.toString();
   private static String STRING_CLASS = String.class.toString();
   
-  private HashMap<String, Object> properties = new HashMap<>();
+  public HashMap<String, Object> properties = new HashMap<>();
   
   public String getString(String key, String defautValue)
   {

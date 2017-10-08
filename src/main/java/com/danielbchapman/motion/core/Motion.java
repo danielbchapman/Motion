@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import javax.swing.JFrame;
+
 import com.danielbchapman.code.Pair;
 import com.danielbchapman.motion.tools.MaskMakerScene;
 import com.danielbchapman.physics.toxiclibs.IGraphicShare;
@@ -94,6 +96,7 @@ public class Motion extends PApplet
     KEY_MAP_DEFAULTS.put("screenshot", "i");
     KEY_MAP_DEFAULTS.put("next_scene", "l");
     KEY_MAP_DEFAULTS.put("open_tools", "t");
+    KEY_MAP_DEFAULTS.put("open_scene_properties", "y");
     KEY_MAP_DEFAULTS.put("open_environment", "q");
     KEY_MAP_DEFAULTS.put("open_brush", "a");
     KEY_MAP_DEFAULTS.put("toggle_show_mode", "m");
@@ -242,6 +245,7 @@ public class Motion extends PApplet
   private Recorder2017.RecordUI recorderUi;
   private BrushEditor2017 brushUi;
   private EnvironmentTools2017 environmentUi;
+  private SceneTools sceneTools;
 
   // Syphon and Spout
   private Object spoutServer;
@@ -307,9 +311,9 @@ public class Motion extends PApplet
     });
 
     mapKey("open_scene_properties", "y", (app, scene) -> {
-      Log.info("Scene Properties");
-      openRecorderUi();
+      Log.info("Scene Properties::Base Scene");
     });
+    
     mapKey("open_environment", "q", (app, scene) -> {
       Log.info("open environment editor");
       openEnvironmentUi();
@@ -1258,6 +1262,7 @@ public class Motion extends PApplet
     if (brushUi == null)
     {
       brushUi = new BrushEditor2017(this);
+      brushUi.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     else
     {
@@ -1267,6 +1272,21 @@ public class Motion extends PApplet
         brushUi = new BrushEditor2017(this);
       }
     }
+  }
+  
+  public void displayProperties(SceneProperties props, Map<String, Class<?>> types)
+  {
+    Log.warn("Displaying properties for: " + props);
+    if (sceneTools != null)
+    {
+      sceneTools.setVisible(false);
+      sceneTools.dispose();
+      sceneTools = null;        
+    } 
+    
+    sceneTools = new SceneTools(props, types);
+    sceneTools.setVisible(true);
+    
   }
 
   public void takeScreenShot(String name)

@@ -12,7 +12,25 @@ import processing.core.PGraphics;
  */
 public class BaseScene extends Scene
 {
-  @Override
+  public HashMap<KeyCombo, Consumer<Motion>> baseKeyMap = new HashMap<>();
+  public HashMap<String, Class<?>> basePropTypes = new HashMap<>();
+  public SceneProperties props = new SceneProperties();
+  
+  public void mapKey(Character key, Consumer<Motion> action)
+  {
+    KeyCombo keyCombo = new KeyCombo(key);
+    baseKeyMap.put(keyCombo, action);
+  }
+  
+  public BaseScene()
+  {
+    mapKey('y', (app) -> {
+      Log.info("Scene Properties");
+      app.displayProperties(this.props, basePropTypes);
+    });
+    
+    basePropTypes.put("demo", Float.class);
+  }
   public void afterBrushes(PGraphics g)
   { 
   }
@@ -31,7 +49,7 @@ public class BaseScene extends Scene
   @Override
   public HashMap<KeyCombo, Consumer<Motion>> getKeyMap()
   {
-    return null;
+    return baseKeyMap;
   }
 
   @Override
@@ -70,6 +88,12 @@ public class BaseScene extends Scene
   public void applyBrush(MotionBrush brush, PGraphics g, MotionMouseEvent point)
   {
     brush.applyBrush(g, point);
+  }
+
+  @Override
+  public HashMap<String, Class<?>> getPropertyTypes()
+  {
+    return basePropTypes;
   }
 
 }

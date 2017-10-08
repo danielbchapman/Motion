@@ -22,6 +22,7 @@ public class TestSceneProperties
     SceneProperties test2 = SceneProperties.load(save);
     
     Assert.assertEquals("Getter Works", test.getFloat("a", 5), a);
+    
     Assert.assertEquals("A is good", test2.getFloat("a", 5), a);
     Assert.assertEquals("B is goos", test2.getInteger("b", 5), b);
     Assert.assertEquals("C is good", test2.getString("c", "5"), c);
