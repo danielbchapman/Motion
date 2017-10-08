@@ -52,6 +52,7 @@ public class SceneTools extends JFrame
       float current = props.getFloat(key, 0);
       DynamicFloatSlider slider = new DynamicFloatSlider(key, current, true, (val)->{
         System.out.println("::change::" + key + "->" + val);
+        props.setFloat(key, val);
       });
       sliders.add(slider);
     }

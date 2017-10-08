@@ -31,6 +31,7 @@ public class BaseScene extends Scene
     
     basePropTypes.put("demo", Float.class);
   }
+  
   public void afterBrushes(PGraphics g)
   { 
   }

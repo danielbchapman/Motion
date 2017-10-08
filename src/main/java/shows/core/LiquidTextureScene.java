@@ -1,6 +1,7 @@
 package shows.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -36,7 +37,7 @@ public class LiquidTextureScene extends BaseScene
   
   //Variables
   int gridScale = 1;
-  float vScale = 15;
+//  float vScale = 15;
   
   //Event Handling (Motion)
   ArrayList<Pair<MotionMouseEvent, MotionBrush>> eventsSinceUpdate = new ArrayList<>();
@@ -44,6 +45,21 @@ public class LiquidTextureScene extends BaseScene
   @Override
   public void initialize(Motion motion)
   {
+    
+    //Setup Prop Types
+    basePropTypes.put("dissipation_density", Float.class);
+    basePropTypes.put("dissipation_velocity", Float.class);
+    basePropTypes.put("dissipation_temperature", Float.class);
+    basePropTypes.put("vorticity", Float.class);
+    basePropTypes.put("vScale", Float.class);
+    
+    props.setFloat("dissipation_density", 1.00f);
+    props.setFloat("dissipation_velocity", 0.95f);
+    props.setFloat("dissipation_temperature", 0.70f);
+    props.setFloat("vorticity", 0.50f);
+    props.setFloat("vScale", 15f);
+    
+    
     this.motion = motion;
     boolean isWindows = Platform.isWindows() || Platform.isWindowsCE();
     
@@ -69,10 +85,10 @@ public class LiquidTextureScene extends BaseScene
     pixelFlow.printGL();
     
     fluid = new DwFluid2D(pixelFlow, motion.width, motion.height, gridScale);
-    fluid.param.dissipation_density     = 1.00f;
-    fluid.param.dissipation_velocity    = 0.95f;
-    fluid.param.dissipation_temperature = 0.70f;
-    fluid.param.vorticity               = 0.50f;
+    fluid.param.dissipation_density     = props.getFloat("dissipation_density", 1.0f);
+    fluid.param.dissipation_velocity    = props.getFloat("dissipation_density", 0.95f);
+    fluid.param.dissipation_temperature = props.getFloat("dissipation_density", 0.70f);
+    fluid.param.vorticity               = props.getFloat("dissipation_density", 0.50f);
     
     callback = new FluidDataCallback();
     fluid.addCallback_FluiData(callback);
@@ -88,6 +104,10 @@ public class LiquidTextureScene extends BaseScene
   public void update(long time)
   {
     client.update();
+    fluid.param.dissipation_density     = props.getFloat("dissipation_density", 1.0f);
+    fluid.param.dissipation_velocity    = props.getFloat("dissipation_velocity", 0.95f);
+    fluid.param.dissipation_temperature = props.getFloat("dissipation_temperature", 0.70f);
+    fluid.param.vorticity               = props.getFloat("vorticity", 0.50f);
     fluid.update();
     eventsSinceUpdate.clear();
   }
@@ -99,7 +119,7 @@ public class LiquidTextureScene extends BaseScene
     g.text(String.format("dissipation_density:     %2f", fluid.param.dissipation_density), 50, y += 20);
     g.text(String.format("dissipation_velocity:    %2f", fluid.param.dissipation_velocity), 50, y += 20);
     g.text(String.format("dissipation_temperature: %2f", fluid.param.dissipation_temperature), 50, y += 20);
-    g.text(String.format("vScale:                  %2f", vScale), 50, y += 20);
+    g.text(String.format("vScale:                  %2f", props.getFloat("vScale", 15f)), 50, y += 20);
   }
   int count = 0;
   @Override
@@ -146,11 +166,12 @@ public class LiquidTextureScene extends BaseScene
         MotionBrush brush = event.two;
         MotionMouseEvent mouse = event.one;
         
-        System.out.println(mouse);
+        //System.out.println(mouse);
+        float vScale = props.getFloat("vScale", 15f);
         float radius = 15;
         float px = mouse.x;
         float py = motion.height - mouse.y;
-        float vx = (mouse.x - mouse.pmouseX) * (vScale);
+        float vx = (mouse.x - mouse.pmouseX) * vScale;
         float vy = (mouse.y - mouse.pmouseY) * (-vScale);
         
         if (mouse.left)
