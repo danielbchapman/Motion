@@ -7,12 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-import com.danielbchapman.functional.Action;
-import com.danielbchapman.functional.Procedure;
-import com.danielbchapman.physics.ui.FloatSlider;
 import com.danielbchapman.physics.ui.TitleField;
 import com.danielbchapman.utility.UiUtility;
 
@@ -63,6 +62,14 @@ public class SceneTools extends JFrame
     
     for(DynamicFloatSlider f : sliders)
       place(f, i++);
+    
+    JPanel buttons = new JPanel();
+    JButton save = new JButton("Save");
+    JButton load = new JButton("Load");
+    JButton refresh = new JButton("Refresh");
+    
+    
+    place(buttons, i++);
     
   }
 
