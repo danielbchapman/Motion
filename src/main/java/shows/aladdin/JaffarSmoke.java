@@ -1,8 +1,11 @@
-package shows.oz;
+package shows.aladdin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
+
+import processing.core.PGraphics;
+import processing.opengl.PGraphics2D;
 
 import com.danielbchapman.motion.core.BaseScene;
 import com.danielbchapman.motion.core.KeyCombo;
@@ -10,32 +13,41 @@ import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.core.MouseBrush;
-import com.danielbchapman.motion.core.Playback2017;
 import com.danielbchapman.motion.core.RecordAction2017;
 import com.danielbchapman.motion.core.Recorder2017;
+import com.danielbchapman.motion.utility.GraphicsUtility;
+import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.Util;
 import com.thomasdiewald.pixelflow.java.DwPixelFlow;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;
 
-import processing.core.PGraphics;
-import processing.opengl.PGraphics2D;
-
-public class WitchSmokeForrest extends BaseScene
+public class JaffarSmoke extends BaseScene
 {
   DwFluid2D fluid;
   HashMap<KeyCombo, Consumer<Motion>> testKeys = new HashMap<>();
   
   ArrayList<MotionMouseEvent> eventsSinceUpdate = new ArrayList<>();
+  
+  ArrayList<RecordAction2017> center;
+  ArrayList<RecordAction2017> left;
+  ArrayList<RecordAction2017> right;
+  ArrayList<RecordAction2017> upper;
+  ArrayList<RecordAction2017> streaks;
+  
   @Override
   public boolean is2D()
   {
     return true;
   }
   
-  ArrayList<RecordAction2017> events;
   @Override
   public void initialize(Motion motion)
   { 
-    events = Recorder2017.load("captures/forrest-smoke", motion.WIDTH, motion.HEIGHT, 0, 0);
+    center = Recorder2017.load("captures/Jaffar1", motion.WIDTH, motion.HEIGHT, 0, 0);
+    left = Recorder2017.load("captures/Jaffar2", motion.WIDTH, motion.HEIGHT, 0, 0);
+    right = Recorder2017.load("captures/Jaffar3", motion.WIDTH, motion.HEIGHT, 0, 0);
+    upper = Recorder2017.load("captures/JaffarPuff", motion.WIDTH, motion.HEIGHT, 0, 0);
+    streaks = Recorder2017.load("captures/forrest-smoke", motion.WIDTH, motion.HEIGHT, 0, 0);
     
     DwPixelFlow context = new DwPixelFlow(motion);
     fluid = new DwFluid2D(context, motion.width, motion.height, 1);
@@ -55,9 +67,9 @@ public class WitchSmokeForrest extends BaseScene
           
           if(e.left)
           {
-            fluid.addDensity(px, py, 20, 0f, 1.0f, 1.0f, 5.0f);
-            fluid.addDensity(px, py, 8, 0f, 1.0f, 1.0f, 3.0f);
-            fluid.addDensity(px, py, 5, 0f, 1.0f, 1.0f, 1.5f);
+            fluid.addDensity(px, py, 8, 0f, 0f, 0f, 1.0f);
+            fluid.addDensity(px, py, 20, 0f, 0f, 0f, 0f);
+            fluid.addDensity(px, py, 5, 0f, 0, 0, 0.5f);
           }
           
           if(e.right)
@@ -97,8 +109,35 @@ public class WitchSmokeForrest extends BaseScene
 
   @Override
   public void go(Motion motion)
+  {    
+    motion.runPlayback("Puff", upper, new MouseBrush());
+  }
+  
+  @Override
+  public void go(Motion motion, Integer cue)
   {
-    motion.runPlayback("witch-melt-layers", events, new MouseBrush());
+    int q = cue;
+    if( 1 == cue)
+    {
+      motion.runPlayback("STREAKS", streaks, new MouseBrush());
+    }
+    if( 11 == cue)
+    {
+      motion.runPlayback("Center", center, new MouseBrush());
+    }
+    else if (12 == cue)
+    {
+      motion.runPlayback("LEFT", left, new MouseBrush());
+    }
+    else if (13 == cue)
+    {
+      motion.runPlayback("RIGHT", right, new MouseBrush());
+    }
+    else
+    {
+      go(motion);
+    }
+
   }
   
 

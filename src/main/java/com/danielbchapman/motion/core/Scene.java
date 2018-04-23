@@ -29,6 +29,11 @@ public abstract class Scene
   }
   
   public abstract void go(Motion motion);
+  public void go(Motion motion, Integer cue)
+  {
+    System.out.println("GO TO FIRED");
+  }
+  
   /**
    * @return true if this scene should maintain its state if navigated away from
    * and false if it should reset. (You probably want false).  

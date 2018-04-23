@@ -18,8 +18,8 @@ import com.danielbchapman.utility.FileUtil;
 public class Actions
 {
   public static MotionEngine engine;
-  public static int WIDTH = 1280;
-  public static int HEIGHT = 720;
+  public static int WIDTH = 1024;
+  public static int HEIGHT = 768;
   //Forces
   
   public static Action advanceScene(int delay)

@@ -31,6 +31,10 @@ import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PJOGL;
+import shows.aladdin.BlueSmoke;
+import shows.aladdin.JaffarSmoke;
+import shows.aladdin.RedSmokePrison;
+import shows.aladdin.SandLayer;
 import shows.core.LiquidTextureScene;
 import shows.oz.AppleOutWind;
 import shows.oz.BirchLeaves;
@@ -579,6 +583,12 @@ public class Motion extends PApplet
       scenes.add(scene);
       Log.info(scene.getName());
     };
+    
+    //Aladdin
+    prep.accept(new SandLayer());
+    prep.accept(new BlueSmoke());
+    prep.accept(new JaffarSmoke());
+    prep.accept(new RedSmokePrison());
     
     //Development Scenes
     prep.accept(new TestGraphicsShare());
@@ -1166,14 +1176,20 @@ public class Motion extends PApplet
 
   public void go()
   {
-    if (currentScene != null)
+    if (currentScene != null) 
+    {
       currentScene.go(this);
+    }
+      
   }
 
   public void goTo(Integer number)
   {
     if (currentScene != null)
+    {
       currentScene.go(this);
+      currentScene.go(this, number);      
+    }
   }
 
   public void toggleOverlay()

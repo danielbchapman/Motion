@@ -1,8 +1,11 @@
-package shows.oz;
+package shows.aladdin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
+
+import processing.core.PGraphics;
+import processing.opengl.PGraphics2D;
 
 import com.danielbchapman.motion.core.BaseScene;
 import com.danielbchapman.motion.core.KeyCombo;
@@ -10,21 +13,21 @@ import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.core.MouseBrush;
-import com.danielbchapman.motion.core.Playback2017;
 import com.danielbchapman.motion.core.RecordAction2017;
 import com.danielbchapman.motion.core.Recorder2017;
+import com.danielbchapman.motion.utility.GraphicsUtility;
+import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.Util;
 import com.thomasdiewald.pixelflow.java.DwPixelFlow;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;
 
-import processing.core.PGraphics;
-import processing.opengl.PGraphics2D;
-
-public class WitchSmokeForrest extends BaseScene
+public class BlueSmoke extends BaseScene
 {
   DwFluid2D fluid;
   HashMap<KeyCombo, Consumer<Motion>> testKeys = new HashMap<>();
   
   ArrayList<MotionMouseEvent> eventsSinceUpdate = new ArrayList<>();
+  
   @Override
   public boolean is2D()
   {
@@ -32,6 +35,7 @@ public class WitchSmokeForrest extends BaseScene
   }
   
   ArrayList<RecordAction2017> events;
+  
   @Override
   public void initialize(Motion motion)
   { 
@@ -55,9 +59,9 @@ public class WitchSmokeForrest extends BaseScene
           
           if(e.left)
           {
-            fluid.addDensity(px, py, 20, 0f, 1.0f, 1.0f, 5.0f);
-            fluid.addDensity(px, py, 8, 0f, 1.0f, 1.0f, 3.0f);
-            fluid.addDensity(px, py, 5, 0f, 1.0f, 1.0f, 1.5f);
+            fluid.addDensity(px, py, 8, .1f, .0f, 0.5f, 1.0f);
+            fluid.addDensity(px, py, 20, 0f, 0f, 1f, 0f);
+            fluid.addDensity(px, py, 5, 0f, 0, 1.0f, 0.5f);
           }
           
           if(e.right)
@@ -97,7 +101,7 @@ public class WitchSmokeForrest extends BaseScene
 
   @Override
   public void go(Motion motion)
-  {
+  {    
     motion.runPlayback("witch-melt-layers", events, new MouseBrush());
   }
   
