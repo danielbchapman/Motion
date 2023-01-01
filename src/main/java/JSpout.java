@@ -6,12 +6,17 @@ public class JSpout
   {
     //https://github.com/leadedge/Spout2
     //https://github.com/leadedge/Spout2/tree/master/PROCESSING
+	String jvm_version = System.getProperty("java.version");
     //32 or 64 bit
     String arch = System.getProperty("sun.arch.data.model");
+    System.out.println("Spout " + arch +"bit v2.0.7.0 - Java " + jvm_version);
     //example: lib/JSpout32.dll or JSpout64.dll
     try
     {
-      System.loadLibrary("lib/JSpout" + arch);  
+    	if(arch.equals("32"))	
+    		System.loadLibrary("lib/JNISpout_32");
+    	else if(arch.equals("64"))	
+    		System.loadLibrary("lib/JNISpout_64");  
     }
     catch(SecurityException | UnsatisfiedLinkError e)
     {

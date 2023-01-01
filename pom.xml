@@ -27,14 +27,14 @@
 					<artifactId>natives</artifactId>
 					<scope>system</scope>
 					<version>2.1.1</version>
-					<systemPath>${basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
+					<systemPath>${project.basedir}/lib/jogl-all-natives-windows-i586.jar</systemPath>
 				</dependency>
 				<dependency>
 					<groupId>gluegen-rt</groupId>
 					<artifactId>natives</artifactId>
 					<scope>system</scope>
 					<version>2.1.1</version>
-					<systemPath>${basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
+					<systemPath>${project.basedir}/lib/gluegen-rt-natives-windows-i586.jar</systemPath>
 				</dependency>
 			</dependencies>
 			
@@ -64,14 +64,14 @@
 					<artifactId>natives</artifactId>
 					<scope>system</scope>
 					<version>2.1.1</version>
-					<systemPath>${basedir}/lib/jogl-all-natives-windows-amd64.jar</systemPath>
+					<systemPath>${project.basedir}/lib/jogl-all-natives-windows-amd64.jar</systemPath>
 				</dependency>
 				<dependency>
 					<groupId>gluegen-rt</groupId>
 					<artifactId>natives</artifactId>
 					<scope>system</scope>
 					<version>2.1.1</version>
-					<systemPath>${basedir}/lib/gluegen-rt-natives-windows-amd64.jar</systemPath>
+					<systemPath>${project.basedir}/lib/gluegen-rt-natives-windows-amd64.jar</systemPath>
 				</dependency>			
 			</dependencies>
 		</profile>
@@ -98,7 +98,7 @@
 					<artifactId>natives</artifactId>
 					<scope>system</scope> 
 					<version>2.1.1</version> 
-					<systemPath>${basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath> 
+					<systemPath>${project.basedir}/lib/jogl-all-natives-macosx-universal.jar</systemPath> 
 				</dependency>
 				<!-- Syphon, this isn't a hard dependency, but the application is probably useless without it -->
 				<dependency> 
@@ -106,14 +106,14 @@
 					<artifactId>natives</artifactId> 
 					<scope>system</scope> 
 					<version>1.0.0</version> 
-					<systemPath>${basedir}/lib/Syphon.jar</systemPath> 
+					<systemPath>${project.basedir}/lib/Syphon.jar</systemPath> 
 				</dependency> 
 				<dependency> 
 					<groupId>jsyphon</groupId> 
 					<artifactId>natives</artifactId> 
 					<scope>system</scope> 
 					<version>1.0.0</version> 
-					<systemPath>${basedir}/lib/jsyphon.jar</systemPath> 
+					<systemPath>${project.basedir}/lib/jsyphon.jar</systemPath> 
 				</dependency>
 			</dependencies>
 		</profile>
@@ -127,8 +127,8 @@
 			<groupId>processing</groupId>
 			<artifactId>core</artifactId>
 			<scope>system</scope>
-			<version>3.3.0</version>
-			<systemPath>${basedir}/lib/core.jar</systemPath>
+			<version>3.5.4</version>
+			<systemPath>${project.basedir}/lib/core.jar</systemPath>
 		</dependency>
 		
 		<dependency>
@@ -136,7 +136,7 @@
 			<artifactId>core</artifactId>
 			<scope>system</scope>
 			<version>2.1.1</version>
-			<systemPath>${basedir}/lib/gluegen-rt.jar</systemPath>
+			<systemPath>${project.basedir}/lib/gluegen-rt.jar</systemPath>
 		</dependency>
 
 		<!-- Toxilibs Dependencies -->
@@ -144,18 +144,22 @@
 			<groupId>org.toxiclibs</groupId>
 			<artifactId>core</artifactId>
 			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/toxiclibscore.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.toxiclibs</groupId>
 			<artifactId>physics</artifactId>
+			<scope>system</scope>
 			<version>1.0.0</version>
+			<systemPath>${project.basedir}/lib/verletphysics.jar</systemPath>
 		</dependency>
 		
 		<dependency>
 			<groupId>diwi</groupId>
 			<artifactId>pixelflow</artifactId>
 			<scope>system</scope>
-			<version>0.21.9</version>
+			<version>1.3.0</version>
 			<systemPath>${basedir}/lib/PixelFlow.jar</systemPath>
 		</dependency>
 
@@ -193,6 +197,11 @@
 			</dependency> 
 		-->
 		<dependency>
+			<groupId>com.danielbchapman</groupId>
+			<artifactId>fxapplication</artifactId>
+			<version>0.0.3</version>
+		</dependency>
+		<dependency>
 			<groupId>com.danielbchapman.data</groupId>
 			<artifactId>groups</artifactId>
 			<version>1.1.0</version>
@@ -200,13 +209,9 @@
 		<dependency>
 			<groupId>com.danielbchapman</groupId>
 			<artifactId>utilities</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.1</version>
 		</dependency>
-		<dependency>
-			<groupId>com.danielbchapman</groupId>
-			<artifactId>fxapplication</artifactId>
-			<version>0.0.2</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
