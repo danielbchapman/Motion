@@ -585,7 +585,7 @@ public class Motion extends PApplet
     };
     
     //Aladdin
-    prep.accept(new SandLayer());
+//    prep.accept(new SandLayer());
     prep.accept(new BlueSmoke());
     prep.accept(new JaffarSmoke());
     prep.accept(new RedSmokePrison());
