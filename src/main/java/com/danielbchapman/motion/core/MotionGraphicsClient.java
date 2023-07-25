@@ -34,6 +34,7 @@ public abstract class MotionGraphicsClient
     {
       try
       {
+    	
         Class<? extends MotionGraphicsClient> spoutClass = (Class<? extends MotionGraphicsClient>) Class.forName("com.danielbchapman.motion.core.MotionSpoutClient");
         Constructor<?> initialize = spoutClass.getConstructor(PApplet.class, PGraphics.class, String.class, String.class);
         MotionGraphicsClient spout = (MotionGraphicsClient) initialize.newInstance(applet, g, appName, serverName);

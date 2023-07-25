@@ -28,6 +28,7 @@ public class MotionSpoutClient extends MotionGraphicsClient
   {
     try
     {
+      Log.info("MotionSpoutClient::connect");
       spoutClass = Class.forName("SpoutImplementation");
       initReceiver = spoutClass.getMethod("initReceiver", String.class, PImage.class);
       closeReceiver = spoutClass.getMethod("closeReceiver");
@@ -39,7 +40,8 @@ public class MotionSpoutClient extends MotionGraphicsClient
     {
       spout = null;
       e.printStackTrace();
-      throw new IllegalStateException("Unable to connect to spout" + e.getMessage());
+      Log.severe("Unable to connect to spout", e);
+      //throw new IllegalStateException("Unable to connect to spout" + e.getMessage());
     }
   }
 

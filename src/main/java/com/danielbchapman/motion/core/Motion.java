@@ -292,6 +292,10 @@ public class Motion extends PApplet
     mapKey("next_scene", "l", (app, scene) -> {
       advanceScene();
       Log.info("advance scene");
+      if(scene != null) {
+    	  Log.info("\t" + scene.getName());  
+      }
+      
     });
 
     mapKey("debug", "d", (app, scene) -> {
@@ -1444,8 +1448,12 @@ public class Motion extends PApplet
         return;
       }
 
-      if (Platform.isWindows() || Platform.isWindowsCE())
-        enableSpout = true;
+      if (Platform.isWindows() || Platform.isWindowsCE()) {
+    	  enableSpout = true;
+    	  //FIXME -> Disabling Spout do to link error in dev. I don't need it at the moment, but we need to fix this.
+    	  enableSpout = false;
+      }
+        
     }
     catch (Throwable t)
     {
