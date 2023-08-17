@@ -7,12 +7,6 @@ import com.danielbchapman.physics.toxiclibs.MotionEngine;
 public class Prologue extends PaintingLayer
 {
 
-  public Prologue(MotionEngine engine)
-  {
-    super(engine);
-    stack.load();
-  }
-
   @Override
   public String getSpecificName()
   {

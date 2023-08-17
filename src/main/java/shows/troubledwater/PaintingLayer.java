@@ -6,11 +6,6 @@ import com.danielbchapman.physics.toxiclibs.MotionEngine;
 public abstract class PaintingLayer extends BleedingCanvasLayer
 {
 
-  public PaintingLayer(MotionEngine engine)
-  {
-    super(engine);
-  }
-
   @Override
   public String getName()
   {

@@ -14,11 +14,6 @@ public class BleedingCanvasLayer extends Layer
   boolean blank;
   int mode = 0;
   
-  public BleedingCanvasLayer(MotionEngine engine)
-  {
-    this.engine = engine;
-  }
-  
   @Override
   public Point[] init()
   {

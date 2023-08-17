@@ -1,4 +1,4 @@
-package shows.troubledwater;
+package shows.ululations;
 
 import java.util.ArrayList;
 
@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import shows.troubledwater.BrushPoint;
+import shows.troubledwater.TWCueStack;
 import toxi.geom.Vec3D;
 
 import com.danielbchapman.brushes.ImageBrush;
@@ -17,7 +19,6 @@ import com.danielbchapman.physics.toxiclibs.Point;
 
 public class RainLayer extends BleedingCanvasLayer
 {
-
   boolean first = true;
   boolean hardRain = false;
   boolean stopRain = false;

@@ -6,10 +6,6 @@ import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
 public class Interlude2 extends PaintingLayer 
 {
-  public Interlude2(MotionEngine engine)
-  {
-    super(engine);
-  }
   Interlude2Stack stack = new Interlude2Stack(this);  
   public class Interlude2Stack extends TWCueStack
   {

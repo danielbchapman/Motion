@@ -8,8 +8,7 @@ import com.danielbchapman.physics.toxiclibs.MotionEngine;
 public class HeroLayer extends BleedingCanvasLayer
 {
 	TWCueStack stack;
-	public HeroLayer(MotionEngine engine) {
-		super(engine);
+	public HeroLayer() {
 		stack = new TWCueStack(this)
 				{
 		      SmallCharacterBrush pen = new SmallCharacterBrush();

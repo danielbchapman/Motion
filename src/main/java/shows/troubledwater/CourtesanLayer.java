@@ -21,8 +21,7 @@ public class CourtesanLayer extends BleedingCanvasLayer {
 
 	boolean first = true;
 	Stack stack;
-	public CourtesanLayer(MotionEngine engine) {
-		super(engine);
+	public CourtesanLayer() {
 		stack = new Stack();
 	}
 

@@ -13,8 +13,7 @@ import processing.core.PGraphics;
 public class Bridge extends BleedingCanvasLayer
 {
 	TWCueStack stack;
-	public Bridge(MotionEngine engine) {
-		super(engine);
+	public Bridge() {
 		stack = new TWCueStack(this)
 				{
 

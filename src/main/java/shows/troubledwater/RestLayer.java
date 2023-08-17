@@ -6,12 +6,6 @@ import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
 public class RestLayer extends PaintingLayer
 {
-
-  public RestLayer(MotionEngine engine)
-  {
-    super(engine);
-  }
-
   @Override
   public String getSpecificName()
   {

@@ -8,9 +8,8 @@ import com.danielbchapman.physics.toxiclibs.MotionEngine;
 public class OneLeafEnd extends PaintingLayer
 {
 
-  public OneLeafEnd(MotionEngine engine)
+  public OneLeafEnd()
   {
-    super(engine);
     stack.load();
   }
 

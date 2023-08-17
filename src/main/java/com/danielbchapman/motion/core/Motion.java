@@ -291,6 +291,7 @@ public class Motion extends PApplet
 
     mapKey("next_scene", "l", (app, scene) -> {
       advanceScene();
+      scene = currentScene;
       Log.info("advance scene");
       if(scene != null) {
     	  Log.info("\t" + scene.getName());  
@@ -565,7 +566,7 @@ public class Motion extends PApplet
     main2D = createGraphics(width, height, P2D);
     editor = createGraphics(width, height, P3D);
     
-    postSetup();
+    postSetupConfigureShow();
 
     try
     {
@@ -581,18 +582,20 @@ public class Motion extends PApplet
   }
 
   // Add layers etc...
-  public void postSetup()
+  public void postSetupConfigureShow()
   {
     Consumer<Scene> prep = (scene) -> {
       scenes.add(scene);
       Log.info(scene.getName());
     };
     
+    //Ululations
+    
     //Aladdin
-//    prep.accept(new SandLayer());
-    prep.accept(new BlueSmoke());
-    prep.accept(new JaffarSmoke());
-    prep.accept(new RedSmokePrison());
+
+//    prep.accept(new BlueSmoke());
+//    prep.accept(new JaffarSmoke());
+//    prep.accept(new RedSmokePrison());
     
     //Development Scenes
     prep.accept(new TestGraphicsShare());
@@ -600,23 +603,23 @@ public class Motion extends PApplet
     
     
     // Add Wizard of Oz
-    prep.accept(new WitchSpellCenter());
-    prep.accept(new LionLeaves());
-    prep.accept(new WitchSmokeForrest());
-    prep.accept(new WitchMelting());
-    prep.accept(new WitchEmeraldFlyby());
-    prep.accept(new LeafWind());
-    prep.accept(new AppleOutWind());
-    prep.accept(new EmeraldEndWind());
-    prep.accept(new BubbleScene());
-    prep.accept(new WitchSmokeGreen());
-    prep.accept(new WitchSmokeRed());
-    prep.accept(new WitchSmokeBlack());
-    prep.accept(new Melting());
-    prep.accept(new PoppyField());
-    prep.accept(new PoppyFieldSnow());
-    prep.accept(new Tornado());
-    prep.accept(new BirchLeaves());
+//    prep.accept(new WitchSpellCenter());
+//    prep.accept(new LionLeaves());
+//    prep.accept(new WitchSmokeForrest());
+//    prep.accept(new WitchMelting());
+//    prep.accept(new WitchEmeraldFlyby());
+//    prep.accept(new LeafWind());
+//    prep.accept(new AppleOutWind());
+//    prep.accept(new EmeraldEndWind());
+//    prep.accept(new BubbleScene());
+//    prep.accept(new WitchSmokeGreen());
+//    prep.accept(new WitchSmokeRed());
+//    prep.accept(new WitchSmokeBlack());
+//    prep.accept(new Melting());
+//    prep.accept(new PoppyField());
+//    prep.accept(new PoppyFieldSnow());
+//    prep.accept(new Tornado());
+//    prep.accept(new BirchLeaves());
     
 
     //Test Scenes
