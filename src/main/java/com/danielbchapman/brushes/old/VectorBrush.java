@@ -1,4 +1,4 @@
-package com.danielbchapman.brushes;
+package com.danielbchapman.brushes.old;
 
 import java.util.Collections;
 import java.util.HashMap;

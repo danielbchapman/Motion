@@ -1,22 +1,19 @@
 package com.danielbchapman.layers;
 
+import com.danielbchapman.motion.core.BaseScene;
+import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.Point;
 
 import processing.core.PGraphics;
 
-public class ClearLayer extends Layer
+public class ClearLayer extends BaseScene
 {
   boolean clear = false;
-  @Override
-  public Point[] init()
-  {
-    return new Point[]{};
-  }
 
   @Override
-  public void render(PGraphics g)
+  public void draw(PGraphics g)
   {
     if(!clear)
     {
@@ -25,14 +22,8 @@ public class ClearLayer extends Layer
       clear = true;
     }
   }
-
-  @Override
-  public void update()
-  {
-  }
-
-  @Override
-  public void go(MotionEngine engine)
+  
+  public void go(Motion engine)
   {
     System.out.println("Clear Called");
     clear = false;

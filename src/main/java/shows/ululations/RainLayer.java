@@ -10,7 +10,7 @@ import shows.troubledwater.BrushPoint;
 import shows.troubledwater.TWCueStack;
 import toxi.geom.Vec3D;
 
-import com.danielbchapman.brushes.ImageBrush;
+import com.danielbchapman.brushes.old.ImageBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.physics.toxiclibs.Action;
 import com.danielbchapman.physics.toxiclibs.Actions;

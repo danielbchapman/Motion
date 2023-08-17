@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 import com.danielbchapman.physics.toxiclibs.PersistentVariables;
 import com.danielbchapman.utility.FileUtil;
 
@@ -99,9 +98,30 @@ public abstract class MotionBrush implements ICloneable<MotionBrush>, ISaveable<
    */
   public float splitSize = 2f;
   MotionMouseEvent last = null;
-  long startTime;
-  
+  public long startTime;
+  public long currentTime;
+  /**
+   * Return true if this brush should draw itself over a vector between
+   * two points. Return false if it should draw a single point.
+   * @return false by default
+   */
   public boolean isVectorBrush()
+  {
+    return false;
+  }
+  
+  /**
+   * @return true if this brush should dissipate the opacity over time.
+   */
+  public boolean isFadingBrush()
+  {
+    return false;
+  }
+  
+  /**
+   * @return true if this brush should change size over time.
+   */
+  public boolean isVariableSizeBrush()
   {
     return false;
   }
@@ -115,9 +135,12 @@ public abstract class MotionBrush implements ICloneable<MotionBrush>, ISaveable<
   
   /**
    * An update method called prior to any drawing methods should
-   * it be needed.
+   * it be needed. By default this increments the current time.
    */
-  public abstract void update(long time);
+  public void update(long time)
+  {
+	  currentTime = time;
+  }
  
   public boolean checkActive(MotionMouseEvent m)
   {
@@ -140,6 +163,7 @@ public abstract class MotionBrush implements ICloneable<MotionBrush>, ISaveable<
     this.down = val;
     this.last = e;
     this.startTime = System.currentTimeMillis();
+    this.currentTime = this.startTime;
   }
   
   public abstract MotionBrush deepCopy();

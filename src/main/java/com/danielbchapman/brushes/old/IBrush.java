@@ -1,4 +1,4 @@
-package com.danielbchapman.brushes;
+package com.danielbchapman.brushes.old;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;

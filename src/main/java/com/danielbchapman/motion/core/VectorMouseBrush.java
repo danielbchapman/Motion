@@ -12,11 +12,6 @@ import toxi.geom.Vec3D;
 public class VectorMouseBrush extends MotionBrush
 {
   @Override
-  public void update(long time)
-  { 
-  }
-
-  @Override
   public void applyBrush(PGraphics g, MotionMouseEvent point)
   {
   }

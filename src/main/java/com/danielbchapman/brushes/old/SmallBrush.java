@@ -1,4 +1,4 @@
-package com.danielbchapman.brushes;
+package com.danielbchapman.brushes.old;
 
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 
@@ -12,5 +12,13 @@ public class SmallBrush extends ImageBrush
     super.opacityEnd =64;
     super.sizeStart = .3f;
     super.sizeEnd = 0.15f;
+  }
+  
+  @Override
+  public MotionInteractiveBehavior copy()
+  {
+    SmallBrush copy = new SmallBrush();
+    copy.vars = this.vars.clone();
+    return copy;
   }
 }

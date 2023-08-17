@@ -1,6 +1,7 @@
 package com.danielbchapman.layers;
 
-import com.danielbchapman.brushes.SaveableBrush;
+import com.danielbchapman.brushes.old.SaveableBrush;
+import com.danielbchapman.motion.core.BaseScene;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Layer;
 
@@ -9,7 +10,7 @@ import lombok.Setter;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public abstract class BleedingLayer extends Layer
+public abstract class BleedingLayer extends BaseScene
 {
   @Getter
   @Setter
@@ -31,7 +32,7 @@ public abstract class BleedingLayer extends Layer
   public abstract void reanderAfterBleed(PGraphics g);
   
   @Override
-  public void render(PGraphics g)
+  public void draw(PGraphics g)
   {
     if (first)
     { 
@@ -47,11 +48,5 @@ public abstract class BleedingLayer extends Layer
     }
     
     reanderAfterBleed(g);
-  }
-  
-  @Override
-  public void renderBrush(SaveableBrush brush, PGraphics g, int currentFrame)
-  {
-    brush.draw(g);
   }
 }

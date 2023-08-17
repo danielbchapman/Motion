@@ -55,7 +55,9 @@ public abstract class Scene
    * Returns a custom key map to be used by the engine. The
    * Engine will call the get method for each request if you 
    * need to modify hot-keys on the fly. This puts ultimate control
-   * in the scene, you should have a method to advance to the next scene.  
+   * in the scene, you should have a method to advance to the next scene.
+   * 
+   * Return null if not used
    */
   public abstract HashMap<KeyCombo, Consumer<Motion>> getKeyMap();
  
@@ -67,7 +69,7 @@ public abstract class Scene
   
   /**
    * Update is called before the draw method and is passed a time 
-   * if needed by physics engines.
+   * if needed by physics engines. Brushes will be updated independently.
    */
   public abstract void update(long time);
   
@@ -97,7 +99,7 @@ public abstract class Scene
   public void overlay(PGraphics clear){};
   
   /**
-   * Draw to a persistant overlay context
+   * Draw to a persistent overlay context
    * @param overlayPaths The persistent layer does not clear itself and is 
    * useful for capturing events over time.
    */

@@ -6,7 +6,7 @@ import processing.core.PGraphics;
 import shows.troubledwater.BrushPoint;
 import toxi.geom.Vec3D;
 
-import com.danielbchapman.brushes.ImageBrush;
+import com.danielbchapman.brushes.old.ImageBrush;
 import com.danielbchapman.physics.toxiclibs.OLDEmitter;
 
 public class RainEmitter extends OLDEmitter<BrushPoint>

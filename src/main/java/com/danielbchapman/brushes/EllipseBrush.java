@@ -6,7 +6,7 @@ import toxi.geom.Vec3D;
 
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 
-public class EllipseBrush extends VectorBrush
+public class EllipseBrush extends VectorBrushPORT
 {
   
   @Override
@@ -26,14 +26,6 @@ public class EllipseBrush extends VectorBrush
     g.ellipse(0, 0, 10, 10);
     g.popMatrix();
   }
-  
-  @Override
-  public MotionInteractiveBehavior copy()
-  {
-    EllipseBrush x = new EllipseBrush();
-    x.vars = this.vars.clone();
-    return x;
-  }
 
   @Override
   public boolean isFadingBrush()
@@ -42,8 +34,13 @@ public class EllipseBrush extends VectorBrush
   }
 
   @Override
-  public boolean isVariableBrush()
+  public boolean isVariableSizeBrush()
   {
     return false;
+  }
+
+  @Override
+  public VectorBrushPORT copyBrushVariables() {
+	return new EllipseBrush();
   }
 }

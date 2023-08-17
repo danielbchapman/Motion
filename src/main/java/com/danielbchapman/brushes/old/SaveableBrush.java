@@ -1,4 +1,4 @@
-package com.danielbchapman.brushes;
+package com.danielbchapman.brushes.old;
 
 import lombok.Getter;
 import toxi.geom.Vec3D;

@@ -12,7 +12,11 @@ import java.util.function.Consumer;
 
 import javax.swing.JFrame;
 
+import com.danielbchapman.brushes.old.VectorBrush;
 import com.danielbchapman.code.Pair;
+import com.danielbchapman.layers.BleedingCanvasLayer;
+import com.danielbchapman.layers.BleedingLayer;
+import com.danielbchapman.layers.ClearLayer;
 import com.danielbchapman.motion.tools.MaskMakerScene;
 import com.danielbchapman.physics.toxiclibs.IGraphicShare;
 import com.danielbchapman.physics.toxiclibs.IGraphicsShareClient;
@@ -71,6 +75,7 @@ import toxi.geom.Vec3D;
  */
 public class Motion extends PApplet
 {
+  public static Motion MOTION;
   public static int WIDTH = 400;
   public static int HEIGHT = 400;
 
@@ -241,6 +246,7 @@ public class Motion extends PApplet
   private boolean mouseLeft = false;
   private boolean mouseRight = false;
   private boolean mouseCenter = false;
+  private long mousedown = -1L;
 
   // Actions
   private String screenShotName = null;
@@ -278,6 +284,7 @@ public class Motion extends PApplet
   
   public Motion()
   {
+	Motion.MOTION = this;
     // SpaceBar = 32;
 
     mapKey("go", "spacebar", (app, scene) -> {
@@ -485,6 +492,7 @@ public class Motion extends PApplet
     m.left = mouseLeft;
     m.right = mouseRight;
     m.center = mouseCenter;
+    m.timeMouseDown = mousedown;
     mouseEvents.add(m);
   }
 
@@ -498,6 +506,7 @@ public class Motion extends PApplet
     m.left = mouseLeft;
     m.right = mouseRight;
     m.center = mouseCenter;
+    m.timeMouseDown = mousedown;
     mouseEvents.add(m);
   }
 
@@ -521,6 +530,7 @@ public class Motion extends PApplet
     m.left = mouseLeft;
     m.center = mouseCenter;
     m.right = mouseRight;
+    m.timeMouseDown = mousedown;
     mouseEvents.add(m);
   }
 
@@ -544,6 +554,7 @@ public class Motion extends PApplet
     m.left = mouseLeft;
     m.right = mouseRight;
     m.center = mouseCenter;
+    m.timeMouseDown = mousedown;
     mouseEvents.add(m);
   }
 
@@ -592,6 +603,9 @@ public class Motion extends PApplet
     
     //Ululations
     prep.accept(new RainLayer());
+    prep.accept(new BleedingCanvasLayer());
+    //prep.accept(new BleedingLayer());
+    prep.accept(new ClearLayer());
     //Aladdin
 
 //    prep.accept(new BlueSmoke());
@@ -827,6 +841,10 @@ public class Motion extends PApplet
           MotionMouseEvent point = pair.event;
           MotionBrush b = pair.brush;
 
+          //FIXME this can't work as-is. It doesn't handle elapsed time. 
+          
+          //FIXME Also, should this happen in the scene? THere's a redundant method there.
+
           boolean shouldBeActive = b.checkActive(point);
           if (shouldBeActive)
           {
@@ -837,6 +855,7 @@ public class Motion extends PApplet
               currentScene.applyBrush(b, main, point);
             else
             {
+              MotionBrush brush = b;
               if (b.last == null)// Start draw
               {
                 currentScene.applyBrush(b, main, point);
@@ -1389,6 +1408,7 @@ public class Motion extends PApplet
     event.pmouseZ = action.pz;
 
     event.debugColor = color;
+    event.timeMouseDown = action.stamp;
     frameEvents.add(new EventPair(event, brush));
 
   }

@@ -16,6 +16,7 @@ public class BaseScene extends Scene
   public HashMap<String, Class<?>> basePropTypes = new HashMap<>();
   public SceneProperties props = new SceneProperties();
   
+  public long currentTime = -1;
   public void mapKey(Character key, Consumer<Motion> action)
   {
     KeyCombo keyCombo = new KeyCombo(key);
@@ -56,6 +57,7 @@ public class BaseScene extends Scene
   @Override
   public void update(long time)
   {
+	  currentTime = time;
   }
 
   @Override

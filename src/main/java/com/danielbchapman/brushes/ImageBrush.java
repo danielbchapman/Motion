@@ -5,12 +5,14 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import toxi.geom.Vec3D;
 
+import com.danielbchapman.motion.core.Motion;
+import com.danielbchapman.motion.core.VectorMouseBrush;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 
 
 //FIXME DOCUMENT THIS IN WHAT FIELDS ARE USED and make this editable
-public class ImageBrush extends VectorBrush
+public class ImageBrush extends VectorBrushPORT
 {
   public boolean isFadingBrush = true;
   public boolean isVariableBrush = true;
@@ -32,19 +34,12 @@ public class ImageBrush extends VectorBrush
   }
 
   @Override
-  public MotionInteractiveBehavior copy()
-  {
-    ImageBrush copy = new ImageBrush();
-    copy.vars = this.vars.clone();
-    return copy;
-  }
-
-  @Override
   public void applyBrush(PGraphics g, Vec3D p, int opacity, float sizeMod)
   {
+	
     if(loadedImage == null)
     {
-      loadedImage = Actions.engine.loadImage(brushFileName);
+      loadedImage = Motion.MOTION.loadImage(brushFileName);
     }
     
     g.pushMatrix();
@@ -64,8 +59,18 @@ public class ImageBrush extends VectorBrush
   }
 
   @Override
-  public boolean isVariableBrush()
+  public boolean isVariableSizeBrush()
   {
     return true;
+  }
+
+  @Override
+  public VectorBrushPORT copyBrushVariables() {
+	 ImageBrush copy = new ImageBrush();
+	 copy.brushFileName = brushFileName;
+	 copy.isFadingBrush = isFadingBrush;
+	 copy.isVariableBrush = isVariableBrush;
+	 
+	 return copy;
   }
 }

@@ -14,6 +14,7 @@ public class MotionMouseEvent extends Vec3D
   {
     super(vec);
   }
+  
   public transient boolean editing;
   public boolean left;
   public boolean right;
@@ -21,6 +22,7 @@ public class MotionMouseEvent extends Vec3D
   public int pmouseX;
   public int pmouseY;
   public int pmouseZ = 0;
+  public long timeMouseDown = -1;
   
   /**
    * Set the color for this mouse event if needed by debugger.
@@ -41,6 +43,7 @@ public class MotionMouseEvent extends Vec3D
     copy.pmouseX = pmouseX;
     copy.pmouseY = pmouseY;
     copy.pmouseZ = pmouseZ;
+    copy.timeMouseDown = timeMouseDown;
     
     return copy;
   }
