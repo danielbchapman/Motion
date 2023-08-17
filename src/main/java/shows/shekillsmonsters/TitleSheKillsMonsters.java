@@ -10,9 +10,8 @@ public class TitleSheKillsMonsters extends BleedingCanvasLayer
 
 	TWCueStack stack;
 
-	public TitleSheKillsMonsters(MotionEngine engine)
+	public TitleSheKillsMonsters()
 	{
-		super(engine);
 
 		stack = new TWCueStack(this)
 		{

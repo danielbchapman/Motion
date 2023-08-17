@@ -9,9 +9,8 @@ import com.danielbchapman.physics.toxiclibs.MotionEngine;
 public class TilliusWWE extends PaintingLayer
 {
 
-  public TilliusWWE(MotionEngine engine)
+  public TilliusWWE()
   {
-    super(engine);
     stack.load();
   }
 

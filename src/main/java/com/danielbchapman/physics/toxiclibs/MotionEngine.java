@@ -729,8 +729,8 @@ public class MotionEngine extends PApplet
     // add(mobolologyThree);
     // activeLayer = mobolologyThree;
 
-    RainLayer rainLayer = new RainLayer(this);
-    CourtesanLayer courteseanLayer = new CourtesanLayer(this);
+    RainLayer rainLayer = new RainLayer();
+    CourtesanLayer courteseanLayer = new CourtesanLayer();
     Consumer<Layer> prepare = (layer) -> {
       layer.applet = this;
       layer.engine = this;
@@ -753,10 +753,10 @@ public class MotionEngine extends PApplet
     // Demo Leftovers
     // prepare.accept(new HeroLayer(this));
     prepare.accept(new RecordingLayer(this)); // Motion Sketches
-    prepare.accept(new TitleSheKillsMonsters(this));
+    prepare.accept(new TitleSheKillsMonsters());
     prepare.accept(new MagicMissleLayer(this));
     prepare.accept(new HealingSpellLayer(this));
-    prepare.accept(new TilliusWWE(this));
+    prepare.accept(new TilliusWWE());
     prepare.accept(new SpinningSquares(Actions.WIDTH, Actions.HEIGHT));
     prepare.accept(new BeholderPuppet());
     prepare.accept(rainLayer);
@@ -776,7 +776,7 @@ public class MotionEngine extends PApplet
     // prepare.accept(new Scene5Grid());
     // prepare.accept(new OneLeafEnd(this));
     prepare.accept(new ClearLayer()); // A layer that draws black
-    prepare.accept(new RestLayer(this));// Blackout layer...
+    prepare.accept(new RestLayer());// Blackout layer...
   }
   
   public void virtualKeyPressed(char key, int code)

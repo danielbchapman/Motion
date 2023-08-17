@@ -61,6 +61,7 @@ import shows.test.TestFluidScene;
 import shows.test.TestGraphicsShare;
 import shows.test.TestInverseExplodeBrush;
 import shows.test.TestVerletScene;
+import shows.ululations.RainLayer;
 import toxi.geom.Vec3D;
 
 /**
@@ -590,7 +591,7 @@ public class Motion extends PApplet
     };
     
     //Ululations
-    
+    prep.accept(new RainLayer());
     //Aladdin
 
 //    prep.accept(new BlueSmoke());
