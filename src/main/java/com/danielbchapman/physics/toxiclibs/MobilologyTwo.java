@@ -225,13 +225,13 @@ public class MobilologyTwo extends Layer
     stack = new CueStack();
     stack.add(
         cue("[PRESET] Prepare Scene", 
-            Actions.homeOff,
-            Actions.gravityOff,
-            Actions.homeLinearOff,
-            Actions.dragTo(.5f),
+            ActionsOLD.homeOff,
+            ActionsOLD.gravityOff,
+            ActionsOLD.homeLinearOff,
+            ActionsOLD.dragTo(.5f),
             //Need to set the forces I like here...
             action("Send Lines Out", (x)->{offscreen(); lockAll();}, null),
-            action("addLinear", null, (e)->{e.addBehavior(Actions.homeLinear);}, 50),
+            action("addLinear", null, (e)->{e.addBehavior(ActionsOLD.homeLinear);}, 50),
             action("Start Lines", (x)->{runFades();}, null, 100)
             ),
         load("[31] SLAP!",
@@ -247,33 +247,33 @@ public class MobilologyTwo extends Layer
 //              }, null, 1500)
             ), 
          cue("[32] on Throw Restore Gravity",
-             Actions.homeLinearOn,
-             Actions.homeOn,
-             Actions.dragTo(0.05173f)
+             ActionsOLD.homeLinearOn,
+             ActionsOLD.homeOn,
+             ActionsOLD.dragTo(0.05173f)
              ),
     
          load("[33] Nikki Hands on Cube", //Restore Gravity on the throw
              "content/scene_two/rec/nikki-hands-on-cube",
              "content/scene_two/brush/scene-two-squeeze",
              //hActions.homeOff,
-             Actions.homeLinearOff),
-         cue("[34] Return Home", Actions.dragTo(.25f), Actions.homeLinearOn),
+             ActionsOLD.homeLinearOff),
+         cue("[34] Return Home", ActionsOLD.dragTo(.25f), ActionsOLD.homeLinearOn),
                       
          load("[37] Nikki Hits the Wall",
              "content/scene_two/rec/punching-wall",
              "content/scene_two/brush/scene-two-squeeze",
-             Actions.dragTo(0.01f)
+             ActionsOLD.dragTo(0.01f)
           ),
-         cue("[38] No home with the suck down", Actions.homeLinearOff), //need some environment here
+         cue("[38] No home with the suck down", ActionsOLD.homeLinearOff), //need some environment here
          load("[39] Jitter Run", 
              "content/scene_two/rec/scene-2-jitter",
              "content/scene_two/brush/scene-two-squeeze",
-             Actions.homeLinearOn
+             ActionsOLD.homeLinearOn
              ),
          load("[40] Jitter Run", 
              "content/scene_two/rec/scene-2-jitter",
              "content/scene_two/brush/scene-two-squeeze",
-             Actions.homeLinearOff
+             ActionsOLD.homeLinearOff
              ),
          load("[41] Line Enters",
              "content/scene_two/rec/2-line-enters",
@@ -286,15 +286,15 @@ public class MobilologyTwo extends Layer
              "content/scene_two/brush/scene-2-jitter"),               
              //jitter -> 
          cue("[45] Restore Grid", 
-             Actions.stopPlayback(), 
-             Actions.homeLinearOn, 
-             Actions.homeLinearOn),
+             ActionsOLD.stopPlayback(), 
+             ActionsOLD.homeLinearOn, 
+             ActionsOLD.homeLinearOn),
               
          cue("[49] Suck Offstage",
-             Actions.dragToNone,
-             Actions.stopPlayback(),
-             Actions.homeOff,
-             Actions.homeLinearOff,
+             ActionsOLD.dragToNone,
+             ActionsOLD.stopPlayback(),
+             ActionsOLD.homeOff,
+             ActionsOLD.homeLinearOff,
              action("clear", null, 
                  (e)->{
                    try{
@@ -303,14 +303,14 @@ public class MobilologyTwo extends Layer
                      t.printStackTrace();
                    }
                  }),
-             Actions.follow(100)),
+             ActionsOLD.follow(100)),
              
          load("[49.1] Suck Offstage",
              "content/scene_two/env/suck",  
              "content/scene_two/rec/suck",
              "content/scene_two/brush/suck",
-             Actions.homeLinearOff,
-             Actions.homeOff
+             ActionsOLD.homeLinearOff,
+             ActionsOLD.homeOff
              ),
          cue("[50] 5 Transition to 3",
              action("Scene 3", null, (x)->{x.advanceScene(); x.activeLayer.go(x);})
@@ -341,7 +341,7 @@ public class MobilologyTwo extends Layer
       return;
     }
       
-    int[] where = Transform.translate(0f, 0f, 0f, Actions.engine.width, Actions.engine.height);
+    int[] where = Transform.translate(0f, 0f, 0f, ActionsOLD.engine.width, ActionsOLD.engine.height);
     Slap force = new Slap(new Vec3D(where[0], where[1], where[2]), new Vec3D(0, 0, -1f), 100f);
     force.maxForce = 10f;
     Cue slap = cue("Slap",
@@ -379,8 +379,8 @@ public class MobilologyTwo extends Layer
   
   public Cue load(String label, String env, String file, String brushFile, ActionOLD ... post)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
-    ActionOLD loadEnv = Actions.loadEnvironment(new File(env));
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
+    ActionOLD loadEnv = ActionsOLD.loadEnvironment(new File(env));
     if(post != null)
       for(ActionOLD a : post)
         acts.add(a);
@@ -389,13 +389,13 @@ public class MobilologyTwo extends Layer
   
   public Cue load(String label, String file, String brush)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brush));
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brush));
     return cue(label, acts);
   }
   
   public Cue load(String label, String file, String brushFile, ActionOLD ... post)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
     if(post != null)
       for(ActionOLD a : post)
         acts.add(a);
@@ -404,7 +404,7 @@ public class MobilologyTwo extends Layer
   
   public Cue load(String file, String brushFile)
   {
-    return Actions.loadRecording(new File(file), new File(brushFile));
+    return ActionsOLD.loadRecording(new File(file), new File(brushFile));
   }
   
   public Cue load(String label)

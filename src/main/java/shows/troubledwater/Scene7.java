@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 import com.danielbchapman.artwork.Paragraph;
 import com.danielbchapman.physics.toxiclibs.ActionOLD;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.CueStack;
 import com.danielbchapman.physics.toxiclibs.OLDEmitter;
@@ -102,9 +102,9 @@ public class Scene7 extends Layer
      add(
          //Tweet!
          cue("[ZERO] Environment Setup and Tweet", 
-             Actions.homeTo(0.4f), 
-             Actions.dragTo(0.12f),
-             Actions.homeOn
+             ActionsOLD.homeTo(0.4f), 
+             ActionsOLD.dragTo(0.12f),
+             ActionsOLD.homeOn
          ),
              
          cue("[1] Flying Text",
@@ -132,7 +132,7 @@ public class Scene7 extends Layer
 //           cue("[2] Scanner--Not implemented"
 //               ),
            cue("[3] CHAIN -> Start Emitters @ ~1:25, Gravity On1",
-               Actions.loadEnvironment(new File("/content/scene_one/scene-one-pre-gravity.env")),
+               ActionsOLD.loadEnvironment(new File("/content/scene_one/scene-one-pre-gravity.env")),
                action("Start Gravity", null, (e)->{e.addBehavior(gravity);})
                ),
 //           load("[4] Cross after spin on Ground",
@@ -183,13 +183,13 @@ public class Scene7 extends Layer
                "content/scene_one/brush/nikki-levitate"
                ),
            cue("[18] Music for two start",
-               Actions.loadRecordingAsAction(
+               ActionsOLD.loadRecordingAsAction(
                    new File("content/scene_one/rec/push-away"), 
                    new File("content/scene_one/brush/max-explode")),
                action("Remove Gravity", null, e->{e.removeBehavior(gravity);}),
-               Actions.homeOff,
-               Actions.homeLinearOff,
-               Actions.dragTo(0f)
+               ActionsOLD.homeOff,
+               ActionsOLD.homeLinearOff,
+               ActionsOLD.dragTo(0f)
                ),
            cue("[19] CHANGE SCENE", //MAKE A FOLLOW
                action("Scene Two Start", null, (e)->{e.advanceScene();}),
@@ -201,22 +201,22 @@ public class Scene7 extends Layer
              action("fountain", null, (x)->{startFountain(5,10,72);})),    
          //Turn on Gravity!
          cue("Gravity On, Home off", 
-             Actions.homeOff, 
-             Actions.dragToVeryLow, 
-             Actions.gravityOn),
+             ActionsOLD.homeOff, 
+             ActionsOLD.dragToVeryLow, 
+             ActionsOLD.gravityOn),
          cue("Home On, Gravity Off", 
-             Actions.homeTo(0.2f), 
-             Actions.homeOn, 
-             Actions.gravityOff),
+             ActionsOLD.homeTo(0.2f), 
+             ActionsOLD.homeOn, 
+             ActionsOLD.gravityOff),
          //Go Home
          cue("Return Home Easing Mode", 
-             Actions.dragToBasic, 
-             Actions.homeOff, 
-             Actions.homeLinearOn)
+             ActionsOLD.dragToBasic, 
+             ActionsOLD.homeOff, 
+             ActionsOLD.homeLinearOn)
      );
      
    cue("CHAIN -> Start Emitters @ ~1:25, Gravity On1",
-   Actions.loadEnvironment(new File("/content/scene_one/scene-one-pre-gravity.env")),
+   ActionsOLD.loadEnvironment(new File("/content/scene_one/scene-one-pre-gravity.env")),
    action("Start Gravity", null, (e)->{e.addBehavior(gravity);})
    );
    }
@@ -242,7 +242,7 @@ public class Scene7 extends Layer
    
    public Cue load(String label, String file, String brushFile, ActionOLD ... post)
    {
-     ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+     ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
      if(post != null)
        for(ActionOLD a : post)
          acts.add(a);
@@ -251,8 +251,8 @@ public class Scene7 extends Layer
    
    public Cue load(String label, String env, String file, String brushFile, ActionOLD ... post)
    {
-     ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
-     ActionOLD loadEnv = Actions.loadEnvironment(new File(env));
+     ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
+     ActionOLD loadEnv = ActionsOLD.loadEnvironment(new File(env));
      if(post != null)
        for(ActionOLD a : post)
          acts.add(a);
@@ -263,7 +263,7 @@ public class Scene7 extends Layer
    {
      try
      {
-       ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brush));
+       ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brush));
        return cue(label, acts);  
      }
      catch (Throwable t)
@@ -277,7 +277,7 @@ public class Scene7 extends Layer
    
    public Cue load(String file, String brushFile)
    {
-     return Actions.loadRecording(new File(file), new File(brushFile));
+     return ActionsOLD.loadRecording(new File(file), new File(brushFile));
    }
    
    public Cue load(String label)
@@ -367,9 +367,9 @@ public class Scene7 extends Layer
    
    public Paragraph create(int fileNo, float x, float y, float w)
    {
-     int width = Actions.engine.width;
-     int height = Actions.engine.height;
-     int pW = Transform.size(w, Actions.engine.width) / 3;
+     int width = ActionsOLD.engine.width;
+     int height = ActionsOLD.engine.height;
+     int pW = Transform.size(w, ActionsOLD.engine.width) / 3;
      
      int[] c = Transform.translate(x, y, width, height);
      System.out.println("Creating paragraph width: " + pW);
@@ -404,7 +404,7 @@ public class Scene7 extends Layer
          20f,
          200
        );
-       emitter.physics = Actions.engine.getPhysics();
+       emitter.physics = ActionsOLD.engine.getPhysics();
        
        emitters.add(emitter);
    }

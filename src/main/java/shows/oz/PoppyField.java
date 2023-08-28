@@ -6,7 +6,7 @@ import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.core.PhysicsScene;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 
 import processing.core.PGraphics;
 import shows.test.SimpleWindBehavior;
@@ -33,7 +33,7 @@ public class PoppyField extends PhysicsScene
     int life = 10000;
     physics = new VerletPhysics3D();
     physics.setDrag(0.02f);
-    physics.addBehavior(Actions.gravity);
+    physics.addBehavior(ActionsOLD.gravity);
     physics.addBehavior(wind);
     //physics.addBehavior(new GravityBehavior3D(new Vec3D(0, .1f, 0)));
     int spacing = 50;

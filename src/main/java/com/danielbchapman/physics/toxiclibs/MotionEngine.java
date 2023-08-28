@@ -124,7 +124,7 @@ public class MotionEngine extends PApplet
   @Setter
   private ArrayList<RecordAction> capture = new ArrayList<>();
 
-  public static Actions ACTIONS;
+  public static ActionsOLD ACTIONS;
   private VerletPhysics3D physics = new VerletPhysics3D();
   private int sceneIndex = -1;
   private ArrayList<Layer> scenes = new ArrayList<>();
@@ -199,11 +199,11 @@ public class MotionEngine extends PApplet
     ActionOLD stop = new ActionOLD("Stop Gravity", 30000);
 
     start.motionFunction = (MotionEngine e) -> {
-      e.addBehavior(Actions.gravity);
+      e.addBehavior(ActionsOLD.gravity);
     };
 
     stop.motionFunction = (MotionEngine e) -> {
-      e.addBehavior(Actions.gravity);
+      e.addBehavior(ActionsOLD.gravity);
     };
 
     gravityThirty.add(start);
@@ -405,7 +405,7 @@ public class MotionEngine extends PApplet
             {
               System.out.println("Remote Mouse Event: " + command.toString());
               RemoteDrawMouseEvent e = (RemoteDrawMouseEvent)command;
-              int[] values = Transform.translate(e.x, e.y, Actions.WIDTH, Actions.HEIGHT);
+              int[] values = Transform.translate(e.x, e.y, ActionsOLD.WIDTH, ActionsOLD.HEIGHT);
               virtualMouseX = values[0];
               virtualMouseY = values[1];
               down = e.down;
@@ -445,7 +445,7 @@ public class MotionEngine extends PApplet
     
     if(liveDrawEnabled)
     {
-      float[] transform = Transform.translate(virtualMouseX, virtualMouseY, Actions.WIDTH, Actions.HEIGHT);
+      float[] transform = Transform.translate(virtualMouseX, virtualMouseY, ActionsOLD.WIDTH, ActionsOLD.HEIGHT);
       ArrayList<Object> args = new ArrayList<>();
       args.add("live");
       args.add("mouse");
@@ -574,12 +574,12 @@ public class MotionEngine extends PApplet
 
   public void settings()
   {
-    size(Actions.WIDTH, Actions.HEIGHT, P3D);// FIXME Needs a resize listener (though not critical)
+    size(ActionsOLD.WIDTH, ActionsOLD.HEIGHT, P3D);// FIXME Needs a resize listener (though not critical)
   }
   public void setup()
   {
    
-    Actions.engine = this;
+    ActionsOLD.engine = this;
     // QLab will limit the rate to 30 FPS it seems
     // Older Intel graphics seem to limit the rate to an odd count. 30 = 20, 60 = 30;
     frameRate(60);
@@ -745,11 +745,11 @@ public class MotionEngine extends PApplet
     prepare.accept(new RandomParticlesLayer());
     prepare.accept(new RandomParticlesVertical());
     prepare.accept(new RandomParticleLinesLayer());
-    prepare.accept(new BleedingGrid(Actions.WIDTH, Actions.HEIGHT, 40));
-    prepare.accept(new BleedingGridOffset(Actions.WIDTH, Actions.HEIGHT, 40));
-    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 10, "point-grid-10"));
-    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 40, "point-grid-40"));
-    prepare.accept(new BleedingPointGrid(Actions.WIDTH, Actions.HEIGHT, 80, "point-grid-80"));
+    prepare.accept(new BleedingGrid(ActionsOLD.WIDTH, ActionsOLD.HEIGHT, 40));
+    prepare.accept(new BleedingGridOffset(ActionsOLD.WIDTH, ActionsOLD.HEIGHT, 40));
+    prepare.accept(new BleedingPointGrid(ActionsOLD.WIDTH, ActionsOLD.HEIGHT, 10, "point-grid-10"));
+    prepare.accept(new BleedingPointGrid(ActionsOLD.WIDTH, ActionsOLD.HEIGHT, 40, "point-grid-40"));
+    prepare.accept(new BleedingPointGrid(ActionsOLD.WIDTH, ActionsOLD.HEIGHT, 80, "point-grid-80"));
     // Demo Leftovers
     // prepare.accept(new HeroLayer(this));
     prepare.accept(new RecordingLayer(this)); // Motion Sketches
@@ -757,7 +757,7 @@ public class MotionEngine extends PApplet
     prepare.accept(new MagicMissleLayer(this));
     prepare.accept(new HealingSpellLayer(this));
     prepare.accept(new TilliusWWE());
-    prepare.accept(new SpinningSquares(Actions.WIDTH, Actions.HEIGHT));
+    prepare.accept(new SpinningSquares(ActionsOLD.WIDTH, ActionsOLD.HEIGHT));
     prepare.accept(new BeholderPuppet());
     prepare.accept(rainLayer);
     // prepare.accept(new Prologue(this));
@@ -939,51 +939,51 @@ public class MotionEngine extends PApplet
 
     if (key == UP)
     {
-      float x = Actions.home.vars.maxForce;
+      float x = ActionsOLD.home.vars.maxForce;
       x += 0.01;
       if (x > 2f)
         x = 2f;
 
       System.out.println("Setting max force to -> " + x);
-      Actions.home.vars.maxForce = x;
+      ActionsOLD.home.vars.maxForce = x;
     }
 
     if (key == DOWN)
     {
-      float x = Actions.home.vars.maxForce;
+      float x = ActionsOLD.home.vars.maxForce;
       x -= 0.01;
       if (x < 0)
         x = 0;
 
       System.out.println("Setting max force to -> " + x);
-      Actions.home.vars.maxForce = x;
+      ActionsOLD.home.vars.maxForce = x;
     }
 
     if (key == 'h')
     {
-      if (isActive(Actions.home))
+      if (isActive(ActionsOLD.home))
       {
         System.out.println("Turning off home force!");
-        removeBehavior(Actions.home);
+        removeBehavior(ActionsOLD.home);
       }
       else
       {
         System.out.println("Turning on home force!");
-        addBehavior(Actions.home);
+        addBehavior(ActionsOLD.home);
       }
     }
 
     if (key == 'j')
     {
-      if (isActive(Actions.homeLinear))
+      if (isActive(ActionsOLD.homeLinear))
       {
         System.out.println("Turning off home linear force!");
-        removeBehavior(Actions.homeLinear);
+        removeBehavior(ActionsOLD.homeLinear);
       }
       else
       {
         System.out.println("Turning on linear home force!");
-        addBehavior(Actions.homeLinear);
+        addBehavior(ActionsOLD.homeLinear);
       }
     }
     if (key == ']')

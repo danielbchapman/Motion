@@ -19,7 +19,7 @@ public abstract class OLDEmitter<T extends Point>
   protected long nextDelta = -1L;
   @Getter
   @Setter
-  public VerletPhysics3D physics = Actions.engine.getPhysics();
+  public VerletPhysics3D physics = ActionsOLD.engine.getPhysics();
   
   /**
    * @param position

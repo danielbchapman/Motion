@@ -5,7 +5,7 @@ import com.danielbchapman.fx.builders.Fx;
 import com.danielbchapman.fx.builders.IntegerField;
 import com.danielbchapman.international.MessageUtility;
 import com.danielbchapman.international.MessageUtility.Instance;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -99,8 +99,8 @@ public class MotionTabs extends TabPane
     int posY = cue.asInt("pb-y", 0);
     int posZ = cue.asInt("pb-z", 0);
     
-    int sizeX = cue.asInt("pb-width", Actions.WIDTH);
-    int sizeY = cue.asInt("pb-height", Actions.HEIGHT);
+    int sizeX = cue.asInt("pb-width", ActionsOLD.WIDTH);
+    int sizeY = cue.asInt("pb-height", ActionsOLD.HEIGHT);
     
     FileField motionFile = new FileField(cue.getData("pb-recording", null));
     FileField brushFile =  new FileField(cue.getData("pb-brush", null));

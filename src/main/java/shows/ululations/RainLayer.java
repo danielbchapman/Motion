@@ -14,7 +14,7 @@ import com.danielbchapman.brushes.old.ImageBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.physics.toxiclibs.ActionOLD;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.Point;
 
@@ -56,22 +56,22 @@ public class RainLayer extends BleedingCanvasLayer
   					  ImageBrush brush = new ImageBrush();
   						add(
   							cue("Rain Falls",
-  								Actions.dragTo(0.5f),
+  								ActionsOLD.dragTo(0.5f),
   								startBleed(),
-  								Actions.gravityTo(new Vec3D(.45f, .85f, 0)),
-  								Actions.gravityOn,
+  								ActionsOLD.gravityTo(new Vec3D(.45f, .85f, 0)),
+  								ActionsOLD.gravityOn,
   								startRain()
   							),
   							
   							cue("Harder Rain", //---Add 5 or so emitters for 1 seconds
-  									Actions.follow(500),
+  									ActionsOLD.follow(500),
   									hardOn(),
-  									Actions.gravityTo(new Vec3D(.45f, .85f, 0).scale(2f)),
-  									Actions.gravityOn
+  									ActionsOLD.gravityTo(new Vec3D(.45f, .85f, 0).scale(2f)),
+  									ActionsOLD.gravityOn
 								),
   							cue("Freeze Paint",
   							    stopBleed(),
-  							    Actions.follow(1000)
+  							    ActionsOLD.follow(1000)
 						    ),
   							cue("AF: Stop Rain", 
   							    hardOff(),
@@ -81,20 +81,20 @@ public class RainLayer extends BleedingCanvasLayer
   							cue("76 Start Rain again, bleeding starts",
   							    startBleed(),
   							    startRain(),
-  							    Actions.dragTo(0.5f),
-  							    Actions.gravityTo(new Vec3D(.45f, .85f, 0)),
-                    Actions.gravityOn),
+  							    ActionsOLD.dragTo(0.5f),
+  							    ActionsOLD.gravityTo(new Vec3D(.45f, .85f, 0)),
+                    ActionsOLD.gravityOn),
                     
                 cue("82 A large Brush runs over the stage", 
-                    Actions.gravityOff,
+                    ActionsOLD.gravityOff,
                     stopRain(),
-                    Actions.dragToNone,
-                    Actions.follow(0)),
+                    ActionsOLD.dragToNone,
+                    ActionsOLD.follow(0)),
                     
                 load("AF->PaintSmear", 
                     "show/rain/paint-slash", 
                     brush, 
-                    Actions.follow(500)),
+                    ActionsOLD.follow(500)),
                 
                 cue("AF->Stop Bleed", 
                     stopBleed()),
@@ -163,7 +163,7 @@ public class RainLayer extends BleedingCanvasLayer
       g.fill(0,0,0, 2);
       g.stroke(0,0,0, 2);
       g.rectMode(PConstants.CORNER);
-      g.rect(0, 0, Actions.WIDTH, Actions.HEIGHT);
+      g.rect(0, 0, ActionsOLD.WIDTH, ActionsOLD.HEIGHT);
         
     }
     

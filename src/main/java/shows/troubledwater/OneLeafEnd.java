@@ -1,7 +1,7 @@
 package shows.troubledwater;
 
 import com.danielbchapman.brushes.SmallBrush;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
@@ -42,7 +42,7 @@ public class OneLeafEnd extends PaintingLayer
               -300, 0, 800, 600,
             "One",
             "show/prologue/leaf-1",
-            pen, Actions.follow(3000)),
+            pen, ActionsOLD.follow(3000)),
           load(
               -250, 0, 800, 600,
               "Leaf",

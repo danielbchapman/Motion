@@ -17,14 +17,14 @@ public class EmitterLayer extends Layer
     int count = 25;
     for(int i = 0; i < count; i++)
     {
-      float x = ((float) Actions.engine.width -75f) / (float)count;
+      float x = ((float) ActionsOLD.engine.width -75f) / (float)count;
       x *= i+1;
       emitters.add(new LetterEmitter(data, new Vec3D(x, -100, 0), Vec3D.randomVector(), 15000, 250, 2f, 25));
     }
     
     for(int i = 0; i < count; i++)
     {
-      float x = ((float) Actions.engine.width -45f) / (float)count;
+      float x = ((float) ActionsOLD.engine.width -45f) / (float)count;
       x *= i+1;
       emitters.add(new LetterEmitter(data, new Vec3D(x, -100, 150), Vec3D.randomVector(), 15000, 250, 2f, 25));
     }

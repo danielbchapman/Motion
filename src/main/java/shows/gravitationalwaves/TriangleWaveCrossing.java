@@ -1,6 +1,6 @@
 package shows.gravitationalwaves;
 
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Moveable;
 import com.danielbchapman.physics.toxiclibs.Point;
 import com.danielbchapman.physics.toxiclibs.Transform;
@@ -20,8 +20,8 @@ public class TriangleWaveCrossing extends TriangleWave
   {
     float mag = 1f;
     
-    int tX = Transform.size(x, Actions.WIDTH);
-    int tY = Transform.size(y, Actions.HEIGHT);
+    int tX = Transform.size(x, ActionsOLD.WIDTH);
+    int tY = Transform.size(y, ActionsOLD.HEIGHT);
     int tZ = 10;
     a = new Point(tX, tY, tZ, 1);
     b = new Point(tX, tY, tZ, 1);

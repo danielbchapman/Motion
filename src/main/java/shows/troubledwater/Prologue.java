@@ -1,6 +1,6 @@
 package shows.troubledwater;
 
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
@@ -41,7 +41,7 @@ public class Prologue extends PaintingLayer
               40, -25, 533, 533,
               "Leaf",
               "show/prologue/leaf-2",
-              pen, Actions.follow(3000))     
+              pen, ActionsOLD.follow(3000))     
       );
       
 //      add(

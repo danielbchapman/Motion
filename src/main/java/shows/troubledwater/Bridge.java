@@ -3,7 +3,7 @@ package shows.troubledwater;
 import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.physics.toxiclibs.ActionOLD;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
 import lombok.Getter;
@@ -28,9 +28,9 @@ public class Bridge extends BleedingCanvasLayer
 										
 								cue("Freeze the water",
 										stopBleed(),
-										Actions.follow(700)),
+										ActionsOLD.follow(700)),
 								cue("STOP BLEED", 
-									Actions.stopPlayback()
+									ActionsOLD.stopPlayback()
 									),
 								
 								//BIG SLASH
@@ -38,25 +38,25 @@ public class Bridge extends BleedingCanvasLayer
 										"show/bridge/slash-1",
 										brush,
 										startBleed(),
-										Actions.follow(250)),
+										ActionsOLD.follow(250)),
 								load("Slash 2",
 										"show/bridge/slash-2",
 										brush,
-										Actions.follow(350)),
+										ActionsOLD.follow(350)),
 								load("Slash 3",
 										"show/bridge/slash-3",
 										brush,
-										Actions.follow(1000)
+										ActionsOLD.follow(1000)
 										),
 								cue("AF: Stop Bleeding",
 								    stopBleed()
 								    ),
 								    
 								//Do wee need this?
-								cue("Stop Playback", Actions.stopPlayback()),
+								cue("Stop Playback", ActionsOLD.stopPlayback()),
 								
 								cue("slow strokes on the water",
-										startBleed(), Actions.follow(100)),
+										startBleed(), ActionsOLD.follow(100)),
 								load("Slow Shake",
 										"show/bridge/slow-shake-a-sheet", 
 										brush),

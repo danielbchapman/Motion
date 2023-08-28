@@ -158,7 +158,7 @@ public class Recorder
       
       open.addActionListener((x)->
       {
-        open(Actions.engine.width, Actions.engine.height, 0, 0);
+        open(ActionsOLD.engine.width, ActionsOLD.engine.height, 0, 0);
       });
       
       close.addActionListener((e)->
@@ -169,9 +169,9 @@ public class Recorder
       
       save.addActionListener((x)->
       {
-        ArrayList<RecordAction> actions = Actions.engine.getCapture();
+        ArrayList<RecordAction> actions = ActionsOLD.engine.getCapture();
         if(actions != null && !actions.isEmpty())
-          save(actions, Actions.engine.width, Actions.engine.height);
+          save(actions, ActionsOLD.engine.width, ActionsOLD.engine.height);
         else
           warn("Unable to Save", "Unable to save empty list" );
       });
@@ -218,7 +218,7 @@ public class Recorder
         }
         
         populate(f.getName(), actions);
-        Actions.engine.setCapture(actions);
+        ActionsOLD.engine.setCapture(actions);
       }
     }
 

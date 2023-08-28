@@ -7,7 +7,7 @@ import toxi.geom.Vec3D;
 
 import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.VectorMouseBrush;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 
 

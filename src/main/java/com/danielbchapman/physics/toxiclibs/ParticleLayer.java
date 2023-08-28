@@ -16,7 +16,7 @@ public class ParticleLayer extends Layer
   {
     for(int i = 0; i < 10; i++)
     {
-      float x = (float) Actions.engine.width / (float)10;
+      float x = (float) ActionsOLD.engine.width / (float)10;
       x -= 75f;
       x *= i+1;
       emitters.add(new LetterEmitter(data, new Vec3D(x, -100, 0), Vec3D.randomVector(), 5000, 250, 2f, 25));

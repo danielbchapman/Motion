@@ -12,15 +12,15 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
 
   public AngularGravityBehavior3D()
   {
-    setStopPoint(((float)Actions.HEIGHT) / 2f);
-    vars.userC = Actions.HEIGHT;
+    setStopPoint(((float)ActionsOLD.HEIGHT) / 2f);
+    vars.userC = ActionsOLD.HEIGHT;
   }
   // Vec3D original = new Vec3D();
   public AngularGravityBehavior3D(Vec3D gravity)
   {
     vars.force = gravity;
     vars.backup = gravity.copy();
-    vars.userC = Actions.HEIGHT;
+    vars.userC = ActionsOLD.HEIGHT;
   }
 
   public void apply(VerletParticle3D p)

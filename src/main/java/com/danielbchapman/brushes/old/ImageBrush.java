@@ -5,7 +5,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import toxi.geom.Vec3D;
 
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
 
 
@@ -44,7 +44,7 @@ public class ImageBrush extends VectorBrush
   {
     if(loadedImage == null)
     {
-      loadedImage = Actions.engine.loadImage(brushFileName);
+      loadedImage = ActionsOLD.engine.loadImage(brushFileName);
     }
     
     g.pushMatrix();

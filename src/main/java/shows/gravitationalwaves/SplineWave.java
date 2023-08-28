@@ -1,6 +1,6 @@
 package shows.gravitationalwaves;
 
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Drawable;
 import com.danielbchapman.physics.toxiclibs.Moveable;
 import com.danielbchapman.physics.toxiclibs.Point;
@@ -35,8 +35,8 @@ public class SplineWave implements Moveable, Drawable
     float rads = (float) (Math.PI / 3 * 2);
     float mag = 1f;
     float offsetMag = .5f;
-    int tX = Transform.size(x, Actions.WIDTH);
-    int tY = Transform.size(y, Actions.HEIGHT);
+    int tX = Transform.size(x, ActionsOLD.WIDTH);
+    int tY = Transform.size(y, ActionsOLD.HEIGHT);
     int tZ = 10;
     a = new Point(tX, tY, tZ, 1);
     ab1 = new Point(tX, tY, tZ, 1);

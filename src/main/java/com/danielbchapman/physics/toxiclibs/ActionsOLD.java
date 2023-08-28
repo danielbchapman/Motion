@@ -15,7 +15,7 @@ import com.danielbchapman.utility.FileUtil;
  * to share fundamental environmental variables without doubling 
  * up accidentally.
  */
-public class Actions
+public class ActionsOLD
 {
   public static MotionEngine engine;
   public static int WIDTH = 1024;
@@ -99,7 +99,7 @@ public class Actions
     return new ActionOLD("Gravity Scaling to " + x,
         0,
         null,
-        (e)->{Actions.gravity.updateMagnitude(x);}
+        (e)->{ActionsOLD.gravity.updateMagnitude(x);}
         );
     
   }
@@ -110,7 +110,7 @@ public class Actions
         null,
         (x)->
         {
-          Actions.gravity.setGravity(dir);
+          ActionsOLD.gravity.setGravity(dir);
         }
         );
   }
@@ -163,7 +163,7 @@ public class Actions
   
   public static ActionOLD stopPlayback()
   {
-    return new ActionOLD("Stopping Playbacks", 0, null, (e)->{Actions.engine.clearPlaybacks();});
+    return new ActionOLD("Stopping Playbacks", 0, null, (e)->{ActionsOLD.engine.clearPlaybacks();});
   }
   
   public static ActionOLD loadEnvironment(File file){

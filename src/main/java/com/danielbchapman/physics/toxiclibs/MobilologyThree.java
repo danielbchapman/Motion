@@ -42,18 +42,18 @@ public class MobilologyThree extends Layer
     setText(FileUtil.readFile("content/scene_three/text.txt"));
     
     location = new Vec3D(
-        Transform.size(0f, Actions.engine.width),
-        Transform.size(-1.02f, Actions.engine.height),
+        Transform.size(0f, ActionsOLD.engine.width),
+        Transform.size(-1.02f, ActionsOLD.engine.height),
         0
       );
      
    low = new Vec3D(
-       Transform.size(-.8f, Actions.engine.width),
+       Transform.size(-.8f, ActionsOLD.engine.width),
        -50,
        -100
      );
    high = new Vec3D(
-       Transform.size(.8f, Actions.engine.width),
+       Transform.size(.8f, ActionsOLD.engine.width),
        50,
        100
      );
@@ -62,14 +62,14 @@ public class MobilologyThree extends Layer
    String data2 = "These are some letters that we should emit";
    for(int i = 0; i < count; i++)
    {
-     float x = ((float) Actions.engine.width -75f) / (float)count;
+     float x = ((float) ActionsOLD.engine.width -75f) / (float)count;
      x *= i+1;
      emitters.add(new LetterEmitter(data2, new Vec3D(x, -100, 0), Vec3D.randomVector(), 15000, 1000, 2f, 25));
    }
    
    for(int i = 0; i < count; i++)
    {
-     float x = ((float) Actions.engine.width -45f) / (float)count;
+     float x = ((float) ActionsOLD.engine.width -45f) / (float)count;
      x *= i+1;
      emitters.add(new LetterEmitter(data2, new Vec3D(x, -100, 150), Vec3D.randomVector(), 15000, 1000, 2f, 25));
    }
@@ -88,7 +88,7 @@ public class MobilologyThree extends Layer
   @Override
   public void go(MotionEngine engine)
   {
-    stack.go(Actions.engine, this);
+    stack.go(ActionsOLD.engine, this);
 //    if(!started)
 //    {
 //      started = true;
@@ -111,11 +111,11 @@ public class MobilologyThree extends Layer
                  (x)->{
                    started = System.currentTimeMillis();
                    System.out.println("============================ SCENE 3=====================");
-                   System.out.println(" Adding Gravity " + Actions.engine.addBehavior(gravityNew));
-                   Actions.engine.getPhysics().setDrag(0.015f);
-                   Actions.engine.addBehavior(Actions.home);
+                   System.out.println(" Adding Gravity " + ActionsOLD.engine.addBehavior(gravityNew));
+                   ActionsOLD.engine.getPhysics().setDrag(0.015f);
+                   ActionsOLD.engine.addBehavior(ActionsOLD.home);
                    MotionEngine.brush = MotionInteractiveBehavior.load(new File("content/scene_three/brush/leaves"));
-                   for(Object o : Actions.engine.getPhysics().behaviors)
+                   for(Object o : ActionsOLD.engine.getPhysics().behaviors)
                      System.out.println(o);
                    
                    System.out.println("============================ END SCENE 3=====================");
@@ -137,19 +137,19 @@ public class MobilologyThree extends Layer
               "content/scene_three/rec/find_this", 
               "content/scene_three/brush/leaves"),
          cue("[57] Forward Gather \"Already Has\"",
-             Actions.stopPlayback()
+             ActionsOLD.stopPlayback()
              ),
          load("[58] With Locking",
              "content/scene_three/rec/3-locking",
              "content/scene_three/brush/soft-leaves"),//"Social Media Platforms"
          cue("[59] On Unlock", //"proud warrior too!
-             Actions.stopPlayback()),
+             ActionsOLD.stopPlayback()),
          load("[59.5] Googling",
              "content/scene_three/rec/googling",
              "content/scene_three/brush/scene-3-implode"
              ),
          cue("[59.6] DISCONNECTING", 
-             Actions.stopPlayback()
+             ActionsOLD.stopPlayback()
              ),
          load("[60] With Savasana",
              "content/scene_three/rec/sequence-60-good", 
@@ -161,21 +161,21 @@ public class MobilologyThree extends Layer
 //         ),
 //         cue("[62] With Downward Motion"),
          cue("[63] With Hands and lights", 
-             Actions.stopPlayback()
+             ActionsOLD.stopPlayback()
              ),
          load("[70] Blow Away",
              "content/scene_three/rec/3-explode", 
              "content/scene_three/brush/max-explode",
              action("stop emitters", null, x->{stopEmitters();}),
-             Actions.gravityOff,
-             Actions.homeOff,
-             Actions.homeLinearOff,
+             ActionsOLD.gravityOff,
+             ActionsOLD.homeOff,
+             ActionsOLD.homeLinearOff,
              action("gravity off", null, x->{x.removeBehavior(gravityNew);}),
-             Actions.follow(50),
+             ActionsOLD.follow(50),
              action("STOP", null, x->{STOP = true;}),
-             Actions.follow(0)
+             ActionsOLD.follow(0)
              ),
-         cue("ADVANCE TO BLANK", Actions.advanceScene(3500))
+         cue("ADVANCE TO BLANK", ActionsOLD.advanceScene(3500))
         );    
   }
   
@@ -330,8 +330,8 @@ public class MobilologyThree extends Layer
   
   public Cue load(String label, String env, String file, String brushFile, ActionOLD ... post)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
-    ActionOLD loadEnv = Actions.loadEnvironment(new File(env));
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
+    ActionOLD loadEnv = ActionsOLD.loadEnvironment(new File(env));
     if(post != null)
       for(ActionOLD a : post)
         acts.add(a);
@@ -340,18 +340,18 @@ public class MobilologyThree extends Layer
   
   public Cue load(String label, String file, String brush)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brush));
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brush));
     return cue(label, acts);
   }
   
   public Cue load(String file, String brushFile)
   {
-    return Actions.loadRecording(new File(file), new File(brushFile));
+    return ActionsOLD.loadRecording(new File(file), new File(brushFile));
   }
   
   public Cue load(String label, String file, String brushFile, ActionOLD ... post)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
     if(post != null)
       for(ActionOLD a : post)
         acts.add(a);

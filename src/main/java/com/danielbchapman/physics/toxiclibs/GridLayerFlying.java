@@ -218,25 +218,25 @@ public class GridLayerFlying extends Layer
     stack = new CueStack();
     stack.add(
         cue("Prepare Scene", 
-            Actions.homeOff,
-            Actions.gravityOff,
-            Actions.homeLinearOff,
-            Actions.dragTo(.5f),
+            ActionsOLD.homeOff,
+            ActionsOLD.gravityOff,
+            ActionsOLD.homeLinearOff,
+            ActionsOLD.dragTo(.5f),
             //Need to set the forces I like here...
             action("Send Lines Out", (x)->{offscreen(); lockAll();}, null)
             ),
         cue("Start Fades", 
-            Actions.homeLinearOn,
+            ActionsOLD.homeLinearOn,
             action("Start Lines", (x)->{runFades();}, null)),
         cue("Slap! One",
-            Actions.gravityOff,
-            Actions.homeLinearOff,
-            Actions.homeOff,
-            Actions.dragToNone,
+            ActionsOLD.gravityOff,
+            ActionsOLD.homeLinearOff,
+            ActionsOLD.homeOff,
+            ActionsOLD.dragToNone,
             action("SLAP", (x)->{slap();}, null),
             action("Restore", (x)->{
-              Actions.dragTo(.5f).motionFunction.accept(Actions.engine);
-              Actions.homeLinearOn.motionFunction.accept(Actions.engine);
+              ActionsOLD.dragTo(.5f).motionFunction.accept(ActionsOLD.engine);
+              ActionsOLD.homeLinearOn.motionFunction.accept(ActionsOLD.engine);
               }, null, 1000)
             )      
     );
@@ -250,7 +250,7 @@ public class GridLayerFlying extends Layer
       return;
     }
       
-    int[] where = Transform.translate(0f, 0f, 0f, Actions.engine.width, Actions.engine.height);
+    int[] where = Transform.translate(0f, 0f, 0f, ActionsOLD.engine.width, ActionsOLD.engine.height);
     Slap force = new Slap(new Vec3D(where[0], where[1], where[2]), new Vec3D(0, 0, -1f), 100f);
     force.maxForce = 10f;
     Cue slap = cue("Slap",

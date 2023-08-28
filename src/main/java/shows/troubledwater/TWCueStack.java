@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.danielbchapman.physics.toxiclibs.ActionOLD;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.CueStack;
 import com.danielbchapman.physics.toxiclibs.Layer;
@@ -74,8 +74,8 @@ public abstract class TWCueStack extends CueStack
   
   public Cue load(String label, String env, String file, String brushFile, ActionOLD ... post)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
-    ActionOLD loadEnv = Actions.loadEnvironment(new File(env));
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
+    ActionOLD loadEnv = ActionsOLD.loadEnvironment(new File(env));
     if(post != null)
       for(ActionOLD a : post)
         acts.add(a);
@@ -84,18 +84,18 @@ public abstract class TWCueStack extends CueStack
   
   public Cue load(String label, String file, String brush)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brush));
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brush));
     return cue(label, acts);
   }
   
   public Cue load(String file, String brushFile)
   {
-    return Actions.loadRecording(new File(file), new File(brushFile));
+    return ActionsOLD.loadRecording(new File(file), new File(brushFile));
   }
   
   public Cue load(int x, int y, int w, int h, String label, String file, MotionInteractiveBehavior brush, ActionOLD... post)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(x, y, w, h, new File(file), brush);
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(x, y, w, h, new File(file), brush);
     if(post != null)
       for(ActionOLD a : post)
         acts.add(a);
@@ -104,7 +104,7 @@ public abstract class TWCueStack extends CueStack
   
   public Cue load(String label, String file, MotionInteractiveBehavior brush, ActionOLD ... post)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), brush);
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), brush);
     if(post != null)
       for(ActionOLD a : post)
         acts.add(a);
@@ -113,7 +113,7 @@ public abstract class TWCueStack extends CueStack
   
   public Cue load(String label, String file, String brushFile, ActionOLD ... post)
   {
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
     if(post != null)
       for(ActionOLD a : post)
         acts.add(a);

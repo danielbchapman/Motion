@@ -77,7 +77,7 @@ public abstract class OLDAbstractEmitter<T extends Moveable>
       
       p.life = lifeSpan;
       p.created = time;
-      Actions.engine.getPhysics().addParticle(p);
+      ActionsOLD.engine.getPhysics().addParticle(p);
     }
     
     //Remove expired children
@@ -94,7 +94,7 @@ public abstract class OLDAbstractEmitter<T extends Moveable>
           {
             //Clear the points from the engine
             for(Point p : points)
-              Actions.engine.getPhysics().removeParticle(p);
+              ActionsOLD.engine.getPhysics().removeParticle(p);
             
             //Clear the object
             it.remove();

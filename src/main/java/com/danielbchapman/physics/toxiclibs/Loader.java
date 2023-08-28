@@ -9,7 +9,7 @@ public class Loader
   public static Cue load(int x, int y, int w, int h, String label, String file, String brush, ActionOLD... post)
   {
     MotionInteractiveBehavior brushInstance = MotionInteractiveBehavior.load(new File(brush));
-    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(x, y, w, h, new File(file), brushInstance);
+    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(x, y, w, h, new File(file), brushInstance);
     if(post != null)
       for(ActionOLD a : post)
         acts.add(a);

@@ -6,7 +6,7 @@ import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.core.PhysicsScene;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 
 import processing.core.PGraphics;
 import shows.test.SimpleWindBehavior;
@@ -24,7 +24,7 @@ public class PoppyFieldSnow extends PhysicsScene
     physics = new VerletPhysics3D();
     physics.setDrag(0.02f);
     physics.addBehavior(new SimpleWindBehavior(new Vec3D(0.05f, 0, 0)));
-    physics.addBehavior(Actions.gravity);
+    physics.addBehavior(ActionsOLD.gravity);
     //physics.addBehavior(new GravityBehavior3D(new Vec3D(0, .1f, 0)));
     for(int i = 0; i < 10; i++)
     {

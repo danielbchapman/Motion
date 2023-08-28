@@ -7,7 +7,7 @@ import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.core.PhysicsScene;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 
 import processing.core.PGraphics;
 import processing.core.PShape;
@@ -38,7 +38,7 @@ public class LionLeaves extends PhysicsScene
     physics = new VerletPhysics3D();
     physics.setDrag(0.02f);
     physics.addBehavior(wind);
-    physics.addBehavior(Actions.gravity);
+    physics.addBehavior(ActionsOLD.gravity);
     //physics.addBehavior(new GravityBehavior3D(new Vec3D(0, .1f, 0)));
     int spacing = 50;
     int widthCells = (Motion.WIDTH / spacing) + 2;

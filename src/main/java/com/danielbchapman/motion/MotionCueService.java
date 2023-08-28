@@ -6,7 +6,7 @@ import com.danielbchapman.application.Resource;
 import com.danielbchapman.application.ScopeType;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.physics.toxiclibs.ActionOLD;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.Loader;
 
@@ -38,8 +38,8 @@ public class MotionCueService extends Resource
         String brush = cue.getData("pb-brush", null);
         
         int w, h, x, y; 
-        w = cue.asInt("pb-width", Actions.WIDTH);
-        h = cue.asInt("height", Actions.HEIGHT);
+        w = cue.asInt("pb-width", ActionsOLD.WIDTH);
+        h = cue.asInt("height", ActionsOLD.HEIGHT);
         x = cue.asInt("pb-x", 0);
         y = cue.asInt("pb-y", 0);
         

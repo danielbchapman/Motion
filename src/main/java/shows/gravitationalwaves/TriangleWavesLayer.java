@@ -2,7 +2,7 @@ package shows.gravitationalwaves;
 
 import com.danielbchapman.layers.BleedingLayer;
 import com.danielbchapman.physics.toxiclibs.OLDAbstractEmitter;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.Point;
@@ -79,7 +79,7 @@ public class TriangleWavesLayer extends BleedingLayer
     g.text("TRIANGLE WAVES", 25, 25, 10);
     if(!initialized)
     {
-      Actions.engine.getPhysics().setDrag(0f);
+      ActionsOLD.engine.getPhysics().setDrag(0f);
       initialized = true;
     }
     emitter.draw(g);
@@ -102,9 +102,9 @@ public class TriangleWavesLayer extends BleedingLayer
     try
     {
       Cue q = Cue.create("reset",        
-          Actions.gravityOff,
-          Actions.homeOff,
-          Actions.homeLinearOff);
+          ActionsOLD.gravityOff,
+          ActionsOLD.homeOff,
+          ActionsOLD.homeLinearOff);
       
       clear();
       q.go(this,  engine);

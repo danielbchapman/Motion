@@ -89,7 +89,7 @@ public class EnvironmentTools extends JFrame
         0, 
         10000,
         1000f,
-        Actions.home, 
+        ActionsOLD.home, 
         (b, f)->{ b.vars.magnitude = f; },
         (b, s)->{ s.set(b.vars.magnitude);},
         true
@@ -101,7 +101,7 @@ public class EnvironmentTools extends JFrame
         0, 
         10000,
         1000f,
-        Actions.home, 
+        ActionsOLD.home, 
         (b, f)->{
           b.vars.maxForce = f;
         },
@@ -113,7 +113,7 @@ public class EnvironmentTools extends JFrame
         0, 
         10000,
         10000f,
-        Actions.homeLinear, 
+        ActionsOLD.homeLinear, 
         (b, f)->{b.vars.userA = f;},
         (b, s)->{s.set(b.vars.userA);},
         true
@@ -124,7 +124,7 @@ public class EnvironmentTools extends JFrame
         0, 
         10000,
         1000f,
-        Actions.homeLinear, 
+        ActionsOLD.homeLinear, 
         (b, f)->{b.vars.maxForce = f;},
         (b, s)->{s.set(b.vars.maxForce);}
         );
@@ -134,10 +134,10 @@ public class EnvironmentTools extends JFrame
         0, 
         10000,
         10000f,
-        Actions.gravity, 
+        ActionsOLD.gravity, 
         (b, f)->{
           b.updateMagnitude(f);
-          System.out.println("Scaling Gravity to -> " + f + " Gravity: " + Actions.gravity);
+          System.out.println("Scaling Gravity to -> " + f + " Gravity: " + ActionsOLD.gravity);
         },
         (b, s)->
         {
@@ -146,7 +146,7 @@ public class EnvironmentTools extends JFrame
         true
         );    
     
-    gravityVector = new Vec3DEditor<>("Gravity Vector", Actions.gravity, 
+    gravityVector = new Vec3DEditor<>("Gravity Vector", ActionsOLD.gravity, 
         (v, o)->{
           o.setGravity(v);
           },
@@ -158,7 +158,7 @@ public class EnvironmentTools extends JFrame
         0, 
         10000,
         10000f,
-        Actions.engine, 
+        ActionsOLD.engine, 
         (e, f)->{
           e.getPhysics().setDrag(f);
         },
@@ -304,10 +304,10 @@ public class EnvironmentTools extends JFrame
       buffer.append("\n");
     };
     //Prepare
-    write.accept(FileArgs.DRAG, Actions.engine.getPhysics().getDrag()+"");
-    write.accept(FileArgs.GRAVITY, Actions.gravity.save());
-    write.accept(FileArgs.HOME, Actions.home.save());
-    write.accept(FileArgs.HOME_LINEAR, Actions.homeLinear.save());
+    write.accept(FileArgs.DRAG, ActionsOLD.engine.getPhysics().getDrag()+"");
+    write.accept(FileArgs.GRAVITY, ActionsOLD.gravity.save());
+    write.accept(FileArgs.HOME, ActionsOLD.home.save());
+    write.accept(FileArgs.HOME_LINEAR, ActionsOLD.homeLinear.save());
     write.accept(FileArgs.WIND, "not implemented...");
     
     try{
@@ -356,12 +356,12 @@ public class EnvironmentTools extends JFrame
       if(x.vars.running)
       {
         System.out.println("Loading -> " + x + " and setting to running");
-        Actions.engine.addBehavior(x);
+        ActionsOLD.engine.addBehavior(x);
       }
       else
       {
         System.out.println("Loading -> " + x + " and setting to not running");
-        Actions.engine.removeBehavior(x);
+        ActionsOLD.engine.removeBehavior(x);
       }
         
     };
@@ -371,16 +371,16 @@ public class EnvironmentTools extends JFrame
       switch(i)
       {
         case 1:
-          Actions.engine.getPhysics().setDrag(Float.valueOf(lines.get(i)));
+          ActionsOLD.engine.getPhysics().setDrag(Float.valueOf(lines.get(i)));
           break;
         case 3:
-          loadIt.accept(Actions.gravity, lines.get(i));
+          loadIt.accept(ActionsOLD.gravity, lines.get(i));
           break;
         case 5:
-          loadIt.accept(Actions.home, lines.get(i));
+          loadIt.accept(ActionsOLD.home, lines.get(i));
           break;
         case 7:
-          loadIt.accept(Actions.homeLinear, lines.get(i));
+          loadIt.accept(ActionsOLD.homeLinear, lines.get(i));
           break;
         case 9:
           //wind

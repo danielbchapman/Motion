@@ -2,7 +2,7 @@ package shows.troubledwater;
 
 import java.io.File;
 
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.SquareGrid;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
@@ -19,17 +19,17 @@ public class Scene5Grid extends SquareGrid
       {
         add(
         		cue("Load Grid", 
-        				Actions.dragTo(0.1133f),
-        				Actions.loadEnvironment(new File("show/scene5/shatter-environment.env"))
+        				ActionsOLD.dragTo(0.1133f),
+        				ActionsOLD.loadEnvironment(new File("show/scene5/shatter-environment.env"))
         			),
         		cue("Start Sine Waves", 
-        				Actions.lfoOn),
+        				ActionsOLD.lfoOn),
         		load("SHATTER",
         				"show/scene5/shatter",
         				"show/scene5/shatter-brush",
-        				Actions.homeOff,
-        				Actions.dragToNone,
-        				Actions.homeLinearOff
+        				ActionsOLD.homeOff,
+        				ActionsOLD.dragToNone,
+        				ActionsOLD.homeLinearOff
         				)
         		//Load Grid
         		//Start Sine Waves

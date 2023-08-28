@@ -3,7 +3,7 @@ package shows.shekillsmonsters;
 import processing.core.PApplet;
 import shows.troubledwater.TWCueStack;
 
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.SpriteLayer;
 
@@ -38,13 +38,13 @@ public class MagicMissleLayer extends SpriteLayer
 									 "show/missle/magic-missle-brush"),
 								//Slow down the world
 								cue("STOP PLAYBACK", 
-										Actions.stopPlayback(), 
-										Actions.follow(200)),
+										ActionsOLD.stopPlayback(), 
+										ActionsOLD.follow(200)),
 								cue("Stop Physics", 
-										Actions.follow(200),
-										Actions.dragTo(0.069f),
-										Actions.homeOff,
-										Actions.homeLinearOff),
+										ActionsOLD.follow(200),
+										ActionsOLD.dragTo(0.069f),
+										ActionsOLD.homeOff,
+										ActionsOLD.homeLinearOff),
 								load("[2] Spell Slows Over Stage",
 										"show/missle/magic-missles.env",
 										 "show/missle/missle-anchor",

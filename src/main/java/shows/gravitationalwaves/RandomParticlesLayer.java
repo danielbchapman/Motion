@@ -10,7 +10,7 @@ import toxi.physics3d.VerletParticle3D;
 
 import com.danielbchapman.layers.BleedingLayer;
 import com.danielbchapman.physics.toxiclibs.OLDAbstractEmitter;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.OLDEmitter;
 import com.danielbchapman.physics.toxiclibs.ExplodeBehaviorInverse;
@@ -101,10 +101,10 @@ public class RandomParticlesLayer extends BleedingLayer
     try
     {
       Cue q = Cue.create("reset",  
-          Actions.dragToNone,
-          Actions.gravityOff,
-          Actions.homeOff,
-          Actions.homeLinearOff);
+          ActionsOLD.dragToNone,
+          ActionsOLD.gravityOff,
+          ActionsOLD.homeOff,
+          ActionsOLD.homeLinearOff);
       
       clear();
       q.go(this,  engine);

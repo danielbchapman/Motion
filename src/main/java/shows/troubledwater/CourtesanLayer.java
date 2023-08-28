@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.physics.toxiclibs.ActionOLD;
-import com.danielbchapman.physics.toxiclibs.Actions;
+import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.CueStack;
 import com.danielbchapman.physics.toxiclibs.Layer;
@@ -61,31 +61,31 @@ public class CourtesanLayer extends BleedingCanvasLayer {
 				load("Stroke 1",
 					"show/scene3/3-1",
 					brush,
-					Actions.follow(1000)),
+					ActionsOLD.follow(1000)),
 				load("Stroke 2",
 						"show/scene3/3-2",
 						brush,
-						Actions.follow(1000)),
+						ActionsOLD.follow(1000)),
 				load("Stroke 3",
 						"show/scene3/3-3",
 						brush,
-						Actions.follow(1000)),
+						ActionsOLD.follow(1000)),
 				load("Stroke 4",
 						"show/scene3/3-4",
 						brush,
-						Actions.follow(1000)),
+						ActionsOLD.follow(1000)),
 				load("Stroke 5",
 						"show/scene3/side-stroke",
 						brush,
-						Actions.follow(1000)),
+						ActionsOLD.follow(1000)),
 				load("Stroke 6",
 						"show/scene3/3-6",
 						brush,
-						Actions.follow(1000)),
+						ActionsOLD.follow(1000)),
 				load("Stroke 7",
 						"show/scene3/long-stroke",
 						brush,
-						Actions.follow(1000))
+						ActionsOLD.follow(1000))
 			);
 		}
 	}
@@ -111,8 +111,8 @@ public class CourtesanLayer extends BleedingCanvasLayer {
 	  
 	  public Cue load(String label, String env, String file, String brushFile, ActionOLD ... post)
 	  {
-	    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
-	    ActionOLD loadEnv = Actions.loadEnvironment(new File(env));
+	    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
+	    ActionOLD loadEnv = ActionsOLD.loadEnvironment(new File(env));
 	    if(post != null)
 	      for(ActionOLD a : post)
 	        acts.add(a);
@@ -121,18 +121,18 @@ public class CourtesanLayer extends BleedingCanvasLayer {
 	  
 	  public Cue load(String label, String file, String brush)
 	  {
-	    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brush));
+	    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brush));
 	    return cue(label, acts);
 	  }
 	  
 	  public Cue load(String file, String brushFile)
 	  {
-	    return Actions.loadRecording(new File(file), new File(brushFile));
+	    return ActionsOLD.loadRecording(new File(file), new File(brushFile));
 	  }
 	  
 	  public Cue load(String label, String file, String brushFile, ActionOLD ... post)
 	  {
-	    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+	    ArrayList<ActionOLD> acts = ActionsOLD.loadRecordingAsAction(new File(file), new File(brushFile));
 	    if(post != null)
 	      for(ActionOLD a : post)
 	        acts.add(a);
