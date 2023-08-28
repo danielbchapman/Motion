@@ -6,25 +6,25 @@ import java.util.List;
 
 public class Loader
 {
-  public static Cue load(int x, int y, int w, int h, String label, String file, String brush, Action... post)
+  public static Cue load(int x, int y, int w, int h, String label, String file, String brush, ActionOLD... post)
   {
     MotionInteractiveBehavior brushInstance = MotionInteractiveBehavior.load(new File(brush));
-    ArrayList<Action> acts = Actions.loadRecordingAsAction(x, y, w, h, new File(file), brushInstance);
+    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(x, y, w, h, new File(file), brushInstance);
     if(post != null)
-      for(Action a : post)
+      for(ActionOLD a : post)
         acts.add(a);
     return cue(label, acts);
   }
   
-  public static Cue cue(String label, List<Action> post, Action ... pre)
+  public static Cue cue(String label, List<ActionOLD> post, ActionOLD ... pre)
   {
-    ArrayList<Action> list = new ArrayList<Action>();
+    ArrayList<ActionOLD> list = new ArrayList<ActionOLD>();
     if(pre != null)
-      for(Action a : pre)
+      for(ActionOLD a : pre)
         list.add(a);
     
     if(post != null)
-      for(Action a : post)
+      for(ActionOLD a : post)
         list.add(a);
     
     Cue cue = new Cue(label, list);

@@ -34,7 +34,7 @@ public class SpriteLayer extends Layer
   {
     //Load Variables
     MotionEngine.brush = MotionInteractiveBehavior.load(new File("test/sprite/test-sprite.brush"));
-    Action x = Actions.loadEnvironment(new File("test/sprite/test-sprite.env"));
+    ActionOLD x = Actions.loadEnvironment(new File("test/sprite/test-sprite.env"));
     x.engine = engine;
     x.layer = this;
     try

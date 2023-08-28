@@ -10,7 +10,7 @@ import toxi.geom.Vec3D;
 
 import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
-import com.danielbchapman.physics.toxiclibs.Action;
+import com.danielbchapman.physics.toxiclibs.ActionOLD;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.Point;
@@ -119,31 +119,31 @@ public class RainLayer extends BleedingCanvasLayer
   @Setter
   boolean bleeding = true;
   
-  public Action stopRain()
+  public ActionOLD stopRain()
   {
-    return new  Action("Rain STOP", 0, (x)->{stopRain = true;}, null);
+    return new  ActionOLD("Rain STOP", 0, (x)->{stopRain = true;}, null);
   }
-  public Action startRain()
+  public ActionOLD startRain()
   {
-    return new  Action("Rain START", 0, (x)->{stopRain = false;}, null);
-  }
-  
-  public Action hardOn()
-  {
-    return new  Action("Hard Starts", 0, (x)->{hardRain = true;}, null);
-  }
-  public Action hardOff()
-  {
-    return new  Action("Hard Ends", 0, (x)->{hardRain = false;}, null);
-  }
-  public Action startBleed()
-  {
-    return new Action("Start Bleeding", 0, (x)->{bleeding = true;}, null);
+    return new  ActionOLD("Rain START", 0, (x)->{stopRain = false;}, null);
   }
   
-  public Action stopBleed()
+  public ActionOLD hardOn()
   {
-    return new Action("Start Bleeding", 0, (x)->{bleeding = false;}, null);
+    return new  ActionOLD("Hard Starts", 0, (x)->{hardRain = true;}, null);
+  }
+  public ActionOLD hardOff()
+  {
+    return new  ActionOLD("Hard Ends", 0, (x)->{hardRain = false;}, null);
+  }
+  public ActionOLD startBleed()
+  {
+    return new ActionOLD("Start Bleeding", 0, (x)->{bleeding = true;}, null);
+  }
+  
+  public ActionOLD stopBleed()
+  {
+    return new ActionOLD("Start Bleeding", 0, (x)->{bleeding = false;}, null);
   }
   
   @Override

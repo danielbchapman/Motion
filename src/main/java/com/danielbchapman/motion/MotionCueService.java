@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.danielbchapman.application.Resource;
 import com.danielbchapman.application.ScopeType;
 import com.danielbchapman.logging.Log;
-import com.danielbchapman.physics.toxiclibs.Action;
+import com.danielbchapman.physics.toxiclibs.ActionOLD;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.Loader;
@@ -25,7 +25,7 @@ public class MotionCueService extends Resource
   public Cue convertCue(final MotionCue cue)
   {
     String label = cue.getCueId() + " | " + cue.getType() + " | " + cue.getLabel();
-    ArrayList<Action> actions = new ArrayList<Action>();
+    ArrayList<ActionOLD> actions = new ArrayList<ActionOLD>();
 
     switch(cue.getCueType())
     {

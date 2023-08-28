@@ -254,11 +254,11 @@ public class GridLayerFlying extends Layer
     Slap force = new Slap(new Vec3D(where[0], where[1], where[2]), new Vec3D(0, 0, -1f), 100f);
     force.maxForce = 10f;
     Cue slap = cue("Slap",
-          new Action("Slap Start", 0,null, 
+          new ActionOLD("Slap Start", 0,null, 
               (x)->{
                 x.addBehavior(force);
               }),
-          new Action("Slap End", 1500,null, 
+          new ActionOLD("Slap End", 1500,null, 
               (x)->{
                 x.removeBehavior(force);
               })    
@@ -267,22 +267,22 @@ public class GridLayerFlying extends Layer
     slap.go(this, engine);
     
   }
-  public Cue cue(String label, Action ... actions)
+  public Cue cue(String label, ActionOLD ... actions)
   {
-    ArrayList<Action> list = new ArrayList<Action>();
-    for(Action a : actions)
+    ArrayList<ActionOLD> list = new ArrayList<ActionOLD>();
+    for(ActionOLD a : actions)
       list.add(a);
     Cue cue = new Cue(label, list);
     return cue;
   }
   
-  public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
+  public ActionOLD action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
   {
-    return new Action(label, 0, fL, fE);
+    return new ActionOLD(label, 0, fL, fE);
   }
-  public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE, int delay)
+  public ActionOLD action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE, int delay)
   {
-    return new Action(label, delay, fL, fE);
+    return new ActionOLD(label, delay, fL, fE);
   }
   public void lockAll()
   {

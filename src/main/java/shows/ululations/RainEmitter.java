@@ -3,10 +3,9 @@ package shows.ululations;
 import java.util.Random;
 
 import processing.core.PGraphics;
-import shows.troubledwater.BrushPoint;
 import toxi.geom.Vec3D;
 
-import com.danielbchapman.brushes.old.ImageBrush;
+import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.physics.toxiclibs.OLDEmitter;
 
 public class RainEmitter extends OLDEmitter<BrushPoint>
@@ -38,18 +37,25 @@ public class RainEmitter extends OLDEmitter<BrushPoint>
     for(BrushPoint p  : children)
     {
       ImageBrush b = p.getWrap();
-      if(!b.isDrawing())
-      {
-        b.startDraw();
-      }
-      
-      b.setPosition(new Vec3D(p.x, p.y, p.z));
-      parent.renderBrush(b, g, -1);
-      //b.draw(g);
-      
-//      g.fill(255);
-//      g.stroke(255);
-//      g.ellipse(p.x, p.y, 5, 5);
+      Vec3D location = new Vec3D(p.x, p.y, p.z);
+      b.applyBrush(g, location, 255, 1.0f);
+//      g.pushMatrix();
+//      b.
+//      
+//      g.popMatrix();
+//      b.is
+//      if(!b.isDrawing())
+//      {
+//        b.startDraw();
+//      }
+//      
+//      b.setPosition(new Vec3D(p.x, p.y, p.z));
+//      parent.renderBrush(b, g, -1);
+//      //b.draw(g);
+//      
+////      g.fill(255);
+////      g.stroke(255);
+////      g.ellipse(p.x, p.y, 5, 5);
     }
       
   }

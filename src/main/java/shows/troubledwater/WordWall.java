@@ -1,6 +1,6 @@
 package shows.troubledwater;
 
-import com.danielbchapman.physics.toxiclibs.Action;
+import com.danielbchapman.physics.toxiclibs.ActionOLD;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
@@ -19,7 +19,7 @@ public class WordWall extends Layer
 					@Override
 					public void load() {
 						add(
-							cue("START WORDS", (Action[])null),
+							cue("START WORDS", (ActionOLD[])null),
 							cue("WORDS FALL", Actions.dragToVeryLow, Actions.gravityOn),
 							cue("WORDS BLOW AWAY", Actions.dragToNone)
 						);

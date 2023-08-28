@@ -120,18 +120,18 @@ public class SceneOneLayer extends Layer
       );
     }
     
-    public Cue cue(String label, Action ... actions)
+    public Cue cue(String label, ActionOLD ... actions)
     {
-      ArrayList<Action> list = new ArrayList<Action>();
-      for(Action a : actions)
+      ArrayList<ActionOLD> list = new ArrayList<ActionOLD>();
+      for(ActionOLD a : actions)
         list.add(a);
       Cue cue = new Cue(label, list);
       return cue;
     }
     
-    public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
+    public ActionOLD action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
     {
-      return new Action(label, 0, fL, fE);
+      return new ActionOLD(label, 0, fL, fE);
     }
     public void makeTweets()
     { 

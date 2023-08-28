@@ -184,19 +184,19 @@ public class MotionEngine extends PApplet
   
   static
   {
-    ArrayList<Action> test = new ArrayList<>();
+    ArrayList<ActionOLD> test = new ArrayList<>();
 
     for (int i = 0; i < 1000; i++)
     {
-      Action a = new Action("Action " + i, i * 16);
+      ActionOLD a = new ActionOLD("Action " + i, i * 16);
       test.add(a);
     }
 
-    ArrayList<Action> gravityThirty = new ArrayList<>();
-    Action start = new Action("Start Gravity", 0);
+    ArrayList<ActionOLD> gravityThirty = new ArrayList<>();
+    ActionOLD start = new ActionOLD("Start Gravity", 0);
     // final AngularGravityBehavior3D gravity = new AngularGravityBehavior3D(new Vec3D(0f, 0.01f, 0f));
 
-    Action stop = new Action("Stop Gravity", 30000);
+    ActionOLD stop = new ActionOLD("Stop Gravity", 30000);
 
     start.motionFunction = (MotionEngine e) -> {
       e.addBehavior(Actions.gravity);

@@ -12,7 +12,8 @@ import toxi.geom.Vec3D;
 
 import com.danielbchapman.brushes.old.ImageBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
-import com.danielbchapman.physics.toxiclibs.Action;
+import com.danielbchapman.motion.core.Motion;
+import com.danielbchapman.physics.toxiclibs.ActionOLD;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.Point;
@@ -25,7 +26,7 @@ public class RainLayer extends BleedingCanvasLayer
   ArrayList<RainEmitter> rain;
   ArrayList<RainEmitter> hard;
   
-  TWCueStack stack;
+  FunctionalCueStack stack;
 
   ArrayList<BrushPoint> list = new ArrayList<>();
   
@@ -48,7 +49,7 @@ public class RainLayer extends BleedingCanvasLayer
 	  if(stack == null)
 	  {
 		  stack = 
-				  new TWCueStack(this)
+				  new FunctionalCueStack(this)
 				  {
   					@Override
   					public void load() {
@@ -120,41 +121,43 @@ public class RainLayer extends BleedingCanvasLayer
   @Setter
   boolean bleeding = true;
   
-  public Action stopRain()
+  public ActionOLD stopRain()
   {
-    return new  Action("Rain STOP", 0, (x)->{stopRain = true;}, null);
+    return new  ActionOLD("Rain STOP", 0, (x)->{stopRain = true;}, null);
   }
-  public Action startRain()
+  public ActionOLD startRain()
   {
-    return new  Action("Rain START", 0, (x)->{stopRain = false;}, null);
-  }
-  
-  public Action hardOn()
-  {
-    return new  Action("Hard Starts", 0, (x)->{hardRain = true;}, null);
-  }
-  public Action hardOff()
-  {
-    return new  Action("Hard Ends", 0, (x)->{hardRain = false;}, null);
-  }
-  public Action startBleed()
-  {
-    return new Action("Start Bleeding", 0, (x)->{bleeding = true;}, null);
+    return new  ActionOLD("Rain START", 0, (x)->{stopRain = false;}, null);
   }
   
-  public Action stopBleed()
+  public ActionOLD hardOn()
   {
-    return new Action("Start Bleeding", 0, (x)->{bleeding = false;}, null);
+    return new  ActionOLD("Hard Starts", 0, (x)->{hardRain = true;}, null);
+  }
+  public ActionOLD hardOff()
+  {
+    return new  ActionOLD("Hard Ends", 0, (x)->{hardRain = false;}, null);
+  }
+  public ActionOLD startBleed()
+  {
+    return new ActionOLD("Start Bleeding", 0, (x)->{bleeding = true;}, null);
+  }
+  
+  public ActionOLD stopBleed()
+  {
+    return new ActionOLD("Start Bleeding", 0, (x)->{bleeding = false;}, null);
   }
   
   @Override
   public void render(PGraphics g)
   {
+	//super.draw(g);//Black background if first pass
     if (first)
     { 
-    	g.background(0);
+      g.background(0);
       first = false;
     }
+    
     if(bleeding)
     {
       g.fill(0,0,0, 2);
@@ -172,23 +175,22 @@ public class RainLayer extends BleedingCanvasLayer
   }
 
   @Override
-  public void update()
+  public void update(long time)
   {
     if(stopRain)
       return;
     
-    long sysTime = System.currentTimeMillis();
     for(RainEmitter e : rain)
-    	e.update(sysTime);
+    	e.update(time);
     
     if(hardRain)
       for(RainEmitter e : hard)
-        e.update(sysTime);
+        e.update(time);
 
   }
 
   @Override
-  public void go(MotionEngine engine)
+  public void go(Motion engine)
   {
     stack.go(engine, this);
     return;

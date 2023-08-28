@@ -2,7 +2,7 @@ package shows.troubledwater;
 
 import com.danielbchapman.brushes.ImageBrush;
 import com.danielbchapman.layers.BleedingCanvasLayer;
-import com.danielbchapman.physics.toxiclibs.Action;
+import com.danielbchapman.physics.toxiclibs.ActionOLD;
 import com.danielbchapman.physics.toxiclibs.Actions;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 
@@ -73,14 +73,14 @@ public class Bridge extends BleedingCanvasLayer
 		stack.load();
 	}
 	
-	public Action stopBleed()
+	public ActionOLD stopBleed()
 	{
-		return new Action("Stop Bleed" , 0, (x)->{bleed = false;}, null);
+		return new ActionOLD("Stop Bleed" , 0, (x)->{bleed = false;}, null);
 	}
 	
-	public Action startBleed()
+	public ActionOLD startBleed()
 	{
-		return new Action("Stop Bleed" , 0, (x)->{bleed = true;}, null);
+		return new ActionOLD("Stop Bleed" , 0, (x)->{bleed = true;}, null);
 	}
 	public void loadStack(TWCueStack stack)
 	{

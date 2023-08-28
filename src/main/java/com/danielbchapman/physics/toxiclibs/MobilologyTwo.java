@@ -345,11 +345,11 @@ public class MobilologyTwo extends Layer
     Slap force = new Slap(new Vec3D(where[0], where[1], where[2]), new Vec3D(0, 0, -1f), 100f);
     force.maxForce = 10f;
     Cue slap = cue("Slap",
-          new Action("Slap Start", 0,null, 
+          new ActionOLD("Slap Start", 0,null, 
               (x)->{
                 x.addBehavior(force);
               }),
-          new Action("Slap End", 1500,null, 
+          new ActionOLD("Slap End", 1500,null, 
               (x)->{
                 x.removeBehavior(force);
               })    
@@ -358,46 +358,46 @@ public class MobilologyTwo extends Layer
     slap.go(this, engine);
     
   }
-  public Cue cue(String label, Action ... actions)
+  public Cue cue(String label, ActionOLD ... actions)
   {
     return cue(label, null, actions);
   }
-  public Cue cue(String label, List<Action> post, Action ... pre)
+  public Cue cue(String label, List<ActionOLD> post, ActionOLD ... pre)
   {
-    ArrayList<Action> list = new ArrayList<Action>();
+    ArrayList<ActionOLD> list = new ArrayList<ActionOLD>();
     if(pre != null)
-      for(Action a : pre)
+      for(ActionOLD a : pre)
         list.add(a);
     
     if(post != null)
-      for(Action a : post)
+      for(ActionOLD a : post)
         list.add(a);
     
     Cue cue = new Cue(label, list);
     return cue;
   }
   
-  public Cue load(String label, String env, String file, String brushFile, Action ... post)
+  public Cue load(String label, String env, String file, String brushFile, ActionOLD ... post)
   {
-    ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
-    Action loadEnv = Actions.loadEnvironment(new File(env));
+    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+    ActionOLD loadEnv = Actions.loadEnvironment(new File(env));
     if(post != null)
-      for(Action a : post)
+      for(ActionOLD a : post)
         acts.add(a);
     return cue(label, acts, loadEnv);
   }
   
   public Cue load(String label, String file, String brush)
   {
-    ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brush));
+    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brush));
     return cue(label, acts);
   }
   
-  public Cue load(String label, String file, String brushFile, Action ... post)
+  public Cue load(String label, String file, String brushFile, ActionOLD ... post)
   {
-    ArrayList<Action> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
+    ArrayList<ActionOLD> acts = Actions.loadRecordingAsAction(new File(file), new File(brushFile));
     if(post != null)
-      for(Action a : post)
+      for(ActionOLD a : post)
         acts.add(a);
     return cue(label, acts);
   }
@@ -411,13 +411,13 @@ public class MobilologyTwo extends Layer
   {
     return cue(label);
   }
-  public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
+  public ActionOLD action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE)
   {
-    return new Action(label, 0, fL, fE);
+    return new ActionOLD(label, 0, fL, fE);
   }
-  public Action action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE, int delay)
+  public ActionOLD action(String label, Consumer<Layer> fL, Consumer<MotionEngine> fE, int delay)
   {
-    return new Action(label, delay, fL, fE);
+    return new ActionOLD(label, delay, fL, fE);
   }
   public void lockAll()
   {
