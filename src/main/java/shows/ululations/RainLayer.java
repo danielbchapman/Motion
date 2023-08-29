@@ -34,7 +34,6 @@ public class RainLayer extends BleedingCanvasLayer
 	@Override
 	public boolean isVerletPhysic3D()
 	{
-		Log.info("CHECKING FOR VERLET");
 		return true;
 	}
 	@Override

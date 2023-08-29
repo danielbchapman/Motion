@@ -66,6 +66,7 @@ import shows.test.TestGraphicsShare;
 import shows.test.TestInverseExplodeBrush;
 import shows.test.TestVerletScene;
 import shows.ululations.RainLayer;
+import shows.ululations.RandomParticleLinesLayer;
 import toxi.geom.Vec3D;
 
 /**
@@ -603,6 +604,7 @@ public class Motion extends PApplet
     
     //Ululations
     prep.accept(new RainLayer());
+    prep.accept(new RandomParticleLinesLayer());
     prep.accept(new BleedingCanvasLayer());
     //prep.accept(new BleedingLayer());
     prep.accept(new ClearLayer());

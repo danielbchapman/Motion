@@ -2,6 +2,7 @@ package com.danielbchapman.layers;
 
 import com.danielbchapman.brushes.old.SaveableBrush;
 import com.danielbchapman.motion.core.BaseScene;
+import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Layer;
 
@@ -44,7 +45,7 @@ public abstract class BleedingLayer extends BaseScene
       g.fill(0,0,0, fadeAmount);
       g.stroke(0,0,0, fadeAmount);
       g.rectMode(PConstants.CORNER);
-      g.rect(0, 0, ActionsOLD.WIDTH, ActionsOLD.HEIGHT);
+      g.rect(0, 0, Motion.WIDTH, Motion.HEIGHT);
     }
     
     reanderAfterBleed(g);
