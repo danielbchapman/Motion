@@ -10,7 +10,7 @@ import com.danielbchapman.motion.utility.GraphicsUtility;
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 public class BleedingPointGrid extends BleedingLayer
 {
@@ -29,8 +29,8 @@ public class BleedingPointGrid extends BleedingLayer
     columns += 3;
     rows += 3;
     //overrides init()
-    ArrayList<Point> p = GraphicsUtility.createMotionGrid(columns, rows , this.spacing, this.spacing, 0, 1, GraphicsUtility::point);
-    super.points = p.toArray(new Point[p.size()]);  
+    ArrayList<PointOLD> p = GraphicsUtility.createMotionGrid(columns, rows , this.spacing, this.spacing, 0, 1, GraphicsUtility::point);
+    super.points = p.toArray(new PointOLD[p.size()]);  
     System.out.printf("Constructing grid at columns %d rows %d spacing %d", columns, rows, this.spacing );
   }
 
@@ -42,14 +42,14 @@ public class BleedingPointGrid extends BleedingLayer
     g.noFill();
     g.stroke(255);
     g.strokeWeight(3f);
-    for(Point p : points)
+    for(PointOLD p : points)
       g.point(p.x,  p.y,  p.z);
     
     g.popMatrix();
   }
 
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   { 
     return null; //not used
   }

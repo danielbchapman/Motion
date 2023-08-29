@@ -21,11 +21,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
-import com.danielbchapman.physics.toxiclibs.AngularGravityBehavior3D;
+import com.danielbchapman.physics.toxiclibs.AngularGravityBehavior3DOLD;
 import com.danielbchapman.physics.toxiclibs.HomeBehavior3D;
 import com.danielbchapman.physics.toxiclibs.HomeBehaviorLinear3D;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.SaveableParticleBehavior3D;
 import com.danielbchapman.physics.ui.PropertySlider;
 import com.danielbchapman.physics.ui.Spacer;
 import com.danielbchapman.physics.ui.TitleField;
@@ -66,9 +65,9 @@ public class EnvironmentTools2017 extends JFrame
   BehaviorSlider2017<HomeBehavior3D> homeMax;
   BehaviorSlider2017<HomeBehaviorLinear3D> homeLinear;
   BehaviorSlider2017<HomeBehaviorLinear3D> homeLinearMax;
-  BehaviorSlider2017<AngularGravityBehavior3D> gravity;
+  BehaviorSlider2017<AngularGravityBehavior3DOLD> gravity;
   PropertySlider<PhysicsScene> dragSlider;
-  Vec3DEditor<AngularGravityBehavior3D> gravityVector;
+  Vec3DEditor<AngularGravityBehavior3DOLD> gravityVector;
   
   JButton read;
   JButton hide;
@@ -157,7 +156,7 @@ public class EnvironmentTools2017 extends JFrame
         (b, s)->{s.set(b.vars.maxForce);}
         );
     
-    gravity = new BehaviorSlider2017<AngularGravityBehavior3D>(
+    gravity = new BehaviorSlider2017<AngularGravityBehavior3DOLD>(
         this, "Angular Gravity", 
         0, 
         10000,

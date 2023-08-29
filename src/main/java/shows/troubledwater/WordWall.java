@@ -4,7 +4,7 @@ import com.danielbchapman.physics.toxiclibs.ActionOLD;
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PGraphics;
 
@@ -31,8 +31,8 @@ public class WordWall extends Layer
 		stack.load();
 	}
 	@Override
-	public Point[] init() {
-		return new Point[0];
+	public PointOLD[] init() {
+		return new PointOLD[0];
 	}
 
 	@Override

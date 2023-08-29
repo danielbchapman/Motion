@@ -6,7 +6,7 @@ import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 /** 
  * A simple collection of words that constitutes a mono-spaced paragraph and 
@@ -37,14 +37,14 @@ public class Paragraph
   public final String content;
   public Word[] words;
   public boolean split;
-  public Point[] points;
+  public PointOLD[] points;
 
   // extend this an apply the force EQUALLY to all points, that's the way to distribute it.
-  public Point parent;
+  public PointOLD parent;
   public int width;
   public int height;
 
-  public Paragraph(String content, Point parent, int maxWidth, int wordSpace, int rowSpace, int delay, int fadeCount, int totalTime, int from, int to, FadeType type)
+  public Paragraph(String content, PointOLD parent, int maxWidth, int wordSpace, int rowSpace, int delay, int fadeCount, int totalTime, int from, int to, FadeType type)
   {
     this.content = content;
     this.width = maxWidth;
@@ -85,7 +85,7 @@ public class Paragraph
         char[] chars = s.toCharArray();
         for(int i = 0; i < chars.length; i++)
         {
-          Point p = parent.copyTranslate(col + (wordSpace * i), row * rowSpace, 0);
+          PointOLD p = parent.copyTranslate(col + (wordSpace * i), row * rowSpace, 0);
           Word w = new Word(""+chars[i], p, 0, 255, count, currentDelay);
           wordList.add(w);
           currentDelay += increment;
@@ -95,7 +95,7 @@ public class Paragraph
         col = colNext;
       }
 
-      points = new Point[wordList.size()];
+      points = new PointOLD[wordList.size()];
       words = new Word[wordList.size()];
 
       this.parent = parent;
@@ -154,7 +154,7 @@ public class Paragraph
           //System.out.println("Increasing column");
         }
 
-        Point p = parent.copyTranslate(col, row * rowSpace, 0);
+        PointOLD p = parent.copyTranslate(col, row * rowSpace, 0);
 
         Word w = new Word(s, p, 0, 255, count, currentDelay);
         wordList.add(w);
@@ -162,7 +162,7 @@ public class Paragraph
         col = colNext;
       }
 
-      points = new Point[wordList.size()];
+      points = new PointOLD[wordList.size()];
       words = new Word[wordList.size()];
 
       this.parent = parent;
@@ -206,7 +206,7 @@ public class Paragraph
           System.out.println("Increasing column");
         }
 
-        Point p = parent.copyTranslate(col, row * rowSpace, 0);
+        PointOLD p = parent.copyTranslate(col, row * rowSpace, 0);
 
         Word w = new Word(s, p, 0, 255, count, currentDelay);
         if (debugCount == 50)
@@ -218,7 +218,7 @@ public class Paragraph
         debugCount++;
       }
 
-      points = new Point[wordList.size()];
+      points = new PointOLD[wordList.size()];
       words = new Word[wordList.size()];
 
       this.parent = parent;
@@ -248,7 +248,7 @@ public class Paragraph
    * @param wordSpace the spacing between letters
    * @param rowSpace the spacing between rows
    */
-  public Paragraph(String content, Point parent, int maxWidth, int wordSpace, int rowSpace)
+  public Paragraph(String content, PointOLD parent, int maxWidth, int wordSpace, int rowSpace)
   {
     this.content = content;
     this.width = maxWidth;
@@ -271,7 +271,7 @@ public class Paragraph
         System.out.println("Increasing column");
       }
 
-      Point p = parent.copyTranslate(col, row * rowSpace, 0);
+      PointOLD p = parent.copyTranslate(col, row * rowSpace, 0);
 
       Word w = new Word(s, p);
       wordList.add(w);
@@ -279,7 +279,7 @@ public class Paragraph
       col = colNext;
     }
 
-    points = new Point[wordList.size()];
+    points = new PointOLD[wordList.size()];
     words = new Word[wordList.size()];
 
     this.parent = parent;
@@ -304,7 +304,7 @@ public class Paragraph
    * @param p  
    * 
    */
-  public void draw(PGraphics g, Point p)
+  public void draw(PGraphics g, PointOLD p)
   {
     g.pushMatrix();
     // Point.rotation(g, p);

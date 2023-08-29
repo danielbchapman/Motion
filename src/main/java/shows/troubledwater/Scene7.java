@@ -16,7 +16,7 @@ import com.danielbchapman.physics.toxiclibs.FloorSplitGravity;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.LetterEmitter;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.physics.toxiclibs.Transform;
 import com.danielbchapman.physics.toxiclibs.Util;
 
@@ -51,11 +51,11 @@ public class Scene7 extends Layer
  }
  
  @Override
- public Point[] init()
+ public PointOLD[] init()
  {
    //Setup Stack
    stack = new SectionOneCueStack();
-   return new Point[]{}; //empty
+   return new PointOLD[]{}; //empty
  }
 
  @Override
@@ -88,7 +88,7 @@ public class Scene7 extends Layer
        active.add(paragraph);
        paragraph.translate(new Vec3D(0,0, -20));
        
-       for(Point p : paragraph.points)
+       for(PointOLD p : paragraph.points)
          physics.addParticle(p);
      } 
      else
@@ -314,7 +314,7 @@ public class Scene7 extends Layer
        int to = a[7]; 
 
        String file = "content/scene_one/" + s;
-       Point p = new Point(x, y, 0, 1f);
+       PointOLD p = new PointOLD(x, y, 0, 1f);
        String toDisplay = WORDS.substring(0, 50);
        if(toDisplay == null)
          toDisplay = "No Text";
@@ -374,7 +374,7 @@ public class Scene7 extends Layer
      int[] c = Transform.translate(x, y, width, height);
      System.out.println("Creating paragraph width: " + pW);
      
-     Point p = new Point(c[0], c[1], 0, 1f);
+     PointOLD p = new PointOLD(c[0], c[1], 0, 1f);
      String toDisplay = WORDS.substring(0, 50);
      if(toDisplay == null)
        toDisplay = "No Text";

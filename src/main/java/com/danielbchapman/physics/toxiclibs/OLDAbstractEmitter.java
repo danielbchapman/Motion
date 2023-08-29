@@ -65,7 +65,7 @@ public abstract class OLDAbstractEmitter<T extends Moveable>
     T instance = onEmit(time);
     children.add(instance);
     
-    for(Point p : instance.getPoints())
+    for(PointOLD p : instance.getPoints())
     {
       if(randomAmount > 0)
         p.addForce(Vec3D.randomVector().scaleSelf(randomAmount));
@@ -87,13 +87,13 @@ public abstract class OLDAbstractEmitter<T extends Moveable>
       Moveable m = it.next();
       if(m != null)
       {
-        Point[] points = m.getPoints();
+        PointOLD[] points = m.getPoints();
         if(points.length > 0)
         {
           if(points[0].life < time - points[0].created)
           {
             //Clear the points from the engine
-            for(Point p : points)
+            for(PointOLD p : points)
               ActionsOLD.engine.getPhysics().removeParticle(p);
             
             //Clear the object

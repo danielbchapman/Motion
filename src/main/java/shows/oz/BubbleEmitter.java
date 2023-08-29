@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.danielbchapman.motion.core.AbstractEmitter;
 import com.danielbchapman.motion.core.Motion;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -28,7 +28,7 @@ public class BubbleEmitter extends AbstractEmitter<Bubble>
   public Bubble createPoint(float x, float y, float z, float w)
   {
     Bubble l = new Bubble(x, y, z, w);
-    l.angular = new Point(motion.random(25), motion.random(25), motion.random(25), 0);
+    l.angular = new PointOLD(motion.random(25), motion.random(25), motion.random(25), 0);
     return l;
   }
 

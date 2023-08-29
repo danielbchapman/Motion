@@ -24,9 +24,9 @@ public class HomeBehaviorLinear3D extends SaveableConstantForce3D
   {
     if(particle.isLocked())
       return;
-    if(particle instanceof Point)
+    if(particle instanceof PointOLD)
     {
-      Point p = (Point) particle;
+      PointOLD p = (PointOLD) particle;
       Vec3D dir = p.sub(p.home);
       float mag = dir.magnitude();
       float maxAngle = vars.maxForce * 0.1f;//do we need this?

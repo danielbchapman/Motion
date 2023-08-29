@@ -26,7 +26,7 @@ public class TestLambdaLoader
       brush.lambda = "(x)->{System.out.println(\"TEST\");};";
       brush.name = "TestBrushBeta";
       System.out.println(brush.compile());
-      Point x = new Point(1,2,3,1);
+      PointOLD x = new PointOLD(1,2,3,1);
       brush.apply(x);
       assertTrue("Lambda exists:", brush.isReady());
       

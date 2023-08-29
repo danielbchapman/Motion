@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 import processing.core.PGraphics;
 
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 public class GraphicsUtility
 {
@@ -24,7 +24,7 @@ public class GraphicsUtility
    * @return ArrayList in row order (row 1, then row 2 etc...)
    * 
    */
-  public static <T extends Point> ArrayList<T> createMotionGrid(int columns, int rows, int vSpace, int hSpace, int depth, int weight, Function<float[], T> constructor)
+  public static <T extends PointOLD> ArrayList<T> createMotionGrid(int columns, int rows, int vSpace, int hSpace, int depth, int weight, Function<float[], T> constructor)
   { 
     ArrayList<T> points = new ArrayList<T>();
     T x = constructor.apply(new float[]{0,0,0,1});
@@ -48,7 +48,7 @@ public class GraphicsUtility
     return points;
   }
   
-  public static void drawMotionGridAsLinesOffset(PGraphics p, Point[] grid, int rowLength)
+  public static void drawMotionGridAsLinesOffset(PGraphics p, PointOLD[] grid, int rowLength)
   {
     int rows = grid.length / rowLength;
     
@@ -57,8 +57,8 @@ public class GraphicsUtility
     {
       for(int c = 0; c < (rowLength - 1); c++) //we draw to the end, but don't draw the last point
       {
-        Point a = grid[r * rowLength + c];
-        Point b = grid[r * rowLength + c + 1];
+        PointOLD a = grid[r * rowLength + c];
+        PointOLD b = grid[r * rowLength + c + 1];
         p.line(a.x, a.y, a.z, b.x, b.y, b.z);
       }
     }
@@ -68,14 +68,14 @@ public class GraphicsUtility
     {
       for(int r = 0; r < (rows -1); r++)
       {
-        Point a = grid[(r) * rowLength + c];
-        Point b = grid[(r + 1) * rowLength + c];
+        PointOLD a = grid[(r) * rowLength + c];
+        PointOLD b = grid[(r + 1) * rowLength + c];
         p.line(a.x, a.y, a.z, b.x, b.y, b.z);
       }
     }
   }
   
-  public static void drawMotionGridAsLines(PGraphics p, Point[] grid, int rowLength)
+  public static void drawMotionGridAsLines(PGraphics p, PointOLD[] grid, int rowLength)
   {
     //System.out.println("drawing grid: " + grid + " of length " + grid.length + " rows: " + rowLength);
     int rows = grid.length / rowLength;
@@ -85,8 +85,8 @@ public class GraphicsUtility
     {
       for(int c = 0; c < rowLength -1; c++) //we draw to the end, but don't draw the last point
       {
-        Point a = grid[r * rowLength + c];
-        Point b = grid[r * rowLength + c + 1];
+        PointOLD a = grid[r * rowLength + c];
+        PointOLD b = grid[r * rowLength + c + 1];
         p.line(a.x, a.y, a.z, b.x, b.y, b.z);
       }
     }
@@ -96,30 +96,30 @@ public class GraphicsUtility
     {
       for(int r = 0; r < (rows -1); r++)
       {
-        Point a = grid[(r) * rowLength + c];
-        Point b = grid[(r + 1) * rowLength + c];
+        PointOLD a = grid[(r) * rowLength + c];
+        PointOLD b = grid[(r + 1) * rowLength + c];
         p.line(a.x, a.y, a.z, b.x, b.y, b.z);
       }
     }
   }
   
-  public static Point point(float[] vals)
+  public static PointOLD point(float[] vals)
   {
     if(vals == null || vals.length < 1)
-      return new Point(0, 0, 0, 1);
+      return new PointOLD(0, 0, 0, 1);
     
     if(vals.length >= 4)
-      return new Point(vals[0], vals[1], vals[2], vals[3]);
+      return new PointOLD(vals[0], vals[1], vals[2], vals[3]);
     
     if(vals.length == 3)
-      return new Point(vals[0], vals[1], vals[2], 1);
+      return new PointOLD(vals[0], vals[1], vals[2], 1);
     
     if(vals.length == 2)
-      return new Point(vals[0], vals[1], 0, 1);
+      return new PointOLD(vals[0], vals[1], 0, 1);
     
     if(vals.length == 1)
-      return new Point(vals[0], 0, 0, 1);
+      return new PointOLD(vals[0], 0, 0, 1);
     
-    return new Point(0, 0, 0, 1);
+    return new PointOLD(0, 0, 0, 1);
   }
 }

@@ -15,11 +15,11 @@ import com.danielbchapman.physics.toxiclibs.OLDEmitter;
 import com.danielbchapman.physics.toxiclibs.ExplodeBehaviorInverse;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 public class RandomParticleLinesLayer extends BleedingLayer
 {
-  ArrayList<OLDEmitter<Point>> emitters = new ArrayList<>();
+  ArrayList<OLDEmitter<PointOLD>> emitters = new ArrayList<>();
   
   ArrayList<MotionInteractiveBehavior> behaviors = new ArrayList<>();
   
@@ -29,13 +29,13 @@ public class RandomParticleLinesLayer extends BleedingLayer
     behaviors.add(new ExplodeBehaviorInverse(new Vec3D(-1f, 0, 0), -50f));
     for(int i = 0; i < 14; i++)
     {
-      OLDEmitter<Point> e = 
-          new OLDEmitter<Point>(new Vec3D(i * 128, 400, 0), new Vec3D(-1, 0, 0), 25000, 200, 1f, 200)
+      OLDEmitter<PointOLD> e = 
+          new OLDEmitter<PointOLD>(new Vec3D(i * 128, 400, 0), new Vec3D(-1, 0, 0), 25000, 200, 1f, 200)
           {
             @Override
-            public Point createPoint(float x, float y, float z, float w)
+            public PointOLD createPoint(float x, float y, float z, float w)
             {
-              return new Point(x, y, z, w);
+              return new PointOLD(x, y, z, w);
             }
     
             @Override
@@ -43,12 +43,12 @@ public class RandomParticleLinesLayer extends BleedingLayer
             {
               for(int i = 0; i < children.size() - 1; i++)
               {
-                Point a = children.get(i);
-                Point b = children.get(i+1);
+                PointOLD a = children.get(i);
+                PointOLD b = children.get(i+1);
                 
                 g.line(a.x, a.y, a.z, b.x, b.y, b.z);
               }
-              for(Point p : children)
+              for(PointOLD p : children)
               {
                 g.point(p.x,  p.y, p.z);
               }
@@ -75,9 +75,9 @@ public class RandomParticleLinesLayer extends BleedingLayer
   }
 
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
-    return new Point[]{};
+    return new PointOLD[]{};
   }
 
   @Override

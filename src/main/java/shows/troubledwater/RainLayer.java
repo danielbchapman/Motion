@@ -13,7 +13,7 @@ import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.physics.toxiclibs.ActionOLD;
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 public class RainLayer extends BleedingCanvasLayer
 {
@@ -29,7 +29,7 @@ public class RainLayer extends BleedingCanvasLayer
   ArrayList<BrushPoint> list = new ArrayList<>();
   
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
 	  if(rain == null)
 		  rain = new ArrayList<>();
@@ -112,7 +112,7 @@ public class RainLayer extends BleedingCanvasLayer
 				  stack.load();
 	  }
 	  
-    return new Point[0];
+    return new PointOLD[0];
   }
 
   @Getter

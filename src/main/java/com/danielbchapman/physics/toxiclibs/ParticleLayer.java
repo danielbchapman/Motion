@@ -23,18 +23,18 @@ public class ParticleLayer extends Layer
     }
   }
   
-  public Point[] init()
+  public PointOLD[] init()
   {
     gridX = 120/2;
     gridY = 76/2;
     spacing = 40;
-    Point[] grid = new Point[gridX * gridY];
+    PointOLD[] grid = new PointOLD[gridX * gridY];
   
     for(int i = 0; i < gridY; i++)
     {
       for(int j = 0; j < gridX; j++)
       {
-        grid[i * gridX + j] = new Point(j * spacing, i * spacing, 0, 1f);
+        grid[i * gridX + j] = new PointOLD(j * spacing, i * spacing, 0, 1f);
       }
     }
     
@@ -66,10 +66,10 @@ public class ParticleLayer extends Layer
     for(int i = 0; i < points.length; i++)
     {
       g.pushMatrix();
-      Point p  = points[i];
+      PointOLD p  = points[i];
       
       g.translate(p.x, p.y, p.z);
-      Point.rotation(g, p);
+      PointOLD.rotation(g, p);
       //g.rotate((p.angular.magnitude())/360f, p.angular.x, p.angular.y, p.angular.z);
       g.text("Word", 0,0,0);
       //Rotation based on angular

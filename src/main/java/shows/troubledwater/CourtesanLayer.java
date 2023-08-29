@@ -13,7 +13,7 @@ import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.CueStack;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PGraphics;
 
@@ -26,8 +26,8 @@ public class CourtesanLayer extends BleedingCanvasLayer {
 	}
 
 	@Override
-	public Point[] init() {
-		return new Point[0];
+	public PointOLD[] init() {
+		return new PointOLD[0];
 	}
 
 	@Override

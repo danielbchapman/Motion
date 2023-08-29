@@ -1,138 +1,197 @@
 package com.danielbchapman.motion.core;
 
+import java.util.ArrayList;
+
 import processing.core.PGraphics;
-import toxi.geom.Vec3D;
-import toxi.geom.Vec4D;
 import lombok.Data;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import com.google.gson.Gson;
-
-
-/**
- * All child classes need to store variables in the Cue class or they
- * must override the save/load defaults in @see {ISaveable} as GSON will
- * not know how to load them. 
- * 
- * The type is stored as the class on construction.
- */
 @Data
-public abstract class Cue<T> implements ISaveable<T>
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class Cue extends AbstractCue<Cue>
 {
-  public String typeName;
-  public String id;
-  public String label;
+  private float timeScale = 1f;
   
-  //Paths and files that are commonly needed
-  public String pathFile;
-  public String brushFile;
-  public String environmentFile;
+  private transient Playback2017 playback;
   
-  public Vec4D position = new Vec4D();
-  public Vec4D scale = new Vec4D(1f, 1f, 1f, 1f);
-  public Vec3D anchor = new Vec3D();
-  public Vec3D size = new Vec3D();
-  
-  //Transients (do not serialize)
-  public transient boolean editing;
-  public transient boolean loaded = false;
-  public transient boolean inError = false;
-  public transient boolean running = false;  
-  public transient long startTime;
-  public transient long length;
-  
-  public Cue()
+  @Override
+  public void start(Motion motion, long time)
   {
-    this.typeName = getClass().getName();
-  }
-  
-  /**
-   * <p>Left click and drag changes the position of the drawing.</p>
-   * <em>Override for custom functionality.</em> 
-   * @param deltaX the change in x
-   * @param deltaY the change in y  
-   */
-  public void handleEditLeft(float deltaX, float deltaY)
-  {
-    this.position.x += deltaX;
-    this.position.y += deltaY;
-    Log.severe("[handleEditLeft] @(" + deltaX + ", " + deltaY + ")");
-  }
-  
-  /**
-   * <p>Left click and drag changes the position of the drawing.</p>
-   * <em>Override for custom functionality.</em> 
-   * @param deltaX the change in x
-   * @param deltaY the change in y   
-   */
-  public void handleEditRight(float deltaX, float deltaY)
-  {
-    Log.severe("[handleEditRight] @(" + deltaX + ", " + deltaY + ")");
-    
-    //We're only using deltaY;
-    if(deltaY < 1 && deltaY > -1)
+    if(!loaded)
+      load(motion);
+
+    if(playback == null)
+    {
+      inError = true;
       return;
-    
-    boolean shrink = deltaY > 0; //Coordinates are backwards...
-    float abs = Math.abs(deltaY);
-    float sizeY = size.y < 1 ? 1 : size.y;
-    float percent = abs / sizeY;
-    
-    if(percent >= 1 && !shrink){
-      scale.x = scale.x + percent;
-      scale.y = size.y + percent;    
     }
-    else if (percent > 1 && shrink)
-    {
-      return; //Nope...      
+    
+    startTime = time;
+    playback.start(time);
+  }
+
+
+  @Override
+  public void load(Motion motion)
+  {
+  	ArrayList<RecordAction2017> actions = new ArrayList<>();
+  	MotionBrush brush;
+  	try {
+  		if(this.pathFile != null) {
+    		actions = Recorder2017.load(pathFile, motion.width, motion.height, 0, 0);
+    	} 	
+  	} catch (Throwable t) {
+  		Log.severe("Unable to load path file " + pathFile, t);
+  	}
+  	
+  	if(this.pathFile != null) {
+  		actions = Recorder2017.load(pathFile, motion.width, motion.height, 0, 0);
+  	} 
+  	
+  	if(this.brushFile != null) {
+  		brush = MotionBrush.loadFromFile(brushFile);
+  	} else {
+  		brush = motion.currentBrush.clone();
+  	}
+  	
+    previewActions = null;
+    playback = new Playback2017(pathFile, motion, brush, actions);
+  }
+
+
+  @Override
+  public void update(Motion motion, long time)
+  { 
+  }
+
+  private transient float previewW = -1;
+  private transient float previewH = -1;
+  private transient float previewX = -1;
+  private transient float previewY = -1;
+  private transient float previewSx = -1;
+  private transient float previewSy = -1;
+  private transient ArrayList<RecordAction2017> previewActions;
+  
+  /* (non-Javadoc)
+   * @see com.danielbchapman.motion.core.Cue#preview(processing.core.PGraphics, com.danielbchapman.motion.core.Motion, long)
+   */
+  @Override
+  public void preview(PGraphics g, Motion motion, long startTime)
+  {
+    //Check for updates
+    if(previewW < 0){
+      if(size.x <= 0)
+        size.x = motion.WIDTH;
+      if(size.y <= 0)
+        size.y = motion.HEIGHT;
+      
+      if(previewX < 0)
+        previewX = 0;
+      
+      if(previewY < 0)
+        previewY = 0;
+      
+      previewW = size.x;
+      previewH = size.y;
+      previewX = position.x;
+      previewY = position.y;
+      previewSx = scale.x;
+      previewSy = scale.y;
     }
-    else if(percent <= 0)
+    
+    if(previewW != size.x)
     {
-      return; //Nope
-    } 
-    else 
+      previewActions = null;
+      previewW = size.x;
+    }
+    
+    if(previewH != size.y)
     {
-      float scalar = 1f;
-      if(shrink)
+      previewActions = null;
+      previewH = size.y;
+    }
+    
+    if(previewX != position.x)
+    {
+      previewActions = null;
+      previewX = position.x;
+    }
+    
+    if(previewY != position.y)
+    {
+      previewActions = null;
+      previewY = position.y;
+    }
+    
+    if(previewSx != scale.x)
+    {
+      previewActions = null;
+      previewSx = scale.x;      
+    }
+    
+    if(previewSy != scale.y)
+    {
+      previewActions = null;
+      previewSy = scale.y;      
+    }
+    
+    if(previewActions == null)
+    {
+      previewActions = Recorder2017.load(pathFile, size.x * scale.x, size.y * scale.y, position.x, position.y);
+    }
+    
+    if(previewActions.size() < 1)
+    {
+      return;
+    }
+    
+    RecordAction2017 last = previewActions.get(0);
+    if(!last.centerClick && !last.rightClick && !last.leftClick)
+      last = null;
+    
+    g.clear();
+    g.stroke(0, 255, 255);
+    g.strokeWeight(3);
+    
+    g.fill(0,255,255);
+    
+    //show data
+    g.text(
+        String.format(
+            "ANCHOR[ (%1$.0f, %2$.0f) ] SIZE[ (%3$.0f, %4$.0f) ]", 
+            anchor.x, 
+            anchor.y, 
+            size.x, 
+            size.y),
+          //Position
+          20, 
+          20);
+    if(previewActions.size() == 1 && last != null)
+    {
+      g.point(last.x, last.y);
+      return;
+    }
+    for(int i = 1; i < previewActions.size(); i++)
+    {
+      RecordAction2017 current = previewActions.get(i);
+      
+      if(!current.centerClick && !current.leftClick && !current.rightClick)
       {
-        scalar = -percent;
+        continue;
+      }
+      
+      if(last != null)
+      {
+        g.line(last.x, last.y, current.x, current.y);
       }
       else
-      {//expand
-        scalar = percent;
+      {
+        g.point(current.x, current.y);
       }
-      
-      scale.x = scale.x + scalar;
-      scale.y = scale.y + scalar;
-      
-      if(scale.x < 0)
-        scale.x = 0;
-      if(scale.y < 0)
-        scale.y = 0;
-      Log.severe("[handleEditRight] SCALAR( + " + scalar + ")");
+      last = current;
     }
-  }
-  
-  /**
-   * <p>Center click and drag changes the scale of the drawing 
-   * and is unbound meaning it will use both values. Right click
-   * uses only the greater value and scales symmetrically. 
-   * </p>
-   * 
-   * <em>Override for custom functionality.</em>
-   *  
-   * @param deltaX the change in x
-   * @param deltaY the change in y   
-   */
-  public void handleEditCenter(float deltaX, float deltaY)
-  {
-    Log.severe("[handleEditCenter] @(" + deltaX + ", " + deltaY + ")");
-  }
-  
-  public abstract void load(Motion motion);
-  public abstract void start(Motion motion, long time);
-  public abstract void update(Motion motion, long time);
-  public abstract void preview(PGraphics g, Motion motion, long time);
+    //FIXME this would be good to have a "timeline" preview, but right now I'm just drawing the path.
+  }  
 }

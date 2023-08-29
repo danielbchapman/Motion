@@ -2,7 +2,7 @@ package com.danielbchapman.motion.core;
 
 import processing.core.PGraphics;
 
-public class ContentCue extends Cue<ContentCue>
+public class ContentCue extends AbstractCue<ContentCue>
 {
   private boolean TESTER = true;
 

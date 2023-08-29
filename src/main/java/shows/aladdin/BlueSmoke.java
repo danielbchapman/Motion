@@ -16,7 +16,7 @@ import com.danielbchapman.motion.core.MouseBrush;
 import com.danielbchapman.motion.core.RecordAction2017;
 import com.danielbchapman.motion.core.Recorder2017;
 import com.danielbchapman.motion.utility.GraphicsUtility;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.physics.toxiclibs.Util;
 import com.thomasdiewald.pixelflow.java.DwPixelFlow;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;

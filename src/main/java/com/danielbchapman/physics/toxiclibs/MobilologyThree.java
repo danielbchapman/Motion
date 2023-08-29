@@ -188,9 +188,9 @@ public class MobilologyThree extends Layer
     for(int i = 0; i < emitters.size(); i++)
       emitters.get(i).stop(true);
   }
-  public Point[] init()
+  public PointOLD[] init()
   {
-    Point[] grid = new Point[0];
+    PointOLD[] grid = new PointOLD[0];
     
     return grid;
   }

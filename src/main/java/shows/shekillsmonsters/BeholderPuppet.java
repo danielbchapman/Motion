@@ -9,36 +9,36 @@ import toxi.geom.Vec3D;
 import com.danielbchapman.artwork.Shapes;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.physics.toxiclibs.Transform;
 
 public class BeholderPuppet extends Layer
 {
   PShape mainEye;
   PShape axes;
-  Point lookTo = new Point(400, 300, 0, 1);
-  Point beholder = new Point(400,200, -500, 1);
+  PointOLD lookTo = new PointOLD(400, 300, 0, 1);
+  PointOLD beholder = new PointOLD(400,200, -500, 1);
   int mX = 400;
   int mY = 300;
   
   int zOffset = 350;
-  Point[] eyes = new Point[]
+  PointOLD[] eyes = new PointOLD[]
       {
-        new Point(200, 100, 85, 1),
-        new Point(250, 400, 85, 1),
-        new Point(300,  100, 85, 1),
-        new Point(350, 200, 85, 1),
-        new Point(400, 100, 85, 1),
-        new Point(450, 200, 85, 1),
-        new Point(500, 100, 85, 1)
+        new PointOLD(200, 100, 85, 1),
+        new PointOLD(250, 400, 85, 1),
+        new PointOLD(300,  100, 85, 1),
+        new PointOLD(350, 200, 85, 1),
+        new PointOLD(400, 100, 85, 1),
+        new PointOLD(450, 200, 85, 1),
+        new PointOLD(500, 100, 85, 1)
       };
   
   float move = 0;
   boolean forward = true;
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
-    return new Point[0];
+    return new PointOLD[0];
   }
 
   public void initShapes(PGraphics g)
@@ -108,7 +108,7 @@ public class BeholderPuppet extends Layer
     g.popMatrix();
   }
   
-  public void drawLittleEye(PGraphics g, Point p, float radius)
+  public void drawLittleEye(PGraphics g, PointOLD p, float radius)
   {
     g.pushMatrix();
     g.translate(p.x, p.y, p.z);

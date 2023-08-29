@@ -5,7 +5,7 @@ import com.danielbchapman.physics.toxiclibs.OLDAbstractEmitter;
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
@@ -68,9 +68,9 @@ public class TriangleWavesLayer extends BleedingLayer
       };
   boolean initialized;
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
-    return new Point[]{};
+    return new PointOLD[]{};
   }
 
   @Override

@@ -1,4 +1,4 @@
-package com.danielbchapman.physics.toxiclibs;
+package com.danielbchapman.motion.core;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,15 +12,16 @@ public class AngularGravityBehavior3D extends SaveableParticleBehavior3D<Angular
 
   public AngularGravityBehavior3D()
   {
-    setStopPoint(((float)ActionsOLD.HEIGHT) / 2f);
-    vars.userC = ActionsOLD.HEIGHT;
+    setStopPoint(((float)Motion.HEIGHT) / 2f);
+    vars.userC = Motion.HEIGHT;
   }
+  
   // Vec3D original = new Vec3D();
   public AngularGravityBehavior3D(Vec3D gravity)
   {
     vars.force = gravity;
     vars.backup = gravity.copy();
-    vars.userC = ActionsOLD.HEIGHT;
+    vars.userC = Motion.HEIGHT;
   }
 
   public void apply(VerletParticle3D p)

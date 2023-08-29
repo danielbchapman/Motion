@@ -2,7 +2,7 @@ package shows.gravitationalwaves;
 
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Moveable;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.physics.toxiclibs.Transform;
 
 import toxi.geom.Vec3D;
@@ -23,9 +23,9 @@ public class TriangleWaveCrossing extends TriangleWave
     int tX = Transform.size(x, ActionsOLD.WIDTH);
     int tY = Transform.size(y, ActionsOLD.HEIGHT);
     int tZ = 10;
-    a = new Point(tX, tY, tZ, 1);
-    b = new Point(tX, tY, tZ, 1);
-    c = new Point(tZ, tY, tZ, 1);
+    a = new PointOLD(tX, tY, tZ, 1);
+    b = new PointOLD(tX, tY, tZ, 1);
+    c = new PointOLD(tZ, tY, tZ, 1);
     
     Vec3D base = new Vec3D(1, 0, 0);
     ;

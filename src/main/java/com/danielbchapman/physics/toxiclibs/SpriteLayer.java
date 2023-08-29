@@ -30,7 +30,7 @@ public class SpriteLayer extends Layer
   }
   
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
     //Load Variables
     MotionEngine.brush = MotionInteractiveBehavior.load(new File("test/sprite/test-sprite.brush"));
@@ -50,12 +50,12 @@ public class SpriteLayer extends Layer
     int rows = 10;
     int cols = 10;
     int spacing = 20;
-    Point[] ret = new Point[rows * cols];
+    PointOLD[] ret = new PointOLD[rows * cols];
     
     for(int i = 0; i < rows; i++)
       for(int j = 0; j < cols; j++)
       {
-        ret[i * cols + j] = new Point((float) i * spacing, (float)j * spacing, 0f, 1f);
+        ret[i * cols + j] = new PointOLD((float) i * spacing, (float)j * spacing, 0f, 1f);
       }
          
     return ret;
@@ -77,11 +77,11 @@ public class SpriteLayer extends Layer
     g.noStroke();
     g.noFill();
     
-    for(Point p : points)
+    for(PointOLD p : points)
     {
       g.pushMatrix();
       g.translate(p.x, p.y , p.z);
-      Point.rotation(g, p);
+      PointOLD.rotation(g, p);
       g.shape(quad); 
       g.popMatrix();
     }

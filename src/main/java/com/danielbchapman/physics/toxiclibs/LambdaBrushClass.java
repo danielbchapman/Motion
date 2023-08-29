@@ -4,5 +4,5 @@ import java.util.function.Consumer;
 
 public abstract class LambdaBrushClass
 {
-  public abstract Consumer<Point> compile();
+  public abstract Consumer<PointOLD> compile();
 }

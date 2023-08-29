@@ -5,37 +5,40 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.danielbchapman.groups.Item;
+import com.danielbchapman.motion.core.Action;
+import com.danielbchapman.motion.core.Motion;
+import com.danielbchapman.motion.core.Scene;
 
 public class Cue
 {
-  private ArrayList<ActionOLD> actions = new ArrayList<>();
+  private ArrayList<Action> actions = new ArrayList<>();
   private boolean running;
   private String label = "Unknown";
   public static final ScheduledThreadPoolExecutor SCHEDULER = new ScheduledThreadPoolExecutor(8);
   
-  public Cue(String label, ArrayList<ActionOLD> actions)
+  public Cue(String label, ArrayList<Action> actions)
   {
     if(label == null)
       label = "Unknown";
     this.label = label;
     
     if(actions != null)
-      for(ActionOLD a : actions)
+      for(Action a : actions)
         this.actions.add(a);
   }
   
-  public void addAction(ActionOLD a)
+  public void addAction(Action a)
   {
     actions.add(a);
   }
   
-  public void removeAction(ActionOLD a)
+  public void removeAction(Action a)
   {
     actions.remove(a);
   }
   
   //FIXME this is a hack design that will work temporarily using the scheduler ~ 20ms in error in raw tests
-  public void go(Layer layer, MotionEngine engine)
+  public void go(Scene scene, MotionEngine engine)
   {
     if(running)
       return;
@@ -43,13 +46,12 @@ public class Cue
     running = true;
     long start = System.currentTimeMillis();
     System.out.println(label + " [FIRED]");
-    for(ActionOLD a : actions)
+    for(Action a : actions)
     {
       a.called = start;
-      a.layer = layer;
-      a.engine = engine;
+      a.scene = scene;
+      a.engine = Motion.MOTION;
       SCHEDULER.schedule(a, a.timeStamp, TimeUnit.MILLISECONDS);
-      
     }
     
     long executeLast = 0L;
@@ -77,12 +79,12 @@ public class Cue
     return null;
   }
   
-  public static Cue create(String name, ActionOLD ... actions)
+  public static Cue create(String name, Action ... actions)
   {
-    ArrayList<ActionOLD> act = new ArrayList<>();
+    ArrayList<Action> act = new ArrayList<>();
     
     if(actions != null)
-      for(ActionOLD a : actions)
+      for(Action a : actions)
         if(a != null)
           act.add(a);
     

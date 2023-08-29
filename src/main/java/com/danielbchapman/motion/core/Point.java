@@ -1,4 +1,4 @@
-package com.danielbchapman.physics.toxiclibs;
+package com.danielbchapman.motion.core;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

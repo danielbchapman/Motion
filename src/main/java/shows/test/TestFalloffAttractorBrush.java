@@ -5,7 +5,7 @@ import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.core.PhysicsBrush;
 import com.danielbchapman.physics.toxiclibs.PersistentVariables;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;

@@ -2,9 +2,9 @@ package shows.oz;
 
 import java.util.Random;
 
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
-public class Bubble extends Point
+public class Bubble extends PointOLD
 {
   int color;
   int shape;

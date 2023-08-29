@@ -13,7 +13,7 @@ import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.utility.GraphicsUtility;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.physics.toxiclibs.Util;
 import com.thomasdiewald.pixelflow.java.DwPixelFlow;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;
@@ -82,15 +82,15 @@ public class TestFluidScene extends BaseScene
     eventsSinceUpdate.clear();
   }
   
-  ArrayList<Point> p = GraphicsUtility.createMotionGrid(40, 30, 20, 20, 0, 1, (float[] floats)->{
-    return new Point(floats[0], floats[1], floats[2], 1f);
+  ArrayList<PointOLD> p = GraphicsUtility.createMotionGrid(40, 30, 20, 20, 0, 1, (float[] floats)->{
+    return new PointOLD(floats[0], floats[1], floats[2], 1f);
   });
-  Point[] points;
+  PointOLD[] points;
   public void draw(PGraphics g) 
   {    
     if(points == null)
     {
-      points = new Point[p.size()];
+      points = new PointOLD[p.size()];
       for(int i = 0; i < points.length; i++)
         points[i] = p.get(i);      
     }

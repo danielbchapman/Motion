@@ -5,10 +5,12 @@ import java.util.function.Consumer;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
+import toxi.physics3d.VerletPhysics3D;
 
 public abstract class Scene
 {
-  boolean initialized = false;  
+  boolean initialized = false;
+  public abstract boolean isVerletPhysic3D();
   /**
    * Determines whether this scene should apply brushes before 
    * or after the draw method. Scenes that rely on physics may 
@@ -19,7 +21,8 @@ public abstract class Scene
   public abstract boolean applyBrushesAfterDraw();
   public abstract void applyBrush(MotionBrush brush, PGraphics g, MotionMouseEvent point);
   public abstract void afterBrushes(PGraphics g);
-  
+ 
+  public abstract VerletPhysics3D get3DPhysics();
   /**
    * Override this method if you need a 2D context for some reason.
    */

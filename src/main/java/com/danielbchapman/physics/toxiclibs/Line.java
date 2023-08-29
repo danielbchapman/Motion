@@ -5,9 +5,9 @@ import processing.core.PGraphics;
 
 public class Line extends Shape
 {
-  Point[] points;
+  PointOLD[] points;
   
-  public Line(Point[] points)
+  public Line(PointOLD[] points)
   {
     this.points = points;
   }
@@ -15,8 +15,8 @@ public class Line extends Shape
   public void render(PGraphics g)
   {
    
-    Point current = points[0];
-    Point next;
+    PointOLD current = points[0];
+    PointOLD next;
     g.beginShape(PConstants.LINE);
     for(int i = 1; i < points.length; i++)
     {
@@ -38,7 +38,7 @@ public class Line extends Shape
     StringBuilder buf = new StringBuilder();
     buf.append("Line -> " + super.toString());
     
-    for(Point p : points)
+    for(PointOLD p : points)
       buf.append("\n\t").append(p);
     
     buf.append("\n");

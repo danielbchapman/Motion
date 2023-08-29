@@ -1,8 +1,8 @@
 package shows.test;
 
+import com.danielbchapman.motion.core.SaveableParticleBehavior3D;
 import com.danielbchapman.physics.toxiclibs.PersistentVariables;
-import com.danielbchapman.physics.toxiclibs.Point;
-import com.danielbchapman.physics.toxiclibs.SaveableParticleBehavior3D;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PApplet;
 import toxi.geom.Vec3D;
@@ -26,9 +26,9 @@ public class SimpleWindBehavior extends SaveableParticleBehavior3D<SimpleWindBeh
   @Override
   public void apply(VerletParticle3D p)
   {   
-    if (p instanceof Point)
+    if (p instanceof PointOLD)
     {
-      Point px = (Point) p;
+      PointOLD px = (PointOLD) p;
     }
     
     if(applet != null){

@@ -6,7 +6,7 @@ import com.danielbchapman.motion.core.BaseScene;
 import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.PhysicsBrush;
 import com.danielbchapman.motion.core.PhysicsScene;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -101,7 +101,7 @@ public class SandLayer extends PhysicsScene
     }
   }
   
-  static class PointC extends Point
+  static class PointC extends PointOLD
   {
     int color;
     public PointC(float x, float y, float z, float w, int c)

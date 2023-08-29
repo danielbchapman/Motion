@@ -6,14 +6,15 @@ import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
 import com.danielbchapman.brushes.ImageBrush;
+import com.danielbchapman.motion.core.Emitter;
 import com.danielbchapman.physics.toxiclibs.OLDEmitter;
 
-public class RainEmitter extends OLDEmitter<BrushPoint>
+public class RainEmitter extends Emitter<BrushPoint>
 {
   RainLayer parent;
   public RainEmitter(RainLayer layer, Vec3D position, Vec3D heading, int lifeSpan, int rate, float randomVector, int randomTime)
   {
-    super(position, heading, lifeSpan, rate, randomVector, randomTime);
+  	super(layer.get3DPhysics(), position, heading, lifeSpan, rate, randomVector, randomTime);
     this.parent = layer;
   }
 

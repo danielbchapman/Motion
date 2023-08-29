@@ -4,7 +4,7 @@ import com.danielbchapman.motion.core.BaseScene;
 import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PGraphics;
 

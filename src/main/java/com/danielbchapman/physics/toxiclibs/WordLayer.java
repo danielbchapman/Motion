@@ -12,9 +12,9 @@ public class WordLayer extends ParticleLayer
   Word[] words;
   
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
-    Point[] result = super.init();
+    PointOLD[] result = super.init();
     words = new Word[result.length];
     for(int i = 0; i < result.length; i++)
     {

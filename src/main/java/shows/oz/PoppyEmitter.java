@@ -5,7 +5,7 @@ import java.util.Random;
 
 import com.danielbchapman.motion.core.AbstractEmitter;
 import com.danielbchapman.motion.core.Motion;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -36,7 +36,7 @@ public class PoppyEmitter extends AbstractEmitter<Poppy>
   public Poppy createPoint(float x, float y, float z, float w)
   {
     Poppy l = new Poppy(x, y, z, w);
-    l.angular = new Point(motion.random(25), motion.random(25), motion.random(25), 0);
+    l.angular = new PointOLD(motion.random(25), motion.random(25), motion.random(25), 0);
     if(snow){
       float chance = this.motion.random(0, snowMax);
       

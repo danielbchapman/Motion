@@ -7,7 +7,7 @@ import com.danielbchapman.physics.toxiclibs.ExplodeBehaviorInverse;
 import com.danielbchapman.physics.toxiclibs.LetterEmitter;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -18,9 +18,9 @@ import toxi.physics3d.behaviors.ParticleBehavior3D;
 public class GalaxyLayer extends BleedingLayer
 {
   Vec3D pos;
-  Point center;
-  Point arm1;
-  Point arm2;
+  PointOLD center;
+  PointOLD arm1;
+  PointOLD arm2;
   
   MotionInteractiveBehavior attractorA;
   MotionInteractiveBehavior attractorB;
@@ -46,7 +46,7 @@ public class GalaxyLayer extends BleedingLayer
     
       };
       
-  Point[] points;
+  PointOLD[] points;
   
   public GalaxyLayer(MotionEngine engine)
   {
@@ -93,19 +93,19 @@ public class GalaxyLayer extends BleedingLayer
   }
 
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
     if(points != null)
       return points;
     
     pos = new Vec3D(720, 360, 0);
     
-    center = new Point(pos.x, pos.y, pos.z, 1);
+    center = new PointOLD(pos.x, pos.y, pos.z, 1);
     center.lock();
-    arm1 = new Point(pos.x, pos.y + 100, pos.z, 1);
-    arm2 = new Point(pos.x, pos.y - 100, pos.z, 1);
+    arm1 = new PointOLD(pos.x, pos.y + 100, pos.z, 1);
+    arm2 = new PointOLD(pos.x, pos.y - 100, pos.z, 1);
     
-    points = new Point[]{ center, arm1, arm2 };
+    points = new PointOLD[]{ center, arm1, arm2 };
     return points;
   }
 

@@ -12,5 +12,5 @@ public interface Moveable
    * @return Point[] representing this shape.
    * 
    */
-  public <T extends Point> Point[] getPoints();
+  public <T extends PointOLD> PointOLD[] getPoints();
 }

@@ -6,7 +6,7 @@ import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 public class Word extends Fadeable
 {
@@ -15,32 +15,32 @@ public class Word extends Fadeable
   char[] letters;
   @Getter
   @Setter
-  Point parent;
-  Point[] points;
+  PointOLD parent;
+  PointOLD[] points;
   
   int size = 36;
   boolean split;
   
-  public Word(String word, Point parent)
+  public Word(String word, PointOLD parent)
   {
     this(word, parent, 255, 255, 0, 0);
   }
   
-  public Word(String word, Point parent, int low, int high, int count, int delay)
+  public Word(String word, PointOLD parent, int low, int high, int count, int delay)
   {
     this(word, parent, low, high, count, delay, 36);
   }
   
-  public Word(String word, Point parent, int low, int high, int count, int delay, int size)
+  public Word(String word, PointOLD parent, int low, int high, int count, int delay, int size)
   {
     super(low, high, count, delay);
     letters = word.toCharArray();
-    points = new Point[letters.length];
+    points = new PointOLD[letters.length];
     this.parent = parent;
     this.size = size;
     //calculate points
   }
-  public void draw(PGraphics g, Point p)
+  public void draw(PGraphics g, PointOLD p)
   {
     float tSize = g.textSize;
     g.textSize(size);
@@ -53,7 +53,7 @@ public class Word extends Fadeable
         g.pushMatrix();
         g.translate(points[i].x, points[i].y, points[i].z);
         
-        Point.rotation(g, points[i]);
+        PointOLD.rotation(g, points[i]);
         
         g.fill(color);
         g.text(letters[i], 0, 0, 0);
@@ -65,7 +65,7 @@ public class Word extends Fadeable
       g.pushMatrix();
       g.translate(p.x,  p.y, p.z);
       
-      Point.rotation(g, p);
+      PointOLD.rotation(g, p);
       g.fill(color);
       for(int i = 0; i < letters.length; i++)
       {
@@ -83,7 +83,7 @@ public class Word extends Fadeable
     this.enableRotation = to;
     
     if(points != null)
-    for(Point p : points)
+    for(PointOLD p : points)
       p.enableRotation = to;
   }
   
@@ -105,7 +105,7 @@ public class Word extends Fadeable
   public void spread(float mag)
   {
     if(points != null)
-      for(Point p : points)
+      for(PointOLD p : points)
         p.addForce(Vec3D.randomVector().scaleSelf(mag));
   }
   

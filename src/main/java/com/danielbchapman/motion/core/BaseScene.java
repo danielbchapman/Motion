@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import processing.core.PGraphics;
+import toxi.physics3d.VerletPhysics3D;
 
 
 /**
@@ -99,4 +100,14 @@ public class BaseScene extends Scene
     return basePropTypes;
   }
 
+	@Override
+	public VerletPhysics3D get3DPhysics() {
+		return null;
+	}
+
+	@Override
+	public boolean isVerletPhysic3D()
+	{
+		return false;
+	}
 }

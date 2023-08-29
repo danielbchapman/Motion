@@ -17,7 +17,7 @@ public class TestCueStack
   @Test
   public void testSerializatoin()
   {
-    PathCue a = new PathCue();
+    Cue a = new Cue();
     
     a.setId("1");
     a.setPathFile("Path File");
@@ -31,7 +31,7 @@ public class TestCueStack
     a.setTimeScale(1.5f);
     Log.debug(a.toString());
     String aa = a.save();
-    PathCue b = a.load(aa);
+    Cue b = a.load(aa);
     Log.debug(aa);
     Log.debug(b);
     Assert.assertEquals("Cue a == Cue b", a, b);
@@ -43,9 +43,9 @@ public class TestCueStack
     CueStack stack = new CueStack("Test-Stack");
     for(int i = 0; i < 50; i++)
     {
-      Cue q = null;
+      AbstractCue q = null;
       if(i % 2 == 0)
-        q = new PathCue();
+        q = new Cue();
       else
         q = new ContentCue();
       

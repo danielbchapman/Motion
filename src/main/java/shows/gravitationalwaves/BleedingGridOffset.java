@@ -9,7 +9,7 @@ import com.danielbchapman.motion.utility.GraphicsUtility;
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Cue;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.utility.Utility;
 
 import processing.core.PGraphics;
@@ -33,8 +33,8 @@ public class BleedingGridOffset extends BleedingLayer
     this.spacing = (int)spacing;
     
     //overrides init()
-    ArrayList<Point> p = GraphicsUtility.createMotionGrid(columns, rows , this.spacing, this.spacing, 0, 1, GraphicsUtility::point);
-    super.points = p.toArray(new Point[p.size()]);  
+    ArrayList<PointOLD> p = GraphicsUtility.createMotionGrid(columns, rows , this.spacing, this.spacing, 0, 1, GraphicsUtility::point);
+    super.points = p.toArray(new PointOLD[p.size()]);  
   }
 
   @Override
@@ -50,7 +50,7 @@ public class BleedingGridOffset extends BleedingLayer
   }
 
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   { 
     return null; //not used
   }

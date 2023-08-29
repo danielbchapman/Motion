@@ -16,11 +16,11 @@ import com.danielbchapman.physics.toxiclibs.OLDEmitter;
 import com.danielbchapman.physics.toxiclibs.ExplodeBehaviorInverse;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
 import com.danielbchapman.physics.toxiclibs.MotionInteractiveBehavior;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 public class RandomParticlesVertical extends BleedingLayer
 {
-  ArrayList<OLDEmitter<Point>> emitters = new ArrayList<>();
+  ArrayList<OLDEmitter<PointOLD>> emitters = new ArrayList<>();
 
   ArrayList<MotionInteractiveBehavior> behaviors = new ArrayList<>();
 
@@ -37,18 +37,18 @@ public class RandomParticlesVertical extends BleedingLayer
 
     for (int i = 0; i < 14; i++)
     {
-      OLDEmitter<Point> e = new OLDEmitter<Point>(new Vec3D(i * 100 - 100, - 100, 0), new Vec3D(0, 1, 0), 25000, 50, 1f, 35)
+      OLDEmitter<PointOLD> e = new OLDEmitter<PointOLD>(new Vec3D(i * 100 - 100, - 100, 0), new Vec3D(0, 1, 0), 25000, 50, 1f, 35)
       {
         @Override
-        public Point createPoint(float x, float y, float z, float w)
+        public PointOLD createPoint(float x, float y, float z, float w)
         {
-          return new Point(x, y, z, w);
+          return new PointOLD(x, y, z, w);
         }
 
         @Override
         public void draw(PGraphics g)
         {
-          for (Point p : children)
+          for (PointOLD p : children)
           {
             g.point(p.x, p.y, p.z);
           }
@@ -79,9 +79,9 @@ public class RandomParticlesVertical extends BleedingLayer
   }
 
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
-    return new Point[] {};
+    return new PointOLD[] {};
   }
 
   @Override

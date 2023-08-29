@@ -34,7 +34,7 @@ public class TestBundle
   @Test
   public void testLinearHomeMath()
   {
-    Point x = new Point(20, 20, 20, 1);
+    PointOLD x = new PointOLD(20, 20, 20, 1);
     x.home = new Vec3D(10, 10, 10);
     
     HomeBehaviorLinear3D tmp = new HomeBehaviorLinear3D(0.05f, 1f, 10f);
@@ -47,7 +47,7 @@ public class TestBundle
   public void testOscillator()
   {
     FrequencyOscillationBehavior behavior = new FrequencyOscillationBehavior();
-    Point x = new Point(0, 0, 0, 1);
+    PointOLD x = new PointOLD(0, 0, 0, 1);
     for(int i = 0; i < 100; i++)
     {
       behavior.update();

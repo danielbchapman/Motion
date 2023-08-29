@@ -3,7 +3,7 @@ package shows.gravitationalwaves;
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Drawable;
 import com.danielbchapman.physics.toxiclibs.Moveable;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.physics.toxiclibs.Transform;
 
 import processing.core.PConstants;
@@ -12,17 +12,17 @@ import toxi.geom.Vec3D;
 
 public class SplineWave implements Moveable, Drawable
 {  
-  Point a;
-  Point ab1;
-  Point ab2;
-  Point b;
-  Point bc1;
-  Point bc2;
-  Point c;
-  Point ca1;
-  Point ca2;
+  PointOLD a;
+  PointOLD ab1;
+  PointOLD ab2;
+  PointOLD b;
+  PointOLD bc1;
+  PointOLD bc2;
+  PointOLD c;
+  PointOLD ca1;
+  PointOLD ca2;
   
-  Point[] points;
+  PointOLD[] points;
   /**
    * @param x
    * @param y
@@ -38,15 +38,15 @@ public class SplineWave implements Moveable, Drawable
     int tX = Transform.size(x, ActionsOLD.WIDTH);
     int tY = Transform.size(y, ActionsOLD.HEIGHT);
     int tZ = 10;
-    a = new Point(tX, tY, tZ, 1);
-    ab1 = new Point(tX, tY, tZ, 1);
-    ab2 = new Point(tX, tY, tZ, 1);
-    b = new Point(tX, tY, tZ, 1);
-    bc1 = new Point(tX, tY, tZ, 1);
-    bc2= new Point(tX, tY, tZ, 1);
-    c = new Point(tX, tY, tZ, 1);
-    ca1 = new Point(tX, tY, tZ, 1);
-    ca2 = new Point(tX, tY, tZ, 1);
+    a = new PointOLD(tX, tY, tZ, 1);
+    ab1 = new PointOLD(tX, tY, tZ, 1);
+    ab2 = new PointOLD(tX, tY, tZ, 1);
+    b = new PointOLD(tX, tY, tZ, 1);
+    bc1 = new PointOLD(tX, tY, tZ, 1);
+    bc2= new PointOLD(tX, tY, tZ, 1);
+    c = new PointOLD(tX, tY, tZ, 1);
+    ca1 = new PointOLD(tX, tY, tZ, 1);
+    ca2 = new PointOLD(tX, tY, tZ, 1);
     
     Vec3D base = new Vec3D(1, 0, 0);
     
@@ -70,12 +70,12 @@ public class SplineWave implements Moveable, Drawable
   }
 
   @Override
-  public <T extends Point> Point[] getPoints()
+  public <T extends PointOLD> PointOLD[] getPoints()
   {
     if(points != null)
       return points;
     
-    points = new Point[]{a,ab1, ab2, b, bc1, bc2, c, ca1, ca2};
+    points = new PointOLD[]{a,ab1, ab2, b, bc1, bc2, c, ca1, ca2};
     return points;
   }
 
@@ -90,7 +90,7 @@ public class SplineWave implements Moveable, Drawable
     g.popMatrix();
     
     g.ellipseMode(PConstants.CENTER);
-    for(Point p : points)
+    for(PointOLD p : points)
     {
       g.pushMatrix();
       g.ellipse(p.x, p.y, 10, 10);

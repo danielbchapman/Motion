@@ -67,8 +67,8 @@ public class SpinningSquares extends Layer {
 	}
 
 	@Override
-	public com.danielbchapman.physics.toxiclibs.Point[] init() {
-		return new com.danielbchapman.physics.toxiclibs.Point[0];
+	public com.danielbchapman.physics.toxiclibs.PointOLD[] init() {
+		return new com.danielbchapman.physics.toxiclibs.PointOLD[0];
 	}
 
 	@Override

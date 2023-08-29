@@ -4,7 +4,7 @@ import com.danielbchapman.motion.core.IPhysicsBrush;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.core.PhysicsBrush;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
@@ -60,9 +60,9 @@ public class TestInverseExplodeBrush extends PhysicsBrush
     Vec3D vForce =  vars.force.normalizeTo(modifier);
     distanceV = distanceV.normalizeTo(modifier);  
     vForce = vForce.add(distanceV);
-    if(p instanceof Point)
+    if(p instanceof PointOLD)
     {
-      ((Point)p).addAngularForce(vForce.scale(5f).invert());
+      ((PointOLD)p).addAngularForce(vForce.scale(5f).invert());
     }
     p.addForce(vForce.invert());
   }

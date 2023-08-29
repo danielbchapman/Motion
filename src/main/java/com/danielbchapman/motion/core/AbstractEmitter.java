@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import com.danielbchapman.physics.toxiclibs.PersistentVariables;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
-public abstract class AbstractEmitter<T extends Point>
+public abstract class AbstractEmitter<T extends PointOLD>
 {
   protected PersistentVariables vars = new PersistentVariables();
   protected ArrayList<T> children = new ArrayList<>();
@@ -89,7 +89,7 @@ public abstract class AbstractEmitter<T extends Point>
     Iterator<T> it = children.iterator();
     while(it.hasNext())
     {
-      Point px = it.next(); //This should probably implement a "fadeable" interface
+      PointOLD px = it.next(); //This should probably implement a "fadeable" interface
       if(px != null)
         if(px.life < time - px.created)
         {

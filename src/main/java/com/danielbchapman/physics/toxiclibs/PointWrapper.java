@@ -3,7 +3,7 @@ package com.danielbchapman.physics.toxiclibs;
 import lombok.Getter;
 import lombok.Setter;
 
-public class PointWrapper<Wrap> extends Point
+public class PointWrapper<Wrap> extends PointOLD
 {
   @Getter
   @Setter

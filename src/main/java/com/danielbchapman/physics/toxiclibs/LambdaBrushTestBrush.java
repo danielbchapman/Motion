@@ -5,8 +5,8 @@ import java.util.function.Consumer;
 public class LambdaBrushTestBrush extends LambdaBrushClass 
 { 
   @Override 
-  public Consumer<Point> compile() 
+  public Consumer<PointOLD> compile() 
   { 
-    return (Consumer<Point>)(x)->{System.out.println("TEST");}; 
+    return (Consumer<PointOLD>)(x)->{System.out.println("TEST");}; 
   } 
 } 

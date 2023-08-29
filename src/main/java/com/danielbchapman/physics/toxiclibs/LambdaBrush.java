@@ -69,7 +69,7 @@ public class LambdaBrush extends MotionInteractiveBehavior
   public String name;
   public String className;
   public String lambda;
-  private Consumer<Point> function;
+  private Consumer<PointOLD> function;
   private LambdaBrushClass functionHost;
 
   public String compile() throws Exception
@@ -122,8 +122,8 @@ public class LambdaBrush extends MotionInteractiveBehavior
   @Override
   public void apply(VerletParticle3D p)
   {
-    if (function != null && (p instanceof Point))
-      function.accept((Point) p);
+    if (function != null && (p instanceof PointOLD))
+      function.accept((PointOLD) p);
   }
 
   @Override

@@ -3,7 +3,7 @@ package com.danielbchapman.physics.toxiclibs;
 import processing.core.PGraphics;
 import toxi.geom.Vec3D;
 
-public class PointEmitter extends OLDEmitter<Point>
+public class PointEmitter extends OLDEmitter<PointOLD>
 {
   /**
    * @param position
@@ -19,14 +19,14 @@ public class PointEmitter extends OLDEmitter<Point>
   public void draw(PGraphics g)
   {
     g.pushMatrix();
-    for(Point p : children)
+    for(PointOLD p : children)
      g.point(p.x,  p.y, p.z); 
     g.popMatrix();
   }
 
   @Override
-  public Point createPoint(float x, float y, float z, float w)
+  public PointOLD createPoint(float x, float y, float z, float w)
   {
-    return new Point(x,y,z,w);
+    return new PointOLD(x,y,z,w);
   }
 }

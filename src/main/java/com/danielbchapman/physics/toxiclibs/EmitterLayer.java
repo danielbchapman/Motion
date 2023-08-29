@@ -30,9 +30,9 @@ public class EmitterLayer extends Layer
     }
   }
   
-  public Point[] init()
+  public PointOLD[] init()
   {
-    Point[] grid = new Point[0];
+    PointOLD[] grid = new PointOLD[0];
     return grid;
   }
 

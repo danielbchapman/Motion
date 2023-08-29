@@ -9,7 +9,7 @@ import processing.opengl.PGraphicsOpenGL;
 
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.physics.toxiclibs.PointWrapper;
 
 
@@ -17,7 +17,7 @@ public class KinectTracker extends Layer
 {
   private MotionEngine engine;
   //SimpleOpenNI  context; 
-  Point[] points;
+  PointOLD[] points;
   PShape dragon;
   PShape mainEye;
   PShape littleEye;
@@ -31,9 +31,9 @@ public class KinectTracker extends Layer
   }
 
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
-    points = new Point[0];
+    points = new PointOLD[0];
     return points;
   }
 

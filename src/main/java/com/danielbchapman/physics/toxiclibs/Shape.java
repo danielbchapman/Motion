@@ -4,7 +4,7 @@ import processing.core.PGraphics;
 
 public abstract class Shape
 {
-  Point[] points;
+  PointOLD[] points;
   
   /**
    * The render method takes the array of points (configured however you want) and

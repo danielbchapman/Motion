@@ -34,15 +34,15 @@ public class MobilologyTwo extends Layer
   {
   }
    
-  public Point[] init()
+  public PointOLD[] init()
   {
     int w = 720;
     int h = 1280;
     gridX = w/20;//w/20;//124/2;//;120;
     gridY = h/20;//h/20;//76/2;//76;
     spacing = 20;
-    Point[] pointsX = new Point[gridX * gridY];
-    Point[] pointsY = new Point[gridX * gridY];
+    PointOLD[] pointsX = new PointOLD[gridX * gridY];
+    PointOLD[] pointsY = new PointOLD[gridX * gridY];
     
 //    int total = gridX + gridY;
     xAxis = new Line[gridY]; //lines
@@ -53,16 +53,16 @@ public class MobilologyTwo extends Layer
       for(int j = 0; j < gridX; j++)
       {
         //Y-Axis
-        pointsX[i * gridX + j] = new Point(j * spacing, i * spacing, 0, 1f);
+        pointsX[i * gridX + j] = new PointOLD(j * spacing, i * spacing, 0, 1f);
         //X-Axis (separate points) so the lines can "fly in"
-        pointsY[i * gridX + j] = new Point(j * spacing, i * spacing, 0, 1f);
+        pointsY[i * gridX + j] = new PointOLD(j * spacing, i * spacing, 0, 1f);
       }
     }
     
     //X-Axis 
     for(int i = 0; i < gridY; i++)
     {
-      Point[] row = new Point[gridX];
+      PointOLD[] row = new PointOLD[gridX];
       for(int j = 0; j < gridX; j++)
       {
         row[j] = pointsX[i*gridX + j];
@@ -75,7 +75,7 @@ public class MobilologyTwo extends Layer
     //Y-Axis
     for(int i = 0; i < gridX; i++)
     {
-      Point[] col = new Point[gridY];
+      PointOLD[] col = new PointOLD[gridY];
       for(int j = 0; j < gridY; j++)
       {
         col[j] = pointsY[i  + gridX * j];
@@ -89,7 +89,7 @@ public class MobilologyTwo extends Layer
       if(yAxis[i] == null)
         System.out.println("No line @ " + i);
     
-    Point[] grid = new Point[pointsX.length + pointsY.length];
+    PointOLD[] grid = new PointOLD[pointsX.length + pointsY.length];
     
     for(int i = 0; i < pointsX.length; i++)
     {
@@ -111,7 +111,7 @@ public class MobilologyTwo extends Layer
     for(int i = 0 ; i < xAxis.length; i++)
     {
       System.out.println("X Line from -> " + xAxis[i].points[0] + " to " + xAxis[i].points[xAxis[i].points.length -1]);
-      for(Point p : xAxis[i].points)
+      for(PointOLD p : xAxis[i].points)
         System.out.println("\tPoint:" + p);
     }
   }
@@ -178,7 +178,7 @@ public class MobilologyTwo extends Layer
         if(direction)
         {
           System.out.println("x -> right");
-          for(Point p : l.points)
+          for(PointOLD p : l.points)
           {
             p.clearForce();
             p.clearVelocity();
@@ -189,7 +189,7 @@ public class MobilologyTwo extends Layer
         {
 
           System.out.println("x -> left");
-          for(Point p : l.points)
+          for(PointOLD p : l.points)
           {
             p.clearForce();
             p.clearVelocity();
@@ -206,10 +206,10 @@ public class MobilologyTwo extends Layer
       {
         direction = rand.nextBoolean();
         if(direction)
-          for(Point p : l.points)
+          for(PointOLD p : l.points)
             p.y = height;
         else
-          for(Point p : l.points)
+          for(PointOLD p : l.points)
             p.y = padding;         
       }
     }
@@ -421,7 +421,7 @@ public class MobilologyTwo extends Layer
   }
   public void lockAll()
   {
-    for(Point p : points)
+    for(PointOLD p : points)
       p.lock();
   }
   
@@ -468,7 +468,7 @@ public class MobilologyTwo extends Layer
     @Override
     public void run()
     {
-      for(Point p : line.points)
+      for(PointOLD p : line.points)
         p.unlock();
     }
     

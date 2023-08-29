@@ -2,7 +2,7 @@ package shows.gravitationalwaves;
 
 import com.danielbchapman.physics.toxiclibs.ActionsOLD;
 import com.danielbchapman.physics.toxiclibs.Moveable;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.physics.toxiclibs.Transform;
 
 import lombok.Getter;
@@ -11,11 +11,11 @@ import toxi.geom.Vec3D;
 
 public class TriangleWave implements Moveable
 {
-  public Point a;
-  public Point b;
-  public Point c;
+  public PointOLD a;
+  public PointOLD b;
+  public PointOLD c;
   
-  private Point[] points;
+  private PointOLD[] points;
   public Vec3D aMag;
   public Vec3D bMag;
   public Vec3D cMag;
@@ -48,9 +48,9 @@ public class TriangleWave implements Moveable
     int tX = Transform.size(x, ActionsOLD.WIDTH);
     int tY = Transform.size(y, ActionsOLD.HEIGHT);
     int tZ = 10;
-    a = new Point(300, 300, 10, 1);
-    b = new Point(300, 300, 10, 1);
-    c = new Point(300, 300, 10, 1);
+    a = new PointOLD(300, 300, 10, 1);
+    b = new PointOLD(300, 300, 10, 1);
+    c = new PointOLD(300, 300, 10, 1);
     
     Vec3D base = new Vec3D(1, 0, 0);
     
@@ -76,12 +76,12 @@ public class TriangleWave implements Moveable
    * @see com.danielbchapman.physics.toxiclibs.Moveable#getPoints()
    */
   @Override
-  public <T extends Point> Point[] getPoints()
+  public <T extends PointOLD> PointOLD[] getPoints()
   {
    if(points != null)
      return points;
    
-   points = new Point[]{a, b, c};
+   points = new PointOLD[]{a, b, c};
    return points;
   }
 }

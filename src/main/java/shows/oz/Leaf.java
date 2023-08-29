@@ -1,8 +1,8 @@
 package shows.oz;
 
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
-public class Leaf extends Point
+public class Leaf extends PointOLD
 {
   int color;
   int shape;

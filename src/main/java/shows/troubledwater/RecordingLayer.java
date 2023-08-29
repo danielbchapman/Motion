@@ -8,7 +8,7 @@ import processing.core.PImage;
 import com.danielbchapman.brushes.SaveableBrush;
 import com.danielbchapman.physics.toxiclibs.Layer;
 import com.danielbchapman.physics.toxiclibs.MotionEngine;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 public class RecordingLayer extends Layer
 {
@@ -24,9 +24,9 @@ public class RecordingLayer extends Layer
   }
   
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
-    return new Point[0];
+    return new PointOLD[0];
   }
 
   @Override

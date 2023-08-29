@@ -78,9 +78,9 @@ public class ExplodeBehavior extends MotionInteractiveBehavior
     Vec3D vForce =  vars.force.normalizeTo(modifier);
     distanceV = distanceV.normalizeTo(modifier);  
     vForce = vForce.add(distanceV);
-    if(p instanceof Point)
+    if(p instanceof PointOLD)
     {
-      ((Point)p).addAngularForce(vForce.scale(5f));
+      ((PointOLD)p).addAngularForce(vForce.scale(5f));
     }
     p.addForce(vForce);
   }

@@ -1,5 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import com.danielbchapman.motion.core.SaveableParticleBehavior3D;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import toxi.geom.Vec3D;
@@ -20,9 +22,9 @@ public class FloorSplitGravity extends SaveableParticleBehavior3D<FloorSplitGrav
 
   public void apply(VerletParticle3D p)
   {
-    Point px = null;
-    if(p instanceof Point)
-      px = (Point) p;
+    PointOLD px = null;
+    if(p instanceof PointOLD)
+      px = (PointOLD) p;
     if(p.y > vars.userC)
     {
       if(!px.isEnableRotation())
@@ -49,7 +51,7 @@ public class FloorSplitGravity extends SaveableParticleBehavior3D<FloorSplitGrav
     apply(px, p, vars.scaledForce, vars.scaledForce.scale(5f));
   }
   
-  private void apply(Point px, VerletParticle3D p, Vec3D force, Vec3D angular)
+  private void apply(PointOLD px, VerletParticle3D p, Vec3D force, Vec3D angular)
   {
     p.addForce(force);
     if(px != null && px.isEnableRotation())

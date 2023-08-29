@@ -1,5 +1,7 @@
 package com.danielbchapman.physics.toxiclibs;
 
+import com.danielbchapman.motion.core.SaveableParticleBehavior3D;
+
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
 

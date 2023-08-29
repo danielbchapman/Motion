@@ -13,7 +13,7 @@ import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.MotionMouseEvent;
 import com.danielbchapman.motion.utility.GraphicsUtility;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 import com.danielbchapman.physics.toxiclibs.Util;
 import com.thomasdiewald.pixelflow.java.DwPixelFlow;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;

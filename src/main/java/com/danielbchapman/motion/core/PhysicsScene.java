@@ -2,8 +2,6 @@ package com.danielbchapman.motion.core;
 
 import java.util.ArrayList;
 
-import com.danielbchapman.physics.toxiclibs.SaveableParticleBehavior3D;
-
 import lombok.Getter;
 import lombok.Setter;
 import processing.core.PGraphics;

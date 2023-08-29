@@ -215,7 +215,7 @@ public class Motion extends PApplet
   // Editor Preview
   private PGraphics editor;
   private boolean editing = false;
-  private Cue editCue;
+  private AbstractCue editCue;
   private MotionMouseEvent editLastPoint;
 
   // Drawing Methods
@@ -1254,7 +1254,7 @@ public class Motion extends PApplet
     else
     {
       editing = true;
-      editCue = new PathCue();
+      editCue = new Cue();
       editCue.setPathFile("captures/curly-both-mouse");
     }
   }
@@ -1380,6 +1380,14 @@ public class Motion extends PApplet
     playbacks.add(pb);
     Log.info("RUNNING PLAYBACK PLAYBACK ADDED [" + name + "]");
     Log.info(pb);
+  }
+  
+  /**
+   * Clear the stack of playbacks
+   */
+  public void stopPlaybacks()
+  {
+  	playbacks.clear();
   }
   /**
    * A hook that allows an action to be "Played" on the screen

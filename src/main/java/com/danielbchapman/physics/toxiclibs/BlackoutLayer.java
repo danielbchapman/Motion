@@ -6,9 +6,9 @@ public class BlackoutLayer extends Layer
 {
 
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
-    return new Point[0];
+    return new PointOLD[0];
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.danielbchapman.layers;
 
 import processing.core.PGraphics;
+import toxi.physics3d.VerletPhysics3D;
 
 import com.danielbchapman.brushes.EllipseBrush;
 import com.danielbchapman.brushes.ImageBrush;
@@ -10,7 +11,7 @@ import com.danielbchapman.motion.core.Motion;
 public class BleedingCanvasLayer extends BaseScene {
 	boolean blank;
 	int mode = 0;
-
+	
 	@Override
 	public void draw(PGraphics g) 
 	{
@@ -40,4 +41,10 @@ public class BleedingCanvasLayer extends BaseScene {
 
 		blank = false;// clear the canvas
 	}
+	
+	 @Override
+	  public void update(long time)
+	  {
+		  currentTime = time;
+	  }
 }

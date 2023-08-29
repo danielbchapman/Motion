@@ -14,7 +14,7 @@ import processing.core.PGraphics;
 
 public abstract class Layer
 {
-  protected Point[] points;
+  protected PointOLD[] points;
   protected PApplet applet;
   public MotionEngine engine;
   protected SaveableBrush brush;
@@ -31,7 +31,7 @@ public abstract class Layer
     return this.getClass().getName();
   }
   
-  public abstract Point[] init();
+  public abstract PointOLD[] init();
   
   /**
    * This is the first call to render a layer. It is called

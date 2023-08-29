@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.danielbchapman.motion.core.SaveableParticleBehavior3D;
 import com.danielbchapman.physics.ui.BehaviorSlider;
 import com.danielbchapman.physics.ui.PropertySlider;
 import com.danielbchapman.physics.ui.Spacer;
@@ -53,9 +54,9 @@ public class EnvironmentTools extends JFrame
   BehaviorSlider<HomeBehavior3D> homeMax;
   BehaviorSlider<HomeBehaviorLinear3D> homeLinear;
   BehaviorSlider<HomeBehaviorLinear3D> homeLinearMax;
-  BehaviorSlider<AngularGravityBehavior3D> gravity;
+  BehaviorSlider<AngularGravityBehavior3DOLD> gravity;
   PropertySlider<MotionEngine> dragSlider;
-  Vec3DEditor<AngularGravityBehavior3D> gravityVector;
+  Vec3DEditor<AngularGravityBehavior3DOLD> gravityVector;
   
   JButton read;
   JButton hide;
@@ -129,7 +130,7 @@ public class EnvironmentTools extends JFrame
         (b, s)->{s.set(b.vars.maxForce);}
         );
     
-    gravity = new BehaviorSlider<AngularGravityBehavior3D>(
+    gravity = new BehaviorSlider<AngularGravityBehavior3DOLD>(
         this, "Angular Gravity", 
         0, 
         10000,

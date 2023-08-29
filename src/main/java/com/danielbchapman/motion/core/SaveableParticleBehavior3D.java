@@ -1,4 +1,4 @@
-package com.danielbchapman.physics.toxiclibs;
+package com.danielbchapman.motion.core;
 
 import lombok.Getter;
 import lombok.Setter;

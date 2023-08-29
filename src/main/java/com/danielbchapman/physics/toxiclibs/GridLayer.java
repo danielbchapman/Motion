@@ -15,24 +15,24 @@ public class GridLayer extends Layer
   {
   }
   
-  public Point[] init()
+  public PointOLD[] init()
   {
     gridX = 120;
     gridY = 76;
     spacing = 10;
-    Point[] grid = new Point[gridX * gridY];
+    PointOLD[] grid = new PointOLD[gridX * gridY];
     lines = new Line[gridX + gridY]; //lines
     for(int i = 0; i < gridY; i++)
     {
       for(int j = 0; j < gridX; j++)
       {
-        grid[i * gridX + j] = new Point(j * spacing, i * spacing, 0, 1f);
+        grid[i * gridX + j] = new PointOLD(j * spacing, i * spacing, 0, 1f);
       }
     }
     
     for(int i = 0; i < gridY; i++)
     {
-      Point[] row = new Point[gridX];
+      PointOLD[] row = new PointOLD[gridX];
       for(int j = 0; j < gridX; j++)
       {
         row[j] = grid[i*gridX + j];
@@ -43,7 +43,7 @@ public class GridLayer extends Layer
     
     for(int i = 0; i < gridX; i++)
     {
-      Point[] col = new Point[gridY];
+      PointOLD[] col = new PointOLD[gridY];
       for(int j = 0; j < gridY; j++)
       {
         col[j] = grid[i  + gridX * j];
@@ -110,10 +110,10 @@ public class GridLayer extends Layer
         direction = rand.nextBoolean();
         
         if(direction)
-          for(Point p : lines[i].points)
+          for(PointOLD p : lines[i].points)
             p.x = width;
         else
-          for(Point p : lines[i].points)
+          for(PointOLD p : lines[i].points)
             p.x = -width;
       }
       else
@@ -121,10 +121,10 @@ public class GridLayer extends Layer
         direction = rand.nextBoolean();
         
         if(direction)
-          for(Point p : lines[i].points)
+          for(PointOLD p : lines[i].points)
             p.x = height;
         else
-          for(Point p : lines[i].points)
+          for(PointOLD p : lines[i].points)
             p.x = -height;
       }
     }
@@ -150,10 +150,10 @@ public class GridLayer extends Layer
         direction = rand.nextBoolean();
         
         if(direction)
-          for(Point p : lines[i].points)
+          for(PointOLD p : lines[i].points)
             p.x = width;
         else
-          for(Point p : lines[i].points)
+          for(PointOLD p : lines[i].points)
             p.x = -width;
       }
       else
@@ -161,10 +161,10 @@ public class GridLayer extends Layer
         direction = rand.nextBoolean();
         
         if(direction)
-          for(Point p : lines[i].points)
+          for(PointOLD p : lines[i].points)
             p.x = height;
         else
-          for(Point p : lines[i].points)
+          for(PointOLD p : lines[i].points)
             p.x = -height;
       }
     }

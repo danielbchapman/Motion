@@ -18,9 +18,9 @@ public class HomeBehavior3D extends SaveableConstantForce3D
     if(p3d.isLocked() || !vars.enabled)
       return;
       
-    if(p3d instanceof Point)
+    if(p3d instanceof PointOLD)
     {
-      Point p = (Point) p3d;
+      PointOLD p = (PointOLD) p3d;
       Vec3D f = p.home.sub(p);//.scale(0.05f);//easing 
       float mag = f.magnitude();
       float stop = 0.05f; //halt

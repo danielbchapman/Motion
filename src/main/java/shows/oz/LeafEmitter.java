@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.danielbchapman.motion.core.AbstractEmitter;
 import com.danielbchapman.motion.core.Motion;
-import com.danielbchapman.physics.toxiclibs.Point;
+import com.danielbchapman.physics.toxiclibs.PointOLD;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -28,7 +28,7 @@ public class LeafEmitter extends AbstractEmitter<Leaf>
   public Leaf createPoint(float x, float y, float z, float w)
   {
     Leaf l = new Leaf(x, y, z, w);
-    l.angular = new Point(motion.random(25), motion.random(25), motion.random(25), 0);
+    l.angular = new PointOLD(motion.random(25), motion.random(25), motion.random(25), 0);
     return l;
   }
 
@@ -81,13 +81,13 @@ public class LeafEmitter extends AbstractEmitter<Leaf>
     
     int i = 0;
     int length = leafShapes.length;
-    for(Point p : this.children)
+    for(PointOLD p : this.children)
     {
       g.pushMatrix();
       g.stroke(255,0,0);
       g.fill(255,0,0);
       g.translate(p.x, p.y, p.z);
-      Point.rotation(g, p);
+      PointOLD.rotation(g, p);
       g.image(leaf , 0, 0, 10, 10);
       g.popMatrix();
     }

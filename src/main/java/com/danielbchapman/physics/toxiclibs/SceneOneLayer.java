@@ -31,11 +31,11 @@ public class SceneOneLayer extends Layer
   }
   
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
     //Setup Stack
     stack = new SectionOneCueStack();
-    return new Point[]{}; //empty
+    return new PointOLD[]{}; //empty
   }
 
   @Override
@@ -61,7 +61,7 @@ public class SceneOneLayer extends Layer
         active.add(paragraph);
         paragraph.translate(new Vec3D(0,0, -20));
         
-        for(Point p : paragraph.points)
+        for(PointOLD p : paragraph.points)
           physics.addParticle(p);
       }
       else
@@ -149,7 +149,7 @@ public class SceneOneLayer extends Layer
         int to = a[7];
 
         String file = "content/scene_one/" + s;
-        Point p = new Point(x, y, 0, 1f);
+        PointOLD p = new PointOLD(x, y, 0, 1f);
         String toDisplay = FileUtil.readFile(file);
         if(toDisplay == null)
           toDisplay = "No Text";
@@ -209,7 +209,7 @@ public class SceneOneLayer extends Layer
       System.out.println("Creating paragraph width: " + pW);
       String file = "content/scene_one/" + fileNo;
       
-      Point p = new Point(c[0], c[1], 0, 1f);
+      PointOLD p = new PointOLD(c[0], c[1], 0, 1f);
       String toDisplay = FileUtil.readFile(file);
       if(toDisplay == null)
         toDisplay = "No Text";

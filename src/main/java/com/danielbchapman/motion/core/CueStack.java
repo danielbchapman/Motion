@@ -2,6 +2,7 @@ package com.danielbchapman.motion.core;
 
 import java.util.ArrayList;
 
+import com.danielbchapman.physics.toxiclibs.Cue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -16,16 +17,51 @@ import lombok.NoArgsConstructor;
 public class CueStack implements ISaveable<CueStack>
 {
   private String label;
-  private ArrayList<Cue> cues = new ArrayList<>();
+  private ArrayList<AbstractCue<?>> cues = new ArrayList<>();
+  public int index = -1;
   
   public CueStack(String label)
   {
     this.label = label;
   }
   
-  public void add(Cue q)
+  public void go(Scene scene)
+  {
+  	if(index == -1)
+    {
+      if(cues.size() < 1)
+      {
+        Log.severe("Can not fire empty cue list '" + label + "'\r\n\t" + this.toString());
+        return;
+      }
+      index = 0;
+    }
+    
+    if(index < cues.size())
+    {
+      AbstractCue<?> toFire = cues.get(index);
+      index++;
+      toFire.go(scene);
+      Log.info("\t[GO] [" + label + "]" + toFire.label);
+      //toFire.go(layer, engine);
+    }
+    else
+    	Log.info("Cue list '" + label + "' is complete, no action taken");
+  }
+  public void add(AbstractCue<?> q)
   {
     this.cues.add(q);
+  }
+  
+  public void add(AbstractCue<?> ...abstractCues) 
+  {
+  	for(AbstractCue<?> q : abstractCues)
+  		this.cues.add(q);
+  }
+  
+  public boolean remove(AbstractCue<?> q)
+  {
+  	return this.cues.remove(q);
   }
   
 //
@@ -57,7 +93,7 @@ public class CueStack implements ISaveable<CueStack>
       try
       {
         Class<?> cueClass = Class.forName(className);
-        Cue cue = (Cue) gson.fromJson(el, cueClass);
+        AbstractCue cue = (AbstractCue) gson.fromJson(el, cueClass);
         if(cue != null)
           ret.add(cue);
       }

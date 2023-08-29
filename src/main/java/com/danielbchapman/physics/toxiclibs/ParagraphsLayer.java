@@ -9,15 +9,15 @@ import com.danielbchapman.artwork.Paragraph.FadeType;
 public class ParagraphsLayer extends Layer
 {
   Paragraph paragraph;
-  Point origin;
+  PointOLD origin;
   public boolean isSplit()
   {
     return paragraph.split;
   }
   @Override
-  public Point[] init()
+  public PointOLD[] init()
   {
-    Point origin = new Point(10,10,0, 1);
+    PointOLD origin = new PointOLD(10,10,0, 1);
     String text = 
           "Buy it, use it, break it, fix it, "+ "\n"+
           "Trash it, change it, mail - upgrade it,"+ "\n"+

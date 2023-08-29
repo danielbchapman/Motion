@@ -21,9 +21,9 @@ public class JitterHome3D extends ConstantForceBehavior3D
     if(!enabled)
       return;    
       
-    if(p3d instanceof Point)
+    if(p3d instanceof PointOLD)
     {
-      Point p = (Point) p3d;
+      PointOLD p = (PointOLD) p3d;
       Vec3D f = p.home.sub(p).normalize().scale(0.05f);//easing 
       float stop = 0.05f; //halt
       

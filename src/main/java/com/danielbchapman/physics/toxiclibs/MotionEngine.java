@@ -36,6 +36,7 @@ import com.danielbchapman.layers.BleedingCanvasLayer;
 import com.danielbchapman.layers.ClearLayer;
 import com.danielbchapman.logging.Log;
 import com.danielbchapman.motion.UI;
+import com.danielbchapman.motion.core.SaveableParticleBehavior3D;
 import com.danielbchapman.motion.livedraw.IRemoteDrawCommand;
 import com.danielbchapman.motion.livedraw.RemoteDrawKeyEvent;
 import com.danielbchapman.motion.livedraw.RemoteDrawMouseEvent;
@@ -350,7 +351,7 @@ public class MotionEngine extends PApplet
     layer.engine = this;
     layers.add(layer);
     if (layer.points != null)
-      for (Point p : layer.points)
+      for (PointOLD p : layer.points)
         physics.addParticle(p);
 
     activeLayer = layer;

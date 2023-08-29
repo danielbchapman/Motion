@@ -52,7 +52,7 @@ public class ActionsOLD
         x.getPhysics().setDrag(0.4f);
       });
   
-  public static AngularGravityBehavior3D gravity = new AngularGravityBehavior3D(new Vec3D(0f, 0.01f, 0f));
+  public static AngularGravityBehavior3DOLD gravity = new AngularGravityBehavior3DOLD(new Vec3D(0f, 0.01f, 0f));
   
   public static ActionOLD gravityOff = new ActionOLD("Gravity Off", 0, null, 
       (x)->{
