@@ -104,6 +104,7 @@ public class RandomParticleLinesLayer extends BleedingLayer
   	// TODO Auto-generated method stub
   	super.go(motion);
   	clear();
+  	this.bleeding = !this.bleeding;
   }
 //  @Override
 //  public void go(MotionEngine engine)

@@ -25,10 +25,15 @@ public class PhysicsScene extends BaseScene
   @Setter
   protected VerletPhysics3D physics;
   
-  protected ArrayList<IPhysicsBrush> active = new ArrayList<>();
+  protected ArrayList<ParticleBehavior3D> active = new ArrayList<>();
   @Getter
   @Setter
   protected ArrayList<ParticleBehavior3D> behaviors = new ArrayList<>();
+  
+  public boolean isVerletPhysic3D()
+  {
+  	return true;
+  }
   
   public boolean isActive(ParticleBehavior3D behavior)
   {
@@ -70,12 +75,17 @@ public class PhysicsScene extends BaseScene
   public void initialize(Motion motion)
   {
     physics = new VerletPhysics3D();
+    System.out.println("Physics Scene Initialized");
   }
   
   @Override
   public void update(long time)
   {
+//  	if(active.size() > 0) {
+//  		System.out.println("DRAWING WITH BEHAVIORS...");
+//  	}
     active.forEach(b -> physics.addBehavior(b));
+    //System.out.println(this.physics.behaviors.size() + " of behaviuors");//    for(MotionInteractiveBehavior b : behaviors)
     physics.update();
     active.forEach(b -> physics.removeBehavior(b));
     active.clear(); // Update the previous forces then dump the list.
@@ -84,13 +94,14 @@ public class PhysicsScene extends BaseScene
   @Override
   public void applyBrush(MotionBrush brush, PGraphics g, MotionMouseEvent point)
   {
-    
-     if(brush instanceof IPhysicsBrush)
-     {
-       //System.out.println("Adding " + brush);
-       IPhysicsBrush b = (IPhysicsBrush) brush;
-       b.setPosition(point);
-       active.add(b); 
-     }
+  	brush.applyBrush(g, point);
+  	if(brush instanceof IPhysicsBrush)
+  	{
+  		//Log.info("\t->Painting with Physics Brush");
+  		IPhysicsBrush b = (IPhysicsBrush) brush;
+  		b.setPosition(point);
+  		active.add(b);
+  		//System.out.println("\tACTIVE -> " + active.size());
+  	} 
   }  
 }

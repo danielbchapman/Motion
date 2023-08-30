@@ -9,8 +9,9 @@ import com.danielbchapman.physics.toxiclibs.PersistentVariables;
 import lombok.Getter;
 import lombok.Setter;
 import toxi.geom.Vec3D;
+import toxi.physics3d.behaviors.ParticleBehavior3D;
 
-public abstract class PhysicsBrush extends MotionBrush implements IPhysicsBrush
+public abstract class PhysicsBrush extends MotionBrush implements IPhysicsBrush, ParticleBehavior3D
 {
   static final Map<String, String> FIELD_NAMES;
   static

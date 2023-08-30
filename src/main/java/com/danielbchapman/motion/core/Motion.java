@@ -65,6 +65,7 @@ import shows.test.TestFluidScene;
 import shows.test.TestGraphicsShare;
 import shows.test.TestInverseExplodeBrush;
 import shows.test.TestVerletScene;
+import shows.ululations.PointGridLayer;
 import shows.ululations.RainLayer;
 import shows.ululations.RandomParticleLinesLayer;
 import toxi.geom.Vec3D;
@@ -603,6 +604,7 @@ public class Motion extends PApplet
     };
     
     //Ululations
+    prep.accept(new PointGridLayer());
     prep.accept(new RainLayer());
     prep.accept(new RandomParticleLinesLayer());
     prep.accept(new BleedingCanvasLayer());
@@ -831,7 +833,7 @@ public class Motion extends PApplet
 
       if (!currentScene.applyBrushesAfterDraw())
       {
-        // FIXME Draw logic here.
+        // FIXME Draw logic here--apply after draw not working
       }
 
       currentScene.draw(main);
