@@ -10,7 +10,11 @@ import com.danielbchapman.motion.core.MotionBrush;
 import com.danielbchapman.motion.core.PhysicsScene;
 import com.danielbchapman.motion.core.Point;
 
+import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.core.PImage;
+import processing.core.PShape;
 import shows.test.SimpleWindBehavior;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletParticle3D;
@@ -21,11 +25,75 @@ public class PointGridLayer extends PhysicsScene
   
   ArrayList<MotionBrush> behaviors = new ArrayList<>();
 	boolean first = true;
+	WaveField waves = new WaveField();
+	PImage texture;
+	PGraphics sprite; 
+	PShape mesh;
+	
+	float deg90 = (float) (90f * 180f / Math.PI);
+	public PointGridLayer()
+	{
+		super();
+		//640, 1000, 33 / This is the side view
+//		createPropFloat("cameraX", Motion.WIDTH / 2.0f);
+//		createPropFloat("cameraY", Motion.HEIGHT / 2.0f);
+//		createPropFloat("cameraZ", (float) ((Motion.HEIGHT/2.0) / Math.tan(Math.PI*30.0 / 180.0)));
+		
+		createPropFloat("cameraX", 640);
+		createPropFloat("cameraY", 1000);
+		createPropFloat("cameraZ", 33);
+		
+		texture = Motion.MOTION.loadImage("content/sprites/light.png");
+		sprite = Motion.MOTION.createGraphics(texture.width, texture.height);
+		sprite.beginDraw();
+		sprite.clear();
+		sprite.fill(255,0,0,0);
+		sprite.rect(0, 0, sprite.width, sprite.height);
+		//sprite.image(cache, 0, 0);
+		sprite.stroke(255);
+		sprite.strokeWeight(5);
+		sprite.point(sprite.width / 2, sprite.height / 2);
+		sprite.tint(255, 128);
+		sprite.endDraw();
+		
+		mesh = Motion.MOTION.createShape();
+		mesh.beginShape();
+		mesh.vertex(20, 0);
+		mesh.vertex(40, 20);
+		mesh.vertex(20, 40);
+		mesh.vertex(0, 20);
+		mesh.fill(255, 255, 255, 128);
+		mesh.stroke(0, 255, 0);
+		mesh.endShape();
+		
+	}
 	
   @Override
   public void draw(PGraphics g)
   {
   	super.draw(g);
+  	
+  	/*camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 /
+  	 * 180.0), width/2.0, height/2.0, 0, 0, 1, 0)</b>. This function is similar
+  	 * to <b>gluLookAt()</b> in OpenGL, but it first clears the current camera settings.
+  	 * 
+  	 */
+//  	float eyeX =(float) (Motion.WIDTH / 2.0);
+//  	float eyeY = (float) (Motion.HEIGHT / 2.0) + 200;
+//  	float eyeZ = (float) ((Motion.HEIGHT/2.0) / Math.tan(Math.PI*30.0 / 180.0));
+//  	
+  	float eyeX = getPropFloat("cameraX");
+  	float eyeY = getPropFloat("cameraY");
+  	float eyeZ = getPropFloat("cameraZ");
+  	float centerX = (float) (Motion.WIDTH / 2.0);
+  	float centerY = (float) (Motion.HEIGHT / 2.0);
+  	float centerZ = 0;
+  	
+  	float upX = 0;
+  	float upY = 1;
+  	float upZ = 0;
+  	g.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+  	g.blendMode(PConstants.BLEND);
   	g.background(0);
 //  	if(first)
 //  	{
@@ -36,16 +104,27 @@ public class PointGridLayer extends PhysicsScene
 //  	}
     //g.background(0, 32);
     g.pushMatrix();
+    g.blendMode(PConstants.ADD);
     VerletParticle3D p;
     for(int i = 0; i < points.length; i++)
     {
     	p = points[i];
-    	if(p == null) {
-    		boolean debug = true;
-    	}
-    	g.strokeWeight(2);
-    	g.stroke(255);
+    	
+    	g.pushMatrix();
+    	//g.blendMode(PConstants.ADD);
+//    	g.stroke(255, 0, 0);
+//    	g.fill(255, 0, 0);
+    	g.translate(p.x, p.y, p.z);
+    	//g.shape(mesh);
+    	//g.sphere(10f);
+//    	g.rotateX(deg90);
+//    	g.rotateZ(deg90);
+    	//g.image(texture, 0,  0,  20,  20);
+
+    	g.strokeWeight(4);
+    	g.stroke(255, 255, 255, 255);
     	g.point(p.x, p.y, p.z);
+    	g.popMatrix();
     }
     g.popMatrix();
   }
@@ -56,14 +135,20 @@ public class PointGridLayer extends PhysicsScene
   public void initialize(Motion motion)
   {
   	super.initialize(motion);
+  	//Initialize First Pass
   	first = true;
-  	points = new Point[128*80]; //10 pixel offset 10K
+  	
+  	int xP = 128;
+  	int yP = 80;
+  	int spacingX = 10;
+  	int spacingY = 10;
+  	points = new Point[xP*yP]; //10 pixel offset 10K
   	int i = 0;
-  	for(int x = 0; x < 128; x++) 
+  	for(int x = 0; x < xP; x++) 
   	{
-  		for(int y = 0; y < 80; y++)
+  		for(int y = 0; y < yP; y++)
   		{  			
-  			Point p = new Point(x * 10, y * 10, 0, 1);
+  			Point p = new Point(x * spacingX, y * spacingY, 0, 1);
   			points[i] = p;
   			physics.addParticle(p);
   			i++;
@@ -78,8 +163,10 @@ public class PointGridLayer extends PhysicsScene
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+  	waves = new WaveField();
   	physics.addBehavior(Actions.home);
   	physics.setDrag(0.2f);
+  	physics.addBehavior(waves);
   	
   	
   //behaviors.add(new ExplodeBehaviorInverse(new Vec3D(-1f, 0, 0), -50f));
@@ -119,6 +206,7 @@ public class PointGridLayer extends PhysicsScene
   public void update(long time)
   {
   	super.update(time);
+  	waves.update(time);
     for(Emitter<?> e : emitters)
       e.update(time);
    

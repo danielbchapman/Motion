@@ -30,6 +30,7 @@ import com.sun.jna.Platform;
 import lombok.Getter;
 import lombok.Setter;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.event.KeyEvent;
@@ -581,7 +582,7 @@ public class Motion extends PApplet
     editor = createGraphics(width, height, P3D);
     
     postSetupConfigureShow();
-
+    
     try
     {
       enableTextureBroadcast(core);
@@ -794,6 +795,7 @@ public class Motion extends PApplet
     //Initialize the scene in this loop | Possible crash in the Fluid Scenes
     if (currentScene != null && !currentScene.initialized)
     {
+    	core.camera();//reset the camera
       currentScene.initialize(this);
       currentScene.initialized = true;
     }

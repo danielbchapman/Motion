@@ -99,6 +99,21 @@ public class BaseScene extends Scene
   {
     return basePropTypes;
   }
+  
+  public void createPropFloat(String key, float defaultValue)
+  {
+  	basePropTypes.put(key, Float.class);
+  	props.setFloat(key, defaultValue);
+  }
+  public float getPropFloat(String key)
+  {
+  	return props.getFloat(key, 0f);
+  }
+  
+  public void setPropFloat(String key, float value)
+  {
+  	props.setFloat(key, value);
+  }
 
 	@Override
 	public VerletPhysics3D get3DPhysics() {

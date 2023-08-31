@@ -92,6 +92,12 @@ public class PhysicsScene extends BaseScene
   }
   
   @Override
+  public void draw(PGraphics g)
+  {
+  	super.draw(g);
+  }
+  
+  @Override
   public void applyBrush(MotionBrush brush, PGraphics g, MotionMouseEvent point)
   {
   	brush.applyBrush(g, point);
