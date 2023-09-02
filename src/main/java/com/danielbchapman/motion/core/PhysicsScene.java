@@ -30,6 +30,10 @@ public class PhysicsScene extends BaseScene
   @Setter
   protected ArrayList<ParticleBehavior3D> behaviors = new ArrayList<>();
   
+  public boolean is2D(){
+		return false;
+  }
+  
   public boolean isVerletPhysic3D()
   {
   	return true;

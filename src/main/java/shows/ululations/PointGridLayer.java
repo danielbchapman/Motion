@@ -3,6 +3,7 @@ package shows.ululations;
 import java.util.ArrayList;
 
 import com.danielbchapman.motion.core.Actions;
+import com.danielbchapman.motion.core.ConstantAccelleratorWithShelf;
 import com.danielbchapman.motion.core.Emitter;
 import com.danielbchapman.motion.core.HomeBehavior3D;
 import com.danielbchapman.motion.core.Motion;
@@ -26,11 +27,14 @@ public class PointGridLayer extends PhysicsScene
   ArrayList<MotionBrush> behaviors = new ArrayList<>();
 	boolean first = true;
 	WaveField waves = new WaveField();
+	ConstantAccelleratorWithShelf gravity = new ConstantAccelleratorWithShelf(new Vec3D(0, 0, -2f));
 	PImage texture;
+	PImage textureAlpha;
 	PGraphics sprite; 
 	PShape mesh;
 	
 	float deg90 = (float) (90f * 180f / Math.PI);
+	float deg60 = (float) (60f * 180f / Math.PI);
 	public PointGridLayer()
 	{
 		super();
@@ -42,6 +46,14 @@ public class PointGridLayer extends PhysicsScene
 		createPropFloat("cameraX", 640);
 		createPropFloat("cameraY", 1000);
 		createPropFloat("cameraZ", 33);
+		
+		createPropFloat("sinRatePeriod", 10000);
+  	createPropFloat("sinScalar", 6);
+  	createPropFloat("sinPeriod", 50);
+  	
+  	createPropFloat("cosRatePeriod", 15000);
+  	createPropFloat("cosScalar", 4.5f);
+  	createPropFloat("cosPeriod", 75);
 		
 		texture = Motion.MOTION.loadImage("content/sprites/light.png");
 		sprite = Motion.MOTION.createGraphics(texture.width, texture.height);
@@ -56,15 +68,14 @@ public class PointGridLayer extends PhysicsScene
 		sprite.tint(255, 128);
 		sprite.endDraw();
 		
-		mesh = Motion.MOTION.createShape();
-		mesh.beginShape();
-		mesh.vertex(20, 0);
-		mesh.vertex(40, 20);
-		mesh.vertex(20, 40);
-		mesh.vertex(0, 20);
-		mesh.fill(255, 255, 255, 128);
-		mesh.stroke(0, 255, 0);
-		mesh.endShape();
+		textureAlpha = Motion.MOTION.createImage(texture.width, texture.height, PConstants.ARGB);
+		textureAlpha.loadPixels();
+		int alpha = 128;
+		for(int i : textureAlpha.pixels)
+		{
+			textureAlpha.pixels[i] = (alpha<<24) | texture.pixels[i] & 0xFFFFFFF; 
+		}
+		textureAlpha.updatePixels();
 		
 	}
 	
@@ -106,7 +117,7 @@ public class PointGridLayer extends PhysicsScene
     g.pushMatrix();
     g.blendMode(PConstants.ADD);
     VerletParticle3D p;
-    for(int i = 0; i < points.length; i++)
+    for(int i = 0; i < points.length -1; i++)
     {
     	p = points[i];
     	
@@ -114,17 +125,23 @@ public class PointGridLayer extends PhysicsScene
     	//g.blendMode(PConstants.ADD);
 //    	g.stroke(255, 0, 0);
 //    	g.fill(255, 0, 0);
-    	g.translate(p.x, p.y, p.z);
+    	//g.translate(p.x, p.y, p.z);
     	//g.shape(mesh);
     	//g.sphere(10f);
-//    	g.rotateX(deg90);
+//    	g.rotateX(-deg60);
 //    	g.rotateZ(deg90);
-    	//g.image(texture, 0,  0,  20,  20);
-
+    	//g.image(sprite, 0,  0,  20,  20);
+    	//g.shape(mesh);
     	g.strokeWeight(4);
     	g.stroke(255, 255, 255, 255);
     	g.point(p.x, p.y, p.z);
+    	
     	g.popMatrix();
+    }
+    
+    for(Emitter<?> e : emitters)
+    {
+    	e.draw(g);
     }
     g.popMatrix();
   }
@@ -164,9 +181,31 @@ public class PointGridLayer extends PhysicsScene
 			e.printStackTrace();
 		}
   	waves = new WaveField();
-  	physics.addBehavior(Actions.home);
+  	//physics.addBehavior(Actions.home);
+  	try
+		{
+			Actions.gravityTo(0.2f).call();
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
   	physics.setDrag(0.2f);
   	physics.addBehavior(waves);
+  	physics.addBehavior(Actions.home);
+//  	physics.addBehavior(gravity);
+  	WavePointEmitter one = new WavePointEmitter(physics, new Vec3D(150, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
+  	WavePointEmitter two = new WavePointEmitter(physics, new Vec3D(200, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
+  	WavePointEmitter three = new WavePointEmitter(physics, new Vec3D(400, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
+  	WavePointEmitter four = new WavePointEmitter(physics, new Vec3D(600, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
+  	WavePointEmitter five = new WavePointEmitter(physics, new Vec3D(800, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
+  	
+  	emitters.add(one);
+  	emitters.add(two);
+  	emitters.add(three);
+  	emitters.add(four);
+  	emitters.add(five);
+  	
   	
   	
   //behaviors.add(new ExplodeBehaviorInverse(new Vec3D(-1f, 0, 0), -50f));
@@ -206,6 +245,13 @@ public class PointGridLayer extends PhysicsScene
   public void update(long time)
   {
   	super.update(time);
+  	waves.sinRatePeriod = getPropFloat("sinRatePeriod");
+  	waves.sinScalar = getPropFloat("sinScalar");
+  	waves.sinPeriod = (long) getPropFloat("sinPeriod");
+  	
+  	waves.cosRatePeriod = getPropFloat("cosRatePeriod");
+  	waves.cosScalar = getPropFloat("cosScalar");
+  	waves.cosPeriod = (long) getPropFloat("cosPeriod");
   	waves.update(time);
     for(Emitter<?> e : emitters)
       e.update(time);
@@ -240,9 +286,9 @@ public class PointGridLayer extends PhysicsScene
 //    }
 //  }
 //
-//  @Override
-//  public String getName()
-//  {
-//    return "PointGridLayer";
-//  }
+  @Override
+  public String getName()
+  {
+    return "PointGridLayer";
+  }
 }
