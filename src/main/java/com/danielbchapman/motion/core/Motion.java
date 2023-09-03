@@ -581,6 +581,7 @@ public class Motion extends PApplet
     main2D = createGraphics(width, height, P2D);
     editor = createGraphics(width, height, P3D);
     
+
     postSetupConfigureShow();
     
     try
@@ -804,6 +805,7 @@ public class Motion extends PApplet
     update(time);
 
     core.beginDraw();
+  	
     if(clearBackgrounds)
     {
       core.clear();

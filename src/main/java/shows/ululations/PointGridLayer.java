@@ -1,7 +1,10 @@
 package shows.ululations;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.function.Function;
 
+import com.danielbchapman.groups.Utility;
 import com.danielbchapman.motion.core.Actions;
 import com.danielbchapman.motion.core.ConstantAccelleratorWithShelf;
 import com.danielbchapman.motion.core.Emitter;
@@ -83,6 +86,7 @@ public class PointGridLayer extends PhysicsScene
   public void draw(PGraphics g)
   {
   	super.draw(g);
+  	g.clear();
   	
   	/*camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 /
   	 * 180.0), width/2.0, height/2.0, 0, 0, 1, 0)</b>. This function is similar
@@ -117,24 +121,25 @@ public class PointGridLayer extends PhysicsScene
     g.pushMatrix();
     g.blendMode(PConstants.ADD);
     VerletParticle3D p;
+    g.stroke(255, 0, 0);
+    g.fill(255, 0, 0);
+    
     for(int i = 0; i < points.length -1; i++)
     {
     	p = points[i];
     	
     	g.pushMatrix();
+//MESH
     	//g.blendMode(PConstants.ADD);
-//    	g.stroke(255, 0, 0);
-//    	g.fill(255, 0, 0);
-    	//g.translate(p.x, p.y, p.z);
-    	//g.shape(mesh);
-    	//g.sphere(10f);
+
+    	g.translate(p.x, p.y, p.z);
 //    	g.rotateX(-deg60);
 //    	g.rotateZ(deg90);
-    	//g.image(sprite, 0,  0,  20,  20);
-    	//g.shape(mesh);
-    	g.strokeWeight(4);
-    	g.stroke(255, 255, 255, 255);
-    	g.point(p.x, p.y, p.z);
+    	g.image(texture, 0,  0,  20,  20);
+//POINT
+//    	g.strokeWeight(4);
+//    	g.stroke(255, 255, 255, 255);
+//    	g.point(p.x, p.y, p.z);
     	
     	g.popMatrix();
     }
@@ -161,11 +166,23 @@ public class PointGridLayer extends PhysicsScene
   	int spacingY = 10;
   	points = new Point[xP*yP]; //10 pixel offset 10K
   	int i = 0;
+  	Random r = new Random();
+  	
+  	Function<Integer, Integer> rand = (input) -> {
+  		int delta = r.nextInt(10);
+  		return input + delta - 5;
+  	};
+  	
+  	Function<Integer, Integer> randZ = (input) -> {
+  		int delta = r.nextInt(5);
+  		return input + delta - 2;
+  	};
+  	
   	for(int x = 0; x < xP; x++) 
   	{
   		for(int y = 0; y < yP; y++)
   		{  			
-  			Point p = new Point(x * spacingX, y * spacingY, 0, 1);
+  			Point p = new Point(rand.apply(x * spacingX), rand.apply(y * spacingY), randZ.apply(0), 1);
   			points[i] = p;
   			physics.addParticle(p);
   			i++;
@@ -194,9 +211,9 @@ public class PointGridLayer extends PhysicsScene
   	physics.addBehavior(waves);
   	physics.addBehavior(Actions.home);
 //  	physics.addBehavior(gravity);
-  	WavePointEmitter one = new WavePointEmitter(physics, new Vec3D(150, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
-  	WavePointEmitter two = new WavePointEmitter(physics, new Vec3D(200, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
-  	WavePointEmitter three = new WavePointEmitter(physics, new Vec3D(400, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
+  	WavePointEmitter one = new WavePointEmitter(physics, new Vec3D(8, 400, 350), Vec3D.randomVector(), 15000, 0, 2f, 1000);
+  	WavePointEmitter two = new WavePointEmitter(physics, new Vec3D(200, 500, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
+  	WavePointEmitter three = new WavePointEmitter(physics, new Vec3D(400, 600, 150), Vec3D.randomVector(), 15000, 0, 2f, 1000);
   	WavePointEmitter four = new WavePointEmitter(physics, new Vec3D(600, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
   	WavePointEmitter five = new WavePointEmitter(physics, new Vec3D(800, 400, 250), Vec3D.randomVector(), 15000, 0, 2f, 1000);
   	

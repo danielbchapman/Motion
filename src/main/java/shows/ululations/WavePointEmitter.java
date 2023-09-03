@@ -3,19 +3,24 @@ package shows.ululations;
 import java.util.Random;
 
 import com.danielbchapman.motion.core.Emitter;
+import com.danielbchapman.motion.core.Motion;
 import com.danielbchapman.motion.core.Point;
 
 import processing.core.PGraphics;
+import processing.core.PImage;
 import toxi.geom.Vec3D;
 import toxi.physics3d.VerletPhysics3D;
 
 public class WavePointEmitter extends Emitter<Point>
 {
-
+	float deg90 = (float) (90f * 180f / Math.PI);
+	float deg60 = (float) (60f * 180f / Math.PI);
+	PImage texture;
 	public WavePointEmitter(VerletPhysics3D physics, Vec3D position, Vec3D heading, int lifeSpan, int rate,
 			float randomVector, int randomTime)
 	{
 		super(physics, position, heading, lifeSpan, rate, randomVector, randomTime);
+		texture = Motion.MOTION.loadImage("content/sprites/light.png");
 	}
 
 	@Override
@@ -38,14 +43,18 @@ public class WavePointEmitter extends Emitter<Point>
 		g.point(vars.position.x,  vars.position.y, vars.position.z);
 		g.popMatrix();
 		
-		g.pushMatrix();
 		for(Point p : children)
 		{
-			g.strokeWeight(4);
-			g.stroke(255);
-			g.point(p.x, p.y, p.z);			
-		}
-		g.popMatrix();		
+			g.pushMatrix();
+			g.translate(p.x,  p.y, p.z);
+			g.rotateX(-deg60);
+//  	g.rotateZ(deg90);
+    	g.image(texture, 0,  0,  60,  60);
+			g.popMatrix();
+//			g.strokeWeight(4);
+//			g.stroke(255);
+//			g.point(p.x, p.y, p.z);			
+		}	
 	}
 
 }
